@@ -148,7 +148,7 @@ Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI0000
 Keywords: champ d'application, motivation, SPIC, relations entre administrations
 
 #### CRPA Article L211-2 — Obligation de motivation
-> « Les personnes physiques ou morales ont le droit d'être informées sans délai des motifs des décisions administratives individuelles défavorables qui les concernent. À cet effet, doivent être motivées les décisions qui [...] restreignent l'exercice des libertés publiques ou, de manière générale, constituent une mesure de police. » (extrait, la liste complète comporte 7 catégories)
+> « Les personnes physiques ou morales ont le droit d'être informées sans délai des motifs des décisions administratives individuelles défavorables qui les concernent. À cet effet, doivent être motivées les décisions qui [...] restreignent l'exercice des libertés publiques ou, de manière générale, constituent une mesure de police. » (extrait, la liste complète comporte 8 catégories numérotées 1° à 8°)
 Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367505 (vérifié le 2026-08-04)
 Keywords: motivation obligatoire, libertés publiques, mesure de police
 
