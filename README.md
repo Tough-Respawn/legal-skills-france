@@ -188,6 +188,7 @@ Invoquez `/jurisprudence harcèlement moral`. Si les citations sortent au format
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **v3.0.1** | Août 2026 | Citations corrigées et sourcées (audit externe), lint statique, baseline de déclenchement mesurée, workflow Judilibre curl / Verified citations, static lint, measured triggering baseline, curl-based Judilibre workflow |
 | **v3.0.0** | Mai 2026 | 8 skills modulaires (1 méta + 7 domaines), 10 modèles de documents, intégration API Judilibre, suite de tests / 8 modular skills, 10 document templates, Judilibre API integration, test suite |
 | **v2.0.0** | Mars 2026 | Références enrichies, protocole cas complexes, vérification web obligatoire / Enriched references, complex case protocol, mandatory web verification |
 | **v0.1.0** | Février 2026 | Version initiale / Initial release |

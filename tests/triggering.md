@@ -101,6 +101,11 @@ Baseline automatisée du 2026-08-04 : harnais headless local (non versionné),
 (commit 506dd9e, working tree), grading strict (runs invalides exclus :
 timeout, plugin non chargé ou chargé depuis un cache).
 
+**Statut : baseline DIAGNOSTIQUE, pas une baseline de release.** Elle mesure
+le plugin avant le durcissement du harnais et sans épinglage du modèle au
+lancement. Une baseline de release devra être relancée sur la 3.0.1 avec le
+harnais durci.
+
 | Date | Case ID | Taux (runs valides) | Déclenché majoritairement | Notes |
 |---|---|---|---|---|
 | 2026-08-04 | C1, C2, C3 | 100% | legal-france-civil | |
@@ -122,7 +127,7 @@ timeout, plugin non chargé ou chargé depuis un cache).
 | 2026-08-04 | B1, B3 | 100% | (issues acceptées) | |
 | 2026-08-04 | B2 | 100% (2 valides) | (issues acceptées) | 3 runs exit=1 à investiguer |
 | 2026-08-04 | M1 | 0% | legal-france-travail | le méta ne s'engage jamais, travail rafle 5/5 |
-| 2026-08-04 | M2 | 100% | legal-france-penal | accepté depuis revue 2026-08-04 |
+| 2026-08-04 | M2 | 100% | legal-france (méta) 5/5 | pénal accepté depuis revue 2026-08-04 mais non observé |
 | 2026-08-04 | M3 | 80% | legal-france (méta) | civil capte 1/5 |
 
 Chantier prioritaire issu de cette baseline : la compétition méta vs domaines
