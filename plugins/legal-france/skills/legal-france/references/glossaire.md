@@ -24,7 +24,7 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Assignation** / *Summons / Writ of claim* — The procedural document by which a claimant initiates civil proceedings, served on the defendant by a huissier (bailiff). States the claims, the grounds, and the court before which the defendant is summoned (CPC art. 54).
 
-**Astreinte** / *Penalty per day of delay (astreinte)* — A financial penalty imposed by a court, accruing per day (or other unit of time) until the party complies with an order. Distinct from damages: purely coercive. Governed by loi n° 91-650 of 9 July 1991.
+**Astreinte** / *Penalty per day of delay (astreinte)* — A financial penalty imposed by a court, accruing per day (or other unit of time) until the party complies with an order. Distinct from damages: purely coercive. Governed by CPCE arts. L. 131-1 à L. 131-4 (codification 2012 ; la loi 91-650 citée auparavant est abrogée sur ce point).
 
 **Autorité de la chose jugée** / *Res judicata* — The binding effect of a final court judgment between the same parties on the same subject matter with the same cause of action. Precludes re-litigation (art. 1355 Code civil).
 
@@ -50,7 +50,7 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Chambre** / *Chamber (of a court)* — A specialized division of a court (e.g., chambre civile, chambre commerciale, chambre criminelle of the Cour de cassation; chambre sociale for labor matters).
 
-**Clause abusive** / *Unfair term* — A contractual term that creates a significant imbalance between the rights and obligations of the parties to the detriment of the consumer, in a B2C contract. Prohibited under art. L. 131-1 Code de la consommation and EU Directive 93/13/EEC. Deemed unwritten (réputée non écrite).
+**Clause abusive** / *Unfair term* — A contractual term that creates a significant imbalance between the rights and obligations of the parties to the detriment of the consumer, in a B2C contract. Prohibited under art. L. 212-1 Code de la consommation (le « L. 131-1 » cité auparavant était faux, vérifié le 2026-08-05) and EU Directive 93/13/EEC. Deemed unwritten (réputée non écrite).
 
 **Clause limitative de responsabilité** / *Limitation of liability clause* — A contractual clause capping or excluding the debtor's liability for breach. Valid in principle in commercial contracts; may be invalidated if it contradicts the obligation essentielle (art. 1170 Code civil; Chronopost).
 
@@ -62,7 +62,7 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Contrat de travail** / *Employment contract* — A contract by which a person (employee) performs work for another (employer) under a relationship of subordination (lien de subordination juridique), in exchange for remuneration. The subordination criterion is the key distinguishing feature from independent contractor relationships.
 
-**Contravention** / *Petty offence (contravention)* — The least serious category of criminal offence in French law (below délit and crime). Punishable by fines only (up to €3,000 for 5th class). Tried by the tribunal de police.
+**Contravention** / *Petty offence (contravention)* — The least serious category of criminal offence in French law (below délit and crime). Punishable by fines only (up to €1,500 for 5th class, €3,000 in case of recidivism, art. 131-13 C. pén., vérifié le 2026-08-05). Tried by the tribunal de police.
 
 **Convention collective** / *Collective bargaining agreement* — A written agreement between one or more employers (or employers' organizations) and one or more trade unions, governing wages, working conditions, and employment terms for the covered sector or company.
 
@@ -180,7 +180,7 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Mise en examen** / *Being charged / Formally placed under investigation* — The formal notification by the juge d'instruction to a person that they are under serious suspicion of having committed an offence, giving them the rights of a party in the investigation (access to file, right to counsel). Not a conviction.
 
-**Morale** / *Élément moral* — See: **Élément moral**.
+**Morale** / *Élément moral* — L'élément moral est l'intention (dol) ou la faute (imprudence, négligence) exigée pour constituer l'infraction, art. 121-3 C. pén. (l'ancien renvoi pointait vers une entrée inexistante).
 
 ---
 
@@ -222,7 +222,7 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Procureur de la République** / *Public Prosecutor* — The head of the parquet at a tribunal judiciaire. Decides whether to prosecute (opportunity principle), directs police in investigations, and represents the public interest in court.
 
-**Promesse unilatérale** / *Unilateral promise* — A contract by which one party (the promisor) grants the other (the beneficiary) an option to conclude a future contract on pre-agreed terms (art. 1124 Code civil). Revocation before exercise of the option gives rise to damages, not forced completion (post-2016 reform: completion possible).
+**Promesse unilatérale** / *Unilateral promise* — A contract by which one party (the promisor) grants the other (the beneficiary) an option to conclude a future contract on pre-agreed terms (art. 1124 Code civil). Depuis la réforme 2016 (art. 1124 al. 2), la révocation pendant le délai d'option N'EMPÊCHE PAS la formation du contrat promis (l'ancienne règle « dommages-intérêts seulement », jurisprudence Cruz 1993, n'est plus le droit positif).
 
 ---
 
@@ -250,11 +250,11 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 ## S
 
-**Saisie** / *Attachment / Seizure* — A legal procedure enabling a creditor holding an enforceable title to seize a debtor's assets (bank accounts, movables, real property) to satisfy the debt. Governed by loi n° 91-650 of 9 July 1991.
+**Saisie** / *Attachment / Seizure* — A legal procedure enabling a creditor holding an enforceable title to seize a debtor's assets (bank accounts, movables, real property) to satisfy the debt. Governed by the Code des procédures civiles d'exécution (CPCE, codification 2012).
 
 **Solidarité** / *Joint and several liability (solidarité)* — An obligation mode where each co-debtor is liable for the entire debt (solidarité passive) or each co-creditor can demand the entire payment (solidarité active). Not presumed in civil law; must be stipulated or provided by statute (art. 1310 Code civil). Presumed between co-traders in commercial law.
 
-**Sursis** / *Suspended sentence* — A criminal penalty the enforcement of which is suspended, conditionally (sursis avec mise à l'épreuve / sursis probatoire) or simply (sursis simple). If the condition of no re-offending (or probation terms) is met, the sentence is not executed.
+**Sursis** / *Suspended sentence* — A criminal penalty the enforcement of which is suspended, conditionally (sursis probatoire, qui a remplacé le sursis avec mise à l'épreuve en 2020, loi 2019-222) or simply (sursis simple). If the condition of no re-offending (or probation terms) is met, the sentence is not executed.
 
 ---
 
@@ -424,9 +424,9 @@ This glossary covers general legal terms, civil law, criminal law, procedure, bu
 
 **Droit à l'oubli** / *Right to erasure / Right to be forgotten* — The data subject's right to obtain the deletion of personal data where the data is no longer necessary, consent is withdrawn, or processing is unlawful (RGPD art. 17). Originally established in CJEU Google Spain (2014). May be limited by freedom of expression or legal obligations.
 
-**Éditeur** / *Publisher (of an online service)* — The natural or legal person who determines the content published on a website or online service and bears editorial responsibility. Subject to the obligations of the loi pour la confiance dans l'économie numérique (LCEN, 21 June 2004) art. 6-III (mandatory legal notices).
+**Éditeur** / *Publisher (of an online service)* — The natural or legal person who determines the content published on a website or online service and bears editorial responsibility. Subject to the obligations of the loi pour la confiance dans l'économie numérique (LCEN, 21 June 2004), mentions légales désormais à l'art. 1-1 (loi SREN 2024-449 ; l'ancien fondement « 6-III » est renuméroté).
 
-**Hébergeur** / *Hosting provider* — A natural or legal person that provides storage of content supplied by the recipient of the service (LCEN art. 6-I-2). Benefits from a conditional liability exemption: not liable unless it had actual knowledge of the illegal content and failed to act promptly to remove it.
+**Hébergeur** / *Hosting provider* — A natural or legal person that provides storage of content supplied by the recipient of the service. L'exonération conditionnelle de responsabilité (pas de connaissance effective, retrait prompt) relève depuis 2024 de l'art. 6 du règlement DSA (UE) 2022/2065 ; l'ancien fondement LCEN « 6-I-2 » a été supprimé par la loi SREN 2024-449 (vérifié le 2026-08-05).
 
 **Notification de violation** / *Data breach notification* — The obligation under RGPD art. 33 for the data controller to notify the supervisory authority (CNIL in France) of a personal data breach within 72 hours of becoming aware of it, where the breach is likely to result in a risk to the rights and freedoms of natural persons. Data subjects must also be informed if the risk is high (art. 34).
 

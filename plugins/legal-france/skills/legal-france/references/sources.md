@@ -85,11 +85,11 @@ Cons. const., [date], n° [year]-[number] [type]
 ```
 [Sector][Year][Document type][Number]
 ```
-- Sector: `1` = Treaties, `2` = International agreements, `3` = Secondary legislation, `6` = CJEU case law, `7` = General Court, `8` = Civil Service Tribunal
-- Document types for sector 3: `L` = regulation, `L` = directive (distinguished by number range), `D` = decision, `R` = regulation
+- Sector: `1` = Treaties, `2` = International agreements, `3` = Secondary legislation, `6` = EU case law (CJ, Tribunal, ex-Tribunal de la fonction publique), `7` = National transposition measures, `8` = National case law (les anciens « 7 = General Court, 8 = Civil Service Tribunal » étaient faux, vérifié le 2026-08-05)
+- Document types for sector 3: `R` = regulation, `L` = directive, `D` = decision (l'ancienne ligne définissait « L » deux fois ; vérifié le 2026-08-05)
 - Example (regulation): `32016R0679` = GDPR (Regulation 2016/679)
 - Example (directive): `31995L0046` = Data Protection Directive 95/46/EC
-- Example (CJEU judgment): `62018CJ0673` = Planet49, Case C-673/17 (sector 6, year 2018 filing, CJ = Court of Justice judgment)
+- Example (CJEU judgment): `62017CJ0673` = Planet49, Case C-673/17 (sector 6, year of filing 2017, CJ = Court of Justice judgment ; l'ancien exemple « 62018CJ0673 » contredisait le numéro d'affaire)
 
 ### Citation format — CJEU decisions
 ```
@@ -154,7 +154,7 @@ Example: `CNIL, 21 janv. 2019, délibération n° 2019-001, Google LLC`
 
 ## 5. Service-public.fr
 
-**URL:** https://www.service-public.fr
+**URL:** https://www.service-public.gouv.fr (nouveau domaine officiel, constaté le 2026-08-05)
 **Operator:** DILA (Direction de l'information légale et administrative)
 
 ### What it contains
@@ -187,7 +187,7 @@ Example: `CNIL, 21 janv. 2019, délibération n° 2019-001, Google LLC`
 - **By requête number:** Use the search tool with the 6-digit requête number (e.g., `108243`)
 - **By keywords:** Full-text search across all decisions
 - **Lebon tables:** The annual Recueil Lebon tables are available online for published decisions
-- **Arianeweb:** The integrated jurisprudence search tool at `https://www.conseil-etat.fr/fr/recherche-avancee-en-jurisprudence`
+- **Arianeweb:** The integrated jurisprudence search tool at `https://www.conseil-etat.fr/decisions-de-justice/jurisprudence/rechercher-une-decision-arianeweb`
 
 ### Citation format
 See Légifrance section above. The requête number is the key identifier.
@@ -251,7 +251,7 @@ Cass. civ. 1re, 12 janv. 2023, n° 21-12.345, Bull. civ. I, n° 5
 
 **Example searches:**
 - Légifrance: `"article 1240" responsabilité délictuelle` in Jurisprudence → Cour de cassation → civ. 2e
-- Légifrance code browser: Code civil → Livre III → Titre IV bis (Responsabilité extracontractuelle, post-réforme 2025)
+- Légifrance code browser: Code civil → Livre III → Titre III → Sous-titre II (La responsabilité extracontractuelle, arts. 1240 à 1254 ; pas de réforme d'ensemble en 2025, seulement les lois 2025-568 et 2025-391)
 - Cour de cassation advanced search: chamber = `civ. 1re`, keyword = `vice du consentement`, publication = `P`
 
 ### Droit pénal
@@ -302,14 +302,14 @@ Cass. civ. 1re, 12 janv. 2023, n° 21-12.345, Bull. civ. I, n° 5
 **Best Légifrance filters:** Category "Jurisprudence administrative" → filter by court (Conseil d'État, cours administratives d'appel, tribunaux administratifs). Use "Textes" section to search décrets, arrêtés, and circulaires.
 
 **Specialized databases:**
-- **Arianeweb (Conseil d'État):** https://www.conseil-etat.fr/fr/recherche-avancee-en-jurisprudence — The primary advanced search tool for all administrative case law. Filters by formation de jugement, rapporteur public, and Lebon publication status.
-- **DILA / circulaires.gouv.fr:** Repository of government circulars and instructions — useful for understanding how ministries interpret legislation.
+- **Arianeweb (Conseil d'État):** https://www.conseil-etat.fr/decisions-de-justice/jurisprudence/rechercher-une-decision-arianeweb — The primary advanced search tool for all administrative case law. Filters by formation de jugement, rapporteur public, and Lebon publication status.
+- **Circulaires et instructions (Legifrance) :** l'ancien site circulaires.gouv.fr redirige vers la recherche Circulaires de legifrance.gouv.fr (constaté le 2026-08-05). Repository of government circulars and instructions — useful for understanding how ministries interpret legislation.
 - **Recueil Lebon:** The official compendium of selected administrative law decisions. On Arianeweb, filter by `Recueil Lebon` or `Tables du Recueil Lebon` for published decisions.
 
 **Example searches:**
 - Arianeweb: formation = `Assemblée`, keyword = `responsabilité sans faute`, period = 2020-2026
 - Légifrance: `excès de pouvoir annulation` in Jurisprudence administrative → Conseil d'État
-- circulaires.gouv.fr: keyword search for a specific ministerial instruction (e.g., `instruction fiscale BOI-CF`)
+- Legifrance (section Circulaires) : keyword search for a specific ministerial instruction (e.g., `instruction fiscale BOI-CF`)
 
 ### Droit du numérique
 
@@ -318,7 +318,7 @@ Cass. civ. 1re, 12 janv. 2023, n° 21-12.345, Bull. civ. I, n° 5
 **Specialized databases:**
 - **CNIL — Délibérations et sanctions:** https://www.cnil.fr/fr/les-sanctions-prononcees-par-la-cnil — Full list of sanctions with deliberation numbers. Filter by theme (cookies, données de santé, vidéosurveillance, IA).
 - **CNIL — Lignes directrices:** Thematic guides on GDPR compliance (e.g., cookies, sous-traitance, AIPD/DPIA).
-- **ANSSI (Agence nationale de la sécurité des systèmes d'information):** https://www.ssi.gouv.fr — Cybersecurity standards and regulatory frameworks.
+- **ANSSI (Agence nationale de la sécurité des systèmes d'information):** https://cyber.gouv.fr (l'ancien ssi.gouv.fr redirige, constaté le 2026-08-05) — Cybersecurity standards and regulatory frameworks.
 - **EDPB (European Data Protection Board):** https://edpb.europa.eu — Guidelines, opinions, and consistency decisions on GDPR interpretation across the EU.
 
 **Example searches:**

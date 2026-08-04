@@ -18,6 +18,7 @@ to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Audit juridique intégral du corpus (2026-08-04/05)** : les 13 fichiers de références, l'index des codes, les 96 décisions de `jurisprudence-cle.md`, le glossaire, les sources et les 10 templates ont été vérifiés contre Legifrance/EUR-Lex/curia/CNIL (~600 entrées). Corrections majeures : références fabriquées neutralisées (arrêts « Stoïkoff », « Société Labbé », CE 390867, pourvois introuvables), délais dangereux corrigés (opposition ordonnance pénale 45 j, appel administratif 2 mois, abus de confiance 5 ans), réformes récentes intégrées (loi SREN 2024, loi 2025-1057 viol/consentement, CSRD, recodification CPP 2029, divorce 1 an), renumérotations post-réformes (LIL 2019, arbitrage 2011, sûretés 2021). Chaque entrée vérifiée porte URL + date.
 - `tests/lint.py` : lint statique (frontmatters, longueurs, manifests, déclencheurs, inventaire `/rediger`, contrat de template).
 - Baseline de déclenchement mesurée le 2026-08-04 (33 scénarios x 5 runs, grading strict) : 132/160 runs valides PASS, détail dans la table Pass/Fail de `tests/triggering.md`.
 - Règle de traçabilité dans le README : toute citation ajoutée doit porter URL Legifrance + date de vérification.
