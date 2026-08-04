@@ -78,8 +78,8 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 7. Société Myr'Ho / Costedoat
-**Citation:** Cass. ass. plén., 25 févr. 2000, n° 97-17.378
+### 7. Costedoat
+**Citation:** Cass. ass. plén., 25 févr. 2000, n° 97-17.378 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007043704/ ; le nom « Société Myr'Ho » qui figurait ici appartient à l'arrêt Boot Shop/Myr'Ho de 2006, entrée 9)
 **Published:** Bull. ass. plén., n° 2; D. 2000.673, rapp. Kessous
 
 **Facts:** An employee-pilot negligently destroyed crops while carrying out a task ordered by his employer. The victims sued the employee personally.
@@ -127,20 +127,17 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 11. Vice caché — Présomption irréfragable du vendeur professionnel
-**Citation:** Cass. civ. 1re, 28 mars 2000, n° 97-18.737
-**Published:** Bull. civ. I, n° 101
+**Citation:** Cass. civ. 1re, 19 janv. 1965, n° 61-10.952 (affaire dite du « pain maudit » de Pont-Saint-Esprit ; jurisprudence constante depuis). Vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000006967375/
+**Audit :** la référence antérieure (« Cass. civ. 1re, 28 mars 2000, n° 97-18.737 ») était une contamination : ce pourvoi existe mais concerne une assurance de groupe (L. 113-8 C. assur.), et les « faits » du chauffe-eau étaient invérifiables.
 
-**Facts:** A defective gas heater caused bodily injury to the buyer. The professional seller claimed ignorance of the defect.
-
-**Rule established:** The professional seller is irrebuttably presumed to have known of the hidden defect (présomption irréfragable de connaissance du vice) under the garantie des vices cachés regime (art. 1641 Code civil). The seller cannot escape liability by claiming ignorance.
+**Rule established:** The professional seller is irrebuttably presumed to have known of the hidden defect (présomption irréfragable de connaissance du vice) under the garantie des vices cachés regime (art. 1641 Code civil, damages under arts. 1645-1646). The seller cannot escape liability by claiming ignorance.
 
 **Significance:** Foundational for product liability under the Code civil. Imposed strict liability on professional sellers for hidden defects, reinforcing consumer protection prior to the transposition of the EU Product Liability Directive.
 
 ---
 
-### 12. Réforme de la prescription — Application de l'article 2224
-**Citation:** Cass. civ. 1re, 11 févr. 2010, n° 09-10.269
-**Published:** Bull. civ. I, n° 34
+### 12. Réforme de la prescription — Régime transitoire de la loi 2008-561
+**Citation:** RÉFÉRENCE SUPPRIMÉE À L'AUDIT (2026-08-05) : le pourvoi « 09-10.269 » cité auparavant est INTROUVABLE sur Legifrance et Juricaf (suspicion de fabrication). La règle transitoire décrite ci-dessous découle de l'article 26 de la loi n° 2008-561 du 17 juin 2008 elle-même ; vérifier toute décision d'application sur legifrance.gouv.fr/juri avant de la citer.
 
 **Facts:** Following the loi n° 2008-561 of 17 June 2008 reforming prescription, a dispute arose over whether the new five-year limitation period (art. 2224 Code civil) applied to claims that had accrued before the reform.
 
@@ -151,7 +148,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 13. Imprévision — Rupture avec Canal de Craponne
-**Citation:** Cass. civ. 3e, 6 mars 1876 (Canal de Craponne) — reversed by art. 1195 Code civil (ord. 2016-131)
+**Citation:** Cass. civ., 6 mars 1876, De Galliffet c/ Commune de Pélissanne (Canal de Craponne) — reversed by art. 1195 Code civil (ord. 2016-131). (Audit 2026-08-05 : la mention « civ. 3e » était anachronique, la Cour ne comptait qu'une chambre civile en 1876.)
 
 **Facts:** A canal company sought judicial revision of a fee fixed by contract in the 16th century, arguing that changed economic circumstances made the contract unbalanced.
 
@@ -188,7 +185,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 3. Légitime défense — classic statement
-**Citation:** Cass. crim., 16 févr. 1967 (reference decision on proportionality in self-defense)
+**Citation:** Art. 122-5 C. pén. et jurisprudence constante (audit 2026-08-05 : l'arrêt « Cass. crim., 16 févr. 1967 » cité auparavant existe, n° 66-92.071, Cousinet, mais juge autre chose : la légitime défense est incompatible avec une infraction involontaire ; la triple condition attaque actuelle/nécessité/proportionnalité résulte du texte de l'art. 122-5, pas de cet arrêt. https://www.legifrance.gouv.fr/juri/id/JURITEXT000007058652/)
 
 **Rule established:** Légitime défense (art. 122-5 Code pénal) requires: (1) an actual and present attack; (2) a necessary defense; and (3) proportionality between the defense and the seriousness of the attack. An excessive response loses the protection.
 
@@ -197,7 +194,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 4. Nanterre tribunal on "voluntary ignorance" / mens rea in business
-**Citation:** Cass. crim., 28 juin 1902 and subsequent doctrine on intention
+**Citation:** RÉFÉRENCE À MANIER AVEC PRÉCAUTION (audit 2026-08-05) : l'arrêt réel du 28 juin 1902 est le fondateur de la DÉLÉGATION DE POUVOIRS (exonération du chef d'entreprise au profit du délégataire), pas d'une doctrine de l'intention ; le rattachement à l'art. 121-3 CP (1994) serait de toute façon anachronique. Reformuler ou supprimer avant toute citation.
 **Modern restatement:** Art. 121-3 Code pénal (1994)
 
 **Rule established:** Art. 121-3 establishes the hierarchy of mental elements: intentional (intentionnelle), reckless (mise en danger délibérée), and negligent (faute simple — only punishable if expressly provided). For délits, intent is presumed unless the text specifies otherwise.
@@ -265,7 +262,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 10. Non-assistance à personne en danger
-**Citation:** Cass. crim., 26 mars 1997, n° 95-83.956
+**Citation:** RÉFÉRENCE SUPPRIMÉE À L'AUDIT (2026-08-05) : le pourvoi 95-83.956 (Crim., 26 mars 1997) existe mais porte sur la responsabilité civile du fait d'autrui (établissement éducatif, affaire Notre-Dame des Flots), RIEN sur la non-assistance à personne en danger. Aucune décision vérifiée n'a pu être identifiée pour la solution décrite ci-dessous : vérifier sur legifrance.gouv.fr/juri avant toute citation de l'art. 223-6.
 **Published:** Bull. crim., n° 123
 
 **Facts:** A bystander witnessed a person in peril (accident victim) but failed to intervene or call emergency services, despite being able to do so without risk.
@@ -277,7 +274,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 11. Terrorisme — Association de malfaiteurs terroriste
-**Citation:** Cass. crim., 29 nov. 2016, n° 16-80.023
+**Citation:** Cass. crim., 12 juill. 2016, n° 16-82.692 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000032900180/ ; le pourvoi « 16-80.023 » cité auparavant est introuvable, et l'arrêt Crim. 29 nov. 2016 en matière d'AMT, n° 16-83.513, porte sur la garde à vue, pas sur ce principe)
 **Published:** Bull. crim.
 
 **Facts:** Individuals who had traveled to conflict zones were prosecuted for association de malfaiteurs terroriste (art. 421-2-1 CP) upon return to France, even absent a specific identified planned attack.
@@ -311,8 +308,8 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 14. Stoïkoff — Surveillance sans contrôle judiciaire
-**Citation:** Cass. crim., 14 oct. 2020, n° 19-87.190
+### 14. ENTRÉE SUPPRIMÉE — « Stoïkoff » (référence fabriquée)
+**Audit 2026-08-05, vérifié par 4 voies :** le pourvoi 19-87.190 existe mais correspond à Crim. 21 OCTOBRE 2020 (blanchiment de trafic de stupéfiants, ne bis in idem), aucune partie « Stoïkoff » n'existe, aucun arrêt du 14 oct. 2020 ne correspond au sujet décrit, et la chambre criminelle n'a jamais rendu la solution prétendue. NE PAS CITER. Les arrêts réels les plus proches sur le contrôle des mesures d'enquête préliminaire : Crim. 22 oct. 2013, n° 13-81.945 et 13-81.949 (géolocalisation, art. 8 CEDH).
 **Published:** Bull. crim.
 
 **Facts:** A suspect challenged the legality of surveillance measures conducted during an enquête préliminaire without authorization from the juge des libertés et de la détention (JLD).
@@ -361,9 +358,8 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 4. Rupture conventionnelle
-**Citation:** Cass. soc., 9 mars 2011, n° 10-11.581
-**Published:** Bull. civ. V, n° 63
+### 4. Rupture conventionnelle — existence d'un litige
+**Citation:** Cass. soc., 23 mai 2013, n° 12-13.865 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000027451922/ ; le pourvoi 10-11.581 cité auparavant existe mais porte sur le contournement du PSE par ruptures conventionnelles, pas sur la validité en présence d'un litige)
 
 **Facts:** A dispute about the validity of a rupture conventionnelle (negotiated termination) where the employee alleged it had been signed under duress.
 
@@ -374,19 +370,19 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 5. Licenciement sans cause réelle et sérieuse — Barème Macron
-**Citation:** Cass. soc., 11 mai 2022, n° 21-14.490 and n° 21-15.247 (plenary decisions on the constitutionality of the Barème)
+**Citation:** Cass. soc. (formation plénière de chambre), 11 mai 2022, n° 21-14.490 et n° 21-15.247 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000045802457 ; ce sont des ARRÊTS de la chambre sociale, pas des avis d'assemblée plénière)
 **Published:** Bull. civ. V
 
-**Facts:** Employees challenged the constitutionality and ECHR compatibility of the statutory cap on damages for unfair dismissal (Barème Macron, art. L. 1235-3) introduced by ordonnance n° 2017-1387.
+**Facts:** Employees challenged the compatibility of the statutory cap on damages for unfair dismissal (Barème Macron, art. L. 1235-3) introduced by ordonnance n° 2017-1387.
 
-**Rule established:** The Barème Macron is compatible with the French Constitution and with art. 10 of the ILO Convention n° 158 and art. 24 of the European Social Charter (both interpreted as not requiring full compensation).
+**Rule established:** The Barème Macron is compatible with art. 10 of the ILO Convention n° 158 ; quant à l'art. 24 de la Charte sociale européenne, la Cour a écarté son invocation faute d'effet direct entre particuliers (ce n'est pas une déclaration de compatibilité).
 
 **Significance:** Ended years of conflicting decisions from lower courts (many of which had set aside the cap on individual basis). Confirmed the capped-damages system as the governing framework for dismissal litigation.
 
 ---
 
 ### 6. Harcèlement moral — Méthode de gestion
-**Citation:** Cass. soc., 29 juin 2011, n° 09-71.107
+**Citation:** Cass. soc., 10 nov. 2009, n° 07-45.321 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000021270312/ ; le pourvoi 09-71.107 cité auparavant est l'arrêt de principe sur le forfait en jours, voir entrée 9)
 **Published:** Bull. civ. V
 
 **Facts:** An employee alleged that systematic management practices — excessive pressure, humiliation, and unreasonable objectives — constituted moral harassment, even though applied collectively to the entire team.
@@ -398,7 +394,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 7. Clause de non-concurrence — Contrepartie financière
-**Citation:** Cass. soc., 10 juill. 2002, n° 00-45.135 (and Cass. soc., 29 janv. 2003, n° 00-44.781)
+**Citation:** Cass. soc., 10 juill. 2002, n° 00-45.135 (vérifié) et Cass. soc., 29 janv. 2003, n° 00-44.882 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007045871 ; le numéro « 00-44.781 » cité auparavant est introuvable)
 **Published:** Bull. civ. V
 
 **Facts:** An employment contract contained a post-termination non-compete clause without any financial compensation for the employee during the restriction period.
@@ -422,7 +418,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 9. Forfait jours — Suivi effectif de la charge de travail
-**Citation:** Cass. soc., 13 sept. 2023, n° 22-17.340
+**Citation:** Cass. soc., 29 juin 2011, n° 09-71.107 (arrêt de principe ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000024844073 ; le pourvoi 22-17.340 cité auparavant est l'un des arrêts congés payés/maladie du 13 sept. 2023, voir entrée dédiée)
 **Published:** Bull. civ. V
 
 **Facts:** An employer applied a forfait jours agreement (art. L3121-64 C. trav.) without ensuring regular monitoring of the employee's workload as required by the applicable collective agreement.
@@ -434,7 +430,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 10. Égalité salariale — Discrimination syndicale par comparaison de carrière
-**Citation:** Cass. soc., 3 nov. 2011, n° 10-18.036
+**Citation:** Cass. soc., 28 mars 2000, n° 97-45.258 et 97-45.259 (Fluchère c/ SNCF, arrêt fondateur de la méthode du panel ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007042320 ; le pourvoi 10-18.036 cité auparavant est l'arrêt géolocalisation du 3 nov. 2011)
 **Published:** Bull. civ. V
 
 **Facts:** A union delegate claimed career discrimination, showing that his salary and promotion trajectory lagged significantly behind comparable non-union colleagues with similar seniority and qualifications.
@@ -470,8 +466,8 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 13. Congés payés et maladie — Conformité EU
-**Citation:** Cass. ass. plén., 17 nov. 2023, n° 21-20.776
-**Published:** Bull. ass. plén.
+**Citation:** Cass. soc., 13 sept. 2023, n° 22-17.340, 22-17.341 et 22-17.342 (Transdev ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000048085897 ; la référence antérieure « ass. plén., 17 nov. 2023, n° 21-20.776 » était doublement fausse : ce numéro est introuvable, et l'assemblée plénière du 17 nov. 2023 est le n° 21-20.723, liberté d'expression artistique)
+**Published:** Bull. civ. V
 
 **Facts:** An employee on long-term non-occupational sick leave claimed accrual of paid leave during illness, relying on EU Directive 2003/88/EC (art. 7, right to annual paid leave).
 
@@ -481,22 +477,15 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 14. Barème Macron — Validation définitive
-**Citation:** Cass. soc., 11 mai 2022, n° 21-14.490 and n° 21-15.247 (avis de l'Assemblée plénière)
-**Published:** Bull. civ. V
-
-**Facts:** Employees challenged the constitutionality and ECHR-compatibility of the statutory cap on damages for unfair dismissal (Barème Macron, art. L1235-3 Code du travail), arguing it prevented adequate reparation of harm.
-
-**Rule established:** The Barème Macron is compatible with art. 10 of ILO Convention n° 158 and with art. 24 of the European Social Charter. National courts must apply the statutory scale and may not depart from it on an individual basis.
-
-**Significance:** Ended years of conflicting lower-court decisions — many of which had set aside the cap. Confirmed the capped-damages system as the binding framework for all unfair dismissal litigation in France.
+### 14. Barème Macron — Validation définitive (DOUBLON de l'entrée 5)
+**Audit 2026-08-05 :** cette entrée dupliquait l'entrée 5 (mêmes pourvois 21-14.490 et 21-15.247) avec une qualification FAUSSE (« avis de l'Assemblée plénière » : ce sont des arrêts de la chambre sociale en formation plénière de chambre) et une affirmation inexacte sur la Charte sociale européenne (invocation écartée faute d'effet direct, pas de déclaration de compatibilité). Se reporter à l'entrée 5, corrigée et sourcée.
 
 ---
 
 ## IV. Administrative Law (Droit administratif)
 
 ### 1. Blanco
-**Citation:** TC, 8 févr. 1873, n° (classic reference, predates modern numbering)
+**Citation:** TC, 8 févr. 1873, n° 00012 (vérifié le 2026-08-04, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000007605886/)
 **Published:** Recueil Lebon (D. 1873.3.17)
 
 **Facts:** A young girl was injured by a railway wagon operated by employees of a State tobacco manufacturer. Her father brought a civil action against the State in ordinary courts.
@@ -520,7 +509,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 3. Dehaene
-**Citation:** CE Ass., 7 juil. 1950, n° (Rec. CE p. 426)
+**Citation:** CE Ass., 7 juil. 1950, n° 01645 (Rec. CE p. 426 ; vérifié le 2026-08-04, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000007636579/)
 **Published:** Rec. CE p. 426; D. 1950.538, note Morange
 
 **Facts:** Civil servants went on strike, and the government challenged whether civil servants had a right to strike at all.
@@ -532,7 +521,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 4. Barel
-**Citation:** CE Ass., 28 mai 1954, n° (Rec. CE p. 308)
+**Citation:** CE Ass., 28 mai 1954, n° 28238 et jointes (Rec. CE p. 308 ; vérifié le 2026-08-04, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000007637425/)
 **Published:** Rec. CE p. 308; S. 1954.3.97, note Rougevin-Baville
 
 **Facts:** Several candidates for the ENA entrance competition were refused admission to the competition without stated reasons. They were suspected of being Communist Party members.
@@ -616,7 +605,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 11. Police administrative vs police judiciaire — Baud
-**Citation:** TC, 7 juin 1951, n° 01148, Dame Noualek (and TC, 12 juin 1978, Société Le Profil)
+**Citation:** TC, 7 juin 1951, n° 1316, Dame Noualek (Rec. p. 636) et TC, 12 juin 1978, n° 02082, Société Le Profil (audit 2026-08-05 : le numéro « 01148 » était faux ; « Consorts Baud » est un arrêt distinct, CE Sect., 11 mai 1951)
 **Published:** Rec. TC
 
 **Facts:** Disputes arose over whether acts of law enforcement belonged to police administrative (prevention of public order disturbances) or police judiciaire (detection and investigation of criminal offenses), determining which court had jurisdiction.
@@ -628,7 +617,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 12. État d'urgence — Contrôle par le CE
-**Citation:** CE, ord. réf., 11 déc. 2015, n° 394989 et 394990 (état d'urgence — assignation à résidence)
+**Citation:** CE, Section du contentieux, 11 déc. 2015, n° 395009 et 394990, M. Domenjoud (audit 2026-08-05 : décisions de Section, pas de simples ordonnances de référé ; vérifié https://www.legifrance.gouv.fr/ceta/id/CETATEXT000031631213)
 **Published:** Rec. CE
 
 **Facts:** Following the terrorist attacks of 13 November 2015, the state of emergency was declared. Individuals subject to assignations à résidence challenged the measures before the juge des référés.
@@ -640,7 +629,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 13. Urbanisme — Danthony appliqué aux permis de construire
-**Citation:** CE, 14 oct. 2015, n° 390867 (and CE, 22 févr. 2018, n° 395963)
+**Citation:** RÉFÉRENCES SUPPRIMÉES À L'AUDIT (2026-08-05) : « CE, 14 oct. 2015, n° 390867 » est INTROUVABLE (ArianeWeb et Legifrance, suspicion de fabrication) ; « CE, 22 févr. 2018, n° 395963 » a un numéro réel mais une date fausse et un objet différent (CE Sect., 22 déc. 2017, Commune de Sempy, carte communale, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000036253348). Entrée à reconstruire avec des décisions vérifiées avant toute citation.
 **Published:** Rec. CE
 
 **Facts:** A third party challenged a permis de construire on grounds of procedural irregularity in the consultation process (enquête publique or avis de l'architecte des bâtiments de France).
@@ -726,7 +715,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 5. CNIL c/ Clearview AI
-**Citation:** CNIL, 20 oct. 2022, SAN-2022-019
+**Citation:** CNIL, délibération SAN-2022-019 du 17 oct. 2022 (rendue publique le 20 oct. ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000046444859)
 **Authority:** Commission nationale de l'informatique et des libertés
 
 **Facts:** Clearview AI scraped publicly accessible photographs from the internet to feed a facial recognition database used by law enforcement. The CNIL investigated following complaints from French residents.
@@ -925,7 +914,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Rule established:** The right to collective action (including the right to strike) is a fundamental right recognized in EU law (art. 28 Charter of Fundamental Rights). However, it must be balanced against the freedom of establishment (TFUE art. 49). Collective action that restricts freedom of establishment must be justified by an overriding reason of public interest and must be proportionate.
 
-**Significance:** First time the CJUE recognized the right to strike as an EU fundamental right but subjected it to proportionality review against economic freedoms. Highly controversial — criticized for subordinating social rights to market freedoms. Read together with Laval (C-341/05, same day).
+**Significance:** First time the CJUE recognized the right to strike as an EU fundamental right but subjected it to proportionality review against economic freedoms. Highly controversial — criticized for subordinating social rights to market freedoms. Read together with Laval (C-341/05, rendu le 18 déc. 2007, une semaine après Viking, pas le même jour).
 
 ---
 
@@ -1016,7 +1005,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 2. Première QPC — Cristallisation de la jurisprudence
-**Citation:** Cons. const., 28 mai 2010, n° 2010-1 QPC (Association SOS Racisme)
+**Citation:** Cons. const., 28 mai 2010, n° 2010-1 QPC, Consorts L. (cristallisation des pensions des anciens combattants des ex-colonies ; censure pour rupture d'égalité). Vérifié le 2026-08-05, https://www.conseil-constitutionnel.fr/decision/2010/20101QPC.htm. (Audit : les « faits » antérieurs de cette entrée, « Association SOS Racisme, listes électorales », étaient fabriqués.)
 **Published:** JO 29 mai 2010
 
 **Facts:** The first question prioritaire de constitutionnalité (QPC) transmitted after the mechanism entered into force on 1 March 2010. The association challenged a provision on electoral rolls.
@@ -1124,7 +1113,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 ---
 
 ### 11. Constitutionnalisation de l'IVG
-**Citation:** Cons. const., 8 mars 2024 (loi constitutionnelle relative à la liberté de recourir à l'interruption volontaire de grossesse)
+**Citation:** Loi constitutionnelle n° 2024-200 du 8 mars 2024 (JORF 9 mars 2024), art. 34 Const. (audit 2026-08-05 : ce n'est PAS une décision du Conseil constitutionnel, la mention « Cons. const. » était erronée ; https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049251463)
 **Published:** JO 9 mars 2024
 
 **Facts:** Following a constitutional amendment adopted by Congress (Parlement réuni en Congrès) at Versailles on 4 March 2024, the freedom to have recourse to voluntary termination of pregnancy (IVG) was inscribed in art. 34 of the Constitution.
@@ -1147,7 +1136,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. QPC — Contrôle d'identité et discriminations (2022)
+### 13. QPC — Contrôle d'identité et discriminations (2017)
 **Citation:** Cons. const., 24 janv. 2017, n° 2016-606/607 QPC
 **Published:** JO 26 janv. 2017
 
