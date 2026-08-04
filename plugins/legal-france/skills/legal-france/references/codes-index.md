@@ -110,7 +110,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | Art. 323-1 – 323-8 | Computer offences (atteintes aux STAD) | Hacking, unauthorized system access |
 | Art. 324-1 – 324-9 | Money laundering (blanchiment) | Laundering of criminal proceeds |
 | Art. 432-1 – 432-17 | Offences by public officials | Corruption (active/passive), abuse of authority |
-| Art. 433-1 – 433-25 | Offences against public authority | Corruption of private persons, obstruction of justice |
+| Art. 433-1 – 433-25 | Offences against public authority committed by private persons | Active corruption of public officials (art. 433-1); NB: corruption of private persons = arts. 445-1 ff, obstruction of justice = arts. 434-1 ff |
 | Art. 441-1 – 441-12 | Forgery (faux) | Document forgery |
 | Art. 450-1 – 450-5 | Criminal conspiracy (association de malfaiteurs) | Organized crime threshold |
 
@@ -256,7 +256,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | L. 251-1 – L. 252-13 | Economic interest groupings (GIE, GEIE) | Cross-entity collaboration structures |
 | L. 420-1 – L. 420-7 | Competition law: anti-competitive practices | Cartels, abuse of dominant position |
 | L. 441-1 – L. 441-16 | Commercial relations: transparency and balance | Payment terms, general terms of sale (CGV), late payment penalties |
-| L. 620-1 – L. 698-1 | Collective insolvency proceedings | Sauvegarde, redressement judiciaire, liquidation judiciaire |
+| L. 620-1 – L. 696-1 | Collective insolvency proceedings | Sauvegarde, redressement judiciaire, liquidation judiciaire (prevention: mandat ad hoc and conciliation at L. 611-1 ff) |
 
 ### Hierarchical structure
 
@@ -323,8 +323,8 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | Art. 543 – 567 | Appeals (appel) | Conditions, time limits (1 month from notification), devolutive effect |
 | Art. 604 – 639-1 | Cassation proceedings | Pourvoi en cassation, formation of petition |
 | Art. 700 | Costs awarded to the winning party (frais irrépétibles) | Attorney fee reimbursement |
-| Art. 1004 – 1030 | Arbitration | Compromis, clause compromissoire |
-| Art. 1441 – 1568 | Mediation, conciliation | Alternative dispute resolution framework |
+| Art. 1442 – 1527 | Arbitration | Convention d'arbitrage : clause compromissoire, compromis (arts. 1442-1449) — verified 2026-08-04, https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006089134 |
+| Art. 1528 – 1568 | Amicable dispute resolution (médiation, conciliation, procédure participative) | Alternative dispute resolution framework |
 
 **Key procedural time limits:**
 - Appeal (appel): 1 month from service of judgment (Art. 538)
@@ -364,7 +364,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | L. 1 – L. 4 | Jurisdiction of administrative courts | Separation of administrative and judicial orders |
 | L. 211-1 – L. 231-7 | Tribunal administratif and cour administrative d'appel | First instance, appeal |
 | L. 311-1 – L. 315-1 | Conseil d'État jurisdiction | Cassation, first instance for ministerial acts |
-| L. 411-1 – L. 412-1 | Référé administratif | Référé-suspension (L. 521-1), référé-liberté (L. 521-2), référé-provision |
+| L. 511-1 – L. 555-2 | Référé administratif | Référé-suspension (L. 521-1), référé-liberté (L. 521-2), référé-provision |
 | L. 521-1 | Référé-suspension | Suspension of an administrative decision: urgency + serious doubt on legality |
 | L. 521-2 | Référé-liberté | Protection of a fundamental freedom: serious and manifestly unlawful infringement |
 | L. 600-1 – L. 600-9 | Town planning litigation | Special rules for construction permits |
@@ -446,7 +446,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | L. 312-1 – L. 315-1 | Consumer credit (crédit à la consommation) | TAEG disclosure, creditworthiness assessment |
 | L. 313-1 – L. 313-49 | Mortgage credit (crédit immobilier) | Mandatory information, 10-day cooling-off period |
 | L. 217-1 – L. 217-29 | Legal guarantees: conformity (garantie légale de conformité) | 2-year guarantee for goods (art. L. 217-4) |
-| L. 218-1 – L. 218-5 | Guarantee against hidden defects (garantie des vices cachés) | 2 years from discovery (Code civil art. 1648) |
+| L. 218-1 – L. 218-2 | Prescription (2-year limitation for professionals' actions against consumers) | NB: the guarantee against hidden defects lives in the Code civil, arts. 1641-1649 (2 years from discovery, art. 1648), not in the consumer code |
 | L. 616-1 – L. 616-3 | Consumer mediation | Mandatory access to ADR for B2C disputes |
 | L. 621-1 – L. 641-1 | Enforcement by DGCCRF | Investigations, injunctions, administrative fines |
 
@@ -464,7 +464,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | L. 123-1 – L. 123-12 | Duration of copyright | Life + 70 years post-mortem |
 | L. 211-1 – L. 217-3 | Neighboring rights (droits voisins) | Performers, phonogram/videogram producers, broadcasters |
 | L. 341-1 – L. 343-7 | Database protection (droit sui generis) | 15-year protection for substantial investment |
-| L. 411-1 – L. 424-11 | Patents (brevets d'invention) | 20-year protection, novelty/inventive step/industrial application requirements |
+| L. 611-1 – L. 615-22 | Patents (brevets d'invention) | 20-year protection (L. 611-2), novelty/inventive step/industrial application (L. 611-10) — verified 2026-08-04, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006069414/LEGISCTA000006146364/ |
 | L. 511-1 – L. 521-17 | Designs (dessins et modèles) | Registered and unregistered design protection |
 | L. 711-1 – L. 716-22 | Trademarks (marques) | Registration, 10-year renewable, distinctive character requirement |
 | L. 721-1 – L. 721-12 | Geographical indications (IG) | AOC, AOP, IGP framework |
@@ -525,17 +525,19 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 **Légifrance ID:** LEGITEXT000031366350
 **Enacted:** Ordonnance n° 2015-1341 of 23 October 2015
 
+Table re-vérifiée contre le sommaire Legifrance le 2026-08-04
+(https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000031366350/).
+
 | Article range | Subject | Typical use cases |
 |---------------|---------|----------------|
 | L. 100-1 – L. 100-3 | Scope | Applies to all administrative relations |
-| L. 110-1 – L. 114-10 | Rules applicable to administration | Good faith, security of legal situations, reasonable time |
+| L. 110-1 – L. 114-10 | Requests to the administration (saisine) and their processing | Electronic saisine, acknowledgment of receipt, transmission to the competent authority, incomplete applications |
 | L. 121-1 – L. 122-2 | Right to be heard (droit d'être entendu) | Audi alteram partem before adverse decision |
-| L. 231-1 | Silence means acceptance | Default rule: silence for 2 months = acceptance (with many exceptions) — verified 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367611 |
-| L. 200-1 – L. 240-2 | Access to administrative documents (CADA) | Right to access non-confidential documents; CADA commission |
-| L. 300-1 – L. 342-2 | Open data and reuse | Mandatory publication of public data, open license |
-| L. 410-1 – L. 412-8 | Administrative acts: definition and types | Actes réglementaires, actes individuels, actes non-décisoires |
-| L. 411-1 – L. 411-8 | Entry into force | Publication/notification requirements |
-| L. 412-1 – L. 412-8 | Abrogation and withdrawal | Illegal act: withdrawal within 4 months (art. L. 242-1) |
-| L. 420-1 – L. 424-5 | Tacit decisions | Silence = rejection (default); silence = acceptance (listed procedures) |
-| L. 430-1 | Mandatory statement of reasons (motivation) | Adverse individual decisions must be reasoned |
-| L. 552-1 – L. 552-12 | Administrative mediation | Prior administrative appeal (recours administratif préalable obligatoire — RAPO) |
+| L. 200-1 – L. 200-2 | Administrative acts: definition and types | Actes réglementaires, actes individuels, actes non-décisoires |
+| L. 211-1 – L. 211-8 | Mandatory statement of reasons (motivation) | Adverse individual decisions must be reasoned (verified 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367505) |
+| L. 221-1 – L. 222-4 | Entry into force of administrative acts | Publication (regulatory acts), notification (individual decisions) |
+| L. 231-1 – L. 232-4 | Tacit (implicit) decisions | Default: silence for 2 months = acceptance (L. 231-1, verified 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367611); listed exceptions where silence = rejection (L. 231-4) |
+| L. 240-1 – L. 243-4 | Abrogation and withdrawal | Illegal act creating rights: withdrawal within 4 months (art. L. 242-1) |
+| L. 300-1 – L. 311-9 | Access to administrative documents (CADA) | Right to access non-confidential documents (L. 311-1); CADA commission (L. 340-1 ff) |
+| L. 312-1 – L. 327-1 | Open data and reuse of public information | Mandatory online publication of public data (L. 312-1); licences and fees for reuse (L. 321-1 ff) |
+| L. 410-1 – L. 424-2 | Administrative appeals and mediation | Recours gracieux/hiérarchique (L. 411-1), RAPO (L. 412-1 – L. 412-8), médiation (L. 421-1), Défenseur des droits (L. 424-1) |
