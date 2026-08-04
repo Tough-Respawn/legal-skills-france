@@ -1,17 +1,17 @@
 # Civil Law — French Civil Law
 
 ## Applicable Codes
-- Code civil (consolidated text, last amended 2024)
-  - Persons and family: Arts. 1–515
+- Code civil (consolidated text, last amended at least 2025 — loi n° 2025-568 du 23 juin 2025 ; vérifié le 2026-08-04)
+  - Persons and family: Arts. 7–515-13-1 (Livre Ier)
   - Property: Arts. 516–710
   - Obligations (contracts): Arts. 1100–1386-1 (reformed by ord. n° 2016-131 of 10 Feb. 2016)
-  - Tort liability: Arts. 1240–1244 (renumbered by ord. 2016-131)
+  - Tort liability: Arts. 1240–1254 (1246-1252 préjudice écologique depuis 2016 ; 1253 troubles du voisinage depuis 2024)
 
 ## Key Articles
 
 ### Article 9 — Right to Privacy
-> « Chacun a droit au respect de sa vie privée. Les juges peuvent, sans préjudice de la réparation du dommage subi, prescrire toutes mesures, telles que séquestre, saisie et autres, propres à empêcher ou faire cesser une atteinte à l'intimité de la vie privée. »
-Source: Legifrance
+> « Chacun a droit au respect de sa vie privée. Les juges peuvent, sans préjudice de la réparation du dommage subi, prescrire toutes mesures, telles que séquestre, saisie et autres, propres à empêcher ou faire cesser une atteinte à l'intimité de la vie privée : ces mesures peuvent, s'il y a urgence, être ordonnées en référé. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006419288 (vérifié le 2026-08-04)
 
 ### Article 16 — Human Dignity
 > « La loi assure la primauté de la personne, interdit toute atteinte à la dignité de celle-ci et garantit le respect de l'être humain dès le commencement de sa vie. »
@@ -22,8 +22,8 @@ Source: Legifrance
 Source: Legifrance
 
 ### Article 371-1 — Parental Authority
-> « L'autorité parentale est un ensemble de droits et de devoirs ayant pour finalité l'intérêt de l'enfant. Elle appartient aux parents jusqu'à la majorité ou l'émancipation de l'enfant pour le protéger dans sa sécurité, sa santé et sa moralité, pour assurer son éducation et permettre son développement, dans le respect dû à sa personne. »
-Source: Legifrance
+> « L'autorité parentale est un ensemble de droits et de devoirs ayant pour finalité l'intérêt de l'enfant. Elle appartient aux parents jusqu'à la majorité ou l'émancipation de l'enfant pour le protéger dans sa sécurité, sa santé, sa vie privée et sa moralité, pour assurer son éducation et permettre son développement, dans le respect dû à sa personne. L'autorité parentale s'exerce sans violences physiques ou psychologiques. Les parents associent l'enfant aux décisions qui le concernent, selon son âge et son degré de maturité. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049164413 (vérifié le 2026-08-04, version loi 2024-120 du 19/02/2024)
 
 ### Article 544 — Property Rights
 > « La propriété est le droit de jouir et disposer des choses de la manière la plus absolue, pourvu qu'on n'en fasse pas un usage prohibé par les lois ou par les règlements. »
@@ -54,16 +54,16 @@ Source: Legifrance
 Source: Legifrance
 
 ### Article 1137 — Fraud (Dol)
-> « Le dol est le fait pour un contractant d'obtenir le consentement de l'autre par des manœuvres ou des mensonges. Constitue également un dol la dissimulation intentionnelle par l'un des contractants d'une information dont il sait le caractère déterminant pour l'autre partie. »
-Source: Legifrance
+> « Le dol est le fait pour un contractant d'obtenir le consentement de l'autre par des manœuvres ou des mensonges. Constitue également un dol la dissimulation intentionnelle par l'un des contractants d'une information dont il sait le caractère déterminant pour l'autre partie. Néanmoins, ne constitue pas un dol le fait pour une partie de ne pas révéler à son cocontractant son estimation de la valeur de la prestation. »
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000032007571/ (vérifié le 2026-08-04 ; l'al. 3, ajouté par la loi 2018-287, codifie la solution Baldus)
 
 ### Article 1140 — Duress (Violence)
 > « Il y a violence lorsqu'une partie s'engage sous la pression d'une contrainte qui lui inspire la crainte d'exposer sa personne, sa fortune ou celles de ses proches à un mal considérable. »
 Source: Legifrance
 
 ### Article 1217 — Remedies for Non-Performance
-> « La partie envers laquelle l'engagement n'a pas été exécuté, ou l'a été imparfaitement, peut : refuser d'exécuter ou suspendre l'exécution de sa propre obligation ; poursuivre l'exécution forcée en nature de l'obligation ; obtenir une réduction du prix ; provoquer la résolution du contrat ; demander réparation des conséquences de l'inexécution. »
-Source: Legifrance
+> « La partie envers laquelle l'engagement n'a pas été exécuté, ou l'a été imparfaitement, peut : refuser d'exécuter ou suspendre l'exécution de sa propre obligation ; poursuivre l'exécution forcée en nature de l'obligation ; obtenir une réduction du prix ; provoquer la résolution du contrat ; demander réparation des conséquences de l'inexécution. Les sanctions qui ne sont pas incompatibles peuvent être cumulées ; des dommages et intérêts peuvent toujours s'y ajouter. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036829854 (vérifié le 2026-08-04)
 
 ### Article 1231-1 — Damages for Breach of Contract
 > « Le débiteur est condamné, s'il y a lieu, au paiement de dommages et intérêts soit à raison de l'inexécution de l'obligation, soit à raison du retard dans l'exécution, s'il ne justifie pas que l'exécution a été empêchée par la force majeure. »
@@ -80,7 +80,7 @@ Source: Legifrance
 ### Article 1242 — Liability for Acts of Others and Things (Fait d'Autrui)
 > « On est responsable non seulement du dommage que l'on cause par son propre fait, mais encore de celui qui est causé par le fait des personnes dont on doit répondre, ou des choses que l'on a sous sa garde. »
 > (Al. 1: general liability for things under one's custody — *garde de la chose*)
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786000 (vérifié le 2026-08-04 ; ATTENTION : article modifié par la loi n° 2025-568 du 23/06/2025 sur la responsabilité parentale, relire les alinéas 2 et s. sur Legifrance avant de les citer)
 
 ### Article 1100 — Sources of Obligations
 Summarized: Les obligations naissent d'actes juridiques, de faits juridiques ou de l'autorité seule de la loi.
@@ -178,9 +178,15 @@ Keywords: résolution, clause résolutoire, inexécution grave, notification
 Summarized: Le juge peut modérer ou augmenter la clause pénale si elle est manifestement excessive ou dérisoire. Toute stipulation contraire est réputée non écrite.
 Keywords: clause pénale, pouvoir modérateur du juge, pénalité contractuelle
 
-### Article 1231-7 — Point de départ des intérêts moratoires
-Summarized: Les dommages et intérêts résultant d'un retard portent intérêt à compter de la mise en demeure ou, en matière délictuelle, du jour du jugement.
-Keywords: intérêts moratoires, mise en demeure, retard
+### Article 1231-6 — Intérêts moratoires (retard de paiement d'une somme d'argent)
+Summarized: Les dommages et intérêts dus à raison du retard dans le paiement d'une obligation de somme d'argent consistent dans l'intérêt au taux légal, à compter de la mise en demeure.
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000032009929/ (vérifié le 2026-08-04)
+Keywords: intérêts moratoires, mise en demeure, somme d'argent, taux légal
+
+### Article 1231-7 — Intérêts sur condamnation à indemnité
+Summarized: En toute matière (pas seulement délictuelle), la condamnation à une indemnité emporte intérêts au taux légal, même en l'absence de demande, courant en principe du prononcé du jugement.
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000032009929/ (vérifié le 2026-08-04)
+Keywords: intérêts, condamnation, jugement, taux légal
 
 ### Article 1243 — Responsabilité du fait des animaux
 Summarized: Le propriétaire d'un animal, ou celui qui s'en sert, est responsable du dommage que l'animal a causé, que celui-ci ait été sous sa garde, qu'il se soit égaré ou échappé.
@@ -195,68 +201,81 @@ Summarized: Celui qui réclame l'exécution d'une obligation doit la prouver. R�
 Keywords: charge de la preuve, onus probandi, preuve, extinction
 
 ### Article 1354 — Présomptions légales
-Summarized: Les présomptions légales dispensent de preuve le fait qu'elles établissent. Elles sont simples (réfragables) ou irréfragables selon la loi.
-Keywords: présomption légale, présomption simple, présomption irréfragable, dispense de preuve
+Summarized: Les présomptions légales dispensent de preuve le fait qu'elles établissent. Le texte distingue trois catégories : simple (preuve contraire réservée), mixte (moyens ou objet de la preuve contraire limités par la loi) et irréfragable (ne peut être renversée).
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032042336 (vérifié le 2026-08-04)
+Keywords: présomption légale, présomption simple, présomption mixte, présomption irréfragable
 
 ### Article 1359 — Preuve par écrit au-delà de 1 500 euros
-Summarized: L'acte juridique portant sur une somme ou une valeur excédant 1 500 euros doit être prouvé par écrit.
-Keywords: preuve littérale, seuil 1 500 euros, écrit, acte juridique
+Summarized: L'acte juridique portant sur une somme ou une valeur excédant un montant fixé par décret doit être prouvé par écrit. Le seuil de 1 500 euros est fixé par l'art. 1er du décret n° 80-533 du 15 juillet 1980 (modifié), pas par l'article lui-même.
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032042311 et https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000033202239 (vérifié le 2026-08-04)
+Keywords: preuve littérale, seuil 1 500 euros, écrit, acte juridique, décret 80-533
 
-### Article 1363 — Commencement de preuve par écrit
-Summarized: Constitue un commencement de preuve par écrit tout écrit émanant de celui à qui on l'oppose et qui rend vraisemblable le fait allégué.
+### Article 1362 — Commencement de preuve par écrit
+Summarized: Constitue un commencement de preuve par écrit tout écrit qui, émanant de celui qui conteste un acte ou de celui qu'il représente, rend vraisemblable ce qui est allégué. (Le vrai art. 1363 pose une autre règle : « Nul ne peut se constituer de titre à soi-même. »)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032042296 (vérifié le 2026-08-04 ; l'entrée était numérotée 1363 par erreur)
 Keywords: commencement de preuve, vraisemblance, écrit, preuve imparfaite
 
 ### Article 1387 — Régimes matrimoniaux — principe de liberté
-Summarized: Les époux peuvent faire, en ce qui concerne leurs biens, toutes les conventions qu'ils jugent à propos, pourvu qu'elles ne soient pas contraires aux bonnes mœurs ni à l'ordre public.
+Summarized: La loi ne régit l'association conjugale, quant aux biens, qu'à défaut de conventions spéciales que les époux peuvent faire comme ils le jugent à propos, pourvu qu'elles ne soient pas contraires aux bonnes mœurs ni aux dispositions qui suivent (le texte ne dit pas « ordre public »).
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136353/ (vérifié le 2026-08-04)
 Keywords: régime matrimonial, liberté conventionnelle, contrat de mariage, bonnes mœurs
 
-### Article 1393 — Contrat de mariage devant notaire
-Summarized: Le contrat de mariage doit être rédigé par acte notarié avant la célébration du mariage.
+### Article 1394 — Contrat de mariage devant notaire
+Summarized: Toutes les conventions matrimoniales sont rédigées par acte devant notaire, en la présence et avec le consentement simultanés de toutes les parties ou de leurs mandataires. (L'exigence de rédaction avant la célébration relève de l'art. 1395 ; le vrai art. 1393 concerne la déclaration générale du régime choisi.)
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136353/ (vérifié le 2026-08-04 ; l'entrée était numérotée 1393 par erreur)
 Keywords: contrat de mariage, notaire, acte authentique, formalisme
 
 ### Article 1401 — Communauté légale — biens communs
 Summarized: La communauté se compose activement des acquêts faits par les époux ensemble ou séparément durant le mariage, provenant tant de leur industrie personnelle que des économies.
 Keywords: communauté légale, acquêts, biens communs, régime légal
 
-### Article 1405 — Biens propres par nature
-Summarized: Restent propres les biens dont chaque époux avait la propriété ou la possession au jour de la célébration du mariage, ainsi que ceux acquis à titre gratuit pendant le mariage.
-Keywords: biens propres, succession, donation, propres par nature
+### Article 1405 — Biens propres par origine
+Summarized: Restent propres les biens dont chaque époux avait la propriété ou la possession au jour de la célébration du mariage, ainsi que ceux acquis pendant le mariage par succession, donation ou legs. (Les propres « par nature » sont à l'art. 1404.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006439446 (vérifié le 2026-08-04)
+Keywords: biens propres, succession, donation, propres par origine
 
-### Article 544 bis — Troubles anormaux du voisinage (construction prétorienne)
-Summarized: Nul ne doit causer à autrui un trouble anormal de voisinage. (Principe jurisprudentiel consolidé, sans article codifié dédié à ce jour.)
-Keywords: trouble de voisinage, responsabilité sans faute, propriété, voisinage
+### Article 1253 — Troubles anormaux du voisinage (codifié en 2024)
+Summarized: Le propriétaire, le locataire, l'occupant sans titre, le bénéficiaire d'un titre, le maître d'ouvrage ou celui qui exerce leurs pouvoirs, qui est à l'origine d'un trouble excédant les inconvénients normaux de voisinage, est responsable de plein droit du dommage qui en résulte. Exceptions pour les activités préexistantes conformes (dont agricoles). Créé par la loi n° 2024-346 du 15 avril 2024 : le principe prétorien est désormais codifié (l'ancienne mention « art. 544 bis » de ce fichier était une numérotation inventée).
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006437138 (vérifié le 2026-08-04)
+Keywords: trouble de voisinage, responsabilité de plein droit, 1253, loi 2024-346, antériorité
 
 ### Article 578 — Usufruit — définition
 Summarized: L'usufruit est le droit de jouir des choses dont un autre a la propriété, comme le propriétaire lui-même, mais à la charge d'en conserver la substance.
 Keywords: usufruit, jouissance, nue-propriété, conservation de la substance
 
-### Article 595 — Droit du nu-propriétaire — baux
-Summarized: L'usufruitier peut donner à bail les biens soumis à l'usufruit. Les baux de plus de neuf ans consentis par l'usufruitier ne sont obligatoires pour le nu-propriétaire que pour la durée excédant neuf ans qui reste à courir.
-Keywords: usufruit, bail, nu-propriétaire, durée, neuf ans
+### Article 595 — Usufruit et baux
+Summarized: L'usufruitier peut donner à bail. Les baux de plus de neuf ans consentis par l'usufruitier seul ne sont, en cas de cessation de l'usufruit, obligatoires à l'égard du nu-propriétaire que pour le temps qui reste à courir de la période de neuf ans EN COURS (le preneur achève la période de neuf ans où il se trouve, pas « la durée excédant neuf ans »). Le concours du nu-propriétaire est requis pour les baux ruraux et commerciaux/industriels/artisanaux (al. 4).
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006429395 (vérifié le 2026-08-04)
+Keywords: usufruit, bail, nu-propriétaire, période de neuf ans
 
 ### Article 637 — Servitudes — définition
 Summarized: Une servitude est une charge imposée sur un héritage pour l'usage et l'utilité d'un héritage appartenant à un autre propriétaire.
 Keywords: servitude, fonds servant, fonds dominant, charge réelle
 
-### Article 688 — Servitudes par titre et destination du père de famille
-Summarized: Les servitudes continues et apparentes s'acquièrent par titre ou par possession de trente ans. Les servitudes continues non apparentes et les servitudes discontinues ne peuvent s'acquérir que par titre.
+### Articles 690-691 — Acquisition des servitudes
+Summarized: Les servitudes continues et apparentes s'acquièrent par titre ou par la possession de trente ans (art. 690). Les servitudes continues non apparentes et les servitudes discontinues, apparentes ou non, ne peuvent s'établir que par titres (art. 691). (L'art. 688 se borne à définir les catégories continues/discontinues ; la destination du père de famille est aux arts. 692-694.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006430374 et https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006430383 (vérifié le 2026-08-04 ; l'entrée était numérotée 688 par erreur)
 Keywords: servitude, titre, prescription acquisitive, possession trentenaire
 
 ### Article 720 — Successions — ouverture
-Summarized: Les successions s'ouvrent par la mort, au dernier domicile du défunt. L'ordre successoral est déterminé par la loi.
+Summarized: Les successions s'ouvrent par la mort, au dernier domicile du défunt.
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006430690 (vérifié le 2026-08-04)
 Keywords: succession, ouverture, décès, dernier domicile
 
-### Article 721 — Égalité successorale
-Summarized: Les successions sont dévolues selon la loi, sans distinction de sexe ni de primogéniture, sauf dispositions testamentaires ou donations.
-Keywords: succession, égalité, dévolution légale, testament
+### Article 721 — Dévolution légale et libéralités
+Summarized: Les successions sont dévolues selon la loi lorsque le défunt n'a pas disposé de ses biens par des libéralités ; elles peuvent être dévolues par les libéralités du défunt dans la mesure compatible avec la réserve héréditaire. (L'égalité « sans distinction de sexe ni de primogéniture », auparavant attribuée ici à tort au 721, est à l'art. 735, pour les descendants.)
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136269/ (vérifié le 2026-08-04)
+Keywords: succession, dévolution légale, libéralités, réserve, art. 735 égalité
 
-### Article 731 — Ordre des héritiers
-Summarized: La succession est déférée aux descendants, aux ascendants privilégiés et collatéraux privilégiés, aux ascendants ordinaires et aux collatéraux ordinaires, dans l'ordre et suivant les règles déterminées par la loi.
-Keywords: ordre successoral, descendants, ascendants, collatéraux
+### Article 734 — Ordre des héritiers
+Summarized: En l'absence de conjoint successible, les parents succèdent dans l'ordre : 1° enfants et descendants ; 2° père et mère, frères et sœurs et leurs descendants ; 3° ascendants autres que père et mère ; 4° collatéraux autres que frères et sœurs et leurs descendants. (Condition « en l'absence de conjoint successible » essentielle ; l'entrée était numérotée 731 par erreur, le vrai 731 posant le principe de dévolution aux parents et au conjoint.)
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136269/ (vérifié le 2026-08-04)
+Keywords: ordre successoral, descendants, ascendants, collatéraux, conjoint successible
 
 ### Article 757 — Droits du conjoint survivant
-Summarized: Si le défunt laisse des enfants ou descendants, le conjoint survivant recueille, à son choix, l'usufruit de la totalité des biens existants ou la propriété du quart des biens.
-Keywords: conjoint survivant, usufruit, quart en propriété, option successorale
+Summarized: Si l'époux prédécédé laisse des enfants ou descendants, le conjoint survivant recueille, à son choix, l'usufruit de la totalité des biens existants ou la propriété du quart LORSQUE TOUS les enfants sont issus des deux époux ; en présence d'un ou plusieurs enfants non issus des deux époux, le conjoint n'a que la propriété du quart (pas d'option usufruit).
+Source: Legifrance, section https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136269/ (vérifié le 2026-08-04)
+Keywords: conjoint survivant, usufruit, quart en propriété, enfants d'un premier lit
 
 ### Article 912 — Réserve héréditaire
 Summarized: La réserve héréditaire est la part des biens et droits successoraux dont la loi assure la dévolution libre de charges à certains héritiers dits réservataires, s'ils sont appelés à la succession et s'ils l'acceptent.
@@ -301,7 +320,7 @@ Keywords: interruption, reconnaissance, prescription, aveu
 ### Perruche — Cass. ass. plén., 17 nov. 2000, n° 99-13.701
 - **Facts**: Medical negligence failed to detect rubella in a pregnant woman; her child was born with severe disabilities. The child (through his parents) sought damages for being born.
 - **Rule**: When a medical fault deprived the mother of the option to terminate the pregnancy, the child born with disability resulting from that fault can claim compensation for the harm constituted by his birth (*préjudice d'être né*).
-- **Significance**: Highly controversial decision later overturned by the *loi Anti-Perruche* (loi n° 2002-303 of 4 March 2002, Art. L. 114-5 CSP), which prohibits compensation solely on the ground of being born with a disability.
+- **Significance**: Highly controversial decision later overturned by the *loi Anti-Perruche* (loi n° 2002-303 of 4 March 2002, codified at Art. L. 114-5 du Code de l'action sociale et des familles — CASF, not CSP; vérifié le 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006796464), which prohibits compensation solely on the ground of being born ("Nul ne peut se prévaloir d'un préjudice du seul fait de sa naissance").
 
 ### Chronopost — Cass. com., 22 oct. 1996, n° 93-18.632
 - **Facts**: Chronopost undertook to deliver an express parcel by a specified time. Its general conditions limited liability to the cost of carriage. The delivery was late and the client lost a business opportunity.
@@ -358,7 +377,7 @@ Keywords: interruption, reconnaissance, prescription, aveu
 
 - **"How does civil liability (tort) work?"** → Three-part analysis: (1) *fait générateur* — personal fault (Art. 1240/1241), act of a thing under one's custody (Art. 1242 al. 1), or act of a person one is responsible for (Art. 1242 al. 2–7); (2) *dommage* — must be certain, direct, and personal; (3) *lien de causalité* — courts apply equivalence of conditions or proximate cause theory.
 
-- **"What are grounds for divorce?"** → Four grounds under Arts. 229 et seq. C. civ.: (1) divorce by mutual consent (*consentement mutuel*, Art. 230); (2) accepted divorce (*accepté*, Art. 233); (3) lasting breakdown of the marriage bond (*altération définitive du lien conjugal*, 2 years separation, Art. 237); (4) fault (*faute*, Art. 242 — requires a serious or renewed violation of marital duties under Art. 212). Note: Art. 212 sets out the duties whose breach can found a fault divorce.
+- **"What are grounds for divorce?"** → Four grounds under Arts. 229 et seq. C. civ.: (1) divorce by mutual consent (*consentement mutuel*, Art. 230); (2) accepted divorce (*accepté*, Art. 233); (3) lasting breakdown of the marriage bond (*altération définitive du lien conjugal*, Arts. 237-238 — separation of ONE year at the time of the petition, since the loi 2019-222 in force 01/01/2021; vérifié le 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038310956); (4) fault (*faute*, Art. 242 — requires a serious or renewed violation of marital duties under Art. 212). Note: Art. 212 sets out the duties whose breach can found a fault divorce.
 
 - **"What privacy rights do I have?"** → Art. 9 protects *vie privée*; judges may issue injunctions without waiting for reparation. Privacy encompasses medical data, sexual life, home, correspondence. Reinforced by GDPR (EU level) and loi n° 78-17 (Informatique et Libertés).
 
