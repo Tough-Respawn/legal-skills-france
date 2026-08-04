@@ -16,7 +16,7 @@ optional_fields:
   - pieces_jointes
 applicable_law:
   - art. 529-2 C. proc. pén. (procédure de l'amende forfaitaire)
-  - art. 530 C. proc. pén. (requête en exonération — 45 jours)
+  - art. 529-2 C. proc. pén. (requête en exonération — 45 jours) et art. 530 (réclamation contre l'amende forfaitaire MAJORÉE — 30 jours)
 disclaimer_level: high
 ---
 
@@ -76,7 +76,7 @@ Au moment des faits, le véhicule était {{situation_vehicule}} (au nom de {{veh
 
 En application de l'article 529-2 du Code de procédure pénale, et dans le délai légal de 45 jours, je sollicite l'exonération de cette contravention.
 
-Je vous prie de bien vouloir m'adresser votre décision motivée par retour de courrier, et de me notifier toute convocation devant la juridiction de proximité (juge de police) si vous décidiez de maintenir la poursuite.
+Je vous prie de bien vouloir m'adresser votre décision motivée par retour de courrier, et de me notifier toute convocation devant le tribunal de police si vous décidiez de maintenir la poursuite.
 
 Veuillez agréer, Monsieur l'Officier du Ministère Public, l'expression de ma considération distinguée.
 
@@ -93,6 +93,6 @@ Veuillez agréer, Monsieur l'Officier du Ministère Public, l'expression de ma c
   - L'original de l'avis de contravention OU la carte de paiement détachable (selon les instructions au dos de l'avis).
   - Le formulaire de requête en exonération (si fourni).
   - Les pièces justifiant la contestation (certificat de cession du véhicule, déclaration de vol, etc.).
-- Conséquence d'une contestation rejetée : l'OMP peut transmettre au juge de proximité (tribunal de police). En cas de condamnation par le juge, l'amende est portée à un montant supérieur (amende civile majorée + frais).
-- Si l'avis a été reçu il y a plus de 45 jours : il s'agit alors d'une amende forfaitaire **majorée**, à contester sous **30 jours** auprès du Trésor Public selon une procédure différente (art. 530 CPP).
+- Conséquence d'une contestation rejetée : l'OMP peut transmettre au tribunal de police (les juridictions de proximité ont été supprimées au 1er juillet 2017). En cas de condamnation, le tribunal prononce une amende PÉNALE qui peut être supérieure à l'amende forfaitaire, plus d'éventuels frais.
+- Si l'avis a été reçu il y a plus de 45 jours : il s'agit alors d'une amende forfaitaire **majorée** ; réclamation motivée à adresser à l'OFFICIER DU MINISTÈRE PUBLIC (pas au Trésor Public) dans les **30 jours** de l'envoi de l'avis (art. 530 CPP ; délai porté à 3 mois dans certains cas routiers avec avis LRAR). Vérifié le 2026-08-05.
 - En cas de contestation pour "non-désignation du conducteur" (entreprises possédant des véhicules) : ne pas utiliser ce modèle, procédure spécifique.

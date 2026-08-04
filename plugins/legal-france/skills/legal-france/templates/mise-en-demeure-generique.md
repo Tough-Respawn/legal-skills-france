@@ -77,4 +77,4 @@ Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées
 - Envoyer par lettre recommandée avec accusé de réception (preuve juridique).
 - Conserver une copie signée de la lettre.
 - Délai recommandé : 8 jours minimum, 15 jours raisonnable. Si contractuel, respecter le délai prévu.
-- Si dette commerciale et destinataire est professionnel : possibilité d'ajouter "intérêts de retard de plein droit à compter de cette mise en demeure" (art. L. 441-10 C. com.).
+- Si dette commerciale et destinataire est professionnel : les pénalités de retard de l'art. L. 441-10 C. com. sont exigibles de plein droit dès le jour suivant la date d'échéance, SANS mise en demeure nécessaire (taux BCE + 10 points, plancher 3 fois le taux légal, indemnité forfaitaire de 40 €) ; les rappeler dans la lettre est utile mais elles ne partent pas de la mise en demeure (vérifié le 2026-08-05).

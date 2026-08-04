@@ -83,6 +83,6 @@ Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées
 - Consulter la convention collective applicable pour le préavis exact (variable selon statut et ancienneté). Source d'autorité : Legifrance ou le portail de la branche.
 - Aucun motif n'est exigé : la démission est un droit (sauf preuve d'abus).
 - Envoyer en lettre recommandée avec accusé de réception OU remettre en main propre contre décharge datée et signée — pour preuve.
-- En période d'essai : la démission est libre, le préavis est très court (24h à 1 semaine selon l'ancienneté dans l'entreprise — art. L. 1221-25).
+- En période d'essai : la rupture par le salarié est libre, avec un délai de prévenance de 48 heures, ramené à 24 heures si la présence dans l'entreprise est inférieure à 8 jours (art. L. 1221-26, jamais « 1 semaine » ; le L. 1221-25 cité auparavant régit le délai à la charge de l'EMPLOYEUR. Vérifié le 2026-08-05).
 - Démission en CDD : ne pas utiliser ce modèle. Le CDD ne peut être rompu unilatéralement que dans des cas limitatifs (art. L. 1243-1).
 - Une démission "sous le coup de la colère" peut être requalifiée en prise d'acte aux torts de l'employeur si elle est suivie de manifestations sans équivoque ; demander conseil avant envoi en cas de conflit.

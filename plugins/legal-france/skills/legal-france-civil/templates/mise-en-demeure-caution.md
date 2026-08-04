@@ -91,5 +91,6 @@ Pièces jointes :
 - Vérifier que les délais 1 mois / 2 mois sont à jour.
 - Envoyer obligatoirement en lettre recommandée avec accusé de réception.
 - Joindre les pièces listées en pied du modèle.
-- Si pas de réponse 8 jours après réception : saisir la commission départementale de conciliation OU le tribunal judiciaire (procédure de protection des locataires sans avocat obligatoire pour les litiges < 10 000 €).
+- Si pas de réponse 8 jours après réception : saisir la commission départementale de conciliation OU le juge des contentieux de la protection (au sein du tribunal judiciaire), sans avocat obligatoire quel que soit le montant en matière de bail d'habitation (art. 761 CPC pour la dispense générale ≤ 10 000 €).
+- Attention : la majoration de 10 % par mois de retard n'est pas due si le locataire n'a pas indiqué au bailleur l'adresse de son nouveau domicile (art. 22 loi 89-462, vérifié le 2026-08-05).
 - Pour un bailleur professionnel (agence) : la mise en demeure peut faire courir des intérêts de retard plus élevés.

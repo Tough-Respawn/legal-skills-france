@@ -123,7 +123,7 @@ L'Employeur                                Le Salarié
 
 - Confirmer sur Legifrance la version en vigueur des articles L. 1237-11 à L. 1237-16, L. 1234-9, R. 1234-2.
 - Calculer rigoureusement l'indemnité minimale : 1/4 de mois × années (pour les 10 premières), puis 1/3 × années (au-delà). Si convention collective plus favorable, appliquer ce minimum supérieur.
-- Remplir parallèlement le **formulaire CERFA n° 14598*04** (ou version en vigueur) pour transmission à la DREETS via TéléRC.
+- Demande d'homologation obligatoirement en ligne via **TéléRC** depuis le 1er avril 2022 (délai d'instruction : 15 jours ouvrables, art. L. 1237-14) ; le formulaire cerfa n° 14598 (version en vigueur) n'est admis qu'en cas d'impossibilité d'utiliser le téléservice. (Vérifié le 2026-08-05.)
 - Trois exemplaires originaux signés : un pour l'employeur, un pour le salarié, un pour la DREETS.
 - Délais à respecter :
   - 15 jours calendaires de rétractation après signature.

@@ -187,7 +187,7 @@ cited articles match Legifrance.
 - DPO : aucun
 
 **Expected:**
-- Citation art. 6 LCEN.
+- Citation art. 1-1 LCEN (issu de la loi SREN 2024 ; l'ancien art. 6 ne fonde plus les mentions légales).
 - Citation RGPD art. 13/14 + 15-22.
 - Section cookies citant délibération CNIL n° 2020-091.
 - Lien CNIL présent.

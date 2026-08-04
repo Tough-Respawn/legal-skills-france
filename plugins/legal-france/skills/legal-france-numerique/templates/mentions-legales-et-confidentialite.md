@@ -23,7 +23,7 @@ optional_fields:
   - dpo_nom                 # if appointed
   - dpo_email
 applicable_law:
-  - art. 6-III LCEN n° 2004-575 du 21 juin 2004 (mentions légales obligatoires)
+  - art. 1-1 de la loi n° 2004-575 du 21 juin 2004 (LCEN, mentions légales obligatoires ; article issu de la loi SREN n° 2024-449 du 21 mai 2024 : l'ancien fondement « art. 6-III » n'existe plus, vérifié le 2026-08-05)
   - art. 13 et 14 RGPD (information des personnes — politique de confidentialité)
   - art. 82 loi 78-17 modifiée + délibération CNIL n° 2020-091 du 17 sept. 2020 (cookies)
 disclaimer_level: high
@@ -51,7 +51,7 @@ disclaimer_level: high
 ```
 # Mentions légales et politique de confidentialité
 
-## 1. Mentions légales (art. 6 LCEN)
+## 1. Mentions légales (art. 1-1 LCEN, issu de la loi SREN 2024)
 
 ### 1.1 Éditeur du site
 
@@ -144,7 +144,7 @@ En cas de difficulté, vous pouvez introduire une réclamation auprès de la **C
 
 Le site utilise des cookies pour son fonctionnement et, sous réserve de votre consentement préalable, pour la mesure d'audience ou la personnalisation.
 
-À votre première visite, un bandeau vous permet d'accepter, refuser, ou personnaliser le dépôt des cookies non strictement nécessaires. Votre choix est conservé pendant 6 mois maximum, à l'issue desquels il vous sera redemandé (conformément à la délibération CNIL n° 2020-091).
+À votre première visite, un bandeau vous permet d'accepter, refuser, ou personnaliser le dépôt des cookies non strictement nécessaires. Votre choix (consentement ou refus) est conservé pendant 6 mois, durée recommandée par la CNIL (recommandation « cookies », délibération n° 2020-092 du 17 septembre 2020 ; c'est une bonne pratique recommandée, pas un maximum réglementaire).
 
 Vous pouvez à tout moment modifier vos choix via la page « Gestion des cookies ».
 
@@ -165,7 +165,7 @@ Dernière mise à jour : {{date_du_jour}}
 
 ## Vérifications juridiques avant envoi
 
-- Confirmer sur Legifrance la version en vigueur de l'art. 6 LCEN n° 2004-575 du 21 juin 2004.
+- Confirmer sur Legifrance la version en vigueur de l'art. 1-1 de la loi n° 2004-575 (LCEN), https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000049568614 (vérifié le 2026-08-05).
 - Confirmer sur eur-lex.europa.eu la version actuelle du RGPD (règlement 2016/679) — articles 13, 14, 15-22.
 - Vérifier sur cnil.fr la dernière délibération sur les cookies (n° 2020-091 ou plus récente).
 - Sur le bandeau cookies : il doit présenter de manière équivalente les boutons "Accepter", "Refuser" et "Personnaliser". Pas de cases pré-cochées. Action positive obligatoire.

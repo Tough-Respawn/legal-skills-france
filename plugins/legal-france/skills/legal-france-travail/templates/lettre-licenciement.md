@@ -41,7 +41,7 @@ disclaimer_level: high
 11. Convention collective applicable ?
 12. Date prévue d'envoi de la lettre ?
 
-(Délai légal : la lettre doit être envoyée au plus tôt **2 jours ouvrables** et au plus tard 1 mois après l'entretien préalable pour le motif personnel.)
+(Délai légal : la lettre doit être envoyée au plus tôt **2 jours ouvrables** après l'entretien préalable ; le plafond d'un mois ne vaut que pour les licenciements DISCIPLINAIRES, art. L. 1332-2 ; pour un motif personnel non disciplinaire, ex. insuffisance professionnelle, seul un délai raisonnable s'applique. Vérifié le 2026-08-05.)
 
 ## Template
 
@@ -85,7 +85,7 @@ Votre préavis, d'une durée de {{duree_preavis}} prévue par {{#if convention_c
 - ainsi que le règlement de votre indemnité légale (ou conventionnelle) de licenciement, calculée conformément aux articles L. 1234-9 et suivants du Code du travail.
 
 {{#if motif_type=="economique"}}
-Nous vous informons que vous bénéficiez de la priorité de réembauche prévue à l'article L. 1233-45 du Code du travail pendant un délai d'un an à compter de la date de rupture de votre contrat. Vous pouvez également solliciter un contrat de sécurisation professionnelle (CSP) le cas échéant.
+Nous vous informons que vous bénéficiez de la priorité de réembauche prévue à l'article L. 1233-45 du Code du travail pendant un délai d'un an à compter de la date de rupture de votre contrat, À CONDITION d'en faire la demande au cours de ce même délai (mention exigée par L. 1233-16). Vous pouvez également solliciter un contrat de sécurisation professionnelle (CSP) le cas échéant.
 {{/if}}
 
 Nous vous prions d'agréer, {{salarie_nom_formule_politesse}}, l'expression de nos salutations distinguées.
@@ -103,6 +103,6 @@ Nous vous prions d'agréer, {{salarie_nom_formule_politesse}}, l'expression de n
 - Pour motif économique : avoir notifié à la DREETS / fait les consultations obligatoires (CSE).
 - Délais à respecter :
   - Convocation à entretien préalable au moins 5 jours ouvrables avant l'entretien.
-  - Lettre envoyée au plus tôt **2 jours ouvrables** après l'entretien (motif personnel) ou 7 jours (motif économique individuel).
+  - Lettre envoyée au plus tôt **2 jours ouvrables** après l'entretien (motif personnel) ou **7 jours ouvrables** (motif économique individuel, portés à **15 jours ouvrables** pour un membre du personnel d'encadrement, art. L. 1233-15 ; vérifié le 2026-08-05).
 - Risque : un licenciement sans cause réelle et sérieuse expose à des dommages-intérêts plafonnés selon l'art. L. 1235-3 (barème Macron — dépend de l'ancienneté et de l'effectif).
 - En cas de doute sérieux sur la justification : consulter un avocat ou un syndicat **avant** envoi.
