@@ -5,8 +5,9 @@
   - Crimes and délits: Books I–IV (Arts. 111-1 et seq.)
   - Contraventions: Book V
 - Code de procédure pénale (CPP) — criminal procedure
-  - Enquête et instruction: Arts. 60–230
-  - Jugement: Arts. 380 et seq.
+  - Enquête et instruction: Arts. 53 et s. (flagrance), 75 et s. (préliminaire), 79-230 (instruction)
+  - Jugement: Arts. 231 et s. (cour d'assises), 380-16 et s. (cour criminelle départementale), 381 et s. (tribunal correctionnel)
+  - NB : l'ordonnance n° 2025-1091 du 19/11/2025 réécrit la partie législative du CPP avec entrée en vigueur au 1er janvier 2029 ; l'actuel CPP reste en vigueur d'ici là
 - Specific laws: loi n° 2000-516 of 15 June 2000 (presumption of innocence and victims' rights); loi n° 2004-204 of 9 March 2004 (Perben II)
 
 ## Key Articles
@@ -32,16 +33,16 @@ Source: Legifrance
 Source: Legifrance
 
 ### CP Article 122-1 — Irresponsibility Due to Mental Disorder
-> « N'est pas pénalement responsable la personne qui était atteinte, au moment des faits, d'un trouble mental ayant aboli son discernement ou le contrôle de ses actes. La personne qui était atteinte, au moment des faits, d'un trouble mental ayant altéré son discernement ou entravé le contrôle de ses actes demeure punissable ; toutefois, la juridiction tient compte de cette circonstance lorsqu'elle détermine la peine et en fixe le régime. »
-Source: Legifrance
+> « N'est pas pénalement responsable la personne qui était atteinte, au moment des faits, d'un trouble psychique ou neuropsychique ayant aboli son discernement ou le contrôle de ses actes. » (al. 2 : le trouble ayant seulement altéré le discernement laisse la personne punissable, la juridiction en tient compte ; depuis la loi 2014-896, réduction du tiers de la peine encourue en matière correctionnelle)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070719/LEGISCTA000006136037/ (vérifié le 2026-08-05 ; le texte dit « trouble psychique ou neuropsychique », jamais « trouble mental »)
 
 ### CP Article 122-5 — Legitimate Defense (Légitime Défense)
 > « N'est pas pénalement responsable la personne qui, devant une atteinte injustifiée envers elle-même ou autrui, accomplit, dans le même temps, un acte commandé par la nécessité de la légitime défense d'elle-même ou d'autrui, sauf s'il y a disproportion entre les moyens de défense employés et la gravité de l'atteinte. »
 Source: Legifrance
 
 ### CP Article 131-3 — Criminal Penalties (Peines Correctionnelles)
-> « Les peines correctionnelles applicables aux personnes physiques sont : 1° L'emprisonnement ; 2° La détention à domicile sous surveillance électronique ; 3° Le travail d'intérêt général ; 4° L'amende ; 5° Le jour-amende ; 6° Le stage ; 7° La peine privative ou restrictive de droit prévue à l'article 131-6 ; 8° La peine complémentaire prévue à l'article 131-10. »
-Source: Legifrance
+> « Les peines correctionnelles encourues par les personnes physiques sont : 1° L'emprisonnement ; 2° La détention à domicile sous surveillance électronique ; 3° Le travail d'intérêt général ; 4° L'amende ; 5° Le jour-amende ; 6° Les peines de stage ; 7° Les peines privatives ou restrictives de droits prévues à l'article 131-6 ; 8° La sanction-réparation. Ces peines ne sont pas exclusives des peines complémentaires prévues à l'article 131-10. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070719/LEGISCTA000006181728/ (vérifié le 2026-08-05)
 
 ### CP Article 221-1 — Murder (Meurtre)
 > « Le fait de donner volontairement la mort à autrui constitue un meurtre. Il est puni de trente ans de réclusion criminelle. »
@@ -59,13 +60,13 @@ Source: Legifrance
 > « L'escroquerie est le fait, soit par l'usage d'un faux nom ou d'une fausse qualité, soit par l'abus d'une qualité vraie, soit par l'emploi de manœuvres frauduleuses, de tromper une personne physique ou morale et de la déterminer ainsi, à son préjudice ou au préjudice d'un tiers, à remettre des fonds, des valeurs ou un bien quelconque, à fournir un service ou à consentir un acte opérant obligation ou décharge. L'escroquerie est punie de cinq ans d'emprisonnement et de 375 000 euros d'amende. »
 Source: Legifrance
 
-### CPP Article 63 — Police Custody (Garde à Vue)
-> « L'officier de police judiciaire peut, pour les nécessités de l'enquête, placer en garde à vue toute personne à l'égard de laquelle il existe une ou plusieurs raisons plausibles de soupçonner qu'elle a commis ou tenté de commettre un crime ou un délit puni d'une peine d'emprisonnement. »
-Source: Legifrance
+### CPP Articles 62-2 et 63 — Police Custody (Garde à Vue)
+> Art. 62-2 (définition, depuis la loi 2011-392) : la garde à vue est une mesure de contrainte par laquelle une personne à l'encontre de laquelle il existe une ou plusieurs raisons plausibles de soupçonner qu'elle a commis ou tenté de commettre un crime ou un délit puni d'emprisonnement est maintenue à la disposition des enquêteurs. Art. 63 I : « Seul un officier de police judiciaire peut, d'office ou sur instruction du procureur de la République, placer une personne en garde à vue. » Art. 63 II : durée de 24 heures, prolongation unique de 24 heures sur autorisation écrite et motivée du procureur (crime ou délit puni d'au moins un an d'emprisonnement).
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000023865405 et https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038311888 (vérifié le 2026-08-05 ; l'ancienne rédaction citée auparavant datait d'avant 2011)
 
-### CPP Article 393 — Immediate Appearance (Comparution Immédiate)
-> « Le procureur de la République, s'il estime que les charges réunies sont suffisantes et que l'affaire est en état d'être jugée, peut, à l'issue de la garde à vue ou, à défaut, après avoir fait comparaître l'intéressé devant lui, traduire le prévenu sur-le-champ devant le tribunal. »
-Source: Legifrance
+### CPP Article 395 — Immediate Appearance (Comparution Immédiate)
+> « Si le maximum de l'emprisonnement prévu par la loi est au moins égal à deux ans, le procureur de la République, lorsqu'il lui apparaît que les charges réunies sont suffisantes et que l'affaire est en l'état d'être jugée, peut, s'il estime que les éléments de l'espèce justifient une comparution immédiate, traduire le prévenu sur-le-champ devant le tribunal. » (en cas de flagrance, seuil abaissé à un emprisonnement d'au moins six mois ; l'art. 393 régit quant à lui le déferrement devant le procureur)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006576448 (vérifié le 2026-08-05 ; l'entrée était numérotée 393 par erreur)
 
 ### CP Article 112-1 — Non-Retroactivity of Harsher Criminal Laws
 - Harsher criminal statutes apply only to acts committed after their entry into force; more lenient statutes (*lois plus douces*) apply retroactively.
@@ -79,9 +80,10 @@ Source: Legifrance
 - Legal persons (companies, associations) are criminally liable for offenses committed on their behalf by their organs or representatives.
 - Keywords: personne morale, responsabilité pénale, organe, représentant
 
-### CP Article 121-4 — Attempt (Tentative)
-- The perpetrator of an offense is the person who commits or attempts to commit the act. Attempt requires a *commencement d'exécution* and failure to complete due only to circumstances beyond the person's control (*désistement involontaire*).
-- Keywords: tentative, commencement d'exécution, désistement
+### CP Articles 121-4 et 121-5 — Author and Attempt (Tentative)
+- Art. 121-4: the perpetrator is the person who commits the acts or attempts to commit a crime (or, where provided, a délit). Art. 121-5: « La tentative est constituée dès lors que, manifestée par un commencement d'exécution, elle n'a été suspendue ou n'a manqué son effet qu'en raison de circonstances indépendantes de la volonté de son auteur. » Le désistement VOLONTAIRE exclut donc la tentative.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006417209 et https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006417210 (vérifié le 2026-08-05)
+- Keywords: tentative, commencement d'exécution, désistement volontaire
 
 ### CP Article 121-7 — Definition of Complicity
 - Complicity is established by aiding, abetting, assisting, or provoking the commission of an offense, or by giving instructions to commit it.
@@ -107,17 +109,19 @@ Source: Legifrance
 - Minors capable of *discernement* are criminally responsible; appropriate sanctions are determined according to a specific regime (CJPM since 2021).
 - Keywords: mineurs, discernement, CJPM, éducation
 
-### CP Article 131-4-1 — Probation (Sursis Probatoire)
-- The *sursis probatoire* combines a suspended sentence with supervision obligations and conditions; replaces former *sursis avec mise à l'épreuve* since 2020 reform.
-- Keywords: sursis probatoire, obligations, suivi, réinsertion
+### CP Article 132-40 — Probation (Sursis Probatoire)
+- The *sursis probatoire* (Arts. 132-40 et s. CP) combines a suspended sentence with supervision obligations and conditions; replaces former *sursis avec mise à l'épreuve* since the 2019-222 reform (in force 2020). NB: Art. 131-4-1 CP est une autre peine, la détention à domicile sous surveillance électronique (DDSE, 15 jours à 6 mois).
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038313559 (vérifié le 2026-08-05 ; l'entrée était numérotée 131-4-1 par erreur)
+- Keywords: sursis probatoire, obligations, suivi, réinsertion, DDSE
 
 ### CP Article 132-1 — Individualization of Sentences
 - Courts must individualize sentences based on the circumstances of the offense and the personality of the offender.
 - Keywords: individualisation des peines, personnalité, circonstances
 
 ### CP Article 132-23 — Period of Safety (Période de Sûreté)
-- For serious crimes punished by 10+ years, the court may impose a *période de sûreté* during which the convicted person may not benefit from sentence adjustments (parole, semi-liberté).
-- Keywords: période de sûreté, aménagement de peine, libération conditionnelle
+- For sentences of 10+ years for offenses specially provided by law, the *période de sûreté* applies DE PLEIN DROIT (half the sentence, or 18 years for a life sentence); it is only optional for sentences above 5 years. During it, no suspension/fractionnement, placement extérieur, permissions de sortir, semi-liberté or libération conditionnelle.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070719/LEGISCTA000006181742/ (vérifié le 2026-08-05)
+- Keywords: période de sûreté, plein droit, aménagement de peine, libération conditionnelle
 
 ### CP Article 132-71 — Definition of Aggravating Circumstance (Bande Organisée)
 - An organized gang (*bande organisée*) is any group formed or any understanding established for the preparation, characterized by one or more material facts, of one or more offenses.
@@ -139,17 +143,20 @@ Source: Legifrance
 - Acts of violence causing an incapacity to work (*ITT*) exceeding 8 days: 3 years imprisonment and €45,000 fine.
 - Keywords: violences volontaires, ITT, incapacité
 
-### CP Article 222-22 — Sexual Aggression (Definition)
-- Sexual aggression is any sexual assault committed with violence, constraint, threat, or surprise. Rape is any act of sexual penetration committed under these conditions.
-- Keywords: agression sexuelle, viol, contrainte, violence, surprise
+### CP Article 222-22 — Sexual Aggression (Definition) — RÉFORME 2025
+- Depuis la loi n° 2025-1057 du 6 novembre 2025 (en vigueur 08/11/2025), la définition repose sur le NON-CONSENTEMENT : constitue une agression sexuelle tout acte sexuel non consenti. Le consentement doit être libre et éclairé, spécifique, préalable et révocable ; il ne peut être déduit du seul silence ou de la seule absence de réaction ; il n'y a pas de consentement en cas de violence, contrainte, menace ou surprise. NE PLUS citer l'ancienne définition (« commise avec violence, contrainte, menace ou surprise ») pour des faits postérieurs au 08/11/2025 ; relire le texte exact sur Legifrance avant toute citation verbatim.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043409030 et loi https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000052533258 (vérifié le 2026-08-05)
+- Keywords: agression sexuelle, consentement, loi 2025-1057, violence, contrainte, surprise
 
-### CP Article 222-23 — Rape (Viol)
-- Rape is any act of sexual penetration, of any nature, or any oral-genital act committed on the person of another by violence, constraint, threat, or surprise. Punished by 15 years *réclusion criminelle*.
-- Keywords: viol, pénétration sexuelle, réclusion criminelle
+### CP Article 222-23 — Rape (Viol) — RÉFORME 2025
+- Le viol est redéfini par la loi n° 2025-1057 sur le fondement du non-consentement (actes de pénétration sexuelle ou actes bucco-génitaux/bucco-anaux non consentis). Peine inchangée et vérifiée : « Le viol est puni de quinze ans de réclusion criminelle. » Relire le texte exact en vigueur sur Legifrance avant toute citation verbatim de la définition.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535571 (vérifié le 2026-08-05)
+- Keywords: viol, consentement, pénétration sexuelle, réclusion criminelle, loi 2025-1057
 
 ### CP Article 225-1 — Discrimination (Definition)
-- Discrimination is any distinction between natural persons based on origin, sex, family situation, pregnancy, physical appearance, vulnerability due to economic situation, patronymic, place of residence, health, disability, genetic characteristics, morals, sexual orientation, gender identity, age, political opinions, trade union activities, ability to express oneself in a language other than French, membership or non-membership in a specific ethnic group, nation, alleged race, or religion.
-- Keywords: discrimination, critères, distinction, égalité
+- Discrimination is any distinction between natural persons based on origin, sex, family situation, pregnancy, physical appearance, vulnerability due to economic situation, patronymic, place of residence, health, loss of autonomy (perte d'autonomie), disability, genetic characteristics, morals, sexual orientation, gender identity, age, political opinions, trade union activities, whistleblower status (qualité de lanceur d'alerte, de facilitateur ou de personne en lien avec un lanceur d'alerte, loi 2022-401), ability to express oneself in a language other than French, membership or non-membership in a specific ethnic group, nation, alleged race, or religion.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045391831 (vérifié le 2026-08-05)
+- Keywords: discrimination, critères, distinction, égalité, lanceur d'alerte
 
 ### CP Article 226-1 — Invasion of Privacy (Atteinte à la Vie Privée)
 - Recording or transmitting private words or images of a person in a private place without consent: 1 year imprisonment and €45,000 fine.
@@ -172,7 +179,8 @@ Source: Legifrance
 - Keywords: escroquerie aggravée, personne vulnérable, autorité publique
 
 ### CP Article 314-1 — Breach of Trust (Abus de Confiance)
-- Misappropriation of funds, valuables, or any property entrusted for a specific purpose: 3 years imprisonment and €375,000 fine.
+- Misappropriation of funds, valuables, or any property entrusted for a specific purpose: « L'abus de confiance est puni de cinq ans d'emprisonnement et de 375 000 euros d'amende » (peine relevée de 3 à 5 ans par la loi 2020-1672 du 24/12/2020).
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042780077 (vérifié le 2026-08-05)
 - Keywords: abus de confiance, détournement, remise, préjudice
 
 ### CP Article 321-1 — Handling Stolen Goods (Recel)
@@ -184,12 +192,14 @@ Source: Legifrance
 - Keywords: terrorisme, ordre public, intimidation, terreur
 
 ### CP Article 421-2-1 — Criminal Terrorist Association
-- Participation in a group formed or understanding established for the preparation of one of the acts of terrorism defined in Arts. 421-1 and 421-2: 10 years imprisonment and €225,000 fine; leadership role: 20 years and €500,000.
-- Keywords: association de malfaiteurs terroriste, préparation, direction
+- Participation in a group formed or understanding established for the preparation of one of the acts of terrorism defined in Arts. 421-1 and 421-2. Les PEINES sont à l'art. 421-5 CP : participation 10 ans d'emprisonnement et 225 000 € ; direction ou organisation « trente ans de réclusion criminelle et de 500 000 € d'amende » (30 ans depuis la loi 2016-987, pas 20).
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032925381 (vérifié le 2026-08-05)
+- Keywords: association de malfaiteurs terroriste, préparation, direction, art. 421-5
 
-### CP Article 431-1 — Participation in Unlawful Assembly (Attroupement)
-- Participation in an assembly (*attroupement*) on public roads likely to disturb public order after the dispersal order: 1 year imprisonment and €15,000 fine.
-- Keywords: attroupement, ordre public, dispersion, voie publique
+### CP Article 431-4 — Participation in Unlawful Assembly (Attroupement)
+- « Le fait, pour celui qui n'est pas porteur d'une arme, de continuer volontairement à participer à un attroupement après les sommations est puni d'un an d'emprisonnement et de 15 000 euros d'amende. » (L'art. 431-1 réprime une autre infraction : l'entrave concertée à l'exercice des libertés d'expression, du travail, d'association, de réunion ou de manifestation.)
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000021926085 (vérifié le 2026-08-05 ; l'entrée était numérotée 431-1 par erreur)
+- Keywords: attroupement, sommations, ordre public, voie publique
 
 ### CPP Article 1 — Public Action (Action Publique)
 - Public action (*action publique*) for the application of penalties is set in motion and exercised by the *magistrats* or officials to whom it is entrusted by law. It can also be set in motion by the injured party (*partie lésée*) under conditions determined by the CPP.
@@ -208,20 +218,23 @@ Source: Legifrance
 - Keywords: opportunité des poursuites, classement sans suite, alternatives, poursuites
 
 ### CPP Article 41-1 — Alternatives to Prosecution
-- Before deciding to prosecute, the *procureur* may employ alternative measures: warning (*rappel à la loi*), mediation, *stage de citoyenneté*, orientation toward treatment, etc.
-- Keywords: alternatives aux poursuites, rappel à la loi, médiation pénale
+- Before deciding to prosecute, the *procureur* may employ alternative measures: *avertissement pénal probatoire* (qui remplace le rappel à la loi, supprimé au 1er janvier 2023 par la loi 2021-1729), mediation, *stage*, orientation toward treatment, régularisation, réparation du dommage, etc.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044569854 (vérifié le 2026-08-05)
+- Keywords: alternatives aux poursuites, avertissement pénal probatoire, médiation pénale
 
-### CPP Article 44 — Territorial Competence of the Procureur
-- The *procureur de la République* has territorial competence for offenses committed within the jurisdiction of the *tribunal judiciaire* to which they are attached, or where the suspect resides, or where the suspect was arrested.
-- Keywords: compétence territoriale, procureur, tribunal judiciaire
+### CPP Article 43 — Territorial Competence of the Procureur
+- « Sont compétents le procureur de la République du lieu de l'infraction, celui de la résidence de l'une des personnes soupçonnées d'avoir participé à l'infraction, celui du lieu d'arrestation d'une de ces personnes [...] et celui du lieu de détention d'une de ces personnes ». (L'art. 44 traite de l'autorité du procureur sur les officiers du ministère public près les tribunaux de police.)
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049312968 (vérifié le 2026-08-05 ; l'entrée était numérotée 44 par erreur)
+- Keywords: compétence territoriale, procureur, lieu de l'infraction, arrestation, détention
 
 ### CPP Article 63-1 — Rights Notification in Garde à Vue
 - At the start of *garde à vue*, the person must be immediately informed: of the nature and date of the offense, of the right to silence, to a lawyer, to a medical examination, to inform a family member, and to consult certain documents.
 - Keywords: notification des droits, garde à vue, avocat, silence
 
-### CPP Article 63-4 — Lawyer in Garde à Vue
-- The person in *garde à vue* may request the assistance of a lawyer from the start of the measure. The lawyer may consult the hearing transcript and attend interviews from the first hour.
-- Keywords: avocat, garde à vue, assistance, entretien, audition
+### CPP Articles 63-3-1 à 63-4-2 — Lawyer in Garde à Vue
+- Demande d'avocat dès le début de la mesure (63-3-1). L'art. 63-4 ne couvre que l'entretien confidentiel de 30 minutes maximum ; la consultation de certaines pièces (PV de notification, certificats médicaux, PV d'audition de la personne) relève du 63-4-1 ; l'assistance de l'avocat aux auditions et confrontations relève du 63-4-2.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049461458 (63-4-1, vérifié le 2026-08-05)
+- Keywords: avocat, garde à vue, entretien 30 minutes, consultation des pièces, audition
 
 ### CPP Article 137 — Provisional Detention (Détention Provisoire) — Principles
 - Provisional detention is an exceptional measure. The person under judicial examination (*mis en examen*) who is presumed innocent remains free. Pre-trial detention may only be ordered when judicial supervision (*contrôle judiciaire*) or house arrest with electronic monitoring (*ARSE*) are insufficient.
@@ -239,9 +252,10 @@ Source: Legifrance
 - The *procureur* may invite the suspect to appear before the tribunal on a set date, notifying them of the charges and their rights.
 - Keywords: CPPV, convocation, procureur, audience, délai
 
-### CPP Article 495 — Ordonnance Pénale (Simplified Procedure)
-- For certain délits, the president of the tribunal may rule without a hearing by *ordonnance pénale*, on the *procureur's* request. The defendant may object within 30 days.
-- Keywords: ordonnance pénale, procédure simplifiée, opposition, délit
+### CPP Articles 495 et 495-3 — Ordonnance Pénale (Simplified Procedure)
+- For certain délits (art. 398-1, faits simples et établis, hors mineurs), the president of the tribunal may rule without a hearing by *ordonnance pénale*, on the *procureur's* request (art. 495). Opposition : « le prévenu est informé qu'il dispose d'un délai de QUARANTE-CINQ JOURS à compter de cette notification pour former opposition » (art. 495-3 ; le délai de 30 jours indiqué auparavant était faux ; 30 jours est le délai de l'ordonnance pénale contraventionnelle, art. 527).
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038312535 (vérifié le 2026-08-05)
+- Keywords: ordonnance pénale, procédure simplifiée, opposition 45 jours, délit
 
 ### CPP Article 567 — Pourvoi en Cassation (Criminal)
 - Parties may bring a *pourvoi en cassation* against final judgments of criminal courts (cour d'assises, tribunal correctionnel, tribunal de police) on points of law.
@@ -253,7 +267,7 @@ Source: Legifrance
 
 ## Core Principles
 
-- **Classification des infractions**: Three tiers of severity: *crime* (most serious — tried by Cour d'assises, prison ≥ 10 years), *délit* (intermediate — tried by tribunal correctionnel, up to 10 years), *contravention* (minor — tried by tribunal de police, fines only). Art. 111-1 CP.
+- **Classification des infractions**: Three tiers of severity: *crime* (most serious, réclusion ≥ 10 years — depuis le 01/01/2023, les crimes punis de 15 ou 20 ans (accusés majeurs, hors récidive) sont jugés en premier ressort par la cour criminelle départementale SANS jury, art. 380-16 CPP ; la cour d'assises avec jury reste compétente pour 30 ans/perpétuité et en appel), *délit* (intermediate — tried by tribunal correctionnel, up to 10 years), *contravention* (minor — tried by tribunal de police, fines only). Art. 111-1 CP.
 - **Nullum crimen sine lege (Légalité pénale)**: No crime, no punishment without a pre-existing written law. Only Parliament (*loi*) can define crimes and délits; only regulations (*règlement*) can define contraventions. Arts. 111-3, 111-4 CP. Courts must not create offenses by analogy.
 - **Responsabilité personnelle**: Criminal liability attaches only to the person who committed the act — no collective criminal liability. Art. 121-1 CP. Accomplices (*complices*) are, however, punishable under Art. 121-7 CP.
 - **Élément intentionnel**: Crimes and délits require intent (*dol général* at minimum) unless the law expressly provides for recklessness or negligence offenses. Art. 121-3 CP.
@@ -261,6 +275,13 @@ Source: Legifrance
 - **Droits de la défense**: Right to counsel (at the first hour of *garde à vue* since loi 2011-392), right to interpreter, right to remain silent.
 
 ## Landmark Decisions
+
+> **Avertissement (audit 2026-08-05)** : les numéros de pourvoi et dates des
+> décisions ci-dessous n'ont PAS été vérifiés individuellement sur Legifrance,
+> à l'exception de la décision 99-411 DC (vérifiée, présentation corrigée) et
+> de l'ex-entrée « Stoïkoff » (introuvable, supprimée). Le pattern de
+> références fabriquées détecté dans ce corpus impose de vérifier chaque
+> pourvoi sur legifrance.gouv.fr/juri avant de le citer dans une réponse.
 
 ### Laboube — Cass. crim., 13 déc. 1956
 - **Facts**: A very young child caused the death of another child through a reckless act; prosecution sought to engage the child's criminal responsibility.
@@ -272,13 +293,11 @@ Source: Legifrance
 - **Rule**: For non-intentional offenses, the required *faute* must be characterized precisely in relation to the specific circumstances — a simple *imprudence* suffices under the statutory definition.
 - **Significance**: Clarified the *élément moral* for unintentional offenses; later refined by the *loi Fauchon* of 10 July 2000 (now Art. 121-3 al. 3–4 CP) which introduced graduated fault for indirect causation.
 
-### Stoïkoff — Cass. crim., 14 oct. 2020, n° 19-87.190
-- **Facts**: Challenge to the legality of surveillance measures conducted during a preliminary inquiry (*enquête préliminaire*) without judicial authorization.
-- **Rule**: Extended use of coercive investigative measures without control by the *juge des libertés et de la détention* (JLD) may violate Arts. 6 and 8 ECHR; the court must ensure effective judicial oversight.
-- **Significance**: Triggered a major legislative reform (loi n° 2021-1729 of 22 Dec. 2021) that restructured supervision of investigative measures, reinforcing the JLD's role.
+### ENTRÉE SUPPRIMÉE — « Stoïkoff, Cass. crim., 14 oct. 2020, n° 19-87.190 »
+- **Audit 2026-08-05** : aucune décision portant ce numéro de pourvoi à cette date n'a été trouvée sur Legifrance ; le nom et la portée décrits n'ont pas pu être confirmés. Forte suspicion de référence fabriquée. NE PAS CITER. À remplacer par une décision réelle vérifiée sur legifrance.gouv.fr/juri si le sujet (contrôle des mesures coercitives en enquête préliminaire) doit être illustré.
 
 ### Conseil constitutionnel, 16 juin 1999, n° 99-411 DC — Principe de nécessité des peines
-- **Facts**: Constitutional review of a statute providing for cumulative criminal and administrative penalties.
+- **Facts**: Constitutional review of the loi « portant diverses mesures relatives à la sécurité routière » (permis à points ; décision vérifiée le 2026-08-05, https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000577776 ; la présentation antérieure « loi prévoyant le cumul de sanctions pénales et administratives » était inexacte).
 - **Rule**: The *principe de nécessité des peines* (Art. 8 DDHC) requires that penalties be proportionate to the offense; cumulative penalties for the same facts must remain proportionate overall (*non bis in idem* principle).
 - **Significance**: Constitutionalized proportionality of penalties and framed the non bis in idem doctrine in French law.
 
@@ -337,9 +356,9 @@ Source: Legifrance
 
 ## Common Questions & Patterns
 
-- **"What is the difference between crime, délit, and contravention?"** → Classification under Art. 111-1 CP depends on severity: *crimes* (réclusion/détention criminelle, ≥ 10 years, tried by Cour d'assises with jury), *délits* (emprisonnement up to 10 years + fines, tried by tribunal correctionnel), *contraventions* (fines only, classes 1–5, tried by tribunal de police). The classification determines the court, procedure, statutes of limitation, and criminal record consequences.
+- **"What is the difference between crime, délit, and contravention?"** → Classification under Art. 111-1 CP depends on severity: *crimes* (réclusion/détention criminelle ≥ 10 years — jugés par la cour criminelle départementale SANS jury pour 15-20 ans depuis 2023, art. 380-16 CPP, et par la Cour d'assises avec jury pour 30 ans/perpétuité et en appel), *délits* (emprisonnement up to 10 years + fines, tried by tribunal correctionnel), *contraventions* (fines only, classes 1–5, tried by tribunal de police). The classification determines the court, procedure, statutes of limitation, and criminal record consequences.
 
-- **"What are my rights during garde à vue?"** → Under Arts. 63 et seq. CPP: immediate notification of reasons and duration; right to inform a relative or employer; right to be examined by a doctor; right to counsel from the outset (lawyer at station from first hour); right to an interpreter; right to silence (Art. 63-4-1 CPP). Maximum duration: 24 hours, extendable to 48 hours by the *procureur*; longer for terrorism or organized crime.
+- **"What are my rights during garde à vue?"** → Under Arts. 63 et seq. CPP: immediate notification of reasons and duration; right to inform a relative or employer; right to be examined by a doctor; right to counsel from the outset (lawyer at station from first hour); right to an interpreter; right to silence (notifié au titre de l'Art. 63-1 CPP, pas 63-4-1). Maximum duration: 24 hours, extendable to 48 hours by the *procureur*; longer for terrorism or organized crime.
 
 - **"What is légitime défense and when does it apply?"** → Art. 122-5 CP: the act must respond to an *unjustified attack* against oneself or another; the response must be *simultaneous* (not before or after); and there must be *proportionality* between the defensive means and the seriousness of the attack. The burden of proving the conditions falls on the accused (it is a *cause d'irresponsabilité pénale*).
 
@@ -351,8 +370,8 @@ Source: Legifrance
 - **Scope**: Major overhaul of criminal procedure and sentencing.
 - **Key measures**:
   - Generalization of audio/video recording of trials before the *cour d'assises* and certain *tribunaux correctionnels* (transparency).
-  - Restriction of *enquêtes préliminaires* to 2 years (extendable to 3 years by the *procureur*) to reduce the duration of investigations conducted without judicial oversight (new Art. 75-1 CPP).
-  - Creation of the *comparution à délai différé* (Arts. 397-1-1 et seq. CPP): an intermediate procedure between *comparution immédiate* and *information judiciaire*, allowing the *procureur* to defer the trial date (within 2 months) while the person may be placed under *contrôle judiciaire* or *détention provisoire*. Designed to avoid the binary choice between immediate trial and opening a full judicial investigation.
+  - Restriction of *enquêtes préliminaires* to 2 years (extendable by 1 year by the *procureur* ; 3 + 2 years for organized crime and terrorism) — Art. 75-3 CPP (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048441879 ; le 75-1 concerne le délai fixé par le procureur aux OPJ).
+  - NB : la *comparution à délai différé* (Art. 397-1-1 CPP) a été créée par la loi n° 2019-222 du 23 mars 2019 (art. 60), PAS par la loi 2021-1729 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038270377).
   - Reduction of the scope of *crédit de réduction de peine* automatique; introduction of individualized sentence reductions granted by the *juge de l'application des peines* (JAP).
   - Strengthened role of the *JLD* (juge des libertés et de la détention) in supervising coercive measures during the preliminary inquiry phase.
   - Reform of disciplinary procedures for *magistrats* with a new public hearing mechanism before the *Conseil supérieur de la magistrature*.
@@ -361,11 +380,11 @@ Source: Legifrance
 ### Réformes du Code de procédure pénale — Codification à droit constant (2023-2026)
 - **Context**: The government launched a project to rewrite and restructure the entire CPP, which has become extremely complex (over 2,400 articles) and difficult to navigate due to successive reforms.
 - **Approach**: *Codification à droit constant* — restructuring and renumbering the CPP without changing the substance of the law. The new architecture is organized in a more logical sequence: principles, actors, investigations, prosecution, trial, appeals, execution of sentences.
-- **Status (as of early 2026)**: The reform was enacted through *ordonnance* under the authority granted by the *loi confiance dans l'institution judiciaire* (Art. 14). The new CPP formally entered into force, though transitional provisions ensure continuity of pending proceedings under the former numbering.
-- **Practical note**: Practitioners must verify whether cited CPP articles refer to the former or new numbering. Cross-reference tables have been published by the Ministry of Justice.
+- **Status (vérifié le 2026-08-05)**: Ordonnance n° 2025-1091 du 19 novembre 2025 portant réécriture de la partie législative du CPP, prise sur l'habilitation de l'art. 2 de la loi n° 2023-1059 du 20 novembre 2023 (PAS l'art. 14 de la loi 2021-1729). **Entrée en vigueur fixée au 1er JANVIER 2029** : le nouveau code n'est PAS en vigueur, l'actuel CPP s'applique jusque-là (les pages Legifrance portent la mention « abrogé à compter du 1er janvier 2029 »). Source : https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000052650320.
+- **Practical note**: Jusqu'au 01/01/2029, citer l'actuelle numérotation. Après cette date, vérifier les tables de concordance.
 
 ### Comparution à délai différé — In Practice
-- **Legal basis**: Arts. 397-1-1 et seq. CPP (created by loi n° 2021-1729).
+- **Legal basis**: Arts. 397-1-1 et seq. CPP (created by loi n° 2019-222 du 23 mars 2019, art. 60 ; vérifié le 2026-08-05).
 - **Mechanism**: When the *procureur* considers that the case requires additional investigation that can be completed within 2 months but does not warrant a full *instruction*, they may opt for *comparution à délai différé*. The person is brought before the *JLD*, who may order *contrôle judiciaire*, *ARSE*, or *détention provisoire*. The trial is then set within a maximum of 2 months.
 - **Purpose**: Fills a procedural gap between *comparution immédiate* (same-day trial, often criticized for hasty justice) and *information judiciaire* (formal investigation by a *juge d'instruction*, which can take months or years). Particularly useful for medium-complexity cases requiring forensic results, additional witness statements, or expert reports.
 - **Critique**: Some practitioners argue it may become a means to extend pre-trial detention without the safeguards of the *instruction* phase. Monitoring by the *chambre de l'instruction* remains essential.
@@ -373,7 +392,7 @@ Source: Legifrance
 ### Other Notable Developments (2023-2026)
 - **Extension of victim notification rights**: Progressive reinforcement of obligations to inform victims of key procedural steps (release of the accused, sentence adjustments, etc.).
 - **Digital criminal procedure**: Expansion of videoconferencing for *audiences* and digitalization of procedural acts (*actes de procédure dématérialisés*). Loi n° 2023-22 (not yet fully implemented) anticipates a fully digital criminal case file (*dossier pénal numérique*).
-- **Reinforcement of environmental criminal law**: New aggravated offenses for *écocide* and environmental pollution (Arts. L. 231-1 et seq. Code de l'environnement, with criminal sanctions). Increased penalties for illegal waste disposal and industrial pollution.
+- **Environmental criminal law**: offenses for *écocide* and environmental pollution created by the loi Climat n° 2021-1104 du 22 août 2021 (PAS 2023-2026) — Arts. L. 231-1 à L. 231-3 C. env. : délit puni de 5 ans et 1 M€, écocide intentionnel 10 ans et 4,5 M€ (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043961211).
 - **Ongoing debates**: Reform of the *cour d'assises* (possible extension of the *cour criminelle départementale* model without jury to additional crimes), reform of the *secret de l'instruction*, and extension of the *CRPC* (*comparution sur reconnaissance préalable de culpabilité*) to more offenses.
 
 ## Cross-references
