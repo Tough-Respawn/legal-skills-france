@@ -19,15 +19,20 @@
 Keywords: contrat de travail, subordination, requalification, droit commun
 Source: Legifrance / Cass. soc., 13 nov. 1996 (Société Générale)
 
-#### L1221-2 — Written Form and Language
-> The CDI need not be in writing (except where a collective agreement requires it); all contracts must be drafted in French. A foreign-language clause is unenforceable against the employee.
-Keywords: écrit, langue française, CDI, forme
-Source: Legifrance
+#### L1221-2 — CDI, forme normale de la relation de travail
+> « Le contrat de travail à durée indéterminée est la forme normale et générale de la relation de travail. » Le CDI n'exige pas d'écrit (sauf convention collective contraire).
+Keywords: CDI, forme normale, relation de travail
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177850/ (vérifié le 2026-08-05)
+
+#### L1221-3 — Langue française
+> « Le contrat de travail établi par écrit est rédigé en français. » Une clause en langue étrangère est inopposable au salarié. (L'exigence de langue était attribuée à tort à L1221-2.)
+Keywords: langue française, écrit, inopposabilité
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177850/ (vérifié le 2026-08-05)
 
 #### L1221-6 — Pre-employment Inquiries
-> Information requested from a job candidate must have a direct and necessary link with the proposed position or with the evaluation of the candidate's professional aptitude. The candidate must be informed beforehand of the methods and techniques used.
+> Information requested from a job candidate must have a direct and necessary link with the proposed position or with the evaluation of the candidate's professional aptitude (L1221-6). L'information préalable du candidat sur les méthodes et techniques d'aide au recrutement relève de L1221-8.
 Keywords: recrutement, vie privée, pertinence, information candidat
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177850/ (vérifié le 2026-08-05)
 
 #### L1221-10 — Déclaration Préalable à l'Embauche (DPAE)
 > The employer must make a prior declaration to the URSSAF before any hiring. Failure constitutes an offence of *travail dissimulé*.
@@ -36,25 +41,30 @@ Source: Legifrance
 
 ### Période d'essai
 
-#### L1221-19 — Purpose of the Trial Period
+#### L1221-19 — Durées maximales initiales (CDI)
+> Durée maximale de la période d'essai : *ouvriers/employés* — 2 mois ; *agents de maîtrise/techniciens* — 3 mois ; *cadres* — 4 mois. (La numérotation était décalée : l'objet de la période d'essai est à L1221-20.)
+Keywords: durée maximale, catégorie professionnelle, période d'essai
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000019067609/ (vérifié le 2026-08-05)
+
+#### L1221-20 — Purpose of the Trial Period
 > « La période d'essai permet à l'employeur d'évaluer les compétences du salarié dans son travail, notamment au regard de son expérience, et au salarié d'apprécier si les fonctions occupées lui conviennent. »
 Keywords: période d'essai, évaluation, compétences, objet
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000019067609/ (vérifié le 2026-08-05)
 
-#### L1221-20 — Express Stipulation Required
-> The trial period and any renewal must be expressly stipulated in the employment contract or the letter of engagement.
+#### L1221-21 — Renouvellement et durées totales
+> Renouvellement une fois seulement si un accord de branche ÉTENDU le prévoit ; durées totales, renouvellement compris : 4 mois (ouvriers/employés), 6 mois (agents de maîtrise/techniciens), 8 mois (cadres).
+Keywords: renouvellement, accord de branche étendu, durées totales
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000019067609/ (vérifié le 2026-08-05)
+
+#### L1221-23 — Express Stipulation Required
+> « La période d'essai et la possibilité de la renouveler ne se présument pas. Elles sont expressément stipulées dans la lettre d'engagement ou le contrat de travail. »
 Keywords: période d'essai, clause expresse, lettre d'engagement
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000019067609/ (vérifié le 2026-08-05)
 
-#### L1221-21 — Maximum Duration (CDI)
-> Maximum initial durations: *ouvriers/employés* — 2 months; *agents de maîtrise/techniciens* — 3 months; *cadres* — 4 months. Renewable once if provided by collective agreement and the contract.
-Keywords: durée maximale, catégorie professionnelle, renouvellement
-Source: Legifrance
-
-#### L1221-25 — Notice of Termination During Trial
-> During the trial period, termination requires prior notice: 24 hours if less than 8 days' presence; 48 hours between 8 days and 1 month; 2 weeks after 1 month; 1 month after 3 months (employer-initiated). Employee: 48 hours (24 hours if less than 8 days).
+#### L1221-25 et L1221-26 — Notice of Termination During Trial
+> Employer-initiated (L1221-25): 24 hours if less than 8 days' presence; 48 hours between 8 days and 1 month; 2 weeks after 1 month; 1 month after 3 months. Employee-initiated (L1221-26): 48 hours (24 hours if less than 8 days).
 Keywords: délai de prévenance, rupture période d'essai
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000019067609/ (vérifié le 2026-08-05)
 
 ### Contrat à durée déterminée (CDD)
 
@@ -68,10 +78,10 @@ Source: Legifrance
 Keywords: cas de recours, remplacement, accroissement temporaire, saisonnier, usage
 Source: Legifrance
 
-#### L1242-8 — Maximum Duration
-> The CDD (including renewals) may not exceed 18 months in most cases; 9 months when awaiting a permanent hire; 24 months for contracts performed abroad or for specific orders/exports.
-Keywords: durée maximale CDD, renouvellement, 18 mois
-Source: Legifrance
+#### L1242-8 et L1242-8-1 — Maximum Duration
+> Depuis l'ordonnance 2017-1387, un accord de branche étendu peut fixer la durée totale du CDD (L1242-8). À défaut de stipulation conventionnelle (L1242-8-1, règles supplétives) : 18 mois renouvellements compris ; 9 mois (attente d'un CDI, travaux urgents de sécurité) ; 24 mois (exécution à l'étranger, départ définitif précédant suppression de poste, commande exceptionnelle à l'exportation).
+Keywords: durée maximale CDD, renouvellement, 18 mois, supplétif, accord de branche
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006189453 (vérifié le 2026-08-05)
 
 #### L1243-1 — Early Termination of CDD
 > « Sauf accord des parties, le contrat de travail à durée déterminée ne peut être rompu avant l'échéance du terme qu'en cas de faute grave, de force majeure ou d'inaptitude constatée par le médecin du travail. »
@@ -79,9 +89,9 @@ Keywords: rupture anticipée, faute grave, force majeure, inaptitude
 Source: Legifrance
 
 #### L1243-8 — End-of-Contract Indemnity (Indemnité de Précarité)
-> At the end of the CDD, the employee receives an indemnity of at least 10% of total gross remuneration (6% if a collective agreement provides counterpart training access).
-Keywords: indemnité de précarité, 10%, fin de CDD
-Source: Legifrance
+> At the end of the CDD, the employee receives an indemnity equal to 10% of total gross remuneration (L1243-8) ; taux dérogatoire de 6% possible par accord collectif offrant des contreparties, notamment un accès privilégié à la formation (L1243-9).
+Keywords: indemnité de précarité, 10%, 6%, fin de CDD
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006189459/ (vérifié le 2026-08-05)
 
 ### Licenciement pour motif personnel
 
@@ -91,9 +101,9 @@ Keywords: cause réelle et sérieuse, motif personnel, motivation
 Source: Legifrance
 
 #### L1232-2 — Prior Interview (Entretien Préalable)
-> The employer must summon the employee to a prior interview by registered letter or hand-delivered letter, specifying the subject, date, time, and place. Minimum 5 working days' notice.
-Keywords: entretien préalable, convocation, lettre recommandée, délai
-Source: Legifrance
+> The employer must summon the employee to a prior interview by registered letter or hand-delivered letter indicating its subject (L1232-2 ; la mention de la date, de l'heure et du lieu vient de R1232-1). Minimum 5 working days between presentation of the letter and the interview.
+Keywords: entretien préalable, convocation, lettre recommandée, 5 jours ouvrables
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177858/ (vérifié le 2026-08-05)
 
 #### L1232-4 — Right to Assistance at Interview
 > The employee may be accompanied by a person of their choice belonging to the company's staff or, if no staff representatives exist, by an external *conseiller du salarié* listed by the préfet.
@@ -101,14 +111,14 @@ Keywords: assistance, conseiller du salarié, entretien préalable
 Source: Legifrance
 
 #### L1232-6 — Notification of Dismissal
-> Dismissal is notified by registered letter with acknowledgement of receipt, setting out the precise reasons. The letter fixes the scope of the dispute (*les limites du litige*).
-Keywords: lettre de licenciement, motivation, LRAR
-Source: Legifrance
+> Dismissal is notified by registered letter with acknowledgement of receipt, setting out the reasons, envoyée au plus tôt 2 jours ouvrables après la date prévue de l'entretien préalable. NB : la règle jurisprudentielle « la lettre fixe les limites du litige » est tempérée depuis 2017, les motifs pouvant être précisés après notification (L1235-2).
+Keywords: lettre de licenciement, motivation, LRAR, 2 jours ouvrables
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177858/ (vérifié le 2026-08-05)
 
 #### L1234-1 — Notice Period (Préavis)
-> « Lorsque le contrat de travail est rompu par l'employeur, le salarié a droit : s'il justifie chez le même employeur d'une ancienneté de services continus inférieure à six mois, à un préavis dont la durée est déterminée par la loi, la convention collective ou, à défaut, par les usages pratiqués dans la localité et la profession. Pour une ancienneté entre six mois et deux ans : un mois. Pour une ancienneté d'au moins deux ans : deux mois. »
-Keywords: préavis, ancienneté, durée, dispense
-Source: Legifrance
+> « Lorsque le licenciement n'est pas motivé par une faute grave, le salarié a droit : 1° S'il justifie chez le même employeur d'une ancienneté de services continus inférieure à six mois, à un préavis dont la durée est déterminée par la loi, la convention ou l'accord collectif de travail ou, à défaut, par les usages pratiqués dans la localité et la profession ; 2° S'il justifie chez le même employeur d'une ancienneté de services continus comprise entre six mois et moins de deux ans, à un préavis d'un mois ; 3° S'il justifie chez le même employeur d'une ancienneté de services continus d'au moins deux ans, à un préavis de deux mois. » (La condition d'ouverture est l'ABSENCE DE FAUTE GRAVE ; l'ancienne citation « Lorsque le contrat de travail est rompu par l'employeur » était une réécriture qui changeait le sens.)
+Keywords: préavis, ancienneté, durée, faute grave
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006189443/ (vérifié le 2026-08-05)
 
 #### L1234-9 — Statutory Severance Pay (Indemnité Légale de Licenciement)
 > « Le salarié titulaire d'un contrat de travail à durée indéterminée, licencié alors qu'il compte huit mois d'ancienneté ininterrompus au service du même employeur, a droit, sauf en cas de faute grave, à une indemnité de licenciement. »
@@ -129,10 +139,10 @@ Source: Legifrance
 
 ### Licenciement économique
 
-#### L1233-1 — Definition of Economic Ground
-> Constitutes an economic dismissal any dismissal effected by an employer for one or more reasons not inherent in the person of the employee, resulting from a suppression or transformation of the position, or a modification of an essential element of the contract refused by the employee, consequent upon economic difficulties, technological changes, cessation of activity, or reorganization necessary to safeguard competitiveness.
+#### L1233-3 — Definition of Economic Ground
+> Constitutes an economic dismissal any dismissal effected by an employer for one or more reasons not inherent in the person of the employee, resulting from a suppression or transformation of the position, or a modification of an essential element of the contract refused by the employee, consequent upon economic difficulties, technological changes, cessation of activity, or reorganization necessary to safeguard competitiveness. (La définition est à L1233-3 ; L1233-1 n'est qu'une disposition de champ d'application du chapitre.)
 Keywords: motif économique, suppression de poste, difficultés économiques, réorganisation, sauvegarde compétitivité
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036762081 (vérifié le 2026-08-05)
 
 #### L1233-3 — Quantified Criteria for Economic Difficulties
 > Economic difficulties characterized by decline in orders/revenue over consecutive quarters (1 quarter <11 employees, 2 for 11-49, 3 for 50-299, 4 for 300+), operating losses, cash-flow degradation, or other justifying elements.
@@ -161,10 +171,10 @@ Source: Legifrance
 Keywords: entretiens, assistance, conseiller du salarié
 Source: Legifrance
 
-#### L1237-13 — Withdrawal Period and Homologation
-> Each party has 15 calendar days from signing to withdraw. After the withdrawal period expires, the request is sent to the DREETS, which has 15 working days to approve (*homologation*). Silence = approval.
-Keywords: délai de rétractation, 15 jours, homologation, DREETS
-Source: Legifrance
+#### L1237-13 et L1237-14 — Withdrawal Period and Homologation
+> Each party has 15 calendar days from signing to withdraw (L1237-13). After the withdrawal period expires, the request is sent to the DREETS, which has 15 working days to approve (*homologation*, L1237-14). Silence = approval.
+Keywords: délai de rétractation, 15 jours calendaires, homologation, 15 jours ouvrables, DREETS
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000019071182 et https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000019071180 (vérifié le 2026-08-05)
 
 ### Harcèlement moral et sexuel
 
@@ -189,16 +199,16 @@ Keywords: harcèlement sexuel, connotation sexuelle, pression grave, environneme
 Source: Legifrance (as amended by loi n° 2021-1018 of 2 Aug. 2021)
 
 #### L1153-5 — Employer's Obligation Regarding Sexual Harassment
-> The employer must take all necessary measures to prevent sexual harassment and must display in the workplace the text of the applicable Penal Code provisions (Art. 222-33 CP) and the available remedies.
-Keywords: prévention, affichage, information, sanctions pénales
-Source: Legifrance
+> The employer must take all necessary measures to prevent sexual harassment, y mettre un terme et les sanctionner. Information « par tout moyen » (plus d'obligation d'affichage stricto sensu) du texte de l'art. 222-33 CP, des actions contentieuses civiles et pénales et des coordonnées des autorités compétentes.
+Keywords: prévention, information par tout moyen, sanctions pénales
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006177846 (vérifié le 2026-08-05)
 
 ### Discrimination
 
 #### L1132-1 — General Prohibition of Discrimination
-> No person may be excluded from recruitment, sanctioned, dismissed, or subjected to discriminatory treatment on the basis of 25+ protected criteria including: origin, sex, sexual orientation, gender identity, age, family situation, pregnancy, genetic characteristics, economic vulnerability, ethnicity, political opinions, trade union activity, right to strike, religious beliefs, physical appearance, surname, place of residence, health, disability, or loss of autonomy.
-Keywords: discrimination, critères prohibés, recrutement, sanction, 25 critères
-Source: Legifrance
+> No person may be excluded from recruitment, sanctioned, dismissed, or subjected to discriminatory treatment on the basis of ~25 protected criteria including: origin, sex, sexual orientation, gender identity, age, family situation, pregnancy, genetic characteristics, economic vulnerability, ethnicity, political opinions, trade union activity, religious beliefs, physical appearance, surname, place of residence or bank domiciliation, health, disability, loss of autonomy, language ability other than French, whistleblower status. (La protection du droit de grève relève de L1132-2, pas de L1132-1.)
+Keywords: discrimination, critères prohibés, recrutement, sanction, lanceur d'alerte
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045391841 (vérifié le 2026-08-05)
 
 #### L1134-1 — Burden of Proof in Discrimination Cases
 > The employee presents factual elements suggesting the existence of discrimination. The burden then shifts to the employer to prove that the decision was justified by objective elements unrelated to any discrimination.
@@ -213,9 +223,9 @@ Keywords: temps de travail effectif, disposition, directives
 Source: Legifrance
 
 #### L3121-18 — Maximum Daily Duration
-> The daily working time may not exceed 10 hours of effective work. Derogations possible by collective agreement or administrative authorization (up to 12 hours).
-Keywords: durée maximale quotidienne, 10 heures, dérogation
-Source: Legifrance
+> The daily working time may not exceed 10 hours of effective work, sauf dérogation de l'inspecteur du travail, urgence, ou accord collectif dans la limite de 12 heures (cette dernière voie relevant de L3121-19).
+Keywords: durée maximale quotidienne, 10 heures, 12 heures, dérogation
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000033020428 (vérifié le 2026-08-05)
 
 #### L3121-20 — Maximum Weekly Duration (Absolute)
 > In no event may the weekly working time exceed 48 hours in a single week.
@@ -223,9 +233,9 @@ Keywords: durée maximale hebdomadaire, 48 heures, absolue
 Source: Legifrance
 
 #### L3121-22 — Maximum Weekly Duration (Average)
-> The average weekly working time, calculated over any period of 12 consecutive weeks, may not exceed 44 hours (may be raised to 46 by collective agreement).
-Keywords: durée moyenne, 44 heures, 12 semaines, dérogation conventionnelle
-Source: Legifrance
+> The average weekly working time, calculated over any period of 12 consecutive weeks, may not exceed 44 hours (L3121-22) ; dérogation par accord jusqu'à 46 heures via L3121-23.
+Keywords: durée moyenne, 44 heures, 46 heures, 12 semaines
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006189630/ (vérifié le 2026-08-05)
 
 #### L3121-27 — Legal Working Time (Durée Légale — 35 Heures)
 > « La durée légale de travail effectif des salariés à temps complet est fixée à trente-cinq heures par semaine. »
@@ -238,9 +248,9 @@ Keywords: heures supplémentaires, majoration, repos compensateur, 35 heures
 Source: Legifrance
 
 #### L3121-64 — Forfait Jours (Lump-Sum Day Agreement)
-> Autonomous cadres or employees whose functions do not permit following collective hours may conclude a *forfait jours* agreement: up to 218 days per year. Requires a collective agreement and individual written consent.
-Keywords: forfait jours, 218 jours, cadres autonomes, accord collectif, autonomie
-Source: Legifrance
+> Autonomous cadres or employees whose working time cannot be predetermined (éligibilité : L3121-58) may conclude a *forfait jours* agreement: up to 218 days per year (L3121-64). Requires a collective agreement and individual written consent (convention individuelle écrite : L3121-55).
+Keywords: forfait jours, 218 jours, cadres autonomes, accord collectif, convention individuelle
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006189633/ (vérifié le 2026-08-05)
 
 ### Congés payés
 
@@ -255,9 +265,9 @@ Keywords: acquisition, 2,5 jours, mois de travail effectif, 30 jours
 Source: Legifrance
 
 #### L3141-5 — Periods Assimilated to Effective Work
-> Certain absences are treated as effective work for leave accrual purposes: paid leave itself, maternity/paternity/adoption leave, occupational accidents (up to one uninterrupted year), and training time.
-Keywords: périodes assimilées, maternité, accident du travail, formation
-Source: Legifrance
+> Certain absences are treated as effective work for leave accrual: paid leave itself, maternity/paternity/adoption leave, occupational accidents and diseases SANS limite de durée (la limite d'un an a été supprimée par la loi 2024-364 du 22/04/2024), training time, et depuis 2024 les arrêts maladie NON professionnels (7°, acquisition réduite à 2 jours ouvrables/mois, plafond 24 jours, L3141-5-1) ; 8° : exercice d'un mandat électif local (loi 2025-1249).
+Keywords: périodes assimilées, maternité, accident du travail, maladie non professionnelle, loi 2024-364
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049461613 (vérifié le 2026-08-05, version en vigueur depuis le 24/12/2025)
 
 #### L3141-16 — Employer Sets the Leave Period and Order
 > The employer determines the leave period and the order of departures, after consulting the CSE, taking into account family situation, seniority, and multiple-employer constraints.
@@ -266,20 +276,20 @@ Source: Legifrance
 
 ### Salaire
 
-#### L3211-1 — Definition of Salary
-> The provisions of this title govern remuneration, including the *salaire minimum interprofessionnel de croissance* (SMIC).
-Keywords: salaire, rémunération, SMIC, dispositions générales
-Source: Legifrance
+#### L3211-1 — Champ d'application du livre Salaire
+> « Les dispositions du présent livre sont applicables aux employeurs de droit privé et à leurs salariés. » (L'ancienne présentation « définition du salaire incluant le SMIC » était fabriquée : aucun article ne dit cela.)
+Keywords: salaire, champ d'application
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006902816 (vérifié le 2026-08-05)
 
 #### L3221-2 — Equal Pay (Égalité de Rémunération)
-> Every employer must ensure equal pay between men and women for equal work or work of equal value.
-Keywords: égalité salariale, hommes/femmes, travail de valeur égale
-Source: Legifrance
+> « Tout employeur assure, pour un même travail ou pour un travail de valeur égale, l'égalité de rémunération entre les femmes et les hommes. »
+Keywords: égalité salariale, femmes/hommes, travail de valeur égale
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006178022 (vérifié le 2026-08-05)
 
-#### L3231-2 — SMIC
-> The SMIC is fixed by decree. It is indexed to inflation (consumer price index) and revised annually on 1 January.
+#### L3231-2, L3231-4 et L3231-6 — SMIC
+> Objet du SMIC : garantie du pouvoir d'achat des salariés aux rémunérations les plus faibles et participation au développement économique (L3231-2). Indexation sur l'indice national des prix à la consommation (L3231-4). Fixation chaque année avec effet au 1er janvier (L3231-6).
 Keywords: SMIC, salaire minimum, indexation, révision annuelle
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006178024/ (vérifié le 2026-08-05)
 
 #### L3245-1 — Prescription for Salary Claims
 > Actions for payment of salary prescribe after 3 years from the date the claimant knew or should have known the facts allowing the claim.
@@ -289,9 +299,9 @@ Source: Legifrance
 ### Représentants du personnel / CSE
 
 #### L2311-1 — Scope of Staff Representation Provisions
-> The provisions on staff representation apply to private-sector employers and their employees, as well as to public-sector employers managing an industrial or commercial public service (*EPIC*) regarding their private-law staff.
-Keywords: champ d'application, secteur privé, EPIC, représentation du personnel
-Source: Legifrance
+> The provisions on staff representation apply to private-sector employers and their employees, aux EPIC en tant que tels, et aux EPA pour leur personnel employé dans les conditions du droit privé.
+Keywords: champ d'application, secteur privé, EPIC, EPA, représentation du personnel
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000006177945/ (vérifié le 2026-08-05)
 
 #### L2311-2 — Establishment of the CSE
 > A *comité social et économique* (CSE) must be established in all enterprises with at least 11 employees for 12 consecutive months.
@@ -303,10 +313,10 @@ Source: Legifrance
 Keywords: consultation, organisation, marche générale, effectifs, formation
 Source: Legifrance
 
-#### L2314-1 — Election of CSE Members
-> CSE members are elected by secret ballot by employees. The number of members depends on the size of the enterprise.
-Keywords: élection, scrutin secret, effectif, membres titulaires/suppléants
-Source: Legifrance
+#### L2314-1 — Composition of the CSE
+> « Le comité social et économique comprend l'employeur et une délégation du personnel comportant un nombre de membres déterminé par décret en Conseil d'Etat compte tenu du nombre des salariés. » (Les modalités d'élection au scrutin secret relèvent de L2314-4 et suivants.)
+Keywords: composition, délégation du personnel, effectif, membres titulaires/suppléants
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037389707 (vérifié le 2026-08-05)
 
 ### Négociation collective
 
@@ -328,9 +338,9 @@ Source: Legifrance (as amended by ord. n° 2017-1385)
 ### Santé et sécurité au travail
 
 #### L4121-1 — Employer's Safety Obligation (Obligation de Sécurité)
-> « L'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs. Ces mesures comprennent : 1° Des actions de prévention des risques professionnels et de la pénibilité au travail ; 2° Des actions d'information et de formation ; 3° La mise en place d'une organisation et de moyens adaptés. »
+> « L'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs. Ces mesures comprennent : 1° Des actions de prévention des risques professionnels, y compris ceux mentionnés à l'article L. 4161-1 ; 2° Des actions d'information et de formation ; 3° La mise en place d'une organisation et de moyens adaptés. L'employeur veille à l'adaptation de ces mesures pour tenir compte du changement des circonstances et tendre à l'amélioration des situations existantes. » (La mention « et de la pénibilité au travail » appartenait à la version 2012-2017, abrogée par l'ordonnance 2017-1389.)
 Keywords: obligation de sécurité, prévention, santé physique et mentale, moyens adaptés
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000035640828 (vérifié le 2026-08-05)
 
 #### L4121-2 — General Prevention Principles
 > The employer implements prevention measures on the basis of nine general principles: avoid risks, evaluate unavoidable risks, combat risks at source, adapt work to the person, take account of the state of technology, replace the dangerous with the non-dangerous or less dangerous, plan prevention, give priority to collective protection, and give appropriate instructions.
@@ -338,21 +348,21 @@ Keywords: principes généraux de prévention, 9 principes, évaluation, substit
 Source: Legifrance
 
 #### L4121-3 — Risk Assessment (Document Unique — DUERP)
-> The employer must assess occupational risks, including in the choice of manufacturing processes, equipment, chemical substances, and workspace layout. The results are recorded in the *document unique d'évaluation des risques professionnels* (DUERP).
-Keywords: DUERP, évaluation des risques, document unique, mise à jour
-Source: Legifrance
+> The employer must assess occupational risks, including in the choice of manufacturing processes, equipment, chemical substances, and workspace layout (L4121-3). Le régime formel du *document unique* (élaboration, mises à jour, conservation) est à L4121-3-1 (loi 2021-1018).
+Keywords: DUERP, évaluation des risques, document unique, L4121-3-1
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006178066 (vérifié le 2026-08-05)
 
 #### L4131-1 — Employee's Right of Withdrawal (*Droit de Retrait*)
-> An employee who has reasonable grounds to believe that a work situation presents a serious and imminent danger to their life or health may withdraw from that situation. The employer may not impose any sanction or wage deduction for exercising this right in good faith.
-Keywords: droit de retrait, danger grave et imminent, bonne foi, sanction interdite
-Source: Legifrance
+> An employee who has reasonable grounds to believe that a work situation presents a serious and imminent danger to their life or health alerts the employer and may withdraw from that situation (L4131-1). L'interdiction de toute sanction ou retenue de salaire relève de L4131-3.
+Keywords: droit de retrait, alerte, danger grave et imminent, L4131-3
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006903155 (vérifié le 2026-08-05)
 
 ### Droit de grève
 
 #### L2511-1 — Right to Strike
-> « L'exercice du droit de grève ne peut justifier la rupture du contrat de travail, sauf faute lourde imputable au salarié. Tout licenciement prononcé en absence de faute lourde est nul de plein droit. »
+> « L'exercice du droit de grève ne peut justifier la rupture du contrat de travail, sauf faute lourde imputable au salarié. [...] Tout licenciement prononcé en absence de faute lourde est nul de plein droit. » (L'alinéa intermédiaire interdit toute mesure discriminatoire, renvoi à L1132-2.)
 Keywords: grève, protection, nullité, faute lourde
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006902372 (vérifié le 2026-08-05)
 
 ## Core Principles
 
