@@ -530,7 +530,7 @@ Numbering convention: articles prefixed `L.` are legislative, `R.` are regulator
 | L. 100-1 – L. 100-3 | Scope | Applies to all administrative relations |
 | L. 110-1 – L. 114-10 | Rules applicable to administration | Good faith, security of legal situations, reasonable time |
 | L. 121-1 – L. 122-2 | Right to be heard (droit d'être entendu) | Audi alteram partem before adverse decision |
-| L. 231-1 | Silence means acceptance | Default rule: silence for 2 months = acceptance (with many exceptions) — verified Legifrance 2026-08-04, LEGIARTI000031367611 |
+| L. 231-1 | Silence means acceptance | Default rule: silence for 2 months = acceptance (with many exceptions) — verified 2026-08-04, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367611 |
 | L. 200-1 – L. 240-2 | Access to administrative documents (CADA) | Right to access non-confidential documents; CADA commission |
 | L. 300-1 – L. 342-2 | Open data and reuse | Mandatory publication of public data, open license |
 | L. 410-1 – L. 412-8 | Administrative acts: definition and types | Actes réglementaires, actes individuels, actes non-décisoires |

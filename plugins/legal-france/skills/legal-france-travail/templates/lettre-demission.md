@@ -79,7 +79,7 @@ Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées
 
 ## Vérifications juridiques avant envoi
 
-- Confirmer sur Legifrance la version en vigueur de l'art. L. 1237-1 du Code du travail (référence vérifiée le 2026-08-04, LEGIARTI000006901174).
+- Confirmer sur Legifrance la version en vigueur de l'art. L. 1237-1 du Code du travail (référence vérifiée le 2026-08-04 : https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006901174).
 - Consulter la convention collective applicable pour le préavis exact (variable selon statut et ancienneté). Source d'autorité : Legifrance ou le portail de la branche.
 - Aucun motif n'est exigé : la démission est un droit (sauf preuve d'abus).
 - Envoyer en lettre recommandée avec accusé de réception OU remettre en main propre contre décharge datée et signée — pour preuve.

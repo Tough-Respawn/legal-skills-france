@@ -131,9 +131,9 @@ Source: Legifrance
 Keywords: relations public-administration, droit commun, champ d'application
 
 #### CRPA Article L100-2 — Principes de l'action administrative
-> « L'administration agit dans l'intérêt général et respecte le principe de légalité. Elle est tenue de garantir, dans ses relations avec le public, les droits fondamentaux. »
-Source: Legifrance
-Keywords: intérêt général, légalité, droits fondamentaux
+> « L'administration agit dans l'intérêt général et respecte le principe de légalité. Elle est tenue à l'obligation de neutralité et au respect du principe de laïcité. Elle se conforme au principe d'égalité et garantit à chacun un traitement impartial. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367306 (vérifié le 2026-08-04)
+Keywords: intérêt général, légalité, neutralité, laïcité, égalité, impartialité
 
 #### CRPA Article L100-3 — Définition de l'administration
 > « Au sens du présent code et sauf disposition contraire de celui-ci, on entend par administration les administrations de l'État, les collectivités territoriales, leurs établissements publics administratifs et les organismes et personnes de droit public et de droit privé chargés d'une mission de service public administratif. »
@@ -142,14 +142,14 @@ Keywords: définition, administration, service public administratif
 
 ### CRPA — Décisions administratives (L.211-1+)
 
-#### CRPA Article L211-1 — Droit à l'information sur les motifs
-> « Les personnes physiques ou morales ont le droit d'être informées sans délai des motifs des décisions administratives individuelles défavorables qui les concernent. »
-Source: Legifrance
-Keywords: motivation, décision défavorable, droit à l'information
+#### CRPA Article L211-1 — Champ d'application du chapitre motivation
+> « Le présent chapitre est applicable, outre aux administrations mentionnées au 1° de l'article L. 100-3, aux organismes et personnes chargés d'une mission de service public industriel et commercial, pour les décisions qu'ils prennent au titre de cette mission. Il s'applique également aux relations entre les administrations. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367501 (vérifié le 2026-08-04)
+Keywords: champ d'application, motivation, SPIC, relations entre administrations
 
 #### CRPA Article L211-2 — Obligation de motivation
-> « Les personnes physiques ou morales ont le droit d'être informées sans délai des motifs des décisions administratives individuelles défavorables qui les concernent. À cet effet, doivent être motivées les décisions qui [...] restreignent l'exercice des libertés publiques ou, de manière générale, constituent une mesure de police. »
-Source: Legifrance
+> « Les personnes physiques ou morales ont le droit d'être informées sans délai des motifs des décisions administratives individuelles défavorables qui les concernent. À cet effet, doivent être motivées les décisions qui [...] restreignent l'exercice des libertés publiques ou, de manière générale, constituent une mesure de police. » (extrait, la liste complète comporte 7 catégories)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031367505 (vérifié le 2026-08-04)
 Keywords: motivation obligatoire, libertés publiques, mesure de police
 
 #### CRPA Article L211-5 — Contenu de la motivation

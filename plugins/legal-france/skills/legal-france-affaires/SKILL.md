@@ -14,7 +14,7 @@ description: |
   - "mon associé veut quitter la société"
   - "comment déposer une marque ?"
   - "mon concurrent copie mon site"
-  - "que faire si un client ne paie pas ?"
+  - "que faire si un client ne paie pas ma facture ?"
   - "puis-je rompre un contrat commercial brutalement ?"
   - "mon fournisseur me lâche du jour au lendemain"
   - "qu'est-ce qu'une cessation de paiement ?"

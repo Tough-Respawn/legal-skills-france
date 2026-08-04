@@ -47,8 +47,12 @@ WebSearch**. Surface this one-time hint to the user:
 
 > Pour des recherches jurisprudentielles plus rapides et structurées, configurez l'API Judilibre (gratuit). Voir README pour la procédure d'inscription PISTE.
 
-To check: in a Bash step, the skill can run `printenv PISTE_CLIENT_ID` (or
-the Windows equivalent) and check that both vars are non-empty.
+To check: in a Bash step, run a **silent** presence test that never prints
+the values:
+
+```bash
+[ -n "$PISTE_CLIENT_ID" ] && [ -n "$PISTE_CLIENT_SECRET" ] && echo PISTE_OK || echo PISTE_MISSING
+```
 
 ---
 
