@@ -194,7 +194,37 @@ Invoquez `/jurisprudence harcèlement moral`. Si les citations sortent au format
 
 ---
 
+## Qualité et tests / Quality & tests
+
+> **FR :** Trois niveaux de vérification. **EN:** Three verification layers.
+
+**1. Lint statique / Static lint**
+
+```bash
+python tests/lint.py
+```
+
+7 contrôles : frontmatters YAML, longueur des descriptions de skills (≤ 1 536 caractères), manifests JSON + versions synchronisées, mots-clés déclencheurs, motifs interdits (citations corrigées), inventaire `/rediger` ↔ fichiers templates, contrat de template (clés + 3 sections obligatoires).
+
+**2. Validation du manifest / Manifest validation**
+
+```bash
+claude plugin validate plugins/legal-france
+```
+
+Note : la validation de la racine du marketplace échoue sur Claude Code ≤ 2.1.104 (`Unrecognized keys: "$schema", "description"`) ; ces clés sont conservées volontairement car acceptées par les versions plus récentes.
+
+**3. Scénarios de déclenchement / Triggering scenarios**
+
+`tests/triggering.md` définit 33 scénarios (positifs, négatifs, borderline, multi-domaines) : chaque phrase est posée en session fraîche et on vérifie quel skill se déclenche. Le déclenchement étant stochastique, mesurez des **taux** sur plusieurs runs plutôt qu'un run unique, et enregistrez modèle, version CLI, version plugin et date avec les résultats. La baseline mesurée du 2026-08-04 (5 runs par scénario) est consignée dans la table Pass/Fail de `tests/triggering.md`.
+
+Scénarios manuels complémentaires : `tests/redaction.md` (10 modèles), `tests/judilibre.md` (API).
+
+---
+
 ## Contribuer / Contributing
+
+**Règle de traçabilité / Traceability rule :** toute citation juridique ajoutée dans `references/` doit être vérifiée sur Legifrance et accompagnée de l'URL de l'article et de la date de vérification (voir le format dans `legal-france-administratif/references/administratif.md`). _Any legal citation added to `references/` must be verified on Legifrance and carry the article URL + verification date._
 
 Pour enrichir les références :
 - **Référence d'un domaine spécifique** : ajoutez dans `plugins/legal-france/skills/legal-france-<domaine>/references/<domaine>.md` (par exemple `legal-france-travail/references/travail.md`).

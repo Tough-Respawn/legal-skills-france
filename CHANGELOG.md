@@ -6,6 +6,22 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.0.1] — 2026-08-04
+
+### Fixed
+
+- **Citations juridiques corrigées après audit externe**, chacune vérifiée sur Legifrance avec URL + date dans les fichiers : bloc CJA de `administratif.md` (numérotation entièrement réattribuée : L211-1, L111-1, R311-1, L3, L211-2, L213-1, L231-1 ; entrées inattribuables supprimées), CRPA L100-2 et L211-1 (textes réels restaurés), CRPA « silence vaut acceptation » L.131-1 → L.231-1 (`codes-index.md`), mise en demeure générique 1231-5 → 1344/1344-1 (1344-1 et intérêts moratoires désormais conditionnels au montant), lettre de démission L.1234-1 retiré.
+- Frontmatter YAML invalide de `commands/rediger.md` (`claude plugin validate plugins/legal-france` passe).
+- Versions marketplace/plugin désynchronisées (2.0.0 vs 3.0.0).
+- Méta-skill recentré sur le transversal/multi-domaines pour réduire la compétition avec les 7 skills de domaine ; descriptions numerique et administratif ramenées sous la limite de 1 536 caractères.
+- Judilibre : appels documentés via Bash `curl` (WebFetch ne peut pas faire le POST OAuth), exemple exécutable en une invocation sans exposer le secret, pagination 0-indexed vérifiée sur le dépôt officiel, test de présence des credentials silencieux.
+
+### Added
+
+- `tests/lint.py` : lint statique (frontmatters, longueurs, manifests, déclencheurs, inventaire `/rediger`, contrat de template).
+- Baseline de déclenchement mesurée le 2026-08-04 (33 scénarios x 5 runs, grading strict) : 132/160 runs valides PASS, détail dans la table Pass/Fail de `tests/triggering.md`.
+- Règle de traçabilité dans le README : toute citation ajoutée doit porter URL Legifrance + date de vérification.
+
 ## [3.0.0] — 2026-05-13
 
 ### Added
