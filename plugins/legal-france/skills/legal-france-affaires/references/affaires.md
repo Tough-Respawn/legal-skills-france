@@ -18,52 +18,52 @@
 ## Key Articles
 
 ### C. com. L110-1 — Acts of Commerce (Actes de Commerce)
-> « La loi répute actes de commerce : tout achat de biens meubles pour les revendre, soit en nature, soit après les avoir travaillés et mis en œuvre ; tout achat de biens immeubles aux fins de les revendre ; toutes opérations d'intermédiaire pour l'achat, la souscription ou la vente d'immeubles, de fonds de commerce, d'actions ou parts de sociétés immobilières ; toute entreprise de location de meubles ; toute entreprise de manufactures, de commission, de transport par terre ou par eau ; toute entreprise de fournitures, d'agences, bureaux d'affaires, établissements de ventes à l'encan, de spectacles publics ; toute opération de change, banque et courtage ; toutes les opérations des établissements publics de banque ; toutes obligations entre négociants, marchands et banquiers ; entre toutes personnes, les lettres de change. »
-Source: Legifrance
+> Liste des actes de commerce (version en vigueur depuis le 01/01/2022, ord. 2021-1192) : achat de biens meubles pour les revendre ; achat de biens immeubles aux fins de les revendre « à moins que l'acquéreur n'ait agi en vue d'édifier un ou plusieurs bâtiments » (exception loi ENL 2006) ; opérations d'intermédiaire pour l'achat/vente d'immeubles, fonds de commerce, actions de sociétés immobilières ; location de meubles ; manufactures, commission, transport ; fournitures, agences, ventes à l'encan, spectacles publics ; « toute opération de change, banque, courtage, activité d'émission et de gestion de monnaie électronique et tout service de paiement » ; opérations des établissements publics de banque ; obligations entre négociants, marchands et banquiers ; lettres de change ; et 11° « entre toutes personnes, les cautionnements de dettes commerciales ». (L'ancienne citation reprenait une version périmée sans l'exception immobilière, la monnaie électronique ni le 11°.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044072567 (vérifié le 2026-08-05)
 
 ### C. com. L210-1 — Commercial Companies
-> « Les sociétés dont l'objet est commercial à raison de leur forme sont, quelle que soit leur objet, les sociétés en nom collectif, les sociétés en commandite simple, les sociétés à responsabilité limitée et les sociétés par actions. »
-Source: Legifrance
+> « Le caractère commercial d'une société est déterminé par sa forme ou par son objet. Sont commerciales à raison de leur forme et quel que soit leur objet, les sociétés en nom collectif, les sociétés en commandite simple, les sociétés à responsabilité limitée et les sociétés par actions. » (L'ancienne citation était une réécriture grammaticalement incohérente.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006222344 (vérifié le 2026-08-05)
 
 ### C. com. L223-1 — SARL (Société à Responsabilité Limitée)
-> « Il peut être institué entre des associés ne supportant les pertes qu'à concurrence de leurs apports des sociétés à responsabilité limitée. Celles-ci sont désignées par une dénomination sociale, à laquelle peut être incorporé le nom d'un ou plusieurs associés, et qui doit être précédée ou suivie immédiatement des mots "société à responsabilité limitée" ou des initiales "SARL". »
-Source: Legifrance
+> « La société à responsabilité limitée est instituée par une ou plusieurs personnes qui ne supportent les pertes qu'à concurrence de leurs apports. [...] La société est désignée par une dénomination sociale, à laquelle peut être incorporé le nom d'un ou plusieurs associés, et qui doit être précédée ou suivie immédiatement des mots "société à responsabilité limitée" ou des initiales "SARL" et de l'énonciation du capital social. » (L'ancienne citation était réécrite et omettait l'énonciation du capital.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000019291708 (vérifié le 2026-08-05)
 
 ### C. com. L227-1 — SAS (Société par Actions Simplifiée)
-> « Une société par actions simplifiée peut être instituée par une ou plusieurs personnes qui ne supportent les pertes qu'à concurrence de leurs apports. Lorsque cette société ne comprend qu'une seule personne, elle est dénommée société par actions simplifiée unipersonnelle. »
-Source: Legifrance
+> « Une société par actions simplifiée peut être instituée par une ou plusieurs personnes qui ne supportent les pertes qu'à concurrence de leur apport. Lorsque cette société ne comporte qu'une seule personne, celle-ci est dénommée "associé unique". » (La phrase antérieure « elle est dénommée société par actions simplifiée unipersonnelle » était inventée : le texte ne contient pas ce terme, vérifié le 2026-08-05.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038799575 (vérifié le 2026-08-05)
 
 ### C. com. L631-1 — Judicial Reorganization (Redressement Judiciaire)
-> « Il est institué une procédure de redressement judiciaire ouverte à tout débiteur mentionné aux articles L. 631-2 ou L. 631-3 qui, dans l'impossibilité de faire face au passif exigible avec son actif disponible, est en cessation des paiements, si elle n'est pas en mesure de résoudre ces difficultés dans le cadre de la procédure de conciliation ouverte en application de l'article L. 611-4. La procédure de redressement judiciaire est destinée à permettre la poursuite de l'activité de l'entreprise, le maintien de l'emploi et l'apurement du passif. »
-Source: Legifrance
+> « Il est institué une procédure de redressement judiciaire ouverte à tout débiteur mentionné aux articles L. 631-2 ou L. 631-3 qui, dans l'impossibilité de faire face au passif exigible avec son actif disponible, est en cessation des paiements. » La procédure est destinée à permettre la poursuite de l'activité, le maintien de l'emploi et l'apurement du passif. (La clause antérieure sur la conciliation « L. 611-4 » était inventée : elle ne figure pas dans l'article.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000019984167 (vérifié le 2026-08-05)
 
 ### C. com. L640-1 — Judicial Liquidation (Liquidation Judiciaire)
 > « Il est institué une procédure de liquidation judiciaire ouverte à tout débiteur mentionné à l'article L. 640-2 en cessation des paiements et dont le redressement est manifestement impossible. La procédure de liquidation judiciaire est destinée à mettre fin à l'activité de l'entreprise ou à réaliser le patrimoine du débiteur par une cession globale ou séparée de ses droits et de ses biens. »
 Source: Legifrance
 
 ### C. conso. L111-1 — Pre-Contractual Information Duty
-> « Avant que le consommateur ne soit lié par un contrat de vente de biens ou de fourniture de services, le professionnel communique au consommateur, de manière lisible et compréhensible, les informations suivantes : 1° Les caractéristiques essentielles du bien ou du service, compte tenu du support de communication utilisé et du bien ou service concerné ; 2° Le prix du bien ou du service, en application des articles L. 112-1 à L. 112-4-1 ; 3° En l'absence d'exécution immédiate du contrat, la date ou le délai auquel le professionnel s'engage à livrer le bien ou à exécuter le service ; 4° Les informations relatives à son identité, à ses coordonnées postales, téléphoniques et électroniques et à ses activités, pour autant qu'elles ne ressortent pas du contexte [...] »
-Source: Legifrance
+> « Avant que le consommateur ne soit lié par un contrat à titre onéreux, le professionnel communique au consommateur, de manière lisible et compréhensible, les informations suivantes : 1° Les caractéristiques essentielles du bien ou du service, ainsi que celles du service numérique ou du contenu numérique [...] 2° Le prix ou tout autre avantage procuré au lieu ou en complément du paiement d'un prix [...] » (Version en vigueur depuis le 01/10/2021, ord. 2021-1247 ; l'ancienne citation reprenait la rédaction antérieure « contrat de vente de biens ou de fourniture de services ».)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044142438 (vérifié le 2026-08-05)
 
 ### C. conso. L121-1 — Unfair Commercial Practices
 > « Les pratiques commerciales déloyales sont interdites. Une pratique commerciale est déloyale lorsqu'elle est contraire aux exigences de la diligence professionnelle et qu'elle altère, ou est susceptible d'altérer de manière substantielle, le comportement économique du consommateur normalement informé et raisonnablement attentif et avisé, à l'égard d'un bien ou d'un service. »
 Source: Legifrance
 
-### C. conso. L217-4 — Guarantee of Conformity (Garantie de Conformité)
-> « Le vendeur livre un bien conforme au contrat de vente et répond des défauts de conformité existant lors de la délivrance du bien. Il répond également des défauts de conformité résultant de l'emballage, des instructions de montage, ou de l'installation lorsque celle-ci a été mise à sa charge par le contrat ou a été réalisée sous sa responsabilité. »
-Source: Legifrance
+### C. conso. L217-3 et L217-4 — Guarantee of Conformity (Garantie de Conformité)
+> Depuis le 01/01/2022 (ord. 2021-1247) : l'obligation de délivrer un bien conforme et la garantie de 2 ans à compter de la délivrance relèvent de L217-3 ; L217-4 énumère les critères contractuels de conformité (« Il correspond à la description, au type, à la quantité et à la qualité [...] »). (L'ancienne citation attribuait à L217-4 le texte pré-2022 de la délivrance conforme.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044142575 (vérifié le 2026-08-05)
 
 ### CPI L111-1 — Copyright (Droit d'Auteur)
 > « L'auteur d'une œuvre de l'esprit jouit sur cette œuvre, du seul fait de sa création, d'un droit de propriété incorporelle exclusif et opposable à tous. Ce droit comporte des attributs d'ordre intellectuel et moral ainsi que des attributs d'ordre patrimonial, qui sont déterminés par les livres Ier et III du présent code. »
 Source: Legifrance
 
 ### CPI L611-1 — Patents (Brevets d'Invention)
-> « Toute invention peut faire l'objet d'un titre de propriété industrielle de l'État délivré par le directeur général de l'Institut national de la propriété industrielle qui confère à son titulaire ou à ses ayants cause un droit exclusif d'exploitation. »
-Source: Legifrance
+> « Toute invention peut faire l'objet d'un titre de propriété industrielle délivré par le directeur de l'Institut national de la propriété industrielle qui confère à son titulaire ou à ses ayants cause un droit exclusif d'exploitation. » (Les mots « de l'État » et « directeur général » de l'ancienne citation ne figurent pas dans le texte.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000018939962 (vérifié le 2026-08-05)
 
 ### CPI L711-1 — Trademarks (Marques)
-> « La marque de produits ou de services est un signe servant à distinguer les produits ou services d'une personne physique ou morale de ceux d'autres personnes physiques ou morales. Ce signe doit être représentable dans le registre national des marques de manière à permettre à toute personne de déterminer précisément et clairement l'objet de la protection conférée à son titulaire. »
-Source: Legifrance
+> « La marque de produits ou de services est un signe servant à distinguer les produits ou services d'une personne physique ou morale de ceux d'autres personnes physiques ou morales. Ce signe doit pouvoir être représenté dans le registre national des marques de manière à permettre à toute personne de déterminer précisément et clairement l'objet de la protection conférée à son titulaire. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039381546 (vérifié le 2026-08-05)
 
 ### C. com. L110-4 — General Commercial Limitation Period
 Sets the default five-year limitation period for obligations arising between merchants or from commercial acts, unless otherwise specified by law.
@@ -101,7 +101,8 @@ Keywords: société anonyme, actionnaires, capital divisé en actions
 Source: Legifrance
 
 ### C. com. L225-17 — SA Board of Directors (Conseil d'Administration)
-The SA is administered by a board of directors composed of three to eighteen members, subject to derogation provided for companies whose shares are admitted to trading on a regulated market.
+The SA is administered by a board of directors composed of three to eighteen members. (La « dérogation pour les sociétés cotées » mentionnée auparavant n'existe pas dans cet article, vérifié le 2026-08-05 : la seule dérogation prévue concerne la vacance de la présidence, art. L. 225-24.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000023519840 (vérifié le 2026-08-05)
 Keywords: conseil d'administration, administrateurs, gouvernance, SA
 Source: Legifrance
 
@@ -110,10 +111,10 @@ The board of directors determines the orientations of the company's activity and
 Keywords: orientations, intérêt social, enjeux sociaux et environnementaux, raison d'être
 Source: Legifrance
 
-### C. com. L225-102-1 — Extra-Financial Reporting (Déclaration de Performance Extra-Financière)
-Large companies must include in their management report a declaration on extra-financial performance covering social, environmental, and governance matters.
-Keywords: DPEF, RSE, reporting extra-financier, ESG
-Source: Legifrance
+### C. com. L225-102-1 (plan de vigilance) et L232-6-3 s. (rapport de durabilité CSRD)
+Depuis l'ordonnance CSRD n° 2023-1142 du 6 décembre 2023 (en vigueur au 01/01/2025), la DPEF est REMPLACÉE par le rapport de durabilité (arts. L232-6-3 et L233-28-4) ; l'art. L225-102-1 actuel porte sur le plan de vigilance inclus dans le rapport de gestion. (L'ancienne entrée décrivait la DPEF supprimée.)
+Keywords: CSRD, rapport de durabilité, plan de vigilance, ESG
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048535098 (vérifié le 2026-08-05)
 
 ### C. com. L225-251 — Liability of SA Directors and Officers
 Directors and, where applicable, the directeur général are individually or jointly liable to the company or to third parties for infringements of the law or the statutes, or management faults.
@@ -121,9 +122,9 @@ Keywords: responsabilité des dirigeants, faute de gestion, SA, administrateurs
 Source: Legifrance
 
 ### C. com. L227-5 — SAS — Freedom of Statutes
-The statutes of the SAS determine the conditions under which the company is managed. They fix the rules governing decisions which must be taken collectively by the shareholders.
-Keywords: SAS, liberté statutaire, gouvernance, décisions collectives
-Source: Legifrance
+« Les statuts fixent les conditions dans lesquelles la société est dirigée. » (Texte intégral, une seule phrase ; la règle sur les décisions collectives relève de L227-9, vérifié le 2026-08-05.)
+Keywords: SAS, liberté statutaire, gouvernance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000005634379/LEGISCTA000006146048/ (vérifié le 2026-08-05)
 
 ### C. com. L227-6 — SAS President — Representation
 The company is represented vis-à-vis third parties by a president designated under the conditions laid down by the statutes. The president is invested with the broadest powers to act in all circumstances in the name of the company.
@@ -136,9 +137,9 @@ Keywords: décisions collectives, associés, SAS, approbation des comptes
 Source: Legifrance
 
 ### C. com. L227-19 — SAS — Exclusion Clauses
-The statutes may provide that a shareholder may be required to transfer their shares. Such clauses (*clause d'exclusion*) must be adopted or modified unanimously.
-Keywords: exclusion, cession forcée, unanimité, SAS
-Source: Legifrance
+The statutes may provide that a shareholder may be required to transfer their shares (clause d'exclusion, L227-16). Depuis la loi n° 2019-744 du 19 juillet 2019 (Soilihi), ces clauses s'adoptent ou se modifient par DÉCISION COLLECTIVE dans les conditions prévues par les statuts ; l'unanimité ne reste requise que pour les clauses des arts. L227-13 et L227-17. (L'ancienne entrée exigeait l'unanimité, règle abrogée en 2019.)
+Keywords: exclusion, cession forcée, décision collective, loi Soilihi 2019
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000005634379/LEGISCTA000006146048/ (vérifié le 2026-08-05)
 
 ### C. com. L420-1 — Anticompetitive Agreements (Ententes)
 Concerted actions, agreements, express or tacit understandings, or coalitions are prohibited when they have as their object or may have as their effect the prevention, restriction, or distortion of competition in a market.
@@ -210,10 +211,10 @@ Defines the scope of consumer credit provisions applicable to credit operations 
 Keywords: crédit à la consommation, champ d'application, montant, consommateur
 Source: Legifrance
 
-### CPI L111-2 — Protectable Works (Œuvres Protégées)
-Lists the categories of protected works: books, lectures, dramatic works, musical compositions, audiovisual works, drawings, paintings, photographs, software, applied arts, etc.
+### CPI L112-2 — Protectable Works (Œuvres Protégées)
+Lists the categories of protected works: books, lectures, dramatic works, musical compositions, audiovisual works, drawings, paintings, photographs, software, applied arts, etc. (L'entrée était numérotée L111-2 par erreur : le vrai L111-2 pose la création indépendante de toute divulgation ; vérifié le 2026-08-05.)
 Keywords: œuvres de l'esprit, catégories, protection, droit d'auteur
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278875 (vérifié le 2026-08-05)
 
 ### CPI L113-9 — Software Created by Employees
 Economic rights in software created by an employee in the execution of their duties or following the instructions of their employer are vested in the employer, unless otherwise stipulated.
@@ -240,10 +241,10 @@ An invention is considered new if it is not included in the state of the art. Th
 Keywords: nouveauté, état de la technique, antériorité, brevet
 Source: Legifrance
 
-### CPI L613-1 — Patent Term (Durée du Brevet)
-The patent is granted for a term of twenty years from the date of the filing of the application.
+### CPI L611-2 — Patent Term (Durée du Brevet)
+Patents are granted for twenty years from the filing date (L611-2). L'art. L613-1, cité auparavant par erreur, pose la prise d'effet du droit exclusif à compter du dépôt.
 Keywords: durée du brevet, 20 ans, date de dépôt
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000041573176 (vérifié le 2026-08-05)
 
 ### CPI L711-2 — Grounds for Refusal of Trademark Registration
 A mark is refused registration or may be declared invalid if it is devoid of distinctive character, if it consists exclusively of signs designating the characteristics of the goods or services, or if it is contrary to public order.
@@ -279,7 +280,8 @@ Source: Legifrance
 - **Rule**: There is no general duty to disclose the market value of a thing to the counterparty; silence on value alone is not *réticence dolosive*.
 - **Significance**: Draws the boundary between legitimate information asymmetry and fraud; key in M&A and commercial negotiations where one party has superior market knowledge.
 
-### Société Labbé — Cass. com., 15 janv. 2002, n° 99-21.172 (Abus de majorité)
+### Abus de majorité — RÉFÉRENCE FABRIQUÉE NEUTRALISÉE
+**Audit 2026-08-05 :** l'entrée « Société Labbé, Cass. com., 15 janv. 2002, n° 99-21.172 » était fausse : ce pourvoi existe mais concerne la liquidation judiciaire du Garage Schouwer (arrêt inédit), aucune « Société Labbé » ni abus de majorité (vérifié https://www.legifrance.gouv.fr/juri/id/JURITEXT000007071735/). Pour l'abus de majorité (décision contraire à l'intérêt social prise dans l'unique dessein de favoriser la majorité, ex. mise en réserve systématique) : arrêt fondateur Schuman-Piquard, Cass. com. 18 avril 1961 ; vérifier tout pourvoi sur Legifrance avant citation.
 - **Facts**: Majority shareholders in a SARL voted to carry forward profits year after year without distributing dividends, to the detriment of minority shareholders.
 - **Rule**: A majority decision constitutes an *abus de majorité* when it is contrary to the corporate interest and made solely to benefit the majority to the detriment of the minority; such a resolution can be annulled.
 - **Significance**: Core reference for minority shareholder protection in French company law; applicable to all company forms.
@@ -294,50 +296,55 @@ Source: Legifrance
 - **Rule**: While the legislature may regulate economic dismissals, provisions that prevent employers from adapting their workforce to genuine economic needs in a way that disproportionately restricts freedom of enterprise (*liberté d'entreprendre*) may be unconstitutional.
 - **Significance**: Established *liberté d'entreprendre* as a constitutional right limiting legislative intervention; frequently cited in company law and M&A.
 
-### Rozenblum — Cass. crim., 4 fév. 1985
+### Rozenblum — Cass. crim., 4 fév. 1985, n° 84-91.581 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007064646/)
 - **Facts**: The manager of a group of companies diverted funds from one subsidiary to another, leading to criminal charges of *abus de biens sociaux*.
 - **Rule**: Intra-group financial support is legitimate if: (1) the group is structured and real, (2) the operation serves a group-wide interest, (3) it is not without counterpart, and (4) it does not exceed the contributing entity's financial capacity.
 - **Significance**: Foundational decision on lawful intra-group transfers. Central reference for holding companies and group governance.
 
-### Cass. com., 18 janv. 2005 — Extension de Procédure Collective (Confusion de Patrimoines)
+### Extension de Procédure Collective (Confusion de Patrimoines) — RÉFÉRENCE NON VÉRIFIÉE
+**Audit 2026-08-05 :** aucun arrêt « Cass. com., 18 janv. 2005 » sur la confusion des patrimoines n'a pu être confirmé (l'arrêt de référence de la période est Metaleurop, Cass. com. 19 avril 2005). Fonder l'analyse sur l'art. L621-2 C. com. (vérifié) et vérifier tout numéro de pourvoi avant citation.
 - **Facts**: A parent company and its subsidiary shared the same premises, the same management, and had intermingled accounts with no clear separation of assets.
 - **Rule**: When assets of two entities are so intermingled they cannot be distinguished (*confusion de patrimoines*), insolvency proceedings may be extended.
 - **Significance**: Key decision on piercing the corporate veil in insolvency. Practitioners must ensure strict patrimony separation between group entities.
 
-### Cass. com., 26 nov. 2003 — Abus de Minorité
+### Abus de Minorité — Cass. com., 9 mars 1993, n° 91-14.685 (Flandin)
+**Audit 2026-08-05 :** la référence antérieure « Cass. com., 26 nov. 2003 » était une contamination : cet arrêt (n° 00-10.243/00-10.949) est MANOUKIAN, sur la rupture abusive des pourparlers, pas un abus de minorité. L'arrêt de principe sur l'abus de minorité est Flandin (blocage d'une augmentation de capital essentielle, désignation d'un mandataire ad hoc) ; vérifier le pourvoi sur Legifrance avant citation.
 - **Facts**: Minority shareholders of a company systematically blocked capital increases that were necessary for the company's survival, without legitimate justification.
 - **Rule**: A minority shareholder commits *abus de minorité* when their negative vote is contrary to the corporate interest, blocks an operation essential to the company's survival, and is motivated solely by personal interests.
 - **Significance**: Counterpart to *abus de majorité*; courts may appoint a mandataire ad hoc to vote in place of the obstructing minority.
 
-### Cass. com., 22 fév. 2005 — Responsabilité du Dirigeant pour Faute Séparable
+### Responsabilité du Dirigeant pour Faute Séparable — Cass. com., 20 mai 2003, n° 99-17.092
+**Audit 2026-08-05 :** la définition citée ci-dessous (« faute intentionnelle d'une particulière gravité incompatible avec l'exercice normal des fonctions ») est celle de l'arrêt de principe du 20 mai 2003 (Seusse/SATI) ; aucun arrêt du « 22 fév. 2005 » n'a pu être confirmé.
 - **Facts**: A manager of a company committed a deliberate fault incompatible with his duties, causing harm to a third party.
 - **Rule**: A director may be personally liable to third parties for a *faute séparable* — an intentional fault of particular gravity incompatible with normal exercise of the director's functions.
 - **Significance**: Defines when corporate personality cannot shield the director; essential for directors' personal liability analysis.
 
-### Cass. com., 30 janv. 1996 — Concurrence Déloyale (Parasitisme)
+### Cass. com., 30 janv. 1996, n° 94-15.725 — Concurrence Déloyale (Parasitisme) (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007035249)
 - **Facts**: A company systematically copied the commercial efforts and economic value created by a competitor without incurring the corresponding investment costs.
 - **Rule**: Parasitism (*agissements parasitaires*) consists in a person or entity unduly profiting from the economic value created by another, through efforts and investments, even absent any risk of confusion between the two undertakings. It constitutes a form of unfair competition (*concurrence déloyale*) actionable under Art. 1240 C. civ.
 - **Significance**: Distinguished parasitism from classic confusion-based unfair competition; widely applied in intellectual property and brand protection disputes.
 
-### Cass. soc., 10 juill. 2002 — Clause de Non-Concurrence (Contrepartie Financière)
+### Cass. soc., 10 juill. 2002, n° 00-45.135 — Clause de Non-Concurrence (Contrepartie Financière) (vérifié le 2026-08-05)
 - **Facts**: An employment contract contained a non-compete clause applicable after termination but provided no financial compensation to the employee.
 - **Rule**: A post-contractual non-compete clause in an employment contract is valid only if it provides a financial counterpart (*contrepartie financière*) to the employee for the restriction on their professional freedom. A clause without such counterpart is null.
 - **Significance**: Landmark reversal of prior case law; now a settled condition for the validity of post-employment non-compete clauses. Also relevant in commercial contexts by analogy.
 
-### Cass. com., 3 mars 2004 — Rupture Brutale de Relations Commerciales Établies
+### Rupture Brutale de Relations Commerciales Établies — RÉFÉRENCE NON VÉRIFIÉE
+**Audit 2026-08-05 :** aucun arrêt « Cass. com., 3 mars 2004 » sur la rupture brutale n'a pu être confirmé. La règle ci-dessous est en revanche solidement fondée sur l'art. L442-1, II C. com. (vérifié, avec le plafond du préavis de 18 mois).
 - **Facts**: A distributor terminated a long-standing supply relationship with a manufacturer without prior notice.
 - **Rule**: Under Art. L442-1 (formerly L442-6, I, 5°) C. com., the sudden breaking-off of an established commercial relationship engages the liability of its author. The duration of reasonable prior notice must take into account the duration of the commercial relationship and customary practices.
 - **Significance**: Key decision on the duty of reasonable notice before terminating established commercial relationships; one of the most litigated provisions in French commercial law.
 
-### Cass. com., 10 sept. 2013 — Déséquilibre Significatif entre Professionnels
+### Déséquilibre Significatif entre Professionnels — Cass. com., 25 janv. 2017, n° 15-23.547 (Galec)
+**Audit 2026-08-05 :** la référence antérieure « Cass. com., 10 sept. 2013 » n'a pu être confirmée ; les arrêts de référence sont Provera (3 mars 2015) et Galec (25 janv. 2017, à vérifier sur Legifrance avant citation).
 - **Facts**: A large-scale retailer imposed contractual terms on suppliers creating a significant imbalance in the parties' rights and obligations.
 - **Rule**: Art. L442-1 (formerly L442-6, I, 2°) C. com. prohibits subjecting or attempting to subject a commercial partner to obligations creating a significant imbalance (*déséquilibre significatif*) in the rights and obligations of the parties. The assessment is global and considers the overall contractual economy.
 - **Significance**: Extended the concept of *déséquilibre significatif* (previously limited to consumer law) to B2B commercial relations; heavily relied upon by the DGCCRF and commercial courts.
 
-### Cass. com., 12 juill. 2005 — Concurrence Déloyale par Dénigrement
-- **Facts**: A competitor made public disparaging remarks about a rival company's products.
-- **Rule**: The public dissemination of information likely to disparage a competitor constitutes an act of unfair competition (*concurrence déloyale par dénigrement*), even where the information is accurate, unless the party can demonstrate that the disclosure was strictly necessary for the protection of public health or safety.
-- **Significance**: Clarified that truth is generally not a defense to commercial denigration, distinguishing it from defamation in civil law.
+### Concurrence Déloyale par Dénigrement — Cass. com., 4 mars 2020, n° 18-15.651
+**Audit 2026-08-05 :** l'arrêt « 12 juill. 2005 » cité auparavant n'a pu être confirmé.
+- **Rule**: La divulgation d'une information de nature à jeter le discrédit sur un concurrent constitue un dénigrement, même si l'information est exacte ; elle peut toutefois être justifiée lorsqu'elle se rattache à un débat d'intérêt général, repose sur une base factuelle suffisante et est exprimée avec mesure (l'ancienne formulation limitait à tort l'exception à la santé publique).
+- **Significance**: Truth alone is not a defense to commercial denigration; the freedom-of-expression justification is framed by the three conditions above. Vérifier le pourvoi sur Legifrance avant citation.
 
 ## Common Questions & Patterns
 
@@ -357,7 +364,7 @@ Source: Legifrance
 
 - **"How do I protect my brand / trademark?"** → File a trademark (*marque*) application with INPI (Institut national de la propriété industrielle). Requirements under CPI L711-1 et seq.: distinctive character (not descriptive of the goods/services), available (no earlier conflicting rights), lawful. Protection lasts 10 years, renewable indefinitely. European-level protection via EUIPO (*marque de l'Union européenne*). Infringement (*contrefaçon*) is both a civil wrong and a criminal offense (CPI L716-10, up to 3 years imprisonment + €300,000 fine).
 
-- **"What is my consumer protection if the product is defective?"** → Two main statutory guarantees for consumers (B2C): (1) *Garantie légale de conformité* (C. conso. L217-4): 2-year period from delivery; defect presumed to pre-exist delivery if appearing within 24 months (12 months for second-hand goods); buyer may demand repair, replacement, or price reduction/rescission. (2) *Garantie des vices cachés* (C. civ. Art. 1641): hidden defect making the thing unfit for use; buyer has 2 years from discovery. Unfair terms and unfair commercial practices provide additional protections (C. conso. L121-1, L212-1).
+- **"What is my consumer protection if the product is defective?"** → Two main statutory guarantees for consumers (B2C): (1) *Garantie légale de conformité* (C. conso. L217-3 depuis 2022): 2-year period from delivery; defect presumed to pre-exist delivery if appearing within 24 months (12 months for second-hand goods); buyer may demand repair, replacement, or price reduction/rescission. (2) *Garantie des vices cachés* (C. civ. Art. 1641): hidden defect making the thing unfit for use; buyer has 2 years from discovery. Unfair terms and unfair commercial practices provide additional protections (C. conso. L121-1, L212-1).
 
 - **"How is copyright acquired and how long does it last?"** → Copyright arises automatically upon creation of an original work (*œuvre de l'esprit*) — no formality, no registration required (CPI L111-1). Duration: life of the author + 70 years (CPI L123-1). Moral rights (*droit moral*: divulgation, attribution, integrity, withdrawal) are perpetual and inalienable. Economic rights (*droits patrimoniaux*: reproduction, representation) can be transferred by written assignment. Works created by employees in the course of duties: economic rights vest with the employer under specific conditions (CPI L113-9 for software; otherwise assignment must be express).
 
@@ -377,7 +384,7 @@ Source: Legifrance
 - **Scope**: Comprehensive reform of the law of security interests (*sûretés*), effective 1 Jan. 2022, implementing the habilitation granted by loi PACTE.
 - **Key measures**:
   - Modernization of *cautionnement* (personal guarantee): codified at Art. 2288 et seq. C. civ.; the proportionality principle is now enshrined in Art. 2300 C. civ. (guarantee must not be manifestly disproportionate to the surety's assets and income at the time of commitment).
-  - Reform of *nantissement de fonds de commerce* (pledge over a going concern): simplified formalities, extended to cover receivables and intellectual property attached to the business; registration at the RCS.
+  - Reform of *nantissement de fonds de commerce*: simplified formalities. (Audit 2026-08-05 : l'assiette de L142-2 comprend la PI attachée au fonds mais PAS les créances, et depuis le 01/01/2023 l'inscription se fait au registre des sûretés mobilières tenu par le greffier, décret 2021-1887, pas au RCS ; l'ancienne formulation était fabriquée.)
   - General regime for *cession de créance à titre de garantie* (Art. 2373 et seq. C. civ.) replacing scattered provisions.
   - Overhaul of *gage sans dépossession* (Art. 2333 et seq. C. civ.): clearer ranking rules and streamlined enforcement via *pacte commissoire*.
 - **Impact**: Major simplification of the French security framework; critical for banking, finance, and restructuring practice. Practitioners must use post-reform provisions for all security interests created after 1 Jan. 2022.
@@ -388,7 +395,7 @@ Source: Legifrance
   - Simplified environmental authorization procedures: reduced administrative timelines for industrial installations classified for environmental protection (*ICPE*) from 17 months to approximately 9 months for green industrial projects.
   - Reform of commercial and industrial land use: new provisions on industrial wasteland rehabilitation (*friches industrielles*), facilitated by prefectoral orders and streamlined liability allocation.
   - Green finance: mandatory inclusion of at least one investment in European long-term investment funds (ELTIF) or private equity (*non-coté*) in *assurance-vie* and *plan d'épargne retraite* (PER) products, to channel savings toward green and industrial investment.
-  - Due diligence and supply chain: reinforcement of the *devoir de vigilance* (loi n° 2017-399) obligations regarding environmental impacts, in anticipation of the EU CS3D Directive.
+  - Due diligence and supply chain (audit 2026-08-05) : la loi industrie verte ne renforce PAS les obligations de fond du devoir de vigilance (loi 2017-399) ; elle crée seulement une exclusion facultative de la commande publique en cas de manquement aux obligations de PUBLICATION (plan de vigilance, informations de durabilité CSRD).
 - **Impact**: Significant for industrial projects, green-sector M&A, and regulatory compliance. Interacts with EU Green Deal legislation (CSRD, taxonomy regulation, CS3D).
 
 ## Cross-references
