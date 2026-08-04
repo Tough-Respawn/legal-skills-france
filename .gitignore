@@ -3,3 +3,4 @@ docs/superpowers/
 CLAUDE.md
 AGENTS.md
 evals/
+.playwright-mcp/

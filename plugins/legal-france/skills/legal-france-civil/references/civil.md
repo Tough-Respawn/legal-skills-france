@@ -364,10 +364,10 @@ Keywords: interruption, reconnaissance, prescription, aveu
 - **Significance**: Established that parental liability is a *responsabilité de plein droit* not requiring proof of the child's fault. Only *force majeure* or the exclusive fault of the victim can exonerate the parents.
 - **Pourvoi**: n° 94-21.111 — à vérifier
 
-### Cass. civ. 1re, 28 mars 2000, n° 97-18.737 — Vice caché et obligation de sécurité
-- **Facts**: A product (defective gas heater) caused bodily injury to the buyer.
-- **Rule**: The professional seller owes a *garantie des vices cachés* (Art. 1641 C. civ.) and is irrebuttably presumed to have known of the defect (*présomption irréfragable de connaissance du vice*).
+### Cass. civ. 1re, 19 janv. 1965, n° 61-10.952 — Vendeur professionnel et vices cachés
+- **Rule**: The professional seller owes the *garantie des vices cachés* (Art. 1641 C. civ.) and is irrebuttably presumed to have known of the defect (*présomption irréfragable de connaissance du vice*), owing damages under Arts. 1645-1646. Jurisprudence constante depuis cet arrêt (affaire dite du « pain maudit » de Pont-Saint-Esprit).
 - **Significance**: Confirmed the severity of the *garantie des vices cachés* regime for professional sellers, who cannot escape liability by claiming ignorance. Foundational for product liability under the Code civil before the transposition of the EU Product Liability Directive (Arts. 1245 et seq.).
+- **Audit 2026-08-05** : la référence antérieure de cette entrée (« Cass. civ. 1re, 28 mars 2000, n° 97-18.737 ») était une contamination : ce pourvoi existe mais concerne une assurance de groupe (L. 113-8 C. assur.), pas les vices cachés. Référence corrigée et vérifiée : https://www.legifrance.gouv.fr/juri/id/JURITEXT000006967375/
 
 ## Common Questions & Patterns
 
