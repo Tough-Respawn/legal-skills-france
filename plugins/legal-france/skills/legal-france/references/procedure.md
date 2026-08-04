@@ -1,5 +1,13 @@
 # Procedural Law — French Civil, Criminal, and Administrative Procedure
 
+> **Audit partiel (2026-08-05)** : 55 entrées de ce fichier ont été vérifiées
+> contre Legifrance (tous les délais chiffrés + les entrées suspectes), avec
+> corrections des erreurs trouvées. Les entrées restantes (principes
+> directeurs CPC 1-24, plusieurs jurisprudences et numéros de décrets) ne
+> sont PAS encore vérifiées une à une : le pattern d'erreur constaté (textes
+> réels sous de mauvais numéros) impose de vérifier sur Legifrance avant de
+> citer une entrée non marquée « vérifié ».
+
 ## Applicable Codes
 - Code de procédure civile (CPC) — arts. 1-24 principes directeurs, 31-32 intérêt à agir, 55-70 compétence, 117-121 nullités, 480+ jugements, 527+ appel, 604+ cassation, 808+ référés, 1442+ arbitrage
 - Code de procédure pénale (CPP) — arts. 1-10 action publique, 40-44 procureur, 63-65 garde à vue, 137-150 détention provisoire, 388-393 comparution, 567+ pourvoi
@@ -83,13 +91,13 @@ Source: Legifrance — Mots-clés: compétence territoriale, domicile du défend
 > « Le demandeur peut saisir à son choix, outre la juridiction du lieu où demeure le défendeur : en matière contractuelle, la juridiction du lieu de la livraison effective de la chose ou du lieu de l'exécution de la prestation de service ; en matière délictuelle, la juridiction du lieu du fait dommageable ou celle dans le ressort de laquelle le dommage a été subi. »
 Source: Legifrance — Mots-clés: option de compétence, lieu de livraison, lieu du dommage
 
-##### CPC Article 55 — Demande de renvoi pour connexité
-> « Si le même litige est pendant devant deux juridictions de même degré également compétentes pour en connaître, la juridiction saisie en second lieu doit se dessaisir au profit de l'autre si l'une des parties le demande. À défaut, elle peut le faire d'office. »
-Source: Legifrance — Mots-clés: litispendance, connexité, dessaisissement
+##### CPC Article 100 — Litispendance
+> « Si le même litige est pendant devant deux juridictions de même degré également compétentes pour en connaître, la juridiction saisie en second lieu doit se dessaisir au profit de l'autre si l'une des parties le demande. A défaut, elle peut le faire d'office. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006410207 (vérifié le 2026-08-05 ; l'entrée était numérotée « 55 » et titrée « connexité » par erreur : l'art. 55 définit l'assignation et la connexité relève de l'art. 101) — Mots-clés: litispendance, dessaisissement
 
-##### CPC Article 56 — Assignation (summons)
-> « L'assignation contient à peine de nullité : [...] l'indication de la juridiction devant laquelle la demande est portée ; l'objet de la demande avec un exposé des moyens en fait et en droit ; [...] »
-Source: Legifrance — Mots-clés: assignation, nullité, acte introductif
+##### CPC Articles 54 et 56 — Assignation (summons)
+> Depuis le décret 2019-1333 (en vigueur 01/01/2020) : l'indication de la juridiction et l'objet de la demande figurent à l'art. 54 (mentions communes) ; l'art. 56 exige notamment, à peine de nullité, les lieu, jour et heure de l'audience, un exposé des moyens en fait et en droit et la liste des pièces. (L'ancienne citation reprenait la rédaction pré-2020.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039623156 (vérifié le 2026-08-05) — Mots-clés: assignation, nullité, acte introductif, art. 54
 
 ##### CPC Article 70 — Demande additionnelle et reconventionnelle
 > « Les demandes reconventionnelles ou additionnelles ne sont recevables que si elles se rattachent aux prétentions originaires par un lien suffisant. »
@@ -137,9 +145,9 @@ Source: Legifrance — Mots-clés: dessaisissement, irrévocabilité
 
 #### Appel (CPC arts. 527, 542, 546, 901-930)
 
-##### CPC Article 527 — Taux du ressort
-> Les jugements des juridictions de première instance sont susceptibles d'appel, sauf lorsqu'ils sont rendus en dernier ressort.
-Source: Legifrance — Mots-clés: taux du ressort, appel, premier et dernier ressort
+##### CPC Article 527 — Classification des voies de recours
+> « Les voies ordinaires de recours sont l'appel et l'opposition, les voies extraordinaires la tierce opposition, le recours en révision et le pourvoi en cassation. » (L'ouverture de l'appel contre les jugements non rendus en dernier ressort relève de l'art. 543 ; l'ancien titre « taux du ressort » était impropre.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006410838 (vérifié le 2026-08-05) — Mots-clés: voies de recours, appel, opposition, cassation
 
 ##### CPC Article 542 — Objet de l'appel
 > « L'appel tend, par la critique du jugement rendu par une juridiction du premier degré, à sa réformation ou à son annulation par la cour d'appel. »
@@ -169,9 +177,9 @@ Source: Legifrance — Mots-clés: exécution provisoire de droit, réforme 2019
 
 Note: Depuis le décret n° 2019-1333 du 11 décembre 2019, l'exécution provisoire est de droit pour les décisions de première instance, renversant le principe antérieur.
 
-##### CPC Article 514-1 — Arrêt de l'exécution provisoire
-> Le premier président de la cour d'appel peut être saisi pour arrêter l'exécution provisoire de droit lorsqu'il existe un moyen sérieux d'annulation ou de réformation et que l'exécution risque d'entraîner des conséquences manifestement excessives.
-Source: Legifrance — Mots-clés: arrêt exécution provisoire, premier président, conséquences excessives
+##### CPC Article 514-3 — Arrêt de l'exécution provisoire par le premier président
+> « En cas d'appel, le premier président peut être saisi afin d'arrêter l'exécution provisoire de la décision lorsqu'il existe un moyen sérieux d'annulation ou de réformation et que l'exécution risque d'entraîner des conséquences manifestement excessives. » (L'art. 514-1, cité auparavant par erreur, permet au juge de PREMIÈRE INSTANCE d'écarter l'exécution provisoire si elle est incompatible avec la nature de l'affaire.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039485157 (vérifié le 2026-08-05) — Mots-clés: arrêt exécution provisoire, premier président, conséquences excessives
 
 #### Cassation (CPC arts. 604-639)
 
@@ -202,9 +210,9 @@ Source: Legifrance — Mots-clés: urgence, absence de contestation sérieuse, r
 > Alinéa 2 : « Dans les cas où l'existence de l'obligation n'est pas sérieusement contestable, il peut accorder une provision au créancier [...]. »
 Source: Legifrance — Mots-clés: dommage imminent, trouble illicite, provision, obligation non sérieusement contestable
 
-##### CPC Article 836 (ancien 811) — Référé en cours d'instance
-> « Le juge de la mise en état peut, même d'office, ordonner en référé toutes les mesures d'instruction légalement admissibles [...]. »
-Source: Legifrance — Mots-clés: mesures d'instruction, référé en cours d'instance
+##### CPC Article 836 (ancien 811) — Extension des pouvoirs de référé
+> « Les pouvoirs du président du tribunal judiciaire prévus aux deux articles précédents s'étendent à toutes les matières où il n'existe pas de procédure particulière de référé. » (La citation antérieure sur le juge de la mise en état était fabriquée : les pouvoirs du JME relèvent des arts. 789 et s.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039623735 (vérifié le 2026-08-05) — Mots-clés: référé, extension, président du tribunal judiciaire
 
 #### Arbitrage (CPC arts. 1442-1527)
 
@@ -212,17 +220,17 @@ Source: Legifrance — Mots-clés: mesures d'instruction, référé en cours d'i
 > « La clause compromissoire est la convention par laquelle les parties à un ou plusieurs contrats s'engagent à soumettre à l'arbitrage les litiges qui pourraient naître relativement à ce ou à ces contrats. »
 Source: Legifrance — Mots-clés: clause compromissoire, convention d'arbitrage
 
-##### CPC Article 1443 — Forme de la clause compromissoire
-> « La clause compromissoire doit, à peine de nullité, être stipulée par écrit dans la convention principale ou dans un document auquel celle-ci se réfère. »
-Source: Legifrance — Mots-clés: écrit, nullité, forme
+##### CPC Article 1443 — Forme de la convention d'arbitrage
+> « A peine de nullité, la convention d'arbitrage est écrite. Elle peut résulter d'un échange d'écrits ou d'un document auquel il est fait référence dans la convention principale. » (Rédaction du décret 2011-48 ; l'ancienne citation datait d'avant 2011.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000023450906 (vérifié le 2026-08-05) — Mots-clés: écrit, nullité, forme
 
 ##### CPC Article 1448 — Compétence-compétence
 > « Lorsqu'un litige relevant d'une convention d'arbitrage est porté devant une juridiction de l'État, celle-ci se déclare incompétente sauf si le tribunal arbitral n'est pas encore saisi et si la convention d'arbitrage est manifestement nulle ou manifestement inapplicable. »
 Source: Legifrance — Mots-clés: compétence-compétence, effet négatif, incompétence du juge étatique
 
-##### CPC Article 1492 — Définition de l'arbitrage international
-> « Est international l'arbitrage qui met en cause des intérêts du commerce international. »
-Source: Legifrance — Mots-clés: arbitrage international, commerce international
+##### CPC Article 1504 — Définition de l'arbitrage international
+> « Est international l'arbitrage qui met en cause des intérêts du commerce international. » (Depuis le décret 2011-48 ; l'entrée était numérotée 1492, numérotation pré-2011 ; l'art. 1492 actuel énumère les cas d'ouverture du recours en annulation.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000023450649 (vérifié le 2026-08-05) — Mots-clés: arbitrage international, commerce international
 
 ### Criminal Procedure — Code de procédure pénale
 
@@ -253,30 +261,30 @@ Source: Legifrance — Mots-clés: plainte, dénonciation, opportunité des pour
 Source: Legifrance — Mots-clés: opportunité des poursuites, alternatives, classement sans suite
 
 ##### CPP Article 41-1 — Alternatives aux poursuites
-> Le procureur de la République peut proposer diverses mesures alternatives aux poursuites : rappel à la loi, médiation pénale, composition pénale, régularisation, etc.
-Source: Legifrance — Mots-clés: alternatives aux poursuites, médiation pénale, rappel à la loi
+> Le procureur de la République peut proposer diverses mesures alternatives aux poursuites : avertissement pénal probatoire (qui a remplacé le rappel à la loi au 01/01/2023, loi 2021-1729), médiation pénale, régularisation, réparation, etc. La composition pénale relève de l'art. 41-2.
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044569854 (vérifié le 2026-08-05) — Mots-clés: alternatives aux poursuites, avertissement pénal probatoire, médiation pénale
 
 #### Garde à vue (CPP arts. 62-65)
 
-##### CPP Article 63 — Garde à vue (police custody)
-> « L'officier de police judiciaire peut, pour les nécessités de l'enquête, placer en garde à vue toute personne à l'encontre de laquelle il existe une ou plusieurs raisons plausibles de soupçonner qu'elle a commis ou tenté de commettre un crime ou un délit puni d'une peine d'emprisonnement. [...] La durée de la garde à vue ne peut excéder vingt-quatre heures. »
-Source: Legifrance — Mots-clés: garde à vue, 24 heures, raisons plausibles
+##### CPP Articles 62-2 et 63 — Garde à vue (police custody)
+> Définition (art. 62-2) : mesure de contrainte visant une personne à l'encontre de laquelle il existe des raisons plausibles de soupçonner un crime ou un délit puni d'emprisonnement. Placement (art. 63 I) : par un OPJ, d'office ou sur instruction du procureur. Durée (art. 63 II) : « La durée de la garde à vue ne peut excéder vingt-quatre heures. » (L'ancienne citation fusionnait 62-2 et 63 sous le seul numéro 63.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038311888 (vérifié le 2026-08-05) — Mots-clés: garde à vue, 24 heures, raisons plausibles
 
 ##### CPP Article 63-1 — Droits en garde à vue
 > « Toute personne placée en garde à vue est immédiatement informée par un officier de police judiciaire [...] de la durée maximale de la mesure et des prolongations dont elle peut faire l'objet ; de la nature et de la date présumée de l'infraction qu'elle est soupçonnée d'avoir commise ou tenté de commettre [...] ; du droit d'être assistée par un avocat [...]. »
 Source: Legifrance — Mots-clés: notification des droits, avocat, interprète, médecin
 
-##### CPP Article 63-4 — Avocat en garde à vue
-> L'avocat peut s'entretenir avec la personne gardée à vue dès le début de la mesure, pour une durée de trente minutes. Il peut assister aux auditions et confrontations.
-Source: Legifrance — Mots-clés: assistance effective de l'avocat, entretien confidentiel
+##### CPP Articles 63-4 et 63-4-2 — Avocat en garde à vue
+> L'avocat peut s'entretenir avec la personne gardée à vue dès le début de la mesure, pour une durée maximale de trente minutes (art. 63-4). L'assistance aux auditions et confrontations relève de l'art. 63-4-2.
+Source: Legifrance (vérifié le 2026-08-05) — Mots-clés: assistance effective de l'avocat, entretien confidentiel, 30 minutes
 
 ##### CPP Article 64 — Procès-verbal de garde à vue
 > L'officier de police judiciaire établit un procès-verbal mentionnant les motifs de la garde à vue, la durée des auditions, des repos, le moment de notification des droits.
 Source: Legifrance — Mots-clés: procès-verbal, traçabilité, mentions obligatoires
 
-##### CPP Article 65 — Prolongation de la garde à vue
-> « La garde à vue peut être prolongée pour un nouveau délai de vingt-quatre heures au plus, sur autorisation écrite et motivée du procureur de la République [...]. »
-Source: Legifrance — Mots-clés: prolongation, 48 heures maximum, autorisation procureur
+##### CPP Article 63, II, al. 2 — Prolongation de la garde à vue
+> « La garde à vue peut être prolongée pour un nouveau délai de vingt-quatre heures au plus, sur autorisation écrite et motivée du procureur de la République », à condition que l'infraction soit un crime ou un délit puni d'au moins un an d'emprisonnement. (L'entrée était numérotée « 65 » par erreur : l'art. 65 actuel concerne le registre des déclarations.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038311888 (vérifié le 2026-08-05) — Mots-clés: prolongation, 48 heures maximum, autorisation procureur
 
 #### Détention provisoire (CPP arts. 137-150)
 
@@ -284,10 +292,9 @@ Source: Legifrance — Mots-clés: prolongation, 48 heures maximum, autorisation
 > « Toute personne mise en examen, présumée innocente, reste libre. Toutefois, en raison des nécessités de l'instruction ou à titre de mesure de sûreté, elle peut être astreinte à une ou plusieurs obligations du contrôle judiciaire ou, si celles-ci se révèlent insuffisantes, être assignée à résidence avec surveillance électronique. À titre exceptionnel, [...] elle peut être placée en détention provisoire. »
 Source: Legifrance — Mots-clés: présomption d'innocence, liberté, contrôle judiciaire, détention exceptionnelle
 
-##### CPP Article 143-1 — Conditions de la détention provisoire
-> « La détention provisoire ne peut être ordonnée ou prolongée que si elle constitue l'unique moyen de parvenir à l'un ou plusieurs des objectifs suivants et si ceux-ci ne peuvent être atteints par le contrôle judiciaire ou l'assignation à résidence [...]. »
-Objectifs: conservation des preuves, protection des personnes, mise à disposition de la justice, cessation de l'infraction, trouble à l'ordre public.
-Source: Legifrance — Mots-clés: nécessité, subsidiarité, critères légaux
+##### CPP Articles 143-1 et 144 — Conditions de la détention provisoire
+> Seuils (art. 143-1) : la personne mise en examen doit encourir une peine criminelle ou une peine correctionnelle d'au moins trois ans d'emprisonnement. Nécessité (art. 144, le texte cité auparavant sous le numéro 143-1) : « La détention provisoire ne peut être ordonnée ou prolongée que s'il est démontré [...] qu'elle constitue l'unique moyen de parvenir à l'un ou plusieurs des objectifs suivants et que ceux-ci ne sauraient être atteints en cas de placement sous contrôle judiciaire ou d'assignation à résidence avec surveillance électronique. » Objectifs : conservation des preuves, prévention des pressions et concertations, protection, garantie de représentation, cessation de l'infraction ou prévention du renouvellement, trouble exceptionnel à l'ordre public (exclu en matière correctionnelle).
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000021332920 (vérifié le 2026-08-05) — Mots-clés: nécessité, subsidiarité, seuil 3 ans, critères légaux
 
 ##### CPP Article 144-1 — Durée raisonnable
 > « La détention provisoire ne peut excéder une durée raisonnable, au regard de la gravité des faits reprochés à la personne mise en examen et de la complexité des investigations nécessaires à la manifestation de la vérité. »
@@ -296,16 +303,16 @@ Source: Legifrance — Mots-clés: délai raisonnable, proportionnalité
 #### Comparution immédiate et modes de poursuite (CPP arts. 388-393)
 
 ##### CPP Article 388 — Saisine du tribunal correctionnel
-> « Le tribunal correctionnel est saisi des infractions de sa compétence soit par la comparution volontaire des parties, soit par la citation, soit par la convocation par officier de police judiciaire, soit par la comparution immédiate [...], soit par le renvoi ordonné par la juridiction d'instruction. »
-Source: Legifrance — Mots-clés: saisine, modes de poursuites, tribunal correctionnel
+> « Le tribunal correctionnel est saisi des infractions de sa compétence soit par la comparution volontaire des parties, soit par la citation, soit par la convocation par procès-verbal, soit par la comparution immédiate, soit enfin par le renvoi ordonné par la juridiction d'instruction. » (La « convocation par officier de police judiciaire » citée auparavant est un autre mode, art. 390-1.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006576400 (vérifié le 2026-08-05) — Mots-clés: saisine, modes de poursuites, tribunal correctionnel
 
-##### CPP Article 393 — Comparution immédiate
-> Le procureur de la République peut, lorsque les faits reprochés sont punis d'au moins deux ans d'emprisonnement (six mois en flagrance), traduire le prévenu sur-le-champ devant le tribunal correctionnel.
-Source: Legifrance — Mots-clés: comparution immédiate, urgence, flagrance, quantum de peine
+##### CPP Article 395 — Comparution immédiate
+> Le procureur de la République peut, lorsque le maximum de l'emprisonnement prévu par la loi est au moins égal à deux ans (six mois en cas de délit flagrant), traduire le prévenu sur-le-champ devant le tribunal correctionnel. (Les seuils sont à l'art. 395 ; l'art. 393, cité auparavant, organise le déferrement devant le procureur.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006576448 (vérifié le 2026-08-05) — Mots-clés: comparution immédiate, urgence, flagrance, quantum de peine
 
 ##### CPP Article 80 — Instruction judiciaire (judicial investigation)
-> « Le juge d'instruction est saisi par une ordonnance de renvoi du parquet ou par une plainte avec constitution de partie civile [...]. Le juge d'instruction ne peut informer qu'en vertu d'un réquisitoire du procureur de la République. »
-Source: Legifrance — Mots-clés: saisine du juge d'instruction, réquisitoire, information judiciaire
+> « Le juge d'instruction ne peut informer qu'en vertu d'un réquisitoire du procureur de la République. Le réquisitoire peut être pris contre personne dénommée ou non dénommée. » La plainte avec constitution de partie civile (arts. 85-86) déclenche le réquisitoire. (La phrase antérieure « saisi par une ordonnance de renvoi du parquet » était juridiquement impossible : l'ordonnance de renvoi émane du juge d'instruction, pas du parquet.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044568319 (vérifié le 2026-08-05) — Mots-clés: saisine du juge d'instruction, réquisitoire, information judiciaire
 
 #### Pourvoi en cassation — matière pénale (CPP arts. 567-621)
 
@@ -313,9 +320,9 @@ Source: Legifrance — Mots-clés: saisine du juge d'instruction, réquisitoire,
 > « Les arrêts et jugements rendus en dernier ressort en matière criminelle, correctionnelle et de police peuvent être annulés en cas de violation de la loi : [...] sur le pourvoi en cassation [...]. »
 Source: Legifrance — Mots-clés: cassation pénale, violation de la loi, annulation
 
-##### CPP Article 574 — Pourvoi du ministère public dans l'intérêt de la loi
-> Le procureur général près la Cour de cassation peut se pourvoir dans l'intérêt de la loi contre les décisions passées en force de chose jugée.
-Source: Legifrance — Mots-clés: pourvoi dans l'intérêt de la loi, procureur général
+##### CPP Articles 620-621 — Pourvoi dans l'intérêt de la loi
+> « [...] le procureur général près la Cour de cassation peut, d'office et nonobstant l'expiration du délai, se pourvoir, mais dans le seul intérêt de la loi, contre ledit jugement ou arrêt » (art. 621). (L'entrée était numérotée « 574 » par erreur : cet article concerne le pourvoi contre les arrêts de renvoi de la chambre de l'instruction.)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006577080 (vérifié le 2026-08-05) — Mots-clés: pourvoi dans l'intérêt de la loi, procureur général
 
 ### Administrative Procedure — Code de justice administrative
 
@@ -364,16 +371,16 @@ Source: Legifrance — Mots-clés: astreinte, exécution forcée, pression finan
 | Domain | Standard Period | Legal Basis | Notes |
 |--------|----------------|-------------|-------|
 | Civil (droit commun) | 5 years | Code civil Art. 2224 | Runs from the day the holder knew or should have known the facts |
-| Civil contract (actions personnelles ou mobilières) | 5 years | Code civil Art. 2224 | Extended to 30 years for real property actions |
+| Civil contract (actions personnelles ou mobilières) | 5 years | Code civil Art. 2224 | 30 years for real property actions (base légale : art. 2227, pas 2224 ; vérifié 2026-08-05) |
 | Criminal — crimes | 20 years | CPP Art. 7 | Runs from the day the offence was committed |
-| Criminal — délits | 6 years | CPP Art. 8 | Extended to 30 years for certain aggravated offences |
+| Criminal — délits | 6 years | CPP Art. 8 | Extended to 10 or 20 years for certain délits (mineurs, terrorisme, stupéfiants) ; le délai de 30 ans ne vaut que pour certains CRIMES (art. 7 ; vérifié 2026-08-05) |
 | Criminal — contraventions | 1 year | CPP Art. 9 | |
 | Administrative | 4 years | Loi du 31 déc. 1968 | For financial claims against the State |
 | Administrative judicial review | 2 months | CJA R421-1 | Runs from notification (if R421-5 requirements met) |
 
 ### Types of Appeals (voies de recours)
 
-**Appel (ordinary appeal)**: Brings the entire case before a superior court for re-examination in fact and law. Civil: Cour d'appel (CPC Art. 542). Criminal: Chambre des appels correctionnels / Cour d'assises d'appel. Administrative: Cour administrative d'appel. Time limit: 1 month civil, 10 days criminal, 1 month administrative.
+**Appel (ordinary appeal)**: Brings the entire case before a superior court for re-examination in fact and law. Civil: Cour d'appel (CPC Art. 542). Criminal: Chambre des appels correctionnels / Cour d'assises d'appel. Administrative: Cour administrative d'appel. Time limit: 1 month civil (CPC 538), 10 days criminal (CPP 498), 2 MONTHS administrative (CJA R811-2 ; le « 1 mois » indiqué auparavant était faux, vérifié le 2026-08-05).
 
 **Cassation**: Review for errors of law only — no re-examination of facts. Civil and criminal: Cour de cassation (CPP Art. 567; CPC Art. 605). Administrative: Conseil d'État. Does not substitute its judgment for the lower court; it either rejects the pourvoi or quashes (casse) and refers to a different court.
 
@@ -397,10 +404,10 @@ Source: Legifrance — Mots-clés: astreinte, exécution forcée, pression finan
 
 ### Alternative Dispute Resolution (modes alternatifs de règlement des différends — MARD)
 
-- **Médiation**: Neutral third party facilitates negotiation between parties. Possible in civil, commercial, family, and some administrative matters. Pre-litigation mediation is mandatory in some cases (administrative mediation under CRPA Art. L213-1; family mediation).
+- **Médiation**: Neutral third party facilitates negotiation between parties. Possible in civil, commercial, family, and some administrative matters. Pre-litigation mediation is mandatory in some cases (médiation administrative : CJA arts. L213-1 à L213-14, la MPO aux arts. L213-11 s. ; la référence « CRPA L213-1 » indiquée auparavant était le mauvais code ; family mediation).
 - **Conciliation**: A conciliateur de justice assists parties to reach a voluntary settlement, free of charge. Mandatory attempt required before some small claims (civil claims under €5,000 before tribunal judiciaire since 2020).
 - **Arbitrage**: Parties agree to have their dispute resolved by a privately appointed arbitrator (CPC Art. 1442 and following). Award (sentence arbitrale) is enforceable. Arbitration clauses in international commercial contracts are widely recognized.
-- **Procédure participative**: Collaborative procedure where lawyers assist parties to negotiate a settlement outside court (CPC Art. 2062 and following — introduced by loi du 22 décembre 2010).
+- **Procédure participative**: Collaborative procedure where lawyers assist parties to negotiate a settlement outside court (fond : CODE CIVIL arts. 2062-2068 ; procédure : CPC arts. 1542 s. ; la mention « CPC art. 2062 » confondait les deux codes ; introduced by loi 2010-1609 du 22 décembre 2010).
 
 ## Landmark Decisions (Décisions de référence)
 
@@ -436,9 +443,9 @@ Portée: Rigueur procédurale accrue en appel, sécurisation du calendrier.
 
 ### Pourvoi en cassation
 
-**Cass. Ass. plén., 2 avril 2021, n° 19-18.814 — Contrôle de proportionnalité**
-L'Assemblée plénière confirme que la Cour de cassation exerce un contrôle de proportionnalité sur les atteintes aux droits fondamentaux, y compris lorsqu'une règle de procédure est en cause.
-Portée: Intégration du contrôle de conventionnalité in concreto dans le cadre du pourvoi.
+**Cass. Ass. plén., 2 avril 2021, n° 19-18.814 — Recevabilité du moyen après revirement**
+L'arrêt (réel, vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000043352249) porte sur le préjudice d'anxiété lié à l'amiante et admet, au nom de l'effectivité de l'accès au juge, la recevabilité d'un moyen fondé sur un revirement de jurisprudence postérieur (arrêt du 5 avril 2019). (Le résumé antérieur, « contrôle de proportionnalité procédural généralisé », ne correspondait pas à cette décision.)
+Portée: Accès au juge et application des revirements de jurisprudence aux pourvois en cours.
 
 **Cass. civ. 1re, 4 juillet 2007, n° 05-20.764 — Cassation sans renvoi**
 La Cour de cassation peut casser sans renvoi lorsque les faits, tels qu'ils ont été souverainement constatés et appréciés par les juges du fond, permettent d'appliquer la règle de droit appropriée.
@@ -468,7 +475,7 @@ Portée: Reconnaissance de la force obligatoire des clauses de résolution amiab
 
 ### Référé et mesures d'urgence
 
-**CE, ord., 2 mars 2003, Commune de Pertuis (Référé-liberté)**
+**CE, juge des référés, 28 février 2003, n° 254411, Commune de Pertuis (Référé-liberté)** (date corrigée à l'audit du 2026-08-05, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000008143494/ ; pour les conditions fondatrices du référé-liberté, voir plutôt CE 18 janv. 2001, Commune de Venelles, n° 229247)
 Le Conseil d'État précise les conditions du référé-liberté (CJA art. L521-2) : l'urgence s'apprécie globalement, l'atteinte doit être grave et manifestement illégale, et le juge dispose de pouvoirs étendus pour y remédier.
 Portée: Consolidation du référé-liberté comme voie de protection effective des libertés fondamentales.
 
@@ -480,7 +487,7 @@ Portée: Interprétation fondatrice des conditions du référé-suspension admin
 
 ### Exécution provisoire de droit (décret n° 2019-1333 du 11 décembre 2019)
 
-**Contenu**: Le décret n° 2019-1333 du 11 décembre 2019 portant réforme de la procédure civile a renversé le principe antérieur en matière d'exécution provisoire. Depuis le 1er janvier 2020, les décisions de première instance sont de droit exécutoires à titre provisoire (CPC art. 514 nouveau), sauf exceptions prévues par la loi (en matière familiale notamment). Le juge peut toutefois écarter l'exécution provisoire si elle risque d'entraîner des conséquences manifestement excessives (CPC art. 514-1). En appel, le premier président peut être saisi aux fins d'arrêt de l'exécution provisoire.
+**Contenu**: Le décret n° 2019-1333 du 11 décembre 2019 portant réforme de la procédure civile a renversé le principe antérieur en matière d'exécution provisoire. Depuis le 1er janvier 2020, les décisions de première instance sont de droit exécutoires à titre provisoire (CPC art. 514 nouveau), sauf exceptions prévues par la loi (en matière familiale notamment). Le juge de première instance peut toutefois écarter l'exécution provisoire si elle est incompatible avec la nature de l'affaire (CPC art. 514-1 ; le critère des « conséquences manifestement excessives » relève du 514-3). En appel, le premier président peut être saisi aux fins d'arrêt de l'exécution provisoire (art. 514-3 : moyen sérieux + conséquences manifestement excessives).
 
 **Impact**: Accélération de l'exécution des décisions de justice. Réduction des appels dilatoires. Modification profonde de la stratégie contentieuse en première instance.
 
@@ -493,6 +500,8 @@ Portée: Interprétation fondatrice des conditions du référé-suspension admin
 **Décret n° 2020-1452 du 27 novembre 2020**: Modifications relatives à la communication par voie électronique obligatoire (RPVA). Adaptation des procédures en période de crise sanitaire.
 
 **Décret n° 2022-245 du 25 février 2022**: Nouvelles précisions sur la procédure d'appel, renforcement de l'obligation de concentration des prétentions dans les premières conclusions (CPC art. 910-4), adaptation de la mise en état.
+
+**Décret n° 2023-1391 du 29 décembre 2023** (ajouté à l'audit du 2026-08-05) : refonte de la procédure d'appel, réécriture des arts. 908 à 912 CPC, en vigueur le 1er septembre 2024.
 
 ### Procédure pénale numérique
 
@@ -514,7 +523,7 @@ Portée: Interprétation fondatrice des conditions du référé-suspension admin
 
 ### Réforme de la justice administrative
 
-**Loi n° 2019-222 du 23 mars 2019**: Extension des pouvoirs du juge unique en première instance. Développement de la médiation administrative (CRPA art. L213-1 et suivants). Renforcement des possibilités de recours aux moyens électroniques (Télérecours).
+**Loi n° 2019-222 du 23 mars 2019**: Extension des pouvoirs du juge unique en première instance. Extension de la médiation administrative, dont le chapitre (CJA arts. L213-1 à L213-14, PAS le CRPA) avait été créé par la loi n° 2016-1547 du 18 novembre 2016. Renforcement des possibilités de recours aux moyens électroniques (Télérecours).
 
 **Télérecours citoyens**: Depuis 2018, les particuliers peuvent saisir les juridictions administratives par voie dématérialisée via la plateforme Télérecours citoyens, étendue progressivement à l'ensemble des contentieux administratifs.
 
