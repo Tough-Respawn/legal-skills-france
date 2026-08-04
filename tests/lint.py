@@ -105,7 +105,7 @@ TRIGGERS = {
     "legal-france-civil": ["proprio", "caution", "divorcer", "vice caché"],
     "legal-france-travail": ["viré", "rupture conventionnelle", "heures sup", "prud'hommes"],
     "legal-france-penal": ["porter plainte", "amende", "garde à vue"],
-    "legal-france-affaires": ["sas", "marque", "concurrence"],
+    "legal-france-affaires": ["sas", "marque", "concurrence", "facture"],
     "legal-france-administratif": ["préfecture", "naturalisation", "caf", "trop-perçu", "recours gracieux"],
     "legal-france-numerique": ["bandeau cookies", "photo", "publication sans accord", "droit à l'oubli", "dpo"],
     "legal-france-europeen": ["cjue", "directive", "citoyen européen"],
