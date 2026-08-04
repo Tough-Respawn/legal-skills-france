@@ -15,8 +15,8 @@ optional_fields:
   - reference_contrat
   - precedents_echanges
 applicable_law:
-  - art. 1231-5 C. civ. (clause pénale / délai grâce)
   - art. 1344 C. civ. (mise en demeure — modes)
+  - art. 1344-1 C. civ. (intérêt moratoire — uniquement pour une obligation de somme d'argent)
 disclaimer_level: high
 ---
 
@@ -60,9 +60,9 @@ Au titre du contrat {{reference_contrat}}, je vous demande de bien vouloir {{obl
 Je vous demande de bien vouloir {{obligation_demandee}}{{#if montant}} pour un montant de {{montant}} euros{{/if}}.
 {{/if}}
 
-En conséquence, je vous mets en demeure, par la présente, d'exécuter cette obligation dans un délai de {{delai_execution}} jours à compter de la réception de la présente lettre, en application des articles 1231-5 et 1344 du Code civil.
+En conséquence, je vous mets en demeure, par la présente, d'exécuter cette obligation dans un délai de {{delai_execution}} jours à compter de la réception de la présente lettre, en application de l'article 1344 du Code civil{{#if montant}} et de l'article 1344-1 du même code{{/if}}.
 
-À défaut, je me réserve le droit d'engager toute action judiciaire utile aux fins d'obtenir l'exécution de cette obligation, ainsi que la réparation du préjudice subi, y compris les intérêts moratoires au taux légal.
+À défaut, je me réserve le droit d'engager toute action judiciaire utile aux fins d'obtenir l'exécution de cette obligation, ainsi que la réparation du préjudice subi{{#if montant}}, y compris les intérêts moratoires au taux légal courant à compter de la présente mise en demeure (art. 1344-1 C. civ.){{/if}}.
 
 Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
 
@@ -72,7 +72,8 @@ Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées
 
 ## Vérifications juridiques avant envoi
 
-- Confirmer sur Legifrance la version en vigueur des articles 1231-5 et 1344 du Code civil.
+- Confirmer sur Legifrance la version en vigueur de l'art. 1344 C. civ. (et de l'art. 1344-1 si créance de somme d'argent).
+- Références vérifiées sur Legifrance le 2026-08-04 : art. 1344 (LEGIARTI000032042162), art. 1344-1 (LEGIARTI000032035273 — vise exclusivement les obligations de somme d'argent).
 - Envoyer par lettre recommandée avec accusé de réception (preuve juridique).
 - Conserver une copie signée de la lettre.
 - Délai recommandé : 8 jours minimum, 15 jours raisonnable. Si contractuel, respecter le délai prévu.

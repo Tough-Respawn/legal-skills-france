@@ -1,6 +1,6 @@
 ---
 description: Générer un modèle de document juridique (mise en demeure, lettre de licenciement, plainte, recours, etc.)
-argument-hint: <type-de-document> (ex: mise-en-demeure-caution, lettre-licenciement, plainte-simple, ou aucun pour lister)
+argument-hint: "<type-de-document> (ex : mise-en-demeure-caution, lettre-licenciement, plainte-simple, ou aucun pour lister)"
 allowed-tools: [Read, Glob, WebFetch, WebSearch]
 ---
 

@@ -20,17 +20,15 @@ description: |
   - "j'ai eu un PV qui n'est pas mérité, je passe par le tribunal admin ?"
   - "rédige-moi un recours gracieux contre la décision X"
 
-  Mots-clés : préfet, préfecture, mairie, maire, conseil municipal,
-  conseil départemental, conseil régional, ministère, ministre, ANTS,
-  CAF, CPAM, Pôle emploi, France Travail, allocation, RSA, AAH, APL,
-  pension, recours gracieux, recours hiérarchique, recours contentieux,
-  REP, recours pour excès de pouvoir, plein contentieux, référé,
-  référé-liberté, référé-suspension, tribunal administratif, TA,
-  cour administrative d'appel, CAA, Conseil d'État, CE, mémoire,
-  requête, ordonnance, fonction publique, fonctionnaire, contractuel,
-  marché public, appel d'offres, urbanisme, permis de construire,
-  permis d'aménager, déclaration préalable, certificat d'urbanisme,
-  étranger, titre de séjour, naturalisation, OQTF, expulsion.
+  Mots-clés : préfet, préfecture, mairie, maire, ministère, ANTS,
+  CAF, CPAM, France Travail, allocation, RSA, AAH, APL, trop-perçu,
+  recours gracieux, recours hiérarchique, recours contentieux, REP,
+  excès de pouvoir, plein contentieux, référé-liberté,
+  référé-suspension, tribunal administratif, TA, cour administrative
+  d'appel, CAA, Conseil d'État, mémoire, requête, fonction publique,
+  fonctionnaire, marché public, appel d'offres, urbanisme, permis de
+  construire, déclaration préalable, étranger, titre de séjour,
+  naturalisation, OQTF, expulsion.
 ---
 
 ## Role

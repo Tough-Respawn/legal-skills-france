@@ -13,27 +13,21 @@ description: |
   - "comment me mettre en conformité RGPD ?"
   - "mon entreprise utilise mes données personnelles"
   - "comment exercer mon droit à l'oubli sur Google ?"
-  - "ma boîte n'a pas de DPO, c'est obligatoire ?"
   - "que doit contenir une politique de confidentialité ?"
   - "puis-je collecter des emails sans consentement explicite ?"
   - "rédige-moi des mentions légales pour mon site e-commerce"
   - "j'ai été piraté, dois-je notifier la CNIL ?"
   - "quelqu'un publie ma photo sur Facebook sans mon accord"
-  - "comment faire retirer une vidéo de moi sur les réseaux sociaux ?"
 
   Mots-clés : RGPD, GDPR, données personnelles, vie privée, CNIL, DPO,
-  délégué à la protection des données, consentement, finalité, base
-  légale, registre des traitements, AIPD, analyse d'impact, droit
-  d'accès, droit à l'effacement, droit à l'oubli, droit à la portabilité,
-  droit d'opposition, droit de rectification, droit à l'image, photo,
-  vidéo, image, publication sans accord, réseaux sociaux, Facebook,
-  Instagram, TikTok, X (Twitter), LinkedIn, YouTube, cookies, traceurs,
-  bandeau cookies, e-Privacy, mentions légales, politique de
+  consentement, base légale, registre des traitements, AIPD, droit
+  d'accès, droit à l'effacement, droit à l'oubli, portabilité,
+  opposition, rectification, droit à l'image, photo, vidéo, publication
+  sans accord, réseaux sociaux, Facebook, Instagram, TikTok, cookies,
+  traceurs, bandeau cookies, e-Privacy, mentions légales, politique de
   confidentialité, CGU, CGV, hébergeur, LCEN, DSA, DMA, plateforme,
-  marketplace, cybersécurité, violation de données, data breach,
-  notification, 72 heures, sanction CNIL, sanction administrative,
-  sanction pénale, numérique, e-commerce, vente à distance, droit de
-  rétractation.
+  cybersécurité, violation de données, notification 72 heures, sanction
+  CNIL, e-commerce, vente à distance, droit de rétractation.
 ---
 
 ## Role

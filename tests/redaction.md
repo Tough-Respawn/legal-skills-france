@@ -19,7 +19,7 @@ cited articles match Legifrance.
 - Délai : 15 jours
 
 **Expected:**
-- Output cites articles 1231-5 et 1344 C. civ.
+- Output cites articles 1344 et 1344-1 C. civ.
 - Final document mentions "Lettre recommandée avec accusé de réception".
 - Reinforced disclaimer present.
 - Standard disclaimer at the end.

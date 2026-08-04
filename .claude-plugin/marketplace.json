@@ -4,13 +4,13 @@
   "description": "French law assistant with domain-specific expertise across civil, criminal, labor, business, administrative, digital, and European law",
   "owner": {
     "name": "Amine Harrak",
-    "email": "amineharrak@proton.me"
+    "email": "leebrdataconsulting@proton.me"
   },
   "plugins": [
     {
       "name": "legal-france",
-      "description": "French law assistant covering civil, criminal, labor, business, administrative, digital, and European law. Adapts to user role (lawyer, judge, student, citizen). Use when user asks about French legislation, legal analysis, contract review, case law research, or mentions 'droit', 'loi', 'article', 'jurisprudence', 'contrat', 'licenciement', 'RGPD', 'Code civil', 'Code penal'.",
-      "version": "2.0.0",
+      "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Judilibre case-law API integration. Covers civil, criminal, labor, business, administrative, digital, and European law.",
+      "version": "3.0.0",
       "author": {
         "name": "Amine Harrak"
       },

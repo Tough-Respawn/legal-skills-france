@@ -1,7 +1,7 @@
 ---
 description: Search French case law, landmark decisions, and jurisprudential trends
 argument-hint: <search terms, article number, or legal topic>
-allowed-tools: [Read, Grep, Glob, WebSearch, WebFetch]
+allowed-tools: [Read, Grep, Glob, Bash, WebSearch, WebFetch]
 ---
 
 Invoke the `legal-france` meta skill to research case law.

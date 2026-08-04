@@ -9,56 +9,49 @@
 
 ## Key Articles
 
-### CJA — Compétence et organisation (L.1+)
+### CJA — Compétence et organisation
 
-#### CJA Article L1 — Compétence de droit commun des tribunaux administratifs
+#### CJA Article L211-1 — Compétence de droit commun des tribunaux administratifs
 > « Les tribunaux administratifs sont, en premier ressort et sous réserve des compétences attribuées aux autres juridictions administratives, juges de droit commun du contentieux administratif. »
-Source: Legifrance
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000024967312 (vérifié le 2026-08-04)
 Keywords: compétence, droit commun, premier ressort, contentieux administratif
 
-#### CJA Article L2 — Conseil d'État, juge de cassation
-> « Le Conseil d'État statue souverainement sur les recours en cassation dirigés contre les décisions rendues en dernier ressort par les juridictions administratives. »
-Source: Legifrance
-Keywords: cassation, Conseil d'État, dernier ressort
+#### CJA Article L111-1 — Conseil d'État, juridiction administrative suprême et juge de cassation
+> « Le Conseil d'Etat est la juridiction administrative suprême. Il statue souverainement sur les recours en cassation dirigés contre les décisions rendues en dernier ressort par les diverses juridictions administratives ainsi que sur ceux dont il est saisi en qualité de juge de premier ressort ou de juge d'appel. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006449167 (vérifié le 2026-08-04)
+Keywords: cassation, Conseil d'État, dernier ressort, juridiction suprême
 
-#### CJA Article L3 — Conseil d'État, juge de premier et dernier ressort
-> « Le Conseil d'État connaît en premier et dernier ressort [...] des recours dirigés contre les ordonnances du Président de la République et les décrets, des litiges relatifs à la situation individuelle des fonctionnaires nommés par décret du Président de la République [...]. »
-Source: Legifrance (résumé des principales compétences)
-Keywords: premier et dernier ressort, décrets, ordonnances, fonctionnaires
+#### CJA Article R311-1 — Conseil d'État, juge de premier et dernier ressort
+> Le Conseil d'État est compétent pour connaître en premier et dernier ressort, notamment, des recours dirigés contre les ordonnances du Président de la République et les décrets, ainsi que contre les actes réglementaires des ministres et des autres autorités à compétence nationale. (résumé, non verbatim)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535673 (version en vigueur depuis le 08/11/2025, vérifié le 2026-08-04)
+Keywords: premier et dernier ressort, décrets, ordonnances, actes réglementaires
 
-#### CJA Article L7 — Formation collégiale
-> « Un tribunal administratif ou une cour administrative d'appel statue en formation collégiale, sauf exceptions prévues par le présent code. »
-Source: Legifrance
+#### CJA Article L3 — Formation collégiale
+> « Les jugements sont rendus en formation collégiale, sauf s'il en est autrement disposé par la loi. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006449157 (vérifié le 2026-08-04)
 Keywords: formation collégiale, juge unique, exceptions
 
-### CJA — Tribunaux administratifs (L.211-1+)
+### CJA — Tribunaux administratifs et cours administratives d'appel
 
-#### CJA Article L211-1 — Institution des tribunaux administratifs
-> « Les tribunaux administratifs sont des juridictions de premier ressort de droit commun en matière administrative. »
-Source: Legifrance
-Keywords: tribunaux administratifs, premier ressort, institution
+#### CJA Article L311-1 — Compétence de premier ressort des tribunaux administratifs
+> « Les tribunaux administratifs sont, en premier ressort, juges de droit commun du contentieux administratif, sous réserve des compétences que l'objet du litige ou l'intérêt d'une bonne administration de la justice conduisent à attribuer à une autre juridiction administrative. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000024967308 (vérifié le 2026-08-04)
+Keywords: tribunaux administratifs, premier ressort, droit commun, compétence
 
-#### CJA Article L211-2 — Ressort territorial
-> « Les tribunaux administratifs ont leur siège et leur ressort fixés par décret en Conseil d'État. »
-Source: Legifrance
-Keywords: ressort territorial, siège, décret
-
-#### CJA Article L213-1 — Magistrats des tribunaux administratifs
-> « Les membres des tribunaux administratifs et des cours administratives d'appel sont des magistrats dont le statut est régi par le présent code. »
-Source: Legifrance
-Keywords: magistrats, statut, indépendance
-
-### CJA — Cours administratives d'appel (L.311-1+)
-
-#### CJA Article L311-1 — Compétence des cours administratives d'appel
-> « Les cours administratives d'appel connaissent des jugements rendus en premier ressort par les tribunaux administratifs, sous réserve des compétences attribuées au Conseil d'État en qualité de juge d'appel. »
-Source: Legifrance
+#### CJA Article L211-2 — Compétence d'appel des cours administratives d'appel
+> « Les cours administratives d'appel connaissent des jugements rendus en premier ressort par les tribunaux administratifs, sous réserve des compétences attribuées au Conseil d'Etat en qualité de juge d'appel et de celles définies aux articles L. 552-1 et L. 552-2. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006449212 (vérifié le 2026-08-04)
 Keywords: appel, cours administratives d'appel, jugements
 
-#### CJA Article L311-2 — Siège et ressort des CAA
-> « Les cours administratives d'appel ont leur siège et leur ressort fixés par décret en Conseil d'État. »
-Source: Legifrance
-Keywords: siège, ressort, CAA
+#### CJA Article L213-1 — Médiation
+> « La médiation régie par le présent chapitre s'entend de tout processus structuré, quelle qu'en soit la dénomination, par lequel deux ou plusieurs parties tentent de parvenir à un accord en vue de la résolution amiable de leurs différends, avec l'aide d'un tiers, le médiateur, choisi par elles ou désigné, avec leur accord, par la juridiction. »
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000033424092 (vérifié le 2026-08-04)
+Keywords: médiation, résolution amiable, médiateur
+
+#### CJA Article L231-1 — Magistrats des TA et CAA
+> Les membres des tribunaux administratifs et des cours administratives d'appel sont des magistrats dont le statut est régi par les dispositions statutaires du CJA. (résumé, non verbatim)
+Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000025495617 (vérifié le 2026-08-04, résumé)
+Keywords: magistrats, statut, indépendance
 
 ### CJA — Référés (L.521-1+)
 

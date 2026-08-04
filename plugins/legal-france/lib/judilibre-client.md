@@ -5,8 +5,33 @@ skill needing case-law research) when the user asks for jurisprudence and
 the PISTE credentials are configured. It defines the call sequence, the
 fallback policy, and the citation conventions for Judilibre results.
 
-There is no compiled client code. The skills perform `WebFetch` calls
-against the PISTE API following the specification below.
+There is no compiled client code. The skills perform the HTTP calls below
+via the **Bash tool (`curl`)** — NOT via `WebFetch`: the OAuth token
+request is a POST with a form-urlencoded body and the API calls need an
+`Authorization` header, neither of which `WebFetch` can produce.
+
+Run token + search in a **single Bash invocation** (shell state does not
+persist between tool calls). Never print the secret or the raw token
+response; capture the token in a variable and only output the search
+result:
+
+```bash
+TOKEN=$(curl -s -X POST "https://oauth.piste.gouv.fr/api/oauth/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "grant_type=client_credentials" \
+  --data-urlencode "client_id=${PISTE_CLIENT_ID}" \
+  --data-urlencode "client_secret=${PISTE_CLIENT_SECRET}" \
+  --data-urlencode "scope=openid" \
+  | sed -n 's/.*"access_token" *: *"\([^"]*\)".*/\1/p')
+if [ -z "$TOKEN" ]; then
+  echo "JUDILIBRE_AUTH_FAILED"   # then fall back to WebSearch per §5
+else
+  curl -s -G "https://api.piste.gouv.fr/cassation/judilibre/v1.0/search" \
+    -H "Authorization: Bearer ${TOKEN}" -H "Accept: application/json" \
+    --data-urlencode "query=<requête utilisateur>" \
+    --data-urlencode "page_size=10"
+fi
+```
 
 ---
 
@@ -70,7 +95,7 @@ token once before falling back.
 - `chamber` — for cc: `civ1`, `civ2`, `civ3`, `soc`, `com`, `crim`, `mixte`, `pl`
 - `date_start`, `date_end` — `YYYY-MM-DD` format
 - `page_size` — default 10, max 50
-- `page` — 1-indexed
+- `page` — 0-indexed (première page = `page=0` ; vérifié le 2026-08-04 sur le dépôt officiel github.com/Cour-de-cassation/judilibre-search, exemple de réponse `"page":0` avec `next_page` pointant vers `page=1`)
 - `sort` — `score` (default, relevance), `date` (most recent first)
 
 **Response (200):**

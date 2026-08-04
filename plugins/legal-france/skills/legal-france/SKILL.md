@@ -1,31 +1,28 @@
 ---
 name: legal-france
 description: |
-  Assistant juridique pour le droit français. À déclencher dès que l'utilisateur
-  évoque, même de façon indirecte, une situation juridique, un conflit, une
-  démarche administrative, un contrat, un événement de vie réglementé, ou pose
-  une question sur ses droits, ses obligations ou un litige. Couvre civil,
-  pénal, travail, affaires, administratif, numérique, européen.
+  Assistant juridique pour le droit français (skill méta, routeur). À
+  déclencher quand la question juridique est transversale, multi-domaines,
+  procédurale, ou trop générale pour un domaine précis. Les 7 skills de
+  domaine (civil, pénal, travail, affaires, administratif, numérique,
+  européen) se déclenchent seuls sur leur vocabulaire propre ; ce skill
+  méta prend le relais quand aucun domaine unique ne suffit.
 
-  Exemples de phrases déclencheuses (allusions courantes) :
-  - "mon proprio refuse de me rendre la caution"
-  - "j'ai été viré, j'ai quoi comme indemnités ?"
-  - "mon voisin fait du bruit la nuit"
-  - "est-ce que j'ai le droit de..."
-  - "je peux contester une amende ?"
-  - "il faut un bandeau cookies sur mon site ?"
-  - "comment porter plainte contre X"
-  - "ma boîte refuse de me payer mes heures sup"
-  - "ma femme veut divorcer"
-  - "rédige-moi une mise en demeure"
-  - "j'ai reçu un courrier de la préfecture"
-  - "mon entreprise utilise mes données personnelles"
+  Exemples de phrases déclencheuses :
+  - question mêlant plusieurs domaines ("licencié après avoir signalé une
+    fuite de données RGPD", "contester une amende ET porter plainte")
+  - procédure et délais ("quel est le délai de prescription ?", "comment
+    faire appel ?", "quel tribunal est compétent ?", "référé", "saisine")
+  - question générale sur ses droits ("est-ce que j'ai le droit de...",
+    "quels sont mes recours ?")
+  - rédaction transversale ("rédige-moi une mise en demeure", "il me faut
+    une attestation sur l'honneur")
 
-  Mots-clés (FR + EN) : droit, loi, article, code, contrat, licenciement,
-  divorce, succession, héritage, RGPD, CNIL, prud'hommes, tribunal, plainte,
-  amende, recours, bail, caution, proprio, locataire, employeur, salarié,
-  syndic, association, société, SAS, SARL, mise en demeure, lettre, modèle,
-  rédiger, French law, contract, dismissal, GDPR, lawsuit, legal advice.
+  Mots-clés (FR + EN) : droit, loi, article, code, jurisprudence,
+  procédure, prescription, délai, appel, cassation, référé, compétence,
+  saisine, tribunal, litige, recours, mise en demeure, attestation sur
+  l'honneur, modèle, rédiger, French law, legal advice, case law,
+  lawsuit, statute of limitations.
 ---
 
 ## Role & Identity
@@ -162,7 +159,7 @@ When ANY of the following conditions is detected, activate complex case handling
 
 Select the appropriate response template from `skills/legal-france/methodology.md` using this strict priority order:
 
-1. **Command used (highest priority)** — If the user invoked a specific command (e.g., `/jurisprudence`, `/analyse-contrat`, `/consultation`), use the template that corresponds to that command.
+1. **Command used (highest priority)** — If the user invoked a specific command (e.g., `/jurisprudence`, `/droit-civil`, `/rediger`), use the template that corresponds to that command.
 2. **Detected user role** — If no command was given, select the template that best matches the detected role (e.g., student → cas pratique; lawyer → consultation juridique; citizen → explication vulgarisée).
 3. **Nature of the request (lowest priority)** — If role is ambiguous, select based on request type: document provided → analyse de document; court decision provided → commentaire d'arrêt; general question → explication vulgarisée.
 
