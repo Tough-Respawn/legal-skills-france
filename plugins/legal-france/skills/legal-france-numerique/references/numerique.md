@@ -226,34 +226,40 @@ Source: Journal officiel de l'UE / Legifrance
 > « L'informatique doit être au service de chaque citoyen. Son développement doit s'opérer dans le cadre de la coopération internationale. Elle ne doit porter atteinte ni à l'identité humaine, ni aux droits de l'homme, ni à la vie privée, ni aux libertés individuelles ou publiques. »
 Source: Legifrance
 
-#### LIL Article 2 — Définitions
-- Numéro : 2
-- Titre : Définition des données à caractère personnel et du traitement
-- Mots-clés : donnée à caractère personnel, personne identifiée ou identifiable, traitement, fichier, responsable du traitement
+> **Attention numérotation** : la loi 78-17 a été entièrement recodifiée par
+> l'ordonnance 2018-1125 (en vigueur au 1er juin 2019). Les entrées ci-dessous
+> utilisent la numérotation EN VIGUEUR (audit du 2026-08-05 ; l'ancienne
+> numérotation pré-2019 qui figurait ici était périmée).
 
-#### LIL Article 4 — Rôle de la CNIL
-- Numéro : 4
-- Titre : Mission et pouvoirs de la Commission nationale de l'informatique et des libertés
-- Mots-clés : CNIL, autorité administrative indépendante, contrôle, sanctions, avis, information du public
+#### LIL Article 2 — Champ d'application et définitions
+- Numéro : 2 (version en vigueur)
+- Contenu : champ d'application de la loi et RENVOI aux définitions de l'article 4 du RGPD (les définitions ne sont plus énoncées dans la loi elle-même)
+- Source : https://www.legifrance.gouv.fr/loda/id/LEGITEXT000006068624/ (vérifié le 2026-08-05)
+- Mots-clés : champ d'application, renvoi art. 4 RGPD, donnée à caractère personnel, traitement
 
-#### LIL Article 8 — Données sensibles
-> « Il est interdit de collecter ou de traiter des données à caractère personnel qui font apparaître, directement ou indirectement, les origines raciales ou ethniques, les opinions politiques, philosophiques ou religieuses ou l'appartenance syndicale des personnes, ou qui sont relatives à la santé ou à la vie sexuelle de celles-ci. »
-Source: Legifrance
+#### LIL Article 8 — Missions de la CNIL
+- Numéro : 8 (version en vigueur ; anciennement art. 11 avant 2019)
+- Contenu : la CNIL est l'autorité administrative indépendante, autorité de contrôle nationale au sens du RGPD ; information des personnes, contrôle, réclamations, avis, lignes directrices, certification
+- Source : https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000037822923 (vérifié le 2026-08-05)
+- Mots-clés : CNIL, autorité de contrôle, missions, avis, sanctions
 
-#### LIL Article 9 — Traitements de données pénales
-- Numéro : 9
-- Titre : Conditions spécifiques pour le traitement des données relatives aux infractions et condamnations
-- Mots-clés : données pénales, infractions, condamnations, mesures de sûreté, registre judiciaire, dérogation limitée
+#### LIL Article 6 — Données sensibles
+- Numéro : 6 (version en vigueur ; anciennement art. 8 avant 2019)
+- Contenu : interdiction de traiter des données qui révèlent la prétendue origine raciale ou l'origine ethnique, les opinions politiques, philosophiques ou religieuses, l'appartenance syndicale, ainsi que les données génétiques, biométriques, de santé, ou relatives à la vie sexuelle ou l'orientation sexuelle (exceptions énumérées)
+- Source : https://www.legifrance.gouv.fr/loda/id/LEGITEXT000006068624/ (vérifié le 2026-08-05)
+- Mots-clés : données sensibles, interdiction de principe, données génétiques, biométriques
 
-#### LIL Article 11 — Pouvoirs de la CNIL
-- Numéro : 11
-- Titre : Énumération des missions et pouvoirs de la CNIL
-- Mots-clés : avis sur projets de loi, contrôles sur place, mises en demeure, sanctions, certification, information du public, coopération européenne
+#### LIL Article 46 — Traitements de données pénales
+- Numéro : 46 (version en vigueur ; anciennement art. 9 avant 2019)
+- Contenu : traitements des données relatives aux condamnations pénales, infractions et mesures de sûreté réservés aux juridictions, autorités publiques, auxiliaires de justice et catégories énumérées
+- Source : https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000037823133 (vérifié le 2026-08-05)
+- Mots-clés : données pénales, infractions, condamnations, catégories autorisées
 
-#### LIL Article 13 — Composition et fonctionnement de la CNIL
-- Numéro : 13
-- Titre : Composition de la commission et formation restreinte
-- Mots-clés : 18 membres, formation plénière, formation restreinte (sanctions), commissaire du Gouvernement
+#### LIL Article 9 — Composition de la CNIL
+- Numéro : 9 (version en vigueur ; anciennement art. 13 avant 2019)
+- Contenu : la CNIL est composée de dix-huit membres ; le fonctionnement (formation plénière, formation restreinte pour les sanctions) est régi par les articles 13 et suivants
+- Source : https://www.legifrance.gouv.fr/loda/id/LEGITEXT000006068624/ (vérifié le 2026-08-05)
+- Mots-clés : 18 membres, formation plénière, formation restreinte
 
 #### LIL Article 45 — Âge du consentement numérique des mineurs
 - Numéro : 45
@@ -267,24 +273,28 @@ Source: Legifrance
 - Titre : Principe de liberté de communication au public par voie électronique
 - Mots-clés : liberté de communication, limites, respect de la dignité, protection de la jeunesse, ordre public
 
-#### LCEN Article 6 — Responsabilité des hébergeurs
-> « Les personnes physiques ou morales qui assurent, même à titre gratuit, pour mise à disposition du public par des services de communication au public en ligne, le stockage de signaux, d'écrits, d'images, de sons ou de messages de toute nature fournis par des destinataires de ces services ne peuvent pas voir leur responsabilité civile engagée du fait des activités ou des informations stockées à la demande d'un destinataire de ces services si elles n'avaient pas effectivement connaissance de leur caractère illicite ou de faits et circonstances faisant apparaître ce caractère [...] »
-Source: Legifrance
+#### LCEN Article 6 — RÉÉCRIT PAR LA LOI SREN 2024 (responsabilité des hébergeurs -> DSA)
+> **Attention (audit 2026-08-05)** : l'ancien régime de responsabilité des
+> hébergeurs de l'art. 6, I, 2 LCEN (« ne peuvent pas voir leur responsabilité
+> civile engagée [...] si elles n'avaient pas effectivement connaissance... »)
+> a été SUPPRIMÉ par la loi SREN n° 2024-449 du 21 mai 2024. L'exonération de
+> responsabilité relève désormais de l'**article 6 du règlement DSA
+> (2022/2065)** ; l'art. 6 LCEN en vigueur ne contient plus que des
+> définitions renvoyant au DSA. Ne plus citer l'ancien texte pour des faits
+> postérieurs à mai 2024.
+- Source : https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000801164/ (vérifié le 2026-08-05)
+- Mots-clés : hébergeur, DSA art. 6, loi SREN 2024-449, connaissance effective
 
-#### LCEN Article 6-I-2 — Fournisseurs d'accès à internet
-- Numéro : 6-I-2
-- Titre : Obligations des fournisseurs d'accès
-- Mots-clés : FAI, information des abonnés, moyens de restriction d'accès, filtrage parental
+#### LCEN — Mécanisme de notification (historique) et régime actuel
+- Ancienne numérotation (avant SREN 2024) : l'information des abonnés sur les moyens de restriction incombait au 6-I-1 (pas 6-I-2) ; les éléments de la notification des contenus illicites étaient au 6-I-5 ; le 6-I-7 posait l'ABSENCE d'obligation générale de surveillance. Régime actuel : notification « notice and action » = art. 16 DSA.
+- Source : https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000037526491/2020-06-25/ (version historique, vérifié le 2026-08-05)
+- Mots-clés : notification, retrait, DSA art. 16, pas d'obligation générale de surveillance
 
-#### LCEN Article 6-I-7 — Obligation de retrait des contenus illicites
-- Numéro : 6-I-7
-- Titre : Retrait prompt des contenus manifestement illicites après notification
-- Mots-clés : notification, retrait, contenu illicite, connaissance effective, réactivité
-
-#### LCEN Article 6-II — Conservation des données d'identification
-- Numéro : 6-II
-- Titre : Obligation de conservation des données permettant l'identification des créateurs de contenus
-- Mots-clés : conservation, données de connexion, identification, autorité judiciaire, durée de conservation
+#### LCEN Article 6, V, A — Conservation des données d'identification
+- Numéro : art. 6, V, A dans la numérotation issue de la loi SREN 2024-449 (anciennement 6-II)
+- Contenu : les fournisseurs d'accès et d'hébergement détiennent et conservent les données de nature à permettre l'identification de quiconque a contribué à la création du contenu
+- Source : https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000801164/ (vérifié le 2026-08-05)
+- Mots-clés : conservation, données de connexion, identification, autorité judiciaire
 
 #### LCEN Article 14 — Commerce électronique
 - Numéro : 14
@@ -294,7 +304,7 @@ Source: Legifrance
 #### LCEN Article 19 — Obligations d'information en e-commerce
 - Numéro : 19
 - Titre : Mentions obligatoires du prestataire de commerce électronique
-- Mots-clés : identification du vendeur, conditions générales, prix, droit de rétractation, information précontractuelle
+- Mots-clés : identification du vendeur, conditions générales, prix, information précontractuelle (le droit de rétractation relève du Code de la consommation, L. 221-18 s., pas de l'art. 19 LCEN)
 
 ### Code pénal — Infractions numériques
 
@@ -343,7 +353,7 @@ Source: Legifrance
 #### DSA Article 6 — Hébergement — exonération de responsabilité conditionnelle
 - Numéro : 6
 - Titre : Conditions d'exonération de responsabilité de l'hébergeur
-- Mots-clés : absence de connaissance, retrait ou blocage diligent, Good Samaritan
+- Mots-clés : absence de connaissance, retrait ou blocage diligent (la clause « Good Samaritan », enquêtes volontaires, est l'art. 7 DSA ; vérifié le 2026-08-05)
 
 #### DSA Article 14 — Conditions générales
 - Numéro : 14
@@ -365,10 +375,10 @@ Source: Legifrance
 - Titre : Accès aux données des très grandes plateformes à des fins de recherche
 - Mots-clés : chercheurs agréés, accès aux données, transparence algorithmique, recherche d'intérêt public
 
-#### DSA Article 52 — Sanctions
-- Numéro : 52
-- Titre : Amendes pour les très grandes plateformes
-- Mots-clés : jusqu'à 6 % du chiffre d'affaires mondial, astreintes, non-conformité
+#### DSA Articles 52 et 74 — Sanctions
+- Art. 52 : sanctions fixées par les ÉTATS MEMBRES, applicables à tous les fournisseurs de services intermédiaires (plafond 6 % du CA mondial annuel). Art. 74 : amendes infligées par la COMMISSION aux très grandes plateformes et moteurs (VLOP/VLOSE), également jusqu'à 6 %.
+- Source : vérifié le 2026-08-05 (texte final 2022/2065)
+- Mots-clés : 6 % du chiffre d'affaires mondial, astreintes, États membres (52), Commission/VLOP (74)
 
 ### DMA — Digital Markets Act (Règlement UE 2022/1925)
 
@@ -385,15 +395,15 @@ Source: Legifrance
 #### DMA Article 5 — Obligations des contrôleurs d'accès
 - Numéro : 5
 - Titre : Obligations directement applicables
-- Mots-clés : interdiction de combiner les données sans consentement, autorisation de désinstallation, interopérabilité de la messagerie, non-discrimination
+- Mots-clés : interdiction de combiner les données sans consentement (5(2)), non-discrimination. NB (vérifié le 2026-08-05) : le droit de désinstaller des applications est à l'art. 6(3) et l'interopérabilité de la messagerie à l'art. 7.
 
 #### DMA Article 6 — Obligations susceptibles d'être précisées
 - Numéro : 6
 - Titre : Obligations pouvant être précisées par la Commission
 - Mots-clés : accès aux données, portabilité, auto-préférence interdite, conditions équitables, interopérabilité
 
-#### DMA Article 12 — Sanctions
-- Numéro : 12
+#### DMA Article 30 — Sanctions
+- Numéro : 30 (l'entrée était numérotée 12 par erreur ; l'art. 12 du texte final porte l'actualisation des obligations ; vérifié le 2026-08-05)
 - Titre : Amendes en cas de non-conformité
 - Mots-clés : jusqu'à 10 % du chiffre d'affaires mondial, 20 % en cas de récidive, mesures correctives structurelles
 
@@ -419,8 +429,8 @@ Source: Legifrance
 - Titre : Obligations de transparence pour les systèmes d'IA à haut risque
 - Mots-clés : instructions d'utilisation, capacités et limites, performance, surveillance humaine
 
-#### AI Act Article 52 — Obligations de transparence pour certains systèmes d'IA
-- Numéro : 52
+#### AI Act Article 50 — Obligations de transparence pour certains systèmes d'IA
+- Numéro : 50 dans le texte final 2024/1689 (l'entrée était numérotée 52 d'après la proposition de 2021 ; l'art. 52 final porte une procédure GPAI ; vérifié le 2026-08-05, https://artificialintelligenceact.eu/article/50/)
 - Titre : Obligations de transparence (chatbots, deepfakes, systèmes de reconnaissance des émotions)
 - Mots-clés : information de l'utilisateur, interaction avec un système d'IA, contenu généré artificiellement, deepfake, étiquetage
 
@@ -480,8 +490,8 @@ Source: Legifrance
 - **Résumé :** La CNIL a examiné si l'utilisation de Google Analytics par des sites web français entraînait des transferts illicites de données personnelles (adresses IP, identifiants uniques) vers les États-Unis sans garanties adéquates post-Schrems II.
 - **Portée :** Action coordonnée post-Schrems II entre plusieurs DPA européennes. A forcé la révision des outils d'analyse web standards et renforcé l'exigence de localisation des données ou de proxies configurés de manière adéquate.
 
-### CNIL c/ Clearview AI — CNIL, 20 octobre 2022, SAN-2022-019
-- **Date :** 20 octobre 2022
+### CNIL c/ Clearview AI — CNIL, 17 octobre 2022, SAN-2022-019
+- **Date :** délibération du 17 octobre 2022 (communiquée le 20 octobre ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000046444859)
 - **Référence :** CNIL, SAN-2022-019
 - **Résumé :** La CNIL a sanctionné Clearview AI (amende de 20 M€) pour collecte et utilisation illicites d'images faciales de personnes résidant en France sans base légale, en violation des droits d'accès et d'effacement. Clearview AI aspirait des photographies publiquement accessibles sur internet pour alimenter un logiciel de reconnaissance faciale.
 - **Portée :** Affirmation que le scraping massif de données biométriques sur internet ne peut être fondé sur l'intérêt légitime. Application extraterritoriale du RGPD. Précédent majeur sur la reconnaissance faciale et les données biométriques.
@@ -495,7 +505,7 @@ Source: Legifrance
 ### CNIL c/ Amazon France Logistique — CNIL, 27 décembre 2023, SAN-2023-021
 - **Date :** 27 décembre 2023
 - **Référence :** CNIL, SAN-2023-021
-- **Résumé :** La CNIL a sanctionné Amazon France Logistique (amende de 32 M€) pour la mise en place d'un système de surveillance excessive des salariés dans ses entrepôts via des scanners mesurant en temps réel l'activité, la productivité et les temps d'inactivité.
+- **Résumé :** La CNIL a sanctionné Amazon France Logistique (amende de 32 M€) pour la mise en place d'un système de surveillance excessive des salariés dans ses entrepôts via des scanners mesurant en temps réel l'activité, la productivité et les temps d'inactivité. **Attention** : la délibération a été réformée par le Conseil d'État le 23 décembre 2025 (n° 492830) ; vérifier le montant final avant de citer 32 M€ comme définitif (constaté le 2026-08-05).
 - **Portée :** Application du RGPD au contrôle de l'activité des salariés. Rappel du principe de proportionnalité et de minimisation dans le contexte de la surveillance au travail. Pertinence pour l'encadrement de l'IA managériale.
 
 ### CNIL c/ Yahoo — CNIL, 29 décembre 2023
@@ -525,7 +535,7 @@ Source: Legifrance
 ### AI Act — Règlement européen sur l'intelligence artificielle (2024)
 - **Dates clés :** Adopté le 13 juin 2024, publié au JOUE le 12 juillet 2024. Entrée en vigueur le 1er août 2024. Application échelonnée : interdictions (art. 5) applicables dès février 2025 ; obligations de transparence pour l'IA à usage général (GPAI) dès août 2025 ; obligations pour l'IA à haut risque dès août 2026.
 - **Contenu :** Approche fondée sur les risques : pratiques interdites (manipulation subliminale, scoring social, reconnaissance faciale en temps réel sauf exceptions), obligations renforcées pour les systèmes à haut risque (gestion des risques, qualité des données, transparence, surveillance humaine), obligations de transparence pour les systèmes d'IA à usage général et les deepfakes.
-- **Impact en France :** La France a activement défendu une approche favorable à l'innovation lors des négociations. La CNIL a publié des recommandations sur l'articulation entre RGPD et AI Act. Le bureau français de l'IA, rattaché à la DINUM, coordonne la mise en œuvre nationale.
+- **Impact en France :** La France a activement défendu une approche favorable à l'innovation lors des négociations. La CNIL a publié des recommandations sur l'articulation entre RGPD et AI Act. Gouvernance nationale (vérifié le 2026-08-05) : coordination stratégique par la DGE, point de contact unique opérationnel DGCCRF, CNIL parmi les autorités sectorielles de surveillance ; le « Bureau de l'IA » (AI Office) est un organe de la Commission européenne. (La mention antérieure d'un « bureau français de l'IA rattaché à la DINUM » était fabriquée.)
 
 ### Data Act (Règlement UE 2023/2854) — Accès et partage des données (2024-2025)
 - **Dates clés :** Adopté le 13 décembre 2023, publié au JOUE le 22 décembre 2023. Entrée en vigueur le 11 janvier 2024. Application générale à partir du 12 septembre 2025.
