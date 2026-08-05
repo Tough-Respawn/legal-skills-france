@@ -140,8 +140,12 @@ Chantier prioritaire issu de cette baseline : la compétition méta vs domaines
 Harnais durci (portes de validité complètes, modèle épinglé
 `claude-fable-5[1m]`, plugins chargés enregistrés par run), plugin 3.0.1,
 commit fe5810f. N2 et B3 relancés intégralement (5 runs frais) pour
-remplacer 2 timeouts. **165/165 runs valides, 138 PASS (83,6 %), zéro
-invalide.** Comparaison formelle avec la baseline diagnostique
+remplacer 2 timeouts. **165/165 runs EXPLOITABLES pour l'évaluation du
+déclenchement, 138 PASS (83,6 %), zéro run invalide au sens des portes de
+validité.** Précision (audit 2026-08-05) : 39 sessions se terminent
+normalement (`success`, exit 0) et 126 sont volontairement tronquées par
+`--max-turns` après l'observation de l'invocation (`error_max_turns`,
+exit 1), troncature acceptée par conception du harnais. Comparaison formelle avec la baseline diagnostique
 (compare.py) : **aucune régression**, 3 améliorations (M1 0 % -> 20 %,
 M3 80 % -> 100 %, E2 60 % -> 80 %), le reste stable.
 

@@ -145,12 +145,12 @@ Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI0000
 
 ### CP Article 222-22 — Sexual Aggression (Definition) — RÉFORME 2025
 - Depuis la loi n° 2025-1057 du 6 novembre 2025 (en vigueur 08/11/2025), la définition repose sur le NON-CONSENTEMENT : constitue une agression sexuelle tout acte sexuel non consenti. Le consentement doit être libre et éclairé, spécifique, préalable et révocable ; il ne peut être déduit du seul silence ou de la seule absence de réaction ; il n'y a pas de consentement en cas de violence, contrainte, menace ou surprise. NE PLUS citer l'ancienne définition (« commise avec violence, contrainte, menace ou surprise ») pour des faits postérieurs au 08/11/2025 ; relire le texte exact sur Legifrance avant toute citation verbatim.
-- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043409030 et loi https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000052533258 (vérifié le 2026-08-05)
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535583 (version en vigueur post-loi 2025-1057) et loi https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000052533258 (vérifié le 2026-08-05)
 - Keywords: agression sexuelle, consentement, loi 2025-1057, violence, contrainte, surprise
 
 ### CP Article 222-23 — Rape (Viol) — RÉFORME 2025
-- Le viol est redéfini par la loi n° 2025-1057 sur le fondement du non-consentement (actes de pénétration sexuelle ou actes bucco-génitaux/bucco-anaux non consentis). Peine inchangée et vérifiée : « Le viol est puni de quinze ans de réclusion criminelle. » Relire le texte exact en vigueur sur Legifrance avant toute citation verbatim de la définition.
-- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535571 (vérifié le 2026-08-05)
+- Le viol est redéfini par la loi n° 2025-1057 sur le fondement du non-consentement (actes de pénétration sexuelle ou actes bucco-génitaux/bucco-anaux non consentis). Le RÉGIME du consentement (libre et éclairé, spécifique, préalable et révocable, non déduit du seul silence) est posé à l'art. 222-22, à citer conjointement. Peine inchangée et vérifiée : « Le viol est puni de quinze ans de réclusion criminelle. » Relire le texte exact en vigueur sur Legifrance avant toute citation verbatim de la définition.
+- Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535571 (222-23) et https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000052535583 (222-22, régime du consentement) (vérifié le 2026-08-05)
 - Keywords: viol, consentement, pénétration sexuelle, réclusion criminelle, loi 2025-1057
 
 ### CP Article 225-1 — Discrimination (Definition)
