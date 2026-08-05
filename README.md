@@ -149,14 +149,16 @@ Parcours complet vérifié en conditions réelles le 2026-08-05. Comptez 10 minu
 
 ##### Option A — Fichier `.env` à la racine du projet (le plus simple à gérer)
 
-Copiez `.env.example` (fourni avec le plugin) en `.env` à la racine du projet où vous utilisez le plugin, et remplissez les deux valeurs :
+Créez un fichier nommé `.env` **directement dans le dossier que vous ouvrez avec Claude Code** : peu importe lequel, c'est simplement le dossier de travail de votre session (celui affiché quand vous lancez `claude`). Un modèle est fourni avec le plugin (`.env.example`). Contenu, deux lignes :
 
 ```bash
 PISTE_CLIENT_ID=votre_client_id
 PISTE_CLIENT_SECRET=votre_client_secret
 ```
 
-Ajoutez `.env` à votre `.gitignore`. Le client Judilibre lit automatiquement les deux clés quand les variables d'environnement sont absentes (extraction textuelle uniquement, le fichier n'est jamais exécuté).
+Ajoutez `.env` à votre `.gitignore` si le dossier est un dépôt Git. Le client Judilibre lit automatiquement les deux clés quand les variables d'environnement sont absentes (extraction textuelle uniquement, le fichier n'est jamais exécuté).
+
+> **Piège Windows** : en enregistrant depuis le Bloc-notes, choisissez « Tous les fichiers » comme type, sinon le fichier s'appelle `.env.txt` et ne sera pas trouvé.
 
 ##### Option B — Settings Claude Code (persiste, marche dans tous les projets)
 
