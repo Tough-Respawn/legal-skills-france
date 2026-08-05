@@ -156,7 +156,7 @@ PISTE_CLIENT_ID=votre_client_id
 PISTE_CLIENT_SECRET=votre_client_secret
 ```
 
-Ajoutez `.env` à votre `.gitignore`. Le client Judilibre le source automatiquement quand les variables d'environnement sont absentes.
+Ajoutez `.env` à votre `.gitignore`. Le client Judilibre lit automatiquement les deux clés quand les variables d'environnement sont absentes (extraction textuelle uniquement, le fichier n'est jamais exécuté).
 
 ##### Option B — Settings Claude Code (persiste, marche dans tous les projets)
 
@@ -200,6 +200,7 @@ Invoquez `/jurisprudence harcèlement moral`. Si les citations sortent au format
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **v3.0.3** | Août 2026 | Durcissement : `.env` lu par extraction textuelle, jamais exécuté / Hardening: `.env` parsed textually, never executed |
 | **v3.0.2** | Août 2026 | Credentials PISTE via fichier `.env` (+ `.env.example`), tutoriel pas-à-pas d'obtention des clés vérifié en réel / PISTE credentials via `.env` file (+ `.env.example`), step-by-step key setup tutorial verified end-to-end |
 | **v3.0.1** | Août 2026 | Citations corrigées et sourcées (audit externe), lint statique, baseline de déclenchement mesurée, workflow Judilibre curl / Verified citations, static lint, measured triggering baseline, curl-based Judilibre workflow |
 | **v3.0.0** | Mai 2026 | 8 skills modulaires (1 méta + 7 domaines), 10 modèles de documents, intégration API Judilibre, suite de tests / 8 modular skills, 10 document templates, Judilibre API integration, test suite |

@@ -16,7 +16,11 @@ response; capture the token in a variable and only output the search
 result:
 
 ```bash
-[ -z "$PISTE_CLIENT_ID" ] && [ -f .env ] && set -a && . ./.env && set +a
+if [ -z "$PISTE_CLIENT_ID" ] && [ -f .env ]; then
+  PISTE_CLIENT_ID=$(sed -n 's/^PISTE_CLIENT_ID=//p' .env | head -1 | tr -d '"\r')
+  PISTE_CLIENT_SECRET=$(sed -n 's/^PISTE_CLIENT_SECRET=//p' .env | head -1 | tr -d '"\r')
+  export PISTE_CLIENT_ID PISTE_CLIENT_SECRET
+fi
 TOKEN=$(curl -s -X POST "https://oauth.piste.gouv.fr/api/oauth/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   --data-urlencode "grant_type=client_credentials" \
@@ -43,9 +47,13 @@ at call time, in this order:
 
 1. Environment variables.
 2. Fallback: a `.env` file at the project root (current working
-   directory), sourced into the shell. Shell state does not persist
-   between Bash tool calls, so **every** Bash step that uses the
-   credentials must start with the sourcing line shown below.
+   directory). **Never `source` it**: a `.env` shipped by an untrusted
+   repository would then execute arbitrary shell code. Extract the two
+   keys textually (restricted parser below); the `tr -d '"\r'` also
+   strips quotes and Windows carriage returns that would silently break
+   authentication. Shell state does not persist between Bash tool calls,
+   so **every** Bash step that uses the credentials must start with this
+   block.
 
 If neither source provides both values, **skip Judilibre entirely and
 fall back to WebSearch**. Surface this one-time hint to the user:
@@ -56,7 +64,11 @@ To check: in a Bash step, run a **silent** presence test that never prints
 the values:
 
 ```bash
-[ -z "$PISTE_CLIENT_ID" ] && [ -f .env ] && set -a && . ./.env && set +a
+if [ -z "$PISTE_CLIENT_ID" ] && [ -f .env ]; then
+  PISTE_CLIENT_ID=$(sed -n 's/^PISTE_CLIENT_ID=//p' .env | head -1 | tr -d '"\r')
+  PISTE_CLIENT_SECRET=$(sed -n 's/^PISTE_CLIENT_SECRET=//p' .env | head -1 | tr -d '"\r')
+  export PISTE_CLIENT_ID PISTE_CLIENT_SECRET
+fi
 [ -n "$PISTE_CLIENT_ID" ] && [ -n "$PISTE_CLIENT_SECRET" ] && echo PISTE_OK || echo PISTE_MISSING
 ```
 

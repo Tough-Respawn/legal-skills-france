@@ -6,6 +6,12 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.0.3] — 2026-08-05
+
+### Security
+
+- Le fichier `.env` n'est plus sourcé (exécutable) mais lu par extraction textuelle des deux clés PISTE uniquement : un `.env` malveillant livré par un dépôt tiers ne peut plus exécuter de code lors d'un appel Judilibre. L'extraction retire aussi guillemets et retours chariot Windows qui cassaient l'authentification en silence. Bloc validé en réel (token OAuth Production obtenu le 2026-08-05).
+
 ## [3.0.2] — 2026-08-05
 
 ### Added
