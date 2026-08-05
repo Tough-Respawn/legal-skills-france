@@ -1,4 +1,4 @@
-# Judilibre Client — Workflow Documentation
+# Judilibre Client : Workflow Documentation
 
 This document is read by the meta skill `legal-france` (and by any domain
 skill needing case-law research) when the user asks for jurisprudence and
@@ -6,7 +6,7 @@ the PISTE credentials are configured. It defines the call sequence, the
 fallback policy, and the citation conventions for Judilibre results.
 
 There is no compiled client code. The skills perform the HTTP calls below
-via the **Bash tool (`curl`)** — NOT via `WebFetch`: the OAuth token
+via the **Bash tool (`curl`)**, NOT via `WebFetch`: the OAuth token
 request is a POST with a form-urlencoded body and the API calls need an
 `Authorization` header, neither of which `WebFetch` can produce.
 
@@ -112,13 +112,13 @@ token once before falling back.
 - `Accept: application/json`
 
 **Query parameters (most useful):**
-- `query` — full-text query (e.g., `harcèlement moral employeur`)
-- `jurisdiction` — `cc` (Cour de cassation), `ca` (Cours d'appel, partial), `cassation` for legacy alias
-- `chamber` — for cc: `civ1`, `civ2`, `civ3`, `soc`, `com`, `crim`, `mixte`, `pl`
-- `date_start`, `date_end` — `YYYY-MM-DD` format
-- `page_size` — default 10, max 50
-- `page` — 0-indexed (première page = `page=0` ; vérifié le 2026-08-04 sur le dépôt officiel github.com/Cour-de-cassation/judilibre-search, exemple de réponse `"page":0` avec `next_page` pointant vers `page=1`)
-- `sort` — `score` (default, relevance), `date` (most recent first)
+- `query` : full-text query (e.g., `harcèlement moral employeur`)
+- `jurisdiction` : `cc` (Cour de cassation), `ca` (Cours d'appel, partial), `cassation` for legacy alias
+- `chamber` : for cc: `civ1`, `civ2`, `civ3`, `soc`, `com`, `crim`, `mixte`, `pl`
+- `date_start`, `date_end` : `YYYY-MM-DD` format
+- `page_size` : default 10, max 50
+- `page` : 0-indexed (première page = `page=0` ; vérifié le 2026-08-04 sur le dépôt officiel github.com/Cour-de-cassation/judilibre-search, exemple de réponse `"page":0` avec `next_page` pointant vers `page=1`)
+- `sort` : `score` (default, relevance), `date` (most recent first)
 
 **Response (200):**
 ```json
@@ -150,7 +150,7 @@ token once before falling back.
 **Endpoint:** `GET https://api.piste.gouv.fr/cassation/judilibre/v1.0/decision`
 
 **Query parameters:**
-- `id` — decision identifier returned by `/search`
+- `id` : decision identifier returned by `/search`
 
 **Headers:** same as `/search`.
 
@@ -181,7 +181,7 @@ token once before falling back.
    metadata in the form `<chamber-fr>, <date-fr>, n° <number>, ECLI:<ecli>`,
    where `<chamber-fr>` is the full citation form from the chamber mapping
    table in section 7 below (e.g., `Cass. soc.`, `Cass. civ. 1re`). The
-   "Cass." prefix is already included in the mapping — do not duplicate it.
+   "Cass." prefix is already included in the mapping : do not duplicate it.
 
    Append the Judilibre decision ID as a supplementary reference:
    `(Judilibre: <id>)`.

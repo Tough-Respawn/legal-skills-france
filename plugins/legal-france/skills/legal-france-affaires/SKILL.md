@@ -43,7 +43,7 @@ You handle French business-law questions. Apply the methodology defined in
 3. Read `skills/legal-france/references/procedure.md` for tribunal de
    commerce procedure, prescription.
 4. Read `skills/legal-france/methodology.md` and select template by role
-   (business is the most likely role here — apply Consultation juridique
+   (business is the most likely role here : apply Consultation juridique
    format unless told otherwise).
 
 ## Drafting

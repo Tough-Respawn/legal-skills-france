@@ -1,4 +1,4 @@
-# Rédaction Test Scenarios — legal-france v3
+# Rédaction Test Scenarios : legal-france v3
 
 One scenario per template (10 total). To run: in a fresh Claude Code
 session, invoke `/rediger <type>` and provide the listed inputs. Verify
@@ -7,7 +7,7 @@ cited articles match Legifrance.
 
 ---
 
-## R1 — mise-en-demeure-generique
+## R1 : mise-en-demeure-generique
 
 **Invoke:** `/rediger mise-en-demeure-generique`
 
@@ -26,7 +26,7 @@ cited articles match Legifrance.
 
 ---
 
-## R2 — attestation-honneur
+## R2 : attestation-honneur
 
 **Invoke:** `/rediger attestation-honneur`
 
@@ -43,7 +43,7 @@ cited articles match Legifrance.
 
 ---
 
-## R3 — mise-en-demeure-caution
+## R3 : mise-en-demeure-caution
 
 **Invoke:** `/rediger mise-en-demeure-caution`
 
@@ -61,7 +61,7 @@ cited articles match Legifrance.
 
 ---
 
-## R4 — lettre-licenciement (motif personnel)
+## R4 : lettre-licenciement (motif personnel)
 
 **Invoke:** `/rediger lettre-licenciement`
 
@@ -70,7 +70,7 @@ cited articles match Legifrance.
 - Salarié : David Dubois, 88 boulevard Saint-Germain, 75006 Paris
 - Poste : Développeur senior
 - Date d'embauche : 12 janvier 2020
-- Motif : personnel — insuffisance professionnelle (3 retards de livraison documentés Q4 2025)
+- Motif : personnel, insuffisance professionnelle (3 retards de livraison documentés Q4 2025)
 - Entretien préalable : 5 mai 2026
 - Convention collective : Syntec
 
@@ -81,7 +81,7 @@ cited articles match Legifrance.
 
 ---
 
-## R5 — rupture-conventionnelle
+## R5 : rupture-conventionnelle
 
 **Invoke:** `/rediger rupture-conventionnelle`
 
@@ -100,7 +100,7 @@ cited articles match Legifrance.
 
 ---
 
-## R6 — lettre-demission
+## R6 : lettre-demission
 
 **Invoke:** `/rediger lettre-demission`
 
@@ -116,7 +116,7 @@ cited articles match Legifrance.
 
 ---
 
-## R7 — plainte-simple
+## R7 : plainte-simple
 
 **Invoke:** `/rediger plainte-simple`
 
@@ -133,7 +133,7 @@ cited articles match Legifrance.
 
 ---
 
-## R8 — contestation-amende
+## R8 : contestation-amende
 
 **Invoke:** `/rediger contestation-amende`
 
@@ -153,7 +153,7 @@ cited articles match Legifrance.
 
 ---
 
-## R9 — recours-gracieux
+## R9 : recours-gracieux
 
 **Invoke:** `/rediger recours-gracieux`
 
@@ -171,7 +171,7 @@ cited articles match Legifrance.
 
 ---
 
-## R10 — mentions-legales-et-confidentialite
+## R10 : mentions-legales-et-confidentialite
 
 **Invoke:** `/rediger mentions-legales-et-confidentialite`
 

@@ -1,4 +1,4 @@
-# Triggering Test Scenarios — legal-france v3
+# Triggering Test Scenarios : legal-france v3
 
 These scenarios verify that the right skill auto-triggers (without forcing
 via "demande à legal" or a slash command). To run: in a fresh Claude Code
@@ -8,7 +8,7 @@ must force-trigger.
 
 ---
 
-## Positive cases (21) — must trigger the listed skill
+## Positive cases (21) : must trigger the listed skill
 
 ### Civil (3)
 | # | User phrasing | Expected skill | Rationale |
@@ -61,7 +61,7 @@ must force-trigger.
 
 ---
 
-## Negative cases (6) — must NOT trigger any legal-france skill
+## Negative cases (6) : must NOT trigger any legal-france skill
 
 | # | User phrasing | Why no trigger |
 |---|---|---|
@@ -74,7 +74,7 @@ must force-trigger.
 
 ---
 
-## Borderline cases (3) — accepted either way, document outcome
+## Borderline cases (3) : accepted either way, document outcome
 
 | # | User phrasing | Reasonable skills | Notes |
 |---|---|---|---|
@@ -84,7 +84,7 @@ must force-trigger.
 
 ---
 
-## Multi-domain cases (3) — should engage the meta skill `legal-france`
+## Multi-domain cases (3) : should engage the meta skill `legal-france`
 
 | # | User phrasing | Why meta |
 |---|---|---|
@@ -155,7 +155,7 @@ M3 80 % -> 100 %, E2 60 % -> 80 %), le reste stable.
 |---|---|---|
 | P2 | 20% | legal-france (méta) |
 | A1 | 20% | strategy-france:creation-entreprise ou none |
-| A2 | 20% | legal-france (méta) — 60% en diagnostique, glissement dans le bruit (n=5) |
+| A2 | 20% | legal-france (méta) : 60% en diagnostique, glissement dans le bruit (n=5) |
 | AD2 | 0% | legal-france (méta) 5/5 |
 | N2 | 40% | legal-france (méta) |
 | E1 | 60% | legal-france (méta) |

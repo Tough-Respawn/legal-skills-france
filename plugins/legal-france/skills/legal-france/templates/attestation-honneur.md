@@ -12,7 +12,7 @@ required_fields:
 optional_fields:
   - destinataire
 applicable_law:
-  - art. 441-7 C. pén. (fausse attestation — sanctions)
+  - art. 441-7 C. pén. (fausse attestation, sanctions)
 disclaimer_level: high
 ---
 

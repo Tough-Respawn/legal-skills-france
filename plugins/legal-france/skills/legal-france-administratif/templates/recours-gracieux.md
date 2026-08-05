@@ -17,7 +17,7 @@ optional_fields:
   - pieces_jointes
 applicable_law:
   - art. L. 410-1 à L. 412-7 CRPA (recours administratifs préalables)
-  - art. R. 421-1 et s. CJA (délais et formes — 2 mois pour le recours contentieux)
+  - art. R. 421-1 et s. CJA (délais et formes, 2 mois pour le recours contentieux)
 disclaimer_level: high
 ---
 
@@ -30,7 +30,7 @@ disclaimer_level: high
 5. Date de la décision ?
 6. Date à laquelle vous avez reçu la notification de cette décision (point de départ du délai de 2 mois) ?
 7. Objet exact de la décision (ce qu'elle décide concrètement à votre égard) ?
-8. Vos moyens de droit (sur quels textes ou principes la décision vous semble illégale — incompétence, vice de forme, violation de la loi, détournement de pouvoir, erreur d'appréciation) ?
+8. Vos moyens de droit (sur quels textes ou principes la décision vous semble illégale : incompétence, vice de forme, violation de la loi, détournement de pouvoir, erreur d'appréciation) ?
 9. Vos moyens de fait (en quoi les faits ont-ils été mal appréciés par l'administration ; éléments nouveaux ou ignorés) ?
 10. *Optionnel :* pièces que vous joignez ?
 
@@ -93,7 +93,7 @@ Je reste à votre disposition pour toute information complémentaire et vous pri
 - **Délai impératif : 2 mois** à compter de la notification de la décision contestée. Cachet de la poste faisant foi.
 - Envoi en lettre recommandée avec accusé de réception **obligatoire** pour preuve d'envoi dans les délais.
 - Identifier la bonne autorité destinataire : pour un recours **gracieux**, c'est l'autorité qui a pris la décision ; pour un recours **hiérarchique**, c'est son supérieur hiérarchique.
-- En cas d'absence de réponse pendant 2 mois → décision implicite de rejet (silence vaut rejet — règle générale ; certaines décisions ont au contraire un silence valant acceptation, à vérifier).
+- En cas d'absence de réponse pendant 2 mois → décision implicite de rejet (silence vaut rejet : règle générale ; certaines décisions ont au contraire un silence valant acceptation, à vérifier).
 - Pour conserver le délai du recours contentieux : il est conseillé de saisir le **tribunal administratif** dans les 2 mois suivant la décision explicite de rejet, OU dans les 2 mois suivant la naissance de la décision implicite de rejet (donc 4 mois après le recours gracieux non répondu).
 - Cas particulier : matière fiscale, sécurité sociale, étrangers → procédures spécifiques.
 - En cas d'urgence (acte exécutoire imminent) : envisager parallèlement un **référé-suspension** devant le tribunal administratif (art. L. 521-1 CJA).

@@ -49,5 +49,5 @@ defined in `skills/legal-france/methodology.md`.
 ## Drafting
 
 Available templates:
-- `templates/recours-gracieux.md` — recours gracieux auprès de l'autorité
+- `templates/recours-gracieux.md` : recours gracieux auprès de l'autorité
   qui a pris la décision (délai 2 mois)

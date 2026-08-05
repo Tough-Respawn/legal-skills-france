@@ -15,8 +15,8 @@ optional_fields:
   - reference_contrat
   - precedents_echanges
 applicable_law:
-  - art. 1344 C. civ. (mise en demeure — modes)
-  - art. 1344-1 C. civ. (intérêt moratoire — uniquement pour une obligation de somme d'argent)
+  - art. 1344 C. civ. (mise en demeure, modes)
+  - art. 1344-1 C. civ. (intérêt moratoire, uniquement pour une obligation de somme d'argent)
 disclaimer_level: high
 ---
 
@@ -46,7 +46,7 @@ Lettre recommandée avec accusé de réception
 
 À {{ville_expediteur}}, le {{date_du_jour}}
 
-Objet : Mise en demeure — {{objet_du_litige}}
+Objet : Mise en demeure, {{objet_du_litige}}
 
 Madame, Monsieur,
 
@@ -73,7 +73,7 @@ Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées
 ## Vérifications juridiques avant envoi
 
 - Confirmer sur Legifrance la version en vigueur de l'art. 1344 C. civ. (et de l'art. 1344-1 si créance de somme d'argent).
-- Références vérifiées sur Legifrance le 2026-08-04 : art. 1344 (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032042162), art. 1344-1 (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032035273 — vise exclusivement les obligations de somme d'argent).
+- Références vérifiées sur Legifrance le 2026-08-04 : art. 1344 (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032042162), art. 1344-1 (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032035273, vise exclusivement les obligations de somme d'argent).
 - Envoyer par lettre recommandée avec accusé de réception (preuve juridique).
 - Conserver une copie signée de la lettre.
 - Délai recommandé : 8 jours minimum, 15 jours raisonnable. Si contractuel, respecter le délai prévu.

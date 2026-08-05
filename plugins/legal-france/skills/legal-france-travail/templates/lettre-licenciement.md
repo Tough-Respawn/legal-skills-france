@@ -22,7 +22,7 @@ applicable_law:
   - art. L. 1233-1 à L. 1233-16 C. trav. (procédure motif économique)
   - art. L. 1234-1 (préavis)
   - art. L. 1234-9 (indemnité légale)
-  - art. L. 1235-3 (barème Macron — dommages-intérêts en cas de licenciement sans cause réelle et sérieuse)
+  - art. L. 1235-3 (barème Macron, dommages-intérêts en cas de licenciement sans cause réelle et sérieuse)
 disclaimer_level: high
 ---
 
@@ -104,5 +104,5 @@ Nous vous prions d'agréer, {{salarie_nom_formule_politesse}}, l'expression de n
 - Délais à respecter :
   - Convocation à entretien préalable au moins 5 jours ouvrables avant l'entretien.
   - Lettre envoyée au plus tôt **2 jours ouvrables** après l'entretien (motif personnel) ou **7 jours ouvrables** (motif économique individuel, portés à **15 jours ouvrables** pour un membre du personnel d'encadrement, art. L. 1233-15 ; vérifié le 2026-08-05).
-- Risque : un licenciement sans cause réelle et sérieuse expose à des dommages-intérêts plafonnés selon l'art. L. 1235-3 (barème Macron — dépend de l'ancienneté et de l'effectif).
+- Risque : un licenciement sans cause réelle et sérieuse expose à des dommages-intérêts plafonnés selon l'art. L. 1235-3 (barème Macron, dépend de l'ancienneté et de l'effectif).
 - En cas de doute sérieux sur la justification : consulter un avocat ou un syndicat **avant** envoi.

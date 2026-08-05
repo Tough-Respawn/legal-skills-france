@@ -1,4 +1,4 @@
-# Response Templates — legal-france
+# Response Templates : legal-france
 
 This file defines the seven structured response templates used by the legal-france skill. Each template includes trigger conditions, section structure, tone guidance, and an example skeleton. The template to use is selected by `SKILL.md`'s Response Protocol (command > role > request nature).
 
@@ -8,15 +8,15 @@ This file defines the seven structured response templates used by the legal-fran
 
 The **syllogisme juridique** (legal syllogism) is the backbone of all professional response formats:
 
-- **Majeure** — The abstract legal rule ("According to Art. X, the law provides that...")
-- **Mineure** — The application to the specific facts ("In the present case, the facts show that...")
-- **Conclusion** — The motivated legal outcome ("Therefore, it follows that...")
+- **Majeure** : The abstract legal rule ("According to Art. X, the law provides that...")
+- **Mineure** : The application to the specific facts ("In the present case, the facts show that...")
+- **Conclusion** : The motivated legal outcome ("Therefore, it follows that...")
 
 Every consultation, cas pratique, and explication must be anchored in this three-part logical structure, even when condensed for plain-language responses.
 
 ---
 
-## Template 1 — Consultation juridique (Legal Consultation)
+## Template 1 : Consultation juridique (Legal Consultation)
 
 **Trigger conditions:**
 - User role is `lawyer` or `judge`
@@ -24,12 +24,12 @@ Every consultation, cas pratique, and explication must be anchored in this three
 - User phrases their request as a professional seeking advice on a client situation
 - Question requires a formal legal opinion with applicable texts and reasoning
 
-**Tone:** Formal, precise, professional. Use full legal terminology. Latin maxims are acceptable when they add precision. Structure must be tight and complete — this is a professional document.
+**Tone:** Formal, precise, professional. Use full legal terminology. Latin maxims are acceptable when they add precision. Structure must be tight and complete, this is a professional document.
 
 **Section structure:**
 
 ### 1. Rappel des faits (Statement of Facts)
-Restate the pertinent facts as provided by the user, legally qualified. Distinguish between established facts and alleged facts. Identify legally relevant elements (dates, parties, legal relationship, acts performed). Keep this section factual — no legal analysis yet.
+Restate the pertinent facts as provided by the user, legally qualified. Distinguish between established facts and alleged facts. Identify legally relevant elements (dates, parties, legal relationship, acts performed). Keep this section factual : no legal analysis yet.
 
 ### 2. Problème de droit (Legal Issue)
 Reformulate the user's question as a precise legal issue. Use interrogative form: "La question est de savoir si..." / "The question is whether..." Identify the applicable branch of law and narrow the issue to its essential legal tension.
@@ -37,7 +37,7 @@ Reformulate the user's question as a precise legal issue. Use interrogative form
 ### 3. Règle applicable (Applicable Rule)
 State the relevant statutory texts with full citations (article numbers, code name, version in force). Add the dominant case law position: leading decisions, jurisprudential evolution, doctrinal consensus if relevant. If there is a contested area, present the competing interpretations.
 
-### 4. Application — Syllogisme (Application)
+### 4. Application : Syllogisme (Application)
 Apply the rule to the facts using the three-part syllogism:
 - **Majeure:** State the rule abstractly ("Art. 1240 C. civ. provides that any act causing damage to another obliges the person by whose fault it occurred to repair it.")
 - **Mineure:** Apply rule to facts ("In the present case, the defendant's action on [date] directly caused damage to the claimant by...")
@@ -70,8 +70,8 @@ Mineure : En l'espèce, les faits reprochés consistent en...
 Conclusion : Il s'ensuit que...
 
 **Solutions & recommandations**
-Option 1 — Contestation devant le CPH : ...
-Option 2 — Négociation transactionnelle : ...
+Option 1 : Contestation devant le CPH : ...
+Option 2 : Négociation transactionnelle : ...
 Recommandation : ...
 
 ---
@@ -80,7 +80,7 @@ Recommandation : ...
 
 ---
 
-## Template 2 — Cas pratique (Practical Case Analysis)
+## Template 2 : Cas pratique (Practical Case Analysis)
 
 **Trigger conditions:**
 - User role is `student`
@@ -88,7 +88,7 @@ Recommandation : ...
 - User describes a hypothetical fact scenario and asks for legal analysis
 - User mentions "devoir", "TD", "exercice", "cas pratique"
 
-**Tone:** Academic, pedagogical, methodologically rigorous. This is a teaching format — show all reasoning steps explicitly. Avoid shortcuts. The syllogisme must be fully visible.
+**Tone:** Academic, pedagogical, methodologically rigorous. This is a teaching format, show all reasoning steps explicitly. Avoid shortcuts. The syllogisme must be fully visible.
 
 **Section structure:**
 
@@ -107,7 +107,7 @@ Begin: "En l'espèce, ..." Apply the abstract rule to the specific facts of the 
 ### 5. Conclusion (Legal Solution)
 State the motivated legal outcome clearly. If the case is uncertain, present both possible outcomes and explain what would determine the result. End with any procedural consequence (remedy available, competent court, deadline).
 
-**Tone note:** The conclusion must be motivated — "Therefore X because Y" — not just "X wins." The reasoning chain must be visible at every step.
+**Tone note:** The conclusion must be motivated, "Therefore X because Y", not just "X wins." The reasoning chain must be visible at every step.
 
 **Example skeleton:**
 
@@ -132,7 +132,7 @@ Il s'ensuit que Mme A dispose de l'action rédhibitoire prévue à l'article 164
 
 ---
 
-## Template 3 — Commentaire d'arrêt (Case Commentary)
+## Template 3 : Commentaire d'arrêt (Case Commentary)
 
 **Trigger conditions:**
 - User provides a court decision (full text or citation) and asks for analysis
@@ -140,26 +140,26 @@ Il s'ensuit que Mme A dispose de l'action rédhibitoire prévue à l'article 164
 - User mentions "commenter", "analyser cet arrêt", "fiche d'arrêt"
 - User role is `student` and provides a decision
 
-**Tone:** Academic and critical. The commentaire d'arrêt is not a summary — it is an analytical exercise. The student must explain what the court decided, why, how it fits into (or departs from) existing law, and what its broader significance is.
+**Tone:** Academic and critical. The commentaire d'arrêt is not a summary, it is an analytical exercise. The student must explain what the court decided, why, how it fits into (or departs from) existing law, and what its broader significance is.
 
 **Section structure:**
 
 ### 1. Fiche d'arrêt (Case Summary)
-Structured summary with: facts (only legally relevant), procedural history (which courts, in which order, what they decided), parties' claims and arguments, precise legal issue, and the court's holding (solution). This section is purely descriptive — no evaluation yet.
+Structured summary with: facts (only legally relevant), procedural history (which courts, in which order, what they decided), parties' claims and arguments, precise legal issue, and the court's holding (solution). This section is purely descriptive, no evaluation yet.
 
-### 2. Sens — Explanation of the Decision
+### 2. Sens : Explanation of the Decision
 Explain the court's legal reasoning. Why did it reach this result? Which rule did it apply, and how did it interpret it? Identify the legal basis relied upon. Explain the logical structure of the reasoning. Highlight any significant interpretive choice made by the court.
 
-### 3. Valeur — Critical Assessment
+### 3. Valeur : Critical Assessment
 Evaluate the decision critically. Is it consistent with prior case law (confirmation, reversal, evolution)? Does it align with statutory text or depart from it? What do legal scholars (doctrine) say? Is the decision equitable? Could it have been decided differently?
 
-### 4. Portée — Significance and Impact
+### 4. Portée : Significance and Impact
 Assess the decision's legal impact. Is it an isolated case or does it signal a jurisprudential trend? What is its authority (Assemblée plénière = highest authority; chambre simple = more limited)? Has it been followed by subsequent decisions or overruled? What does it change for practitioners?
 
 **Example skeleton:**
 
 ```
-## Commentaire d'arrêt — Cass. civ. 3e, [date], n° [pourvoi]
+## Commentaire d'arrêt : Cass. civ. 3e, [date], n° [pourvoi]
 
 **Fiche d'arrêt**
 Faits : ...
@@ -180,7 +180,7 @@ Cet arrêt constitue un arrêt de principe / d'espèce. Il a pour conséquence d
 
 ---
 
-## Template 4 — Recherche de jurisprudence (Case Law Research)
+## Template 4 : Recherche de jurisprudence (Case Law Research)
 
 **Trigger conditions:**
 - User invokes `/jurisprudence <topic>`
@@ -204,7 +204,7 @@ For each relevant decision, provide:
 
 Present decisions chronologically or grouped by sub-question.
 
-### 3. Analyse — Jurisprudential Trend
+### 3. Analyse : Jurisprudential Trend
 Synthesize the decisions found. What is the dominant position? Has there been an evolution (before/after a landmark decision)? Are there contradictions between chambers or between courts? What does the current state of the law appear to be?
 
 ### 4. Sources (Citations and Links)
@@ -213,7 +213,7 @@ Full citations in correct French legal format. Direct links to Legifrance record
 **Example skeleton:**
 
 ```
-## Recherche de jurisprudence — [Topic]
+## Recherche de jurisprudence : [Topic]
 
 **Termes de recherche**
 Domaine : droit du travail | Mots-clés : licenciement, faute grave, télétravail
@@ -221,8 +221,8 @@ Articles concernés : L. 1234-1, L. 1237-19 C. trav.
 Période : 2018-2025 | Juridictions : Cass. soc., Cours d'appel
 
 **Décisions trouvées**
-1. Cass. soc., [date], n° [pourvoi] — La Cour a jugé que...
-2. CA Paris, [date], n° [RG] — La cour a retenu que...
+1. Cass. soc., [date], n° [pourvoi] : La Cour a jugé que...
+2. CA Paris, [date], n° [RG] : La cour a retenu que...
 
 **Analyse**
 La jurisprudence est constante sur le point X, mais divisée sur Y...
@@ -235,7 +235,7 @@ Depuis l'arrêt [date], on observe une tendance vers...
 
 ---
 
-## Template 5 — Analyse de document (Document Analysis)
+## Template 5 : Analyse de document (Document Analysis)
 
 **Trigger conditions:**
 - User provides a contract, terms of service, employment agreement, privacy policy, or other legal document
@@ -243,7 +243,7 @@ Depuis l'arrêt [date], on observe une tendance vers...
 - User asks to "review", "check", "analyze" a document they have provided
 - User role is `business` and submits a document
 
-**Tone:** Professional, compliance-focused, risk-oriented. Be systematic and complete. Flag every potentially problematic clause — the user is relying on this analysis to make decisions. Be direct about risks without being alarmist.
+**Tone:** Professional, compliance-focused, risk-oriented. Be systematic and complete. Flag every potentially problematic clause, the user is relying on this analysis to make decisions. Be direct about risks without being alarmist.
 
 **Section structure:**
 
@@ -266,7 +266,7 @@ List specific changes to make the document compliant and protect the user's inte
 **Example skeleton:**
 
 ```
-## Analyse de document — [Document title / type]
+## Analyse de document : [Document title / type]
 
 **Résumé**
 Type : Contrat de prestation de services | Parties : Société A (prestataire) / M. B (client)
@@ -278,7 +278,7 @@ Problème : Cette clause exclut toute responsabilité y compris en cas de faute 
 Risque : ÉLEVÉ
 
 **Conformité**
-RGPD : La clause de traitement des données (art. 12) ne précise pas la durée de conservation — non conforme à l'art. 13 RGPD.
+RGPD : La clause de traitement des données (art. 12) ne précise pas la durée de conservation, non conforme à l'art. 13 RGPD.
 Clauses abusives : ...
 
 **Recommandations**
@@ -288,26 +288,26 @@ Clauses abusives : ...
 
 ---
 
-## Template 6 — Explication vulgarisée (Plain Language Explanation)
+## Template 6 : Explication vulgarisée (Plain Language Explanation)
 
 **Trigger conditions:**
 - User role is `citizen` (detected or default)
 - User invokes `/droit` (or any domain command) and role is `citizen` (or default)
 - User asks a simple, non-technical legal question in plain language
-- No contract or case provided — just a general legal question
+- No contract or case provided : just a general legal question
 
 **Tone:** Accessible, warm, and clear. No Latin, no legal jargon unless immediately explained. Use short sentences. Focus on what the person needs to do, not on legal theory. Practical steps are more important than doctrinal precision.
 
 **Section structure:**
 
 ### 1. Réponse courte (Short Answer)
-One to two sentences. Answer the question directly. No conditions, no hedging — just the clearest possible answer to what was asked. The user should understand the answer before reading any further.
+One to two sentences. Answer the question directly. No conditions, no hedging : just the clearest possible answer to what was asked. The user should understand the answer before reading any further.
 
 ### 2. Explication (Context)
-Explain the answer in plain language. Give enough background for the user to understand why the law says what it says. Use analogies if helpful. Avoid "however" walls of caveats — save nuance for the next section.
+Explain the answer in plain language. Give enough background for the user to understand why the law says what it says. Use analogies if helpful. Avoid "however" walls of caveats : save nuance for the next section.
 
 ### 3. Ce que dit la loi (What the Law Says)
-Cite the relevant article in simplified form: "Article 2224 of the Civil Code says you have 5 years to file a claim after you discover the damage." Provide the Legifrance or service-public.fr link if retrieved. Do not quote full article text — paraphrase clearly.
+Cite the relevant article in simplified form: "Article 2224 of the Civil Code says you have 5 years to file a claim after you discover the damage." Provide the Legifrance or service-public.fr link if retrieved. Do not quote full article text, paraphrase clearly.
 
 ### 4. Que faire concrètement (Practical Steps)
 Numbered list of concrete actions. Include: who to contact, what to say or write, relevant deadlines, which authority or court is involved, whether a lawyer is required or optional.
@@ -321,7 +321,7 @@ Links to service-public.fr for the relevant procedure. Suggest consulting a lawy
 ## Explication
 
 **Réponse courte**
-Oui, votre employeur doit vous remettre un bulletin de salaire à chaque paie — c'est une obligation légale.
+Oui, votre employeur doit vous remettre un bulletin de salaire à chaque paie : c'est une obligation légale.
 
 **Explication**
 Le bulletin de salaire est le document qui détaille votre rémunération, les cotisations sociales prélevées, et les heures travaillées...
@@ -345,13 +345,13 @@ Source : https://www.legifrance.gouv.fr/...
 
 ---
 
-## Template 7 — Cas complexe (Complex Case Analysis)
+## Template 7 : Cas complexe (Complex Case Analysis)
 
 **Trigger conditions:**
 - Triggered automatically by the Complex Case Protocol in SKILL.md
 - Never triggered manually by a user command
 - Overrides role-default and nature-default templates (priorities 2 and 3 of Response Protocol)
-- Does NOT override command-triggered templates (priority 1) — in that case, the command's template is used but section 4 (Synthèse croisée) is appended as an addendum
+- Does NOT override command-triggered templates (priority 1) : in that case, the command's template is used but section 4 (Synthèse croisée) is appended as an addendum
 
 **Tone:** Adapts to detected user role:
 - `lawyer` / `judge`: formal, complete, Latin maxims acceptable
@@ -366,31 +366,31 @@ Identify and number each distinct legal issue. Present as a table:
 
 | N° | Problème de droit | Domaine(s) | Lié à |
 |----|-------------------|------------|-------|
-| 1  | [Issue description] | [Domain(s)] | — |
+| 1  | [Issue description] | [Domain(s)] | : |
 | 2  | [Issue description] | [Domain(s)] | N°1 |
 
 This section sets the structure for the entire analysis. Every issue identified here must be treated in section 2.
 
-### 2. Analyse par problème (Per-Issue Analysis — repeated for each issue)
+### 2. Analyse par problème (Per-Issue Analysis : repeated for each issue)
 For each issue identified in section 1, apply the full syllogism:
-- **Majeure** — State the applicable rule with full citations (article numbers, code name, version in force, leading case law)
-- **Mineure** — Apply the rule to the specific facts. Test each element of the rule against the facts explicitly.
-- **Conclusion intermédiaire** — State the legal outcome for this issue alone. This is a partial conclusion — the global conclusion comes in section 4.
+- **Majeure** : State the applicable rule with full citations (article numbers, code name, version in force, leading case law)
+- **Mineure** : Apply the rule to the specific facts. Test each element of the rule against the facts explicitly.
+- **Conclusion intermédiaire** : State the legal outcome for this issue alone. This is a partial conclusion, the global conclusion comes in section 4.
 
 Number each analysis to match the issue mapping: "**Problème n°1 :**", "**Problème n°2 :**", etc.
 
 ### 3. Résolution des conflits de normes (Norm Conflict Resolution)
-**Conditional section — include ONLY if a norm conflict was detected. Skip entirely if all issues are independent.**
+**Conditional section : include ONLY if a norm conflict was detected. Skip entirely if all issues are independent.**
 
 When rules contradict, resolve using (in order):
 1. **Hierarchy of norms:** Constitution > EU Treaties and Regulations > Loi > Décret > Arrêté
-2. **Principle of specialty:** lex specialis derogat legi generali — the more specific text prevails
-3. **Chronology:** lex posterior derogat legi priori — the more recent text prevails (same-level norms only)
+2. **Principle of specialty:** lex specialis derogat legi generali, the more specific text prevails
+3. **Chronology:** lex posterior derogat legi priori, the more recent text prevails (same-level norms only)
 
 For each conflict: identify the competing norms, state which principle resolves the conflict, explain why one prevails, and cite the authority for this resolution (Constitutional Council decision, CJEU ruling, etc.).
 
 ### 4. Synthèse croisée (Cross-Synthesis)
-**Conditional section — include ONLY if issues interact. If all issues are fully independent with no interactions, replace with a brief statement confirming their independence.**
+**Conditional section : include ONLY if issues interact. If all issues are fully independent with no interactions, replace with a brief statement confirming their independence.**
 
 Analyze how the intermediate conclusions from section 2 interact:
 - Does resolving issue #1 change the analysis of issue #3?
@@ -423,7 +423,7 @@ Standard mandatory disclaimer in the user's language. Same as all other template
 
 | N° | Problème | Domaine(s) | Lié à |
 |----|----------|------------|-------|
-| 1  | Le licenciement est-il justifié ? | Travail | — |
+| 1  | Le licenciement est-il justifié ? | Travail | : |
 | 2  | La surveillance des e-mails était-elle licite ? | Numérique, Travail | N°1 |
 | 3  | Le salarié peut-il invoquer la protection des lanceurs d'alerte ? | Pénal, Travail | N°1, N°2 |
 
@@ -467,26 +467,26 @@ When a user requests case-law research (the `/jurisprudence` command, or
 the Complex Case Protocol triggers a jurisprudential lookup), follow this
 protocol BEFORE falling back to `WebSearch site:legifrance.gouv.fr`:
 
-### Step 1 — Check PISTE credentials
+### Step 1 : Check PISTE credentials
 
 Verify `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET` env vars are both set.
 If either is missing → skip Judilibre, use `WebSearch`, and emit the
 configuration hint once per session.
 
-### Step 2 — Follow the Judilibre client workflow
+### Step 2 : Follow the Judilibre client workflow
 
 Read `plugins/legal-france/lib/judilibre-client.md` and execute the call
 sequence (token, search, optional decision fetch). Use the chamber-code
 mapping table for French-format citations.
 
-### Step 3 — Cite using French legal citation standards
+### Step 3 : Cite using French legal citation standards
 
 Build citations from Judilibre metadata as defined in `## Citation
 Standards` of `skills/legal-france/SKILL.md`. Always append the Judilibre
 decision ID in parentheses: `Cass. soc., 25 nov. 2020, n° 19-13.340
 (Judilibre: 5fcb...)`.
 
-### Step 4 — On error, fall back
+### Step 4 : On error, fall back
 
 Per the client workflow: silent fallback to `WebSearch` on 4xx/5xx (except
 401 which gets one retry). Add a one-line note in the response footer when

@@ -55,5 +55,5 @@ eur-lex.europa.eu for the RGPD (règlement 2016/679).
 ## Drafting
 
 Available templates:
-- `templates/mentions-legales-et-confidentialite.md` — mentions légales
+- `templates/mentions-legales-et-confidentialite.md` : mentions légales
   obligatoires (LCEN art. 6) + politique de confidentialité (RGPD art. 13/14)

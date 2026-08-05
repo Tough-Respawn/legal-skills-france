@@ -31,9 +31,9 @@ disclaimer_level: high
 3. Date(s) et heure(s) des faits ?
 4. Lieu précis des faits (adresse, ville) ?
 5. Description chronologique et factuelle des faits (qui, quoi, quand, comment) ?
-6. Quelle qualification pénale envisagez-vous ? (vol, escroquerie, dégradation, harcèlement, menaces, abus de confiance, agression, etc. — si vous ne savez pas, dites "qualification à laisser au procureur").
+6. Quelle qualification pénale envisagez-vous ? (vol, escroquerie, dégradation, harcèlement, menaces, abus de confiance, agression, etc. : si vous ne savez pas, dites "qualification à laisser au procureur").
 7. Quel préjudice avez-vous subi (matériel, corporel, moral, financier) ?
-8. *Optionnel :* l'auteur des faits est-il identifié ? (nom, ou éléments de description — sinon mentionner "auteur inconnu" / "plainte contre X").
+8. *Optionnel :* l'auteur des faits est-il identifié ? (nom, ou éléments de description, sinon mentionner "auteur inconnu" / "plainte contre X").
 9. *Optionnel :* y a-t-il des témoins ? (nom et coordonnées)
 10. *Optionnel :* avez-vous des pièces à joindre ? (constat, factures, photos, captures d'écran, certificats médicaux, etc.)
 

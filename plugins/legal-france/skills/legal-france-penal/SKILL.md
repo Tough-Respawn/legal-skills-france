@@ -45,7 +45,7 @@ You handle French criminal-law questions. Apply the methodology defined in
 ## Drafting
 
 Available templates:
-- `templates/plainte-simple.md` — plainte adressée au procureur de la
+- `templates/plainte-simple.md` : plainte adressée au procureur de la
   République
-- `templates/contestation-amende.md` — contestation auprès de l'OMP dans
+- `templates/contestation-amende.md` : contestation auprès de l'OMP dans
   le délai de 45 jours

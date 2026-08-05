@@ -58,8 +58,8 @@ For dismissal questions, always re-verify on Legifrance:
 ## Drafting
 
 Available templates:
-- `templates/lettre-licenciement.md` — pour motif personnel ou économique
-- `templates/rupture-conventionnelle.md` — convention homologable par la
+- `templates/lettre-licenciement.md` : pour motif personnel ou économique
+- `templates/rupture-conventionnelle.md` : convention homologable par la
   DREETS
-- `templates/lettre-demission.md` — avec calcul automatique du préavis selon
+- `templates/lettre-demission.md` : avec calcul automatique du préavis selon
   convention collective indiquée

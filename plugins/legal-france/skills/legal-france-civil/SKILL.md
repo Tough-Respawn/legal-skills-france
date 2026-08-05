@@ -57,5 +57,5 @@ caution), load the matching template from `templates/` and follow
 `plugins/legal-france/lib/redacteur-engine.md` for the workflow.
 
 Available templates in this skill:
-- `templates/mise-en-demeure-caution.md` — mise en demeure pour restitution
+- `templates/mise-en-demeure-caution.md` : mise en demeure pour restitution
   du dépôt de garantie (loi 1989, art. 22)

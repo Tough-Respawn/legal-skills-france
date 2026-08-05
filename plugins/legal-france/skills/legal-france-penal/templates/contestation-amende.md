@@ -16,7 +16,7 @@ optional_fields:
   - pieces_jointes
 applicable_law:
   - art. 529-2 C. proc. pén. (procédure de l'amende forfaitaire)
-  - art. 529-2 C. proc. pén. (requête en exonération — 45 jours) et art. 530 (réclamation contre l'amende forfaitaire MAJORÉE — 30 jours)
+  - art. 529-2 C. proc. pén. (requête en exonération, 45 jours) et art. 530 (réclamation contre l'amende forfaitaire MAJORÉE, 30 jours)
 disclaimer_level: high
 ---
 
@@ -33,7 +33,7 @@ disclaimer_level: high
 9. Motif précis et factuel de la contestation (ex : "ce n'est pas mon véhicule", "véhicule vendu à cette date", "panneau de signalisation non visible", "erreur sur l'identité du conducteur", "véhicule volé") ?
 10. *Optionnel :* pièces que vous pouvez joindre pour prouver vos dires (certificat de cession, déclaration de vol, photos, témoignages) ?
 
-(Délai légal pour contester : **45 jours** à compter de l'envoi de l'avis — au-delà, la contravention devient une amende forfaitaire majorée.)
+(Délai légal pour contester : **45 jours** à compter de l'envoi de l'avis, au-delà, la contravention devient une amende forfaitaire majorée.)
 
 ## Template
 
@@ -49,7 +49,7 @@ Centre Automatisé de Constatation des Infractions Routières (ou tribunal indiq
 
 À {{ville_contrevenant}}, le {{date_du_jour}}
 
-Objet : Requête en exonération — Avis de contravention n° {{numero_avis_contravention}}
+Objet : Requête en exonération, Avis de contravention n° {{numero_avis_contravention}}
 
 Monsieur l'Officier du Ministère Public,
 

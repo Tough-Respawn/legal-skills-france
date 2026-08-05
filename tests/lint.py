@@ -17,7 +17,7 @@ Contrôles :
 
 Complément manuel : `claude plugin validate plugins/legal-france`
 (la racine du marketplace échoue sur Claude Code 2.1.104 à cause des clés
-"$schema"/"description", acceptées par les versions plus récentes — choix
+"$schema"/"description", acceptées par les versions plus récentes : choix
 assumé de les garder).
 """
 import glob

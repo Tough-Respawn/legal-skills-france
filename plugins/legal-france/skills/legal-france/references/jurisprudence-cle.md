@@ -24,7 +24,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** A pedestrian was hit by a car. The driver argued that the victim's contributory negligence should reduce or eliminate liability.
 
-**Rule established:** The fault of the victim cannot partially exonerate the custodian of a thing under the strict liability regime — only total exoneration for exclusive fault of the victim is admissible. Contributory negligence operating as partial defense was rejected.
+**Rule established:** The fault of the victim cannot partially exonerate the custodian of a thing under the strict liability regime, only total exoneration for exclusive fault of the victim is admissible. Contributory negligence operating as partial defense was rejected.
 
 **Significance:** Created an anomaly that was quickly corrected by the legislature: the Badinter Law (loi n° 85-677 of 5 July 1985) on road accident compensation was enacted in direct response, establishing a specific statutory regime for traffic accidents. Desmares was then explicitly limited to non-traffic contexts.
 
@@ -96,7 +96,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** Faurecia, an automobile equipment manufacturer, contracted with Oracle for an IT system that was never properly delivered. Oracle invoked a limitation-of-liability clause capping damages at the amount of fees paid.
 
-**Rule established:** A limitation-of-liability clause is valid between professionals, even in the context of a breach of a core obligation, provided it does not entirely deprive the essential obligation (obligation essentielle) of its substance. A clause that merely caps damages — without eliminating liability altogether — does not conflict with art. 1170 Code civil (codifying Chronopost).
+**Rule established:** A limitation-of-liability clause is valid between professionals, even in the context of a breach of a core obligation, provided it does not entirely deprive the essential obligation (obligation essentielle) of its substance. A clause that merely caps damages, without eliminating liability altogether, does not conflict with art. 1170 Code civil (codifying Chronopost).
 
 **Significance:** Clarified the boundary between clauses limitatives (valid) and clauses élusives (void under Chronopost). Essential for IT and commercial contract drafting: a well-calibrated cap on damages survives judicial review.
 
@@ -114,7 +114,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 10. Bertrand — Responsabilité des parents
+### 10. Bertrand : Responsabilité des parents
 **Citation:** Cass. civ. 2e, 19 févr. 1997, n° 94-21.111
 **Published:** Bull. civ. II, n° 56
 
@@ -126,7 +126,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 11. Vice caché — Présomption irréfragable du vendeur professionnel
+### 11. Vice caché : Présomption irréfragable du vendeur professionnel
 **Citation:** Cass. civ. 1re, 19 janv. 1965, n° 61-10.952 (affaire dite du « pain maudit » de Pont-Saint-Esprit ; jurisprudence constante depuis). Vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000006967375/
 **Audit :** la référence antérieure (« Cass. civ. 1re, 28 mars 2000, n° 97-18.737 ») était une contamination : ce pourvoi existe mais concerne une assurance de groupe (L. 113-8 C. assur.), et les « faits » du chauffe-eau étaient invérifiables.
 
@@ -136,7 +136,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 12. Réforme de la prescription — Régime transitoire de la loi 2008-561
+### 12. Réforme de la prescription : Régime transitoire de la loi 2008-561
 **Citation:** RÉFÉRENCE SUPPRIMÉE À L'AUDIT (2026-08-05) : le pourvoi « 09-10.269 » cité auparavant est INTROUVABLE sur Legifrance et Juricaf (suspicion de fabrication). La règle transitoire décrite ci-dessous découle de l'article 26 de la loi n° 2008-561 du 17 juin 2008 elle-même ; vérifier toute décision d'application sur legifrance.gouv.fr/juri avant de la citer.
 
 **Facts:** Following the loi n° 2008-561 of 17 June 2008 reforming prescription, a dispute arose over whether the new five-year limitation period (art. 2224 Code civil) applied to claims that had accrued before the reform.
@@ -147,8 +147,8 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. Imprévision — Rupture avec Canal de Craponne
-**Citation:** Cass. civ., 6 mars 1876, De Galliffet c/ Commune de Pélissanne (Canal de Craponne) — reversed by art. 1195 Code civil (ord. 2016-131). (Audit 2026-08-05 : la mention « civ. 3e » était anachronique, la Cour ne comptait qu'une chambre civile en 1876.)
+### 13. Imprévision : Rupture avec Canal de Craponne
+**Citation:** Cass. civ., 6 mars 1876, De Galliffet c/ Commune de Pélissanne (Canal de Craponne), reversed by art. 1195 Code civil (ord. 2016-131). (Audit 2026-08-05 : la mention « civ. 3e » était anachronique, la Cour ne comptait qu'une chambre civile en 1876.)
 
 **Facts:** A canal company sought judicial revision of a fee fixed by contract in the 16th century, arguing that changed economic circumstances made the contract unbalanced.
 
@@ -184,7 +184,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 3. Légitime défense — classic statement
+### 3. Légitime défense : classic statement
 **Citation:** Art. 122-5 C. pén. et jurisprudence constante (audit 2026-08-05 : l'arrêt « Cass. crim., 16 févr. 1967 » cité auparavant existe, n° 66-92.071, Cousinet, mais juge autre chose : la légitime défense est incompatible avec une infraction involontaire ; la triple condition attaque actuelle/nécessité/proportionnalité résulte du texte de l'art. 122-5, pas de cet arrêt. https://www.legifrance.gouv.fr/juri/id/JURITEXT000007058652/)
 
 **Rule established:** Légitime défense (art. 122-5 Code pénal) requires: (1) an actual and present attack; (2) a necessary defense; and (3) proportionality between the defense and the seriousness of the attack. An excessive response loses the protection.
@@ -197,11 +197,11 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 **Citation:** RÉFÉRENCE À MANIER AVEC PRÉCAUTION (audit 2026-08-05) : l'arrêt réel du 28 juin 1902 est le fondateur de la DÉLÉGATION DE POUVOIRS (exonération du chef d'entreprise au profit du délégataire), pas d'une doctrine de l'intention ; le rattachement à l'art. 121-3 CP (1994) serait de toute façon anachronique. Reformuler ou supprimer avant toute citation.
 **Modern restatement:** Art. 121-3 Code pénal (1994)
 
-**Rule established:** Art. 121-3 establishes the hierarchy of mental elements: intentional (intentionnelle), reckless (mise en danger délibérée), and negligent (faute simple — only punishable if expressly provided). For délits, intent is presumed unless the text specifies otherwise.
+**Rule established:** Art. 121-3 establishes the hierarchy of mental elements: intentional (intentionnelle), reckless (mise en danger délibérée), and negligent (faute simple, only punishable if expressly provided). For délits, intent is presumed unless the text specifies otherwise.
 
 ---
 
-### 5. Garde à vue — QPC
+### 5. Garde à vue : QPC
 **Citation:** Cons. const., 30 juill. 2010, n° 2010-14/22 QPC
 **Published:** JO 31 juill. 2010
 
@@ -213,7 +213,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 6. CEDH — Garde à vue et droit à l'avocat (Salduz)
+### 6. CEDH : Garde à vue et droit à l'avocat (Salduz)
 **Citation:** CEDH, gr. ch., 27 nov. 2008, Salduz c/ Turquie, n° 36391/02
 **Court:** European Court of Human Rights (Grande Chambre)
 
@@ -231,13 +231,13 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** A company director used corporate funds for personal expenses. The question of the prescription starting point arose, as the misuse was concealed in the company's accounts.
 
-**Rule established:** The prescription for abus de biens sociaux (art. L241-3 Code de commerce) runs not from the date of the act, but from the date the offense was discovered — or could have been discovered — by the victim or a party with standing, unless the concealment was deliberate. This applies the theory of infraction dissimulée.
+**Rule established:** The prescription for abus de biens sociaux (art. L241-3 Code de commerce) runs not from the date of the act, but from the date the offense was discovered, or could have been discovered, by the victim or a party with standing, unless the concealment was deliberate. This applies the theory of infraction dissimulée.
 
 **Significance:** Established the delayed prescription rule for financial offenses involving concealment, allowing prosecution years after the facts. A key authority in white-collar criminal law, frequently applied in corporate fraud and corruption cases.
 
 ---
 
-### 8. Cybercriminalité — Accès frauduleux à un STAD
+### 8. Cybercriminalité : Accès frauduleux à un STAD
 **Citation:** Cass. crim., 20 mai 2015, n° 14-81.336
 **Published:** Bull. crim., n° 119
 
@@ -249,13 +249,13 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 9. Harcèlement moral — Élément constitutif
+### 9. Harcèlement moral : Élément constitutif
 **Citation:** Cass. crim., 6 déc. 2011, n° 10-82.266
 **Published:** Bull. crim., n° 249
 
 **Facts:** An employer subjected an employee to repeated demeaning behavior, excessive workload, and isolation. Criminal proceedings were brought under art. 222-33-2 Code pénal.
 
-**Rule established:** Moral harassment (harcèlement moral) under art. 222-33-2 CP requires repeated acts (agissements répétés) that have the object or effect of degrading working conditions and are likely to affect the victim's rights, dignity, physical or mental health, or career. Neither specific intent (dol spécial) nor a premeditated plan is required — the effects on the victim suffice.
+**Rule established:** Moral harassment (harcèlement moral) under art. 222-33-2 CP requires repeated acts (agissements répétés) that have the object or effect of degrading working conditions and are likely to affect the victim's rights, dignity, physical or mental health, or career. Neither specific intent (dol spécial) nor a premeditated plan is required, the effects on the victim suffice.
 
 **Significance:** Confirmed that criminal harassment does not require proof of malicious intent, aligning the criminal standard with the labor law definition (art. L1152-1 C. trav.). Strengthened criminal enforcement against workplace harassment.
 
@@ -273,7 +273,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 11. Terrorisme — Association de malfaiteurs terroriste
+### 11. Terrorisme : Association de malfaiteurs terroriste
 **Citation:** Cass. crim., 12 juill. 2016, n° 16-82.692 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000032900180/ ; le pourvoi « 16-80.023 » cité auparavant est introuvable, et l'arrêt Crim. 29 nov. 2016 en matière d'AMT, n° 16-83.513, porte sur la garde à vue, pas sur ce principe)
 **Published:** Bull. crim.
 
@@ -285,7 +285,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 12. Récidive et individualisation — Peines plancher (abrogation)
+### 12. Récidive et individualisation : Peines plancher (abrogation)
 **Citation:** Cons. const., 9 août 2007, n° 2007-554 DC (validation); subsequently loi n° 2014-896 of 15 Aug. 2014 (abrogation)
 
 **Facts:** The loi n° 2007-1198 of 10 August 2007 introduced mandatory minimum sentences (peines plancher) for repeat offenders. The Conseil constitutionnel reviewed the law's constitutionality. It was later repealed in 2014.
@@ -296,7 +296,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. Principe de nécessité des peines — Non bis in idem
+### 13. Principe de nécessité des peines : Non bis in idem
 **Citation:** Cons. const., 16 juin 1999, n° 99-411 DC
 **Published:** JO 19 juin 1999
 
@@ -308,7 +308,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 14. ENTRÉE SUPPRIMÉE — « Stoïkoff » (référence fabriquée)
+### 14. ENTRÉE SUPPRIMÉE : « Stoïkoff » (référence fabriquée)
 **Audit 2026-08-05, vérifié par 4 voies :** le pourvoi 19-87.190 existe mais correspond à Crim. 21 OCTOBRE 2020 (blanchiment de trafic de stupéfiants, ne bis in idem), aucune partie « Stoïkoff » n'existe, aucun arrêt du 14 oct. 2020 ne correspond au sujet décrit, et la chambre criminelle n'a jamais rendu la solution prétendue. NE PAS CITER. Les arrêts réels les plus proches sur le contrôle des mesures d'enquête préliminaire : Crim. 22 oct. 2013, n° 13-81.945 et 13-81.949 (géolocalisation, art. 8 CEDH).
 **Published:** Bull. crim.
 
@@ -340,25 +340,25 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** An employer dismissed several employees for economic reasons but had not followed any special procedure, as no statutory procedure for collective economic dismissal yet existed.
 
-**Rule established:** Recognized economic reasons as a valid ground for individual dismissal — establishing that the employer's economic difficulties could constitute a legitimate cause for termination even absent the employee's personal fault.
+**Rule established:** Recognized economic reasons as a valid ground for individual dismissal, establishing that the employer's economic difficulties could constitute a legitimate cause for termination even absent the employee's personal fault.
 
 **Significance:** First major recognition of economic dismissal (licenciement économique) as a legal concept, predating the statutory framework. The modern regime (art. L. 1233-1 et seq. Code du travail) was built on this case-law foundation.
 
 ---
 
-### 3. Obligation de sécurité — amiante
+### 3. Obligation de sécurité : amiante
 **Citation:** Cass. soc., 28 févr. 2002, n° 99-17.221 and four related decisions (les arrêts amiante)
 **Published:** Bull. civ. V, n° 81
 
 **Facts:** Former employees of asbestos-manufacturing companies developed occupational diseases from asbestos exposure. They claimed compensation from their employers.
 
-**Rule established:** The employer's obligation of safety (obligation de sécurité) is an obligation de résultat (strict duty): the employer must protect employees from occupational hazards, and any failure — even without personal fault — constitutes an inexcusable fault (faute inexcusable) if the employer had or should have had awareness of the risk.
+**Rule established:** The employer's obligation of safety (obligation de sécurité) is an obligation de résultat (strict duty): the employer must protect employees from occupational hazards, and any failure, even without personal fault, constitutes an inexcusable fault (faute inexcusable) if the employer had or should have had awareness of the risk.
 
 **Significance:** Transformed the legal nature of the employer's safety obligation from an obligation de moyens to an obligation de résultat. Triggered massive litigation in asbestos cases and reshaped workplace safety law.
 
 ---
 
-### 4. Rupture conventionnelle — existence d'un litige
+### 4. Rupture conventionnelle : existence d'un litige
 **Citation:** Cass. soc., 23 mai 2013, n° 12-13.865 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000027451922/ ; le pourvoi 10-11.581 cité auparavant existe mais porte sur le contournement du PSE par ruptures conventionnelles, pas sur la validité en présence d'un litige)
 
 **Facts:** A dispute about the validity of a rupture conventionnelle (negotiated termination) where the employee alleged it had been signed under duress.
@@ -369,7 +369,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 5. Licenciement sans cause réelle et sérieuse — Barème Macron
+### 5. Licenciement sans cause réelle et sérieuse : Barème Macron
 **Citation:** Cass. soc. (formation plénière de chambre), 11 mai 2022, n° 21-14.490 et n° 21-15.247 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000045802457 ; ce sont des ARRÊTS de la chambre sociale, pas des avis d'assemblée plénière)
 **Published:** Bull. civ. V
 
@@ -381,11 +381,11 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 6. Harcèlement moral — Méthode de gestion
+### 6. Harcèlement moral : Méthode de gestion
 **Citation:** Cass. soc., 10 nov. 2009, n° 07-45.321 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000021270312/ ; le pourvoi 09-71.107 cité auparavant est l'arrêt de principe sur le forfait en jours, voir entrée 9)
 **Published:** Bull. civ. V
 
-**Facts:** An employee alleged that systematic management practices — excessive pressure, humiliation, and unreasonable objectives — constituted moral harassment, even though applied collectively to the entire team.
+**Facts:** An employee alleged that systematic management practices, excessive pressure, humiliation, and unreasonable objectives, constituted moral harassment, even though applied collectively to the entire team.
 
 **Rule established:** Management methods that impose constant pressure, set unreasonable objectives, or involve demeaning treatment may constitute harcèlement moral under art. L1152-1 Code du travail, even when the methods are collective and not specifically targeted at one individual.
 
@@ -393,7 +393,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 7. Clause de non-concurrence — Contrepartie financière
+### 7. Clause de non-concurrence : Contrepartie financière
 **Citation:** Cass. soc., 10 juill. 2002, n° 00-45.135 (vérifié) et Cass. soc., 29 janv. 2003, n° 00-44.882 (vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007045871 ; le numéro « 00-44.781 » cité auparavant est introuvable)
 **Published:** Bull. civ. V
 
@@ -405,7 +405,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 8. Uber — Requalification des travailleurs de plateforme
+### 8. Uber : Requalification des travailleurs de plateforme
 **Citation:** Cass. soc., 4 mars 2020, n° 19-13.316
 **Published:** Bull. civ. V
 
@@ -417,19 +417,19 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 9. Forfait jours — Suivi effectif de la charge de travail
+### 9. Forfait jours : Suivi effectif de la charge de travail
 **Citation:** Cass. soc., 29 juin 2011, n° 09-71.107 (arrêt de principe ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000024844073 ; le pourvoi 22-17.340 cité auparavant est l'un des arrêts congés payés/maladie du 13 sept. 2023, voir entrée dédiée)
 **Published:** Bull. civ. V
 
 **Facts:** An employer applied a forfait jours agreement (art. L3121-64 C. trav.) without ensuring regular monitoring of the employee's workload as required by the applicable collective agreement.
 
-**Rule established:** A forfait jours convention is null if the applicable collective agreement lacks sufficient guarantees for monitoring the employee's workload, rest time, and work-life balance — or if the employer fails to implement such guarantees in practice. Upon nullity, the employee is entitled to overtime pay for all hours worked beyond 35 hours per week.
+**Rule established:** A forfait jours convention is null if the applicable collective agreement lacks sufficient guarantees for monitoring the employee's workload, rest time, and work-life balance, or if the employer fails to implement such guarantees in practice. Upon nullity, the employee is entitled to overtime pay for all hours worked beyond 35 hours per week.
 
 **Significance:** Strict judicial control over forfait jours. Employers must demonstrate active, documented workload-monitoring procedures. Nullity carries heavy financial consequences (retroactive overtime calculation).
 
 ---
 
-### 10. Égalité salariale — Discrimination syndicale par comparaison de carrière
+### 10. Égalité salariale : Discrimination syndicale par comparaison de carrière
 **Citation:** Cass. soc., 28 mars 2000, n° 97-45.258 et 97-45.259 (Fluchère c/ SNCF, arrêt fondateur de la méthode du panel ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000007042320 ; le pourvoi 10-18.036 cité auparavant est l'arrêt géolocalisation du 3 nov. 2011)
 **Published:** Bull. civ. V
 
@@ -441,7 +441,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 11. Baby Loup — Laïcité dans le secteur privé
+### 11. Baby Loup : Laïcité dans le secteur privé
 **Citation:** Cass. ass. plén., 25 juin 2014, n° 13-28.369
 **Published:** Bull. ass. plén.
 
@@ -453,7 +453,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 12. Air France — Obligation de sécurité de moyens renforcés
+### 12. Air France : Obligation de sécurité de moyens renforcés
 **Citation:** Cass. soc., 25 nov. 2015, n° 14-24.444
 **Published:** Bull. civ. V
 
@@ -465,19 +465,19 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. Congés payés et maladie — Conformité EU
+### 13. Congés payés et maladie : Conformité EU
 **Citation:** Cass. soc., 13 sept. 2023, n° 22-17.340, 22-17.341 et 22-17.342 (Transdev ; vérifié le 2026-08-05, https://www.legifrance.gouv.fr/juri/id/JURITEXT000048085897 ; la référence antérieure « ass. plén., 17 nov. 2023, n° 21-20.776 » était doublement fausse : ce numéro est introuvable, et l'assemblée plénière du 17 nov. 2023 est le n° 21-20.723, liberté d'expression artistique)
 **Published:** Bull. civ. V
 
 **Facts:** An employee on long-term non-occupational sick leave claimed accrual of paid leave during illness, relying on EU Directive 2003/88/EC (art. 7, right to annual paid leave).
 
-**Rule established:** Sick leave — whether occupational or not — must count for paid-leave accrual under EU law. French provisions that limited accrual during non-occupational sick leave were set aside as incompatible with EU Directive 2003/88/EC.
+**Rule established:** Sick leave, whether occupational or not, must count for paid-leave accrual under EU law. French provisions that limited accrual during non-occupational sick leave were set aside as incompatible with EU Directive 2003/88/EC.
 
 **Significance:** Triggered legislative reform: loi n° 2024-364 of 22 April 2024 amended art. L3141-5 Code du travail to provide 2 days/month accrual during non-occupational sick leave (cap 24 days/year). Full 2.5 days/month for occupational illness/accident with no one-year cap. Major alignment of French labor law with EU requirements.
 
 ---
 
-### 14. Barème Macron — Validation définitive (DOUBLON de l'entrée 5)
+### 14. Barème Macron : Validation définitive (DOUBLON de l'entrée 5)
 **Audit 2026-08-05 :** cette entrée dupliquait l'entrée 5 (mêmes pourvois 21-14.490 et 21-15.247) avec une qualification FAUSSE (« avis de l'Assemblée plénière » : ce sont des arrêts de la chambre sociale en formation plénière de chambre) et une affirmation inexacte sur la Charte sociale européenne (invocation écartée faute d'effet direct, pas de déclaration de compatibilité). Se reporter à l'entrée 5, corrigée et sourcée.
 
 ---
@@ -502,7 +502,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** A municipal official challenged his dismissal. The question was whether the Conseil d'État had jurisdiction or whether the matter had to first go to the minister.
 
-**Rule established:** The Conseil d'État is a court of general jurisdiction for administrative disputes; the ministerial theory (ministre-juge) — which required citizens to obtain a prior ministerial decision before going to court — was abandoned.
+**Rule established:** The Conseil d'État is a court of general jurisdiction for administrative disputes; the ministerial theory (ministre-juge), which required citizens to obtain a prior ministerial decision before going to court, was abandoned.
 
 **Significance:** Established the right of direct access to administrative courts without prior exhaustion of a ministerial recourse. Made the Conseil d'État a true court rather than a mere superior administrative authority.
 
@@ -556,7 +556,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 7. Canal — Contrôle des ordonnances article 16
+### 7. Canal : Contrôle des ordonnances article 16
 **Citation:** CE Ass., 19 oct. 1962, n° 58502, Canal
 **Published:** Rec. CE p. 553
 
@@ -568,7 +568,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 8. Danthony — Vice de procédure et influence sur la décision
+### 8. Danthony : Vice de procédure et influence sur la décision
 **Citation:** CE Ass., 23 déc. 2011, n° 335033, Danthony
 **Published:** Rec. CE
 
@@ -580,7 +580,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 9. Référé-liberté — Commune de Calais (droit d'asile)
+### 9. Référé-liberté : Commune de Calais (droit d'asile)
 **Citation:** CE, ord. réf., 23 nov. 2015, n° 394540, Ministre de l'intérieur c/ Commune de Calais
 **Published:** Rec. CE
 
@@ -592,7 +592,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 10. Responsabilité hospitalière — Bianchi
+### 10. Responsabilité hospitalière : Bianchi
 **Citation:** CE Ass., 9 avr. 1993, n° 69336, Bianchi
 **Published:** Rec. CE p. 127
 
@@ -604,19 +604,19 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 11. Police administrative vs police judiciaire — Baud
+### 11. Police administrative vs police judiciaire : Baud
 **Citation:** TC, 7 juin 1951, n° 1316, Dame Noualek (Rec. p. 636) et TC, 12 juin 1978, n° 02082, Société Le Profil (audit 2026-08-05 : le numéro « 01148 » était faux ; « Consorts Baud » est un arrêt distinct, CE Sect., 11 mai 1951)
 **Published:** Rec. TC
 
 **Facts:** Disputes arose over whether acts of law enforcement belonged to police administrative (prevention of public order disturbances) or police judiciaire (detection and investigation of criminal offenses), determining which court had jurisdiction.
 
-**Rule established:** The distinction between police administrative and police judiciaire depends on the purpose (finalité) of the measure: (1) police administrative aims to prevent disturbances to public order (sécurité, salubrité, tranquillité) — jurisdiction lies with administrative courts; (2) police judiciaire aims to detect and prosecute offenses — jurisdiction lies with judicial courts. The purpose is assessed at the moment the contested act was taken.
+**Rule established:** The distinction between police administrative and police judiciaire depends on the purpose (finalité) of the measure: (1) police administrative aims to prevent disturbances to public order (sécurité, salubrité, tranquillité), jurisdiction lies with administrative courts; (2) police judiciaire aims to detect and prosecute offenses, jurisdiction lies with judicial courts. The purpose is assessed at the moment the contested act was taken.
 
 **Significance:** Foundational distinction for French administrative law. Determines both jurisdiction and the applicable liability regime. Applied daily in contentious cases involving law enforcement actions.
 
 ---
 
-### 12. État d'urgence — Contrôle par le CE
+### 12. État d'urgence : Contrôle par le CE
 **Citation:** CE, Section du contentieux, 11 déc. 2015, n° 395009 et 394990, M. Domenjoud (audit 2026-08-05 : décisions de Section, pas de simples ordonnances de référé ; vérifié https://www.legifrance.gouv.fr/ceta/id/CETATEXT000031631213)
 **Published:** Rec. CE
 
@@ -628,7 +628,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. Urbanisme — Danthony appliqué aux permis de construire
+### 13. Urbanisme : Danthony appliqué aux permis de construire
 **Citation:** RÉFÉRENCES SUPPRIMÉES À L'AUDIT (2026-08-05) : « CE, 14 oct. 2015, n° 390867 » est INTROUVABLE (ArianeWeb et Legifrance, suspicion de fabrication) ; « CE, 22 févr. 2018, n° 395963 » a un numéro réel mais une date fausse et un objet différent (CE Sect., 22 déc. 2017, Commune de Sempy, carte communale, https://www.legifrance.gouv.fr/ceta/id/CETATEXT000036253348). Entrée à reconstruire avec des décisions vérifiées avant toute citation.
 **Published:** Rec. CE
 
@@ -640,7 +640,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 14. Grande-Synthe — Contentieux climatique
+### 14. Grande-Synthe : Contentieux climatique
 **Citation:** CE, 19 nov. 2020, n° 427301, Commune de Grande-Synthe
 **Published:** Rec. CE
 
@@ -652,7 +652,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 15. Czabaj — Délai raisonnable de recours
+### 15. Czabaj : Délai raisonnable de recours
 **Citation:** CE Ass., 13 juill. 2016, n° 387763, Czabaj
 **Published:** Rec. CE
 
@@ -702,13 +702,13 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 4. Google Spain — Droit à l'oubli
+### 4. Google Spain : Droit à l'oubli
 **Citation:** CJUE, 13 mai 2014, Google Spain SL et Google Inc. c/ AEPD et Mario Costeja González, aff. C-131/12
 **Published:** ECLI:EU:C:2014:317
 
 **Facts:** A Spanish citizen requested the delisting of links to newspaper articles mentioning a past real-estate seizure from Google search results. The Spanish data protection authority (AEPD) ordered Google to delist the results.
 
-**Rule established:** The operator of a search engine is a data controller within the meaning of Directive 95/46/EC. Under certain conditions — where the information is inadequate, irrelevant, no longer relevant, or excessive in relation to the purposes of processing — the data subject has the right to request that links to web pages containing personal information be delisted from search results.
+**Rule established:** The operator of a search engine is a data controller within the meaning of Directive 95/46/EC. Under certain conditions, where the information is inadequate, irrelevant, no longer relevant, or excessive in relation to the purposes of processing, the data subject has the right to request that links to web pages containing personal information be delisted from search results.
 
 **Significance:** Consecrated the "right to be forgotten" (droit à l'oubli) in EU law, later codified in RGPD art. 17. Established the obligation for search engines to process delisting requests. Foundational for the entire body of subsequent case law balancing the right to information against data protection.
 
@@ -726,7 +726,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 6. CNIL c/ Criteo — Publicité ciblée
+### 6. CNIL c/ Criteo : Publicité ciblée
 **Citation:** CNIL, 15 juin 2023, SAN-2023-009
 **Authority:** Commission nationale de l'informatique et des libertés
 
@@ -734,11 +734,11 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Rule established:** The adtech company bears the burden of proving that valid consent was obtained before depositing advertising cookies. Consent must be traceable and documented. Inadequate information about data processing purposes and insufficient mechanisms for exercising access and erasure rights constitute separate violations.
 
-**Significance:** €40 million fine — one of the largest CNIL sanctions. Confirmed the strict approach to consent in the programmatic advertising ecosystem. Adtech intermediaries cannot rely on partner websites' consent mechanisms without verifying their validity.
+**Significance:** €40 million fine, one of the largest CNIL sanctions. Confirmed the strict approach to consent in the programmatic advertising ecosystem. Adtech intermediaries cannot rely on partner websites' consent mechanisms without verifying their validity.
 
 ---
 
-### 7. CNIL c/ Amazon France Logistique — Surveillance des salariés
+### 7. CNIL c/ Amazon France Logistique : Surveillance des salariés
 **Citation:** CNIL, 27 déc. 2023, SAN-2023-021
 **Authority:** Commission nationale de l'informatique et des libertés
 
@@ -750,7 +750,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 8. Google Analytics — Transferts post-Schrems II
+### 8. Google Analytics : Transferts post-Schrems II
 **Citation:** CNIL, 10 févr. 2022, mises en demeure (coordinated with other EU DPAs)
 **Authority:** Commission nationale de l'informatique et des libertés
 
@@ -762,7 +762,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 9. Fashion ID — Responsabilité conjointe pour les plug-ins sociaux
+### 9. Fashion ID : Responsabilité conjointe pour les plug-ins sociaux
 **Citation:** CJUE, 29 juill. 2019, Fashion ID GmbH & Co. KG c/ Verbraucherzentrale NRW, aff. C-40/17
 **Published:** ECLI:EU:C:2019:629
 
@@ -774,7 +774,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 10. Meta/Facebook — Concurrence et RGPD
+### 10. Meta/Facebook : Concurrence et RGPD
 **Citation:** CJUE, 4 juill. 2023, Meta Platforms c/ Bundeskartellamt, aff. C-252/21
 **Published:** ECLI:EU:C:2023:537
 
@@ -786,7 +786,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 11. CNIL c/ Yahoo — Cookies publicitaires
+### 11. CNIL c/ Yahoo : Cookies publicitaires
 **Citation:** CNIL, 29 déc. 2023, SAN-2023-024
 **Authority:** Commission nationale de l'informatique et des libertés
 
@@ -798,7 +798,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 12. Schrems I — Invalidation du Safe Harbor
+### 12. Schrems I : Invalidation du Safe Harbor
 **Citation:** CJUE, 6 oct. 2015, Maximillian Schrems c/ Data Protection Commissioner, aff. C-362/14
 **Published:** ECLI:EU:C:2015:650
 
@@ -810,7 +810,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. DSA — Premières mesures d'exécution
+### 13. DSA : Premières mesures d'exécution
 **Citation:** Commission européenne, procédures formelles ouvertes en 2024 (X/Twitter, TikTok, AliExpress, Meta)
 
 **Facts:** Following the entry into force of the Digital Services Act (Règlement UE 2022/2065) for very large online platforms (VLOPs) on 25 August 2023, the Commission opened formal proceedings against several platforms for suspected non-compliance with DSA obligations on risk assessment, content moderation, and transparency.
@@ -821,7 +821,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 14. AI Act — Entrée en vigueur et premières interdictions
+### 14. AI Act : Entrée en vigueur et premières interdictions
 **Citation:** Règlement UE 2024/1689 du 13 juin 2024 (AI Act), art. 5 (interdictions applicables dès février 2025)
 
 **Facts:** The EU AI Act entered into force on 1 August 2024 with a phased application schedule. The first provisions to take effect (February 2025) concern outright prohibitions on certain AI practices.
@@ -840,7 +840,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** A Dutch transport company sought to rely directly on EEC Treaty provisions prohibiting customs duties increases in a dispute before a Dutch court. The Dutch government argued only states could invoke treaty provisions.
 
-**Rule established:** The EEC Treaty constitutes "a new legal order of international law for the benefit of which the states have limited their sovereign rights." Community law confers rights upon individuals which national courts must protect. Treaty provisions that are clear, unconditional, and require no further action by Member States have direct effect (effet direct) — individuals may rely on them before national courts without implementation.
+**Rule established:** The EEC Treaty constitutes "a new legal order of international law for the benefit of which the states have limited their sovereign rights." Community law confers rights upon individuals which national courts must protect. Treaty provisions that are clear, unconditional, and require no further action by Member States have direct effect (effet direct), individuals may rely on them before national courts without implementation.
 
 **Significance:** The most important decision in EU legal history. Created the doctrine of direct effect, transforming EU law from an inter-state instrument into a system of individual rights enforceable before national courts.
 
@@ -852,7 +852,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** An Italian lawyer refused to pay an electricity bill after Italy nationalized the electricity sector (ENEL), arguing the nationalization law was contrary to the EEC Treaty.
 
-**Rule established:** Community law has primacy (primauté) over national law — including national constitutional law. Where there is a conflict between Community law and a subsequent national law, Community law prevails. National courts must apply Community law and set aside conflicting national rules, without waiting for the national rule to be annulled by the legislature or constitutional court.
+**Rule established:** Community law has primacy (primauté) over national law, including national constitutional law. Where there is a conflict between Community law and a subsequent national law, Community law prevails. National courts must apply Community law and set aside conflicting national rules, without waiting for the national rule to be annulled by the legislature or constitutional court.
 
 **Significance:** The doctrine of supremacy of EU law. Together with Van Gend en Loos, these two decisions form the constitutional bedrock of the EU legal order. French courts apply this principle (Nicolo for Conseil d'État; Société des Cafés Jacques Vabre for Cour de cassation).
 
@@ -888,13 +888,13 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Facts:** Spanish fishing companies registered in the UK challenged the Merchant Shipping Act 1988, which required 75% British ownership of fishing vessels to register under the British flag, as contrary to EU law. The UK House of Lords referred the question of whether it could suspend a UK Act of Parliament pending EU law review.
 
-**Rule established:** National courts must be able to grant interim relief — including suspension of a national statute — where EU rights are at stake, even if national law does not authorize such relief. The effectiveness (effectivité) of EU law requires that national procedural rules cannot prevent interim protection of EU rights.
+**Rule established:** National courts must be able to grant interim relief, including suspension of a national statute, where EU rights are at stake, even if national law does not authorize such relief. The effectiveness (effectivité) of EU law requires that national procedural rules cannot prevent interim protection of EU rights.
 
 **Significance:** Established the principle of procedural effectiveness: EU law requires national courts to disapply not only conflicting substantive rules, but also conflicting procedural rules that would prevent effective protection of EU rights. Confirmed parliamentary supremacy gives way to EU supremacy in the UK (until Brexit).
 
 ---
 
-### 6. Mangold — Discrimination par l'âge
+### 6. Mangold : Discrimination par l'âge
 **Citation:** CJCE, 22 nov. 2005, Werner Mangold c/ Rüdiger Helm, aff. C-144/04
 **Published:** ECLI:EU:C:2005:709
 
@@ -902,11 +902,11 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Rule established:** The prohibition of discrimination on grounds of age constitutes a general principle of EU law, which national courts must enforce even before the transposition deadline of the relevant directive (Directive 2000/78/EC). National provisions contrary to this principle must be set aside.
 
-**Significance:** Established that general principles of EU law — including the prohibition of age discrimination — can have horizontal direct effect and override national legislation even before directive transposition. Expanded the scope of EU fundamental rights in employment law.
+**Significance:** Established that general principles of EU law, including the prohibition of age discrimination, can have horizontal direct effect and override national legislation even before directive transposition. Expanded the scope of EU fundamental rights in employment law.
 
 ---
 
-### 7. Viking Line — Droits sociaux et libertés économiques
+### 7. Viking Line : Droits sociaux et libertés économiques
 **Citation:** CJCE, 11 déc. 2007, International Transport Workers' Federation c/ Viking Line, aff. C-438/05
 **Published:** ECLI:EU:C:2007:772
 
@@ -914,23 +914,23 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Rule established:** The right to collective action (including the right to strike) is a fundamental right recognized in EU law (art. 28 Charter of Fundamental Rights). However, it must be balanced against the freedom of establishment (TFUE art. 49). Collective action that restricts freedom of establishment must be justified by an overriding reason of public interest and must be proportionate.
 
-**Significance:** First time the CJUE recognized the right to strike as an EU fundamental right but subjected it to proportionality review against economic freedoms. Highly controversial — criticized for subordinating social rights to market freedoms. Read together with Laval (C-341/05, rendu le 18 déc. 2007, une semaine après Viking, pas le même jour).
+**Significance:** First time the CJUE recognized the right to strike as an EU fundamental right but subjected it to proportionality review against economic freedoms. Highly controversial, criticized for subordinating social rights to market freedoms. Read together with Laval (C-341/05, rendu le 18 déc. 2007, une semaine après Viking, pas le même jour).
 
 ---
 
-### 8. Laval — Détachement de travailleurs et action collective
+### 8. Laval : Détachement de travailleurs et action collective
 **Citation:** CJCE, 18 déc. 2007, Laval un Partneri Ltd c/ Svenska Byggnadsarbetareförbundet, aff. C-341/05
 **Published:** ECLI:EU:C:2007:809
 
 **Facts:** A Latvian construction company posted workers to Sweden. Swedish trade unions blockaded the company's construction site to force it to sign a Swedish collective agreement imposing higher labor standards.
 
-**Rule established:** The Posted Workers Directive (96/71/EC) sets a ceiling — not merely a floor — on the requirements that a host Member State can impose on posted workers through collective action. Trade union action that goes beyond the Directive's mandatory provisions and seeks to impose additional terms (such as wage rates above the statutory minimum) constitutes an unjustified restriction on the freedom to provide services (TFUE art. 56).
+**Rule established:** The Posted Workers Directive (96/71/EC) sets a ceiling, not merely a floor, on the requirements that a host Member State can impose on posted workers through collective action. Trade union action that goes beyond the Directive's mandatory provisions and seeks to impose additional terms (such as wage rates above the statutory minimum) constitutes an unjustified restriction on the freedom to provide services (TFUE art. 56).
 
 **Significance:** Together with Viking, established the framework for balancing collective social rights against EU economic freedoms. Led to the revision of the Posted Workers Directive (Directive 2018/957), which enhanced worker protections.
 
 ---
 
-### 9. Kadi — Droits fondamentaux et mesures antiterroristes
+### 9. Kadi : Droits fondamentaux et mesures antiterroristes
 **Citation:** CJCE, gr. ch., 3 sept. 2008, Kadi et Al Barakaat International Foundation c/ Conseil, aff. jointes C-402/05 P et C-415/05 P
 **Published:** ECLI:EU:C:2008:461
 
@@ -938,23 +938,23 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 **Rule established:** EU measures implementing UN Security Council resolutions are subject to full judicial review by EU courts for compliance with EU fundamental rights. The EU legal order is autonomous; obligations under the UN Charter cannot override the constitutional principles of the EU Treaties, including the protection of fundamental rights.
 
-**Significance:** Landmark assertion of the autonomy of the EU legal order and the primacy of EU fundamental rights even against international law obligations. Established that no measure — however sourced in international law — escapes EU judicial review if it affects EU fundamental rights.
+**Significance:** Landmark assertion of the autonomy of the EU legal order and the primacy of EU fundamental rights even against international law obligations. Established that no measure, however sourced in international law, escapes EU judicial review if it affects EU fundamental rights.
 
 ---
 
-### 10. Åkerberg Fransson — Champ d'application de la Charte
+### 10. Åkerberg Fransson : Champ d'application de la Charte
 **Citation:** CJUE, gr. ch., 26 févr. 2013, Åklagaren c/ Hans Åkerberg Fransson, aff. C-617/10
 **Published:** ECLI:EU:C:2013:105
 
 **Facts:** A Swedish fisherman was subject to both tax surcharges and criminal prosecution for VAT fraud. He argued this violated the ne bis in idem principle under art. 50 of the Charter of Fundamental Rights.
 
-**Rule established:** The Charter of Fundamental Rights applies whenever a Member State is "implementing EU law" within the meaning of art. 51(1) of the Charter. This is interpreted broadly: national measures that fall within the scope of EU law — such as tax penalties for VAT fraud (VAT being governed by EU directives) — trigger Charter applicability. The ne bis in idem principle may preclude cumulative criminal and administrative sanctions for the same facts.
+**Rule established:** The Charter of Fundamental Rights applies whenever a Member State is "implementing EU law" within the meaning of art. 51(1) of the Charter. This is interpreted broadly: national measures that fall within the scope of EU law, such as tax penalties for VAT fraud (VAT being governed by EU directives), trigger Charter applicability. The ne bis in idem principle may preclude cumulative criminal and administrative sanctions for the same facts.
 
 **Significance:** Vastly expanded the scope of the EU Charter by defining "implementation of EU law" broadly. Any national measure with a sufficient connection to an EU-regulated area triggers Charter review. Foundational for the application of EU fundamental rights in Member State proceedings.
 
 ---
 
-### 11. Brasserie du Pêcheur — Responsabilité de l'État pour violation du droit de l'Union
+### 11. Brasserie du Pêcheur : Responsabilité de l'État pour violation du droit de l'Union
 **Citation:** CJCE, 5 mars 1996, Brasserie du Pêcheur SA c/ Bundesrepublik Deutschland, aff. jointes C-46/93 et C-48/93
 **Published:** ECLI:EU:C:1996:79
 
@@ -978,7 +978,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. Google Spain (droit à l'oubli) — Impact EU
+### 13. Google Spain (droit à l'oubli) : Impact EU
 **Citation:** CJUE, 13 mai 2014, Google Spain SL c/ AEPD, aff. C-131/12
 **Published:** ECLI:EU:C:2014:317
 
@@ -1004,7 +1004,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 2. Première QPC — Cristallisation de la jurisprudence
+### 2. Première QPC : Cristallisation de la jurisprudence
 **Citation:** Cons. const., 28 mai 2010, n° 2010-1 QPC, Consorts L. (cristallisation des pensions des anciens combattants des ex-colonies ; censure pour rupture d'égalité). Vérifié le 2026-08-05, https://www.conseil-constitutionnel.fr/decision/2010/20101QPC.htm. (Audit : les « faits » antérieurs de cette entrée, « Association SOS Racisme, listes électorales », étaient fabriqués.)
 **Published:** JO 29 mai 2010
 
@@ -1028,7 +1028,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 4. QPC — Garde à vue
+### 4. QPC : Garde à vue
 **Citation:** Cons. const., 30 juill. 2010, n° 2010-14/22 QPC
 **Published:** JO 31 juill. 2010
 
@@ -1040,7 +1040,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 5. QPC — Mariage pour tous
+### 5. QPC : Mariage pour tous
 **Citation:** Cons. const., 17 mai 2013, n° 2013-669 DC
 **Published:** JO 18 mai 2013
 
@@ -1052,7 +1052,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 6. QPC — État d'urgence (assignations à résidence)
+### 6. QPC : État d'urgence (assignations à résidence)
 **Citation:** Cons. const., 22 déc. 2015, n° 2015-527 QPC
 **Published:** JO 24 déc. 2015
 
@@ -1064,19 +1064,19 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 7. Bloc de constitutionnalité — Charte de l'environnement
+### 7. Bloc de constitutionnalité : Charte de l'environnement
 **Citation:** Cons. const., 19 juin 2008, n° 2008-564 DC (loi relative aux OGM)
 **Published:** JO 26 juin 2008
 
 **Facts:** The Conseil constitutionnel reviewed the loi relative aux organismes génétiquement modifiés (OGM). Challengers invoked the Charte de l'environnement (Constitutional Charter for the Environment, integrated into the Constitution by loi constitutionnelle n° 2005-205 of 1 March 2005).
 
-**Rule established:** The Charte de l'environnement has full constitutional value and forms part of the bloc de constitutionnalité. Its provisions — including the precautionary principle (art. 5) and the right to live in a balanced environment respectful of health (art. 1) — are directly enforceable in constitutional review. The legislature must comply with these environmental principles when adopting legislation.
+**Rule established:** The Charte de l'environnement has full constitutional value and forms part of the bloc de constitutionnalité. Its provisions, including the precautionary principle (art. 5) and the right to live in a balanced environment respectful of health (art. 1), are directly enforceable in constitutional review. The legislature must comply with these environmental principles when adopting legislation.
 
 **Significance:** Confirmed the constitutional rank of environmental rights in France. Established the Charte de l'environnement as a binding constitutional norm, not merely a programmatic declaration. Foundation for subsequent environmental QPC decisions and climate litigation.
 
 ---
 
-### 8. QPC — Droit de propriété et expropriation
+### 8. QPC : Droit de propriété et expropriation
 **Citation:** Cons. const., 21 janv. 2011, n° 2010-87 QPC
 **Published:** JO 22 janv. 2011
 
@@ -1088,7 +1088,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 9. Loi Sécurité globale — Liberté de la presse
+### 9. Loi Sécurité globale : Liberté de la presse
 **Citation:** Cons. const., 20 mai 2021, n° 2021-817 DC
 **Published:** JO 26 mai 2021
 
@@ -1100,13 +1100,13 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 10. QPC — Principe de fraternité (aide aux migrants)
+### 10. QPC : Principe de fraternité (aide aux migrants)
 **Citation:** Cons. const., 6 juill. 2018, n° 2018-717/718 QPC
 **Published:** JO 7 juill. 2018
 
 **Facts:** Citizens were prosecuted for assisting undocumented migrants (délit de solidarité). They challenged the constitutionality of art. L622-1 CESEDA, which criminalized aiding the entry, movement, or irregular stay of foreign nationals.
 
-**Rule established:** The principle of fraternity (fraternité) — the third value of the French republican motto — has constitutional value. It implies the freedom to help others for humanitarian purposes. Criminal provisions that punish humanitarian assistance to migrants without distinguishing between aid motivated by humanitarian purposes and aid motivated by profit are unconstitutional insofar as they restrict this freedom disproportionately.
+**Rule established:** The principle of fraternity (fraternité), the third value of the French republican motto, has constitutional value. It implies the freedom to help others for humanitarian purposes. Criminal provisions that punish humanitarian assistance to migrants without distinguishing between aid motivated by humanitarian purposes and aid motivated by profit are unconstitutional insofar as they restrict this freedom disproportionately.
 
 **Significance:** Landmark recognition of fraternité as an autonomous constitutional principle with direct legal effects. Led to the creation of a humanitarian exemption from the délit de solidarité. One of the most symbolically significant QPC decisions.
 
@@ -1124,7 +1124,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 12. QPC — Non bis in idem (cumul de sanctions)
+### 12. QPC : Non bis in idem (cumul de sanctions)
 **Citation:** Cons. const., 18 mars 2015, n° 2014-453/454 QPC et 2015-462 QPC (affaire EADS)
 **Published:** JO 20 mars 2015
 
@@ -1136,7 +1136,7 @@ Organized by domain. Each entry includes: citation, facts summary, rule establis
 
 ---
 
-### 13. QPC — Contrôle d'identité et discriminations (2017)
+### 13. QPC : Contrôle d'identité et discriminations (2017)
 **Citation:** Cons. const., 24 janv. 2017, n° 2016-606/607 QPC
 **Published:** JO 26 janv. 2017
 

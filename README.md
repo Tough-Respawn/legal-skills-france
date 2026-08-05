@@ -1,7 +1,7 @@
-# legal-france — Plugin Claude Code pour le droit français / French Law Plugin for Claude Code
+# legal-france : Plugin Claude Code pour le droit français / French Law Plugin for Claude Code
 
-> **FR :** Assistant juridique français pour Claude Code — 8 skills modulaires auto-déclenchants, 10 modèles de documents juridiques, intégration jurisprudence Cour de cassation (Judilibre).
-> **EN:** French law assistant for Claude Code — 8 modular auto-triggering skills, 10 legal document templates, Cour de cassation case-law integration (Judilibre).
+> **FR :** Assistant juridique français pour Claude Code, 8 skills modulaires auto-déclenchants, 10 modèles de documents juridiques, intégration jurisprudence Cour de cassation (Judilibre).
+> **EN:** French law assistant for Claude Code, 8 modular auto-triggering skills, 10 legal document templates, Cour de cassation case-law integration (Judilibre).
 
 ---
 
@@ -35,10 +35,10 @@ claude plugin install legal-france
 Le plugin détecte automatiquement votre profil et adapte sa réponse :
 _The plugin auto-detects your profile and adapts its response:_
 
-- **Avocat / Magistrat** — Format consultation juridique structurée / Structured legal consultation
-- **Étudiant en droit** — Cas pratique, commentaire d'arrêt / Case analysis, case commentary
-- **Citoyen** _(défaut / default)_ — Langage clair, démarches pratiques / Plain language, practical steps
-- **Entreprise** — Conformité, analyse de documents / Compliance, document analysis
+- **Avocat / Magistrat** : Format consultation juridique structurée / Structured legal consultation
+- **Étudiant en droit** : Cas pratique, commentaire d'arrêt / Case analysis, case commentary
+- **Citoyen** _(défaut / default)_ : Langage clair, démarches pratiques / Plain language, practical steps
+- **Entreprise** : Conformité, analyse de documents / Compliance, document analysis
 
 ---
 
@@ -92,10 +92,10 @@ _7 structured templates aligned with French legal methodology:_
 | Procédure | Procedural law | `legal-france` (meta) | `skills/legal-france/references/procedure.md` |
 
 Références transversales / Cross-cutting references (méta skill `legal-france`) :
-- `skills/legal-france/references/jurisprudence-cle.md` — 96 décisions clés / 96 landmark decisions
-- `skills/legal-france/references/glossaire.md` — ~170 termes / ~170 terms
-- `skills/legal-france/references/codes-index.md` — Index des codes français / Index of French legal codes
-- `skills/legal-france/references/sources.md` — Sources officielles / Official sources
+- `skills/legal-france/references/jurisprudence-cle.md` : 96 décisions clés / 96 landmark decisions
+- `skills/legal-france/references/glossaire.md` : ~170 termes / ~170 terms
+- `skills/legal-france/references/codes-index.md` : Index des codes français / Index of French legal codes
+- `skills/legal-france/references/sources.md` : Sources officielles / Official sources
 
 Tous les chemins sont relatifs à `plugins/legal-france/`.
 
@@ -129,7 +129,7 @@ _The plugin displays real-time step indicators while processing:_
 > **FR :** Pour des recherches jurisprudentielles structurées via l'API officielle de la Cour de cassation. Gratuit. Sans cette config, le plugin retombe automatiquement sur les recherches web Legifrance.
 > **EN:** For structured case-law search via the official Cour de cassation API. Free of charge. Without this setup, the plugin transparently falls back to Legifrance web search.
 
-### Étape 1 — Obtenir vos identifiants PISTE (pas-à-pas)
+### Étape 1 : Obtenir vos identifiants PISTE (pas-à-pas)
 
 Parcours complet vérifié en conditions réelles le 2026-08-05. Comptez 10 minutes. Référence générale : [guide officiel PISTE](https://piste.gouv.fr/help-center/guide).
 
@@ -143,11 +143,11 @@ Parcours complet vérifié en conditions réelles le 2026-08-05. Comptez 10 minu
 
    Attention à ne pas inverser les deux : un couple mélangé (ou pris pour moitié sur les API Keys) donne `invalid_client` sur `oauth.piste.gouv.fr`.
 
-### Étape 2 — Définir deux variables d'environnement
+### Étape 2 : Définir deux variables d'environnement
 
-**Choisissez l'option qui correspond à votre setup** — une seule des trois suffit :
+**Choisissez l'option qui correspond à votre setup** : une seule des trois suffit :
 
-##### Option A — Fichier `.env` à la racine du projet (le plus simple à gérer)
+##### Option A : Fichier `.env` à la racine du projet (le plus simple à gérer)
 
 Créez un fichier nommé `.env` **directement dans le dossier que vous ouvrez avec Claude Code** : peu importe lequel, c'est simplement le dossier de travail de votre session (celui affiché quand vous lancez `claude`). Un modèle est fourni avec le plugin (`.env.example`). Contenu, deux lignes :
 
@@ -160,7 +160,7 @@ Ajoutez `.env` à votre `.gitignore` si le dossier est un dépôt Git. Le client
 
 > **Piège Windows** : en enregistrant depuis le Bloc-notes, choisissez « Tous les fichiers » comme type, sinon le fichier s'appelle `.env.txt` et ne sera pas trouvé.
 
-##### Option B — Settings Claude Code (persiste, marche dans tous les projets)
+##### Option B : Settings Claude Code (persiste, marche dans tous les projets)
 
 Ouvrez `~/.claude/settings.json` (Linux/macOS) ou `%USERPROFILE%\.claude\settings.json` (Windows) et ajoutez le bloc `env` :
 
@@ -173,24 +173,24 @@ Ouvrez `~/.claude/settings.json` (Linux/macOS) ou `%USERPROFILE%\.claude\setting
 }
 ```
 
-Si le fichier contient déjà d'autres clés, fusionnez le bloc `env` avec l'existant. Pas besoin de relancer le terminal — relancez juste la session Claude Code.
+Si le fichier contient déjà d'autres clés, fusionnez le bloc `env` avec l'existant. Pas besoin de relancer le terminal : relancez juste la session Claude Code.
 
-##### Option C — Variables d'environnement système (persistent globalement, utile si vous utilisez les creds avec d'autres outils)
+##### Option C : Variables d'environnement système (persistent globalement, utile si vous utilisez les creds avec d'autres outils)
 
-**Linux / macOS** — ajoutez à la fin de `~/.bashrc`, `~/.zshrc` ou `~/.profile` :
+**Linux / macOS** : ajoutez à la fin de `~/.bashrc`, `~/.zshrc` ou `~/.profile` :
 ```bash
 export PISTE_CLIENT_ID="votre_client_id"
 export PISTE_CLIENT_SECRET="votre_client_secret"
 ```
 Puis `source ~/.bashrc` (ou rouvrez votre terminal).
 
-**Windows** — méthode graphique :
+**Windows** : méthode graphique :
 1. Touche Windows → tapez "variables d'environnement" → ouvrir.
 2. Cliquez "Variables d'environnement" → section "Variables utilisateur" → "Nouveau".
 3. Créez `PISTE_CLIENT_ID` et `PISTE_CLIENT_SECRET` avec vos valeurs.
 4. Rouvrez Claude Code (les variables sont lues au démarrage).
 
-### Étape 3 — Vérifier
+### Étape 3 : Vérifier
 
 Invoquez `/jurisprudence harcèlement moral`. Si les citations sortent au format `Cass. soc., date, n° pourvoi (Judilibre: id)`, c'est bon. Sinon le footer indique pourquoi (variables non détectées, erreur d'auth, app Sandbox au lieu de Production).
 
@@ -263,4 +263,4 @@ _To enrich references:_
 
 ## Licence / License
 
-MIT — Copyright (c) 2026 Amine Harrak
+MIT : Copyright (c) 2026 Amine Harrak

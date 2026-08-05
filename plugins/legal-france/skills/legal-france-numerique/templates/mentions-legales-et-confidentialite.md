@@ -24,7 +24,7 @@ optional_fields:
   - dpo_email
 applicable_law:
   - art. 1-1 de la loi n° 2004-575 du 21 juin 2004 (LCEN, mentions légales obligatoires ; article issu de la loi SREN n° 2024-449 du 21 mai 2024 : l'ancien fondement « art. 6-III » n'existe plus, vérifié le 2026-08-05)
-  - art. 13 et 14 RGPD (information des personnes — politique de confidentialité)
+  - art. 13 et 14 RGPD (information des personnes, politique de confidentialité)
   - art. 82 loi 78-17 modifiée + délibération CNIL n° 2020-091 du 17 sept. 2020 (cookies)
 disclaimer_level: high
 ---
@@ -130,7 +130,7 @@ Conformément aux articles 15 à 22 du RGPD et à la loi n° 78-17 modifiée, vo
 
 - **Droit d'accès** (art. 15)
 - **Droit de rectification** (art. 16)
-- **Droit à l'effacement** (art. 17 — « droit à l'oubli »)
+- **Droit à l'effacement** (art. 17 : « droit à l'oubli »)
 - **Droit à la limitation** (art. 18)
 - **Droit à la portabilité** (art. 20)
 - **Droit d'opposition** (art. 21)
@@ -138,7 +138,7 @@ Conformément aux articles 15 à 22 du RGPD et à la loi n° 78-17 modifiée, vo
 
 Pour exercer ces droits, contactez : {{editeur_email}}{{#if dpo_nom}} ou directement le DPO : {{dpo_email}}{{/if}}. Une preuve d'identité pourra vous être demandée.
 
-En cas de difficulté, vous pouvez introduire une réclamation auprès de la **CNIL** : www.cnil.fr — 3 Place de Fontenoy, 75007 Paris.
+En cas de difficulté, vous pouvez introduire une réclamation auprès de la **CNIL** : www.cnil.fr, 3 Place de Fontenoy, 75007 Paris.
 
 ### 2.7 Cookies et traceurs
 
@@ -166,10 +166,10 @@ Dernière mise à jour : {{date_du_jour}}
 ## Vérifications juridiques avant envoi
 
 - Confirmer sur Legifrance la version en vigueur de l'art. 1-1 de la loi n° 2004-575 (LCEN), https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000049568614 (vérifié le 2026-08-05).
-- Confirmer sur eur-lex.europa.eu la version actuelle du RGPD (règlement 2016/679) — articles 13, 14, 15-22.
+- Confirmer sur eur-lex.europa.eu la version actuelle du RGPD (règlement 2016/679) : articles 13, 14, 15-22.
 - Vérifier sur cnil.fr la dernière délibération sur les cookies (n° 2020-091 ou plus récente).
 - Sur le bandeau cookies : il doit présenter de manière équivalente les boutons "Accepter", "Refuser" et "Personnaliser". Pas de cases pré-cochées. Action positive obligatoire.
-- Si transferts hors UE : préciser le mécanisme légal (CCT, BCR, décision d'adéquation, Data Privacy Framework si États-Unis). NE PAS oublier — c'est un point d'audit CNIL fréquent.
-- Si vous traitez des données sensibles (santé, opinions, biométrie, mineurs) : l'analyse d'impact (AIPD, art. 35 RGPD) peut être obligatoire — consulter un DPO ou un avocat spécialisé.
+- Si transferts hors UE : préciser le mécanisme légal (CCT, BCR, décision d'adéquation, Data Privacy Framework si États-Unis). NE PAS oublier, c'est un point d'audit CNIL fréquent.
+- Si vous traitez des données sensibles (santé, opinions, biométrie, mineurs) : l'analyse d'impact (AIPD, art. 35 RGPD) peut être obligatoire, consulter un DPO ou un avocat spécialisé.
 - Le DPO devient obligatoire (art. 37 RGPD) dans certains cas : organisme public, surveillance régulière de personnes à grande échelle, traitement à grande échelle de données sensibles.
 - Pour un site e-commerce : ces mentions doivent être complétées par des **CGV** distinctes (non couvertes par ce modèle).

@@ -1,4 +1,4 @@
-# Judilibre Test Scenarios — legal-france v3
+# Judilibre Test Scenarios : legal-france v3
 
 These scenarios verify the Judilibre integration behaviour. To run: configure
 credentials (or unset them, depending on the test), then invoke
@@ -6,7 +6,7 @@ credentials (or unset them, depending on the test), then invoke
 
 ---
 
-## Scenario J1 — Auth success path
+## Scenario J1 : Auth success path
 
 **Preconditions:**
 - `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET` are valid.
@@ -20,7 +20,7 @@ credentials (or unset them, depending on the test), then invoke
 
 ---
 
-## Scenario J2 — Auth missing path
+## Scenario J2 : Auth missing path
 
 **Preconditions:**
 - `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET` are unset.
@@ -34,7 +34,7 @@ credentials (or unset them, depending on the test), then invoke
 
 ---
 
-## Scenario J3 — Auth invalid creds
+## Scenario J3 : Auth invalid creds
 
 **Preconditions:**
 - `PISTE_CLIENT_ID` set to a bogus value (e.g., `INVALID`).
@@ -50,7 +50,7 @@ credentials (or unset them, depending on the test), then invoke
 
 ---
 
-## Scenario J4 — Decision lookup by pourvoi
+## Scenario J4 : Decision lookup by pourvoi
 
 **Preconditions:**
 - Valid credentials.
@@ -63,7 +63,7 @@ credentials (or unset them, depending on the test), then invoke
 
 ---
 
-## Scenario J5 — Out-of-scope jurisdiction (Conseil d'État)
+## Scenario J5 : Out-of-scope jurisdiction (Conseil d'État)
 
 **Preconditions:**
 - Valid credentials.

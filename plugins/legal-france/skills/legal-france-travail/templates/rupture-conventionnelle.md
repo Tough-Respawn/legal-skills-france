@@ -28,13 +28,13 @@ disclaimer_level: high
 1. Raison sociale + adresse + SIRET de l'employeur ?
 2. Nom complet, adresse, poste du salarié ?
 3. Date d'embauche initiale (début du contrat de travail) ?
-4. Salaire brut mensuel (de référence — moyenne des 12 derniers mois ou 3 derniers, le plus favorable) ?
+4. Salaire brut mensuel (de référence : moyenne des 12 derniers mois ou 3 derniers, le plus favorable) ?
 5. Date envisagée pour la rupture (au plus tôt le lendemain de l'homologation par la DREETS) ?
 6. Montant de l'indemnité spécifique de rupture conventionnelle (au minimum l'indemnité légale de licenciement, calculée selon l'art. R. 1234-2) ?
 7. Convention collective applicable ?
 8. Ancienneté en années complètes au moment de la rupture ?
 
-(Le minimum légal est de 1/4 de mois de salaire par année pour les 10 premières années, puis 1/3 pour les suivantes — vérifier le minimum conventionnel qui peut être supérieur.)
+(Le minimum légal est de 1/4 de mois de salaire par année pour les 10 premières années, puis 1/3 pour les suivantes : vérifier le minimum conventionnel qui peut être supérieur.)
 
 ## Template
 
@@ -61,11 +61,11 @@ Il a été convenu ce qui suit, dans le cadre des articles L. 1237-11 à L. 1237
 
 ---
 
-### Article 1 — Principe de la rupture
+### Article 1 : Principe de la rupture
 
 Les parties conviennent, d'un commun accord et sans contrainte, de mettre un terme au contrat de travail qui les lie.
 
-### Article 2 — Entretiens préalables
+### Article 2 : Entretiens préalables
 
 Le Salarié et l'Employeur se sont rencontrés au cours d'un (ou plusieurs) entretien(s) préalable(s) tenu(s) le(s) :
 
@@ -74,13 +74,13 @@ Le Salarié et l'Employeur se sont rencontrés au cours d'un (ou plusieurs) entr
 
 Au cours de ces entretiens, le Salarié a été informé qu'il pouvait se faire assister, conformément à l'article L. 1237-12 du Code du travail, par une personne de son choix appartenant au personnel de l'entreprise ou, en l'absence d'institutions représentatives du personnel, par un conseiller du salarié.
 
-### Article 3 — Date envisagée de rupture
+### Article 3 : Date envisagée de rupture
 
 La date de rupture du contrat de travail est fixée au {{date_envisagee_rupture}}, sous réserve de l'homologation de la présente convention par la DREETS.
 
 Conformément à l'article L. 1237-13, cette date ne peut être antérieure au lendemain du jour de l'homologation de la convention.
 
-### Article 4 — Indemnité spécifique de rupture
+### Article 4 : Indemnité spécifique de rupture
 
 L'Employeur versera au Salarié une indemnité spécifique de rupture conventionnelle d'un montant brut de {{indemnite_montant}} euros.
 
@@ -88,7 +88,7 @@ Cette indemnité respecte le montant minimum prévu par l'article L. 1234-9 et l
 
 Ce montant sera versé au plus tard le jour de la rupture effective du contrat.
 
-### Article 5 — Documents de fin de contrat
+### Article 5 : Documents de fin de contrat
 
 Au jour de la rupture, l'Employeur remettra au Salarié :
 - le certificat de travail,
@@ -96,15 +96,15 @@ Au jour de la rupture, l'Employeur remettra au Salarié :
 - le reçu pour solde de tout compte,
 - le solde de tout compte incluant l'indemnité de rupture conventionnelle, les congés payés non pris et tout autre élément dû.
 
-### Article 6 — Délai de rétractation
+### Article 6 : Délai de rétractation
 
 Conformément à l'article L. 1237-13, les parties disposent d'un délai de **15 jours calendaires** à compter de la date de signature de la présente convention pour exercer leur droit de rétractation par lettre recommandée avec accusé de réception adressée à l'autre partie.
 
-### Article 7 — Homologation
+### Article 7 : Homologation
 
 À l'expiration du délai de rétractation, la partie la plus diligente adresse la présente convention à la DREETS compétente. Celle-ci dispose de **15 jours ouvrables** à compter de sa réception pour s'assurer du respect des conditions et homologuer la convention. À défaut de notification dans ce délai, l'homologation est réputée acquise.
 
-### Article 8 — Litiges
+### Article 8 : Litiges
 
 Tout litige relatif à la conclusion, l'exécution ou la rupture de la présente convention relève de la compétence du conseil de prud'hommes territorialement compétent.
 
@@ -116,7 +116,7 @@ L'Employeur                                Le Salarié
 
 [Signature + cachet]                       [Signature, précédée de la
                                             mention manuscrite "Lu et
-                                            approuvé — bon pour accord"]
+                                            approuvé : bon pour accord"]
 ```
 
 ## Vérifications juridiques avant envoi

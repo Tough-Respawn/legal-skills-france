@@ -49,7 +49,7 @@ Lettre recommandée avec accusé de réception
 
 À {{ville_locataire}}, le {{date_du_jour}}
 
-Objet : Mise en demeure de restituer le dépôt de garantie — logement {{logement_adresse}}
+Objet : Mise en demeure de restituer le dépôt de garantie, logement {{logement_adresse}}
 
 Madame, Monsieur,
 
@@ -71,7 +71,7 @@ Conformément à l'article 22 de la loi n° 89-462 du 6 juillet 1989, le dépôt
 
 Par la présente, je vous mets donc en demeure de me restituer la somme de {{montant_caution}} euros{{#if motif_retenue_invoque}} (ou à tout le moins le solde non contesté){{/if}}, augmentée des pénalités légales applicables, dans un délai de 8 jours à compter de la réception de la présente lettre, à l'adresse indiquée en tête.
 
-À défaut, je serai contraint(e) de saisir la juridiction compétente (tribunal judiciaire — protection des locataires) afin d'obtenir le paiement de la somme due, des pénalités et de tout dommage et intérêt.
+À défaut, je serai contraint(e) de saisir la juridiction compétente (tribunal judiciaire : protection des locataires) afin d'obtenir le paiement de la somme due, des pénalités et de tout dommage et intérêt.
 
 Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
 
@@ -87,7 +87,7 @@ Pièces jointes :
 
 ## Vérifications juridiques avant envoi
 
-- Confirmer sur Legifrance la version en vigueur de l'art. 22 loi n° 89-462 du 6 juillet 1989 (vérifier le pourcentage de pénalité — actuellement 10% du loyer mensuel par mois entamé).
+- Confirmer sur Legifrance la version en vigueur de l'art. 22 loi n° 89-462 du 6 juillet 1989 (vérifier le pourcentage de pénalité : actuellement 10% du loyer mensuel par mois entamé).
 - Vérifier que les délais 1 mois / 2 mois sont à jour.
 - Envoyer obligatoirement en lettre recommandée avec accusé de réception.
 - Joindre les pièces listées en pied du modèle.
