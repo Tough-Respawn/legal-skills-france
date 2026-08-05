@@ -3,3 +3,4 @@ CLAUDE.md
 AGENTS.md
 evals/
 .playwright-mcp/
+.env

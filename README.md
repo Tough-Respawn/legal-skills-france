@@ -144,9 +144,20 @@ Une fois sur la page Authentification de votre application Production, vous lise
 
 ### Étape 2 — Définir deux variables d'environnement
 
-**Choisissez l'option qui correspond à votre setup** — une seule des deux suffit :
+**Choisissez l'option qui correspond à votre setup** — une seule des trois suffit :
 
-##### Option A — Settings Claude Code (recommandée, persiste, marche partout)
+##### Option A — Fichier `.env` à la racine du projet (le plus simple à gérer)
+
+Copiez `.env.example` (fourni avec le plugin) en `.env` à la racine du projet où vous utilisez le plugin, et remplissez les deux valeurs :
+
+```bash
+PISTE_CLIENT_ID=votre_client_id
+PISTE_CLIENT_SECRET=votre_client_secret
+```
+
+Ajoutez `.env` à votre `.gitignore`. Le client Judilibre le source automatiquement quand les variables d'environnement sont absentes.
+
+##### Option B — Settings Claude Code (persiste, marche dans tous les projets)
 
 Ouvrez `~/.claude/settings.json` (Linux/macOS) ou `%USERPROFILE%\.claude\settings.json` (Windows) et ajoutez le bloc `env` :
 
@@ -161,7 +172,7 @@ Ouvrez `~/.claude/settings.json` (Linux/macOS) ou `%USERPROFILE%\.claude\setting
 
 Si le fichier contient déjà d'autres clés, fusionnez le bloc `env` avec l'existant. Pas besoin de relancer le terminal — relancez juste la session Claude Code.
 
-##### Option B — Variables d'environnement système (persistent globalement, utile si vous utilisez les creds avec d'autres outils)
+##### Option C — Variables d'environnement système (persistent globalement, utile si vous utilisez les creds avec d'autres outils)
 
 **Linux / macOS** — ajoutez à la fin de `~/.bashrc`, `~/.zshrc` ou `~/.profile` :
 ```bash

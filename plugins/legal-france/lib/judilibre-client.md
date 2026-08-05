@@ -16,6 +16,7 @@ response; capture the token in a variable and only output the search
 result:
 
 ```bash
+[ -z "$PISTE_CLIENT_ID" ] && [ -f .env ] && set -a && . ./.env && set +a
 TOKEN=$(curl -s -X POST "https://oauth.piste.gouv.fr/api/oauth/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   --data-urlencode "grant_type=client_credentials" \
@@ -37,13 +38,17 @@ fi
 
 ## 1. Credentials
 
-Two environment variables are read at call time:
+Two credentials, `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET`, are resolved
+at call time, in this order:
 
-- `PISTE_CLIENT_ID`
-- `PISTE_CLIENT_SECRET`
+1. Environment variables.
+2. Fallback: a `.env` file at the project root (current working
+   directory), sourced into the shell. Shell state does not persist
+   between Bash tool calls, so **every** Bash step that uses the
+   credentials must start with the sourcing line shown below.
 
-If either is missing, **skip Judilibre entirely and fall back to
-WebSearch**. Surface this one-time hint to the user:
+If neither source provides both values, **skip Judilibre entirely and
+fall back to WebSearch**. Surface this one-time hint to the user:
 
 > Pour des recherches jurisprudentielles plus rapides et structurées, configurez l'API Judilibre (gratuit). Voir README pour la procédure d'inscription PISTE.
 
@@ -51,6 +56,7 @@ To check: in a Bash step, run a **silent** presence test that never prints
 the values:
 
 ```bash
+[ -z "$PISTE_CLIENT_ID" ] && [ -f .env ] && set -a && . ./.env && set +a
 [ -n "$PISTE_CLIENT_ID" ] && [ -n "$PISTE_CLIENT_SECRET" ] && echo PISTE_OK || echo PISTE_MISSING
 ```
 
