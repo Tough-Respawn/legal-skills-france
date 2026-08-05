@@ -129,18 +129,19 @@ _The plugin displays real-time step indicators while processing:_
 > **FR :** Pour des recherches jurisprudentielles structurées via l'API officielle de la Cour de cassation. Gratuit. Sans cette config, le plugin retombe automatiquement sur les recherches web Legifrance.
 > **EN:** For structured case-law search via the official Cour de cassation API. Free of charge. Without this setup, the plugin transparently falls back to Legifrance web search.
 
-### Étape 1 — Obtenir vos identifiants PISTE
+### Étape 1 — Obtenir vos identifiants PISTE (pas-à-pas)
 
-L'inscription PISTE, la création d'application, l'abonnement à Judilibre et la génération des clés sont documentés dans le guide officiel : **[piste.gouv.fr/help-center/guide](https://piste.gouv.fr/help-center/guide)**.
+Parcours complet vérifié en conditions réelles le 2026-08-05. Comptez 10 minutes. Référence générale : [guide officiel PISTE](https://piste.gouv.fr/help-center/guide).
 
-Suivez ce guide jusqu'à obtenir un **Client ID** et un **Client Secret**.
+1. **Créer un compte** sur [piste.gouv.fr](https://piste.gouv.fr/registration), activer via le lien reçu par mail, se connecter.
+2. **Accepter les CGU Judilibre** : menu **API → Consentement CGU API** → chercher « Judilibre » → accepter pour l'environnement **PRODUCTION**. Ne sautez pas cette étape : tant que les CGU ne sont pas validées, la case Judilibre reste grisée à l'étape 4 (c'est la cause n° 1 des blocages, [confirmée par la FAQ de l'API Légifrance](https://www.legifrance.gouv.fr/contenu/pied-de-page/foire-aux-questions-api) qui suit le même mécanisme). L'ancienne URL directe `/api-fr/consentement-cgu-api-fr` citée par de vieilles docs renvoie une 404 : passez par le menu.
+3. **Créer une application de PRODUCTION** : menu **APPLICATIONS → Créer une application**. N'utilisez pas l'application `APP_SANDBOX_<votre-email>` créée automatiquement à l'inscription : le plugin appelle les URL Production (`oauth.piste.gouv.fr`), une app Sandbox échouera avec `invalid_client`.
+4. **Souscrire à Judilibre** : sur votre application → « Modifier l'application » → dans la liste des API, cocher la ligne **JUDILIBRE / environnement PRODUCTION** → « Appliquer les modifications ».
+5. **Générer et lire les identifiants OAuth** : onglet **Authentification** de l'application, section **« Identifiants Oauth »** (PAS la section « API Keys » au-dessus : autre méthode d'authentification, inutilisée par le plugin). Si le tableau est vide, cliquez « Générer » (type « Confidentiel », URL de rappel et certificat X.509 laissés vides). Puis :
+   - **Client ID** = la valeur affichée dans la colonne « Client ID » du tableau ;
+   - **Client Secret** = la valeur cachée derrière « **Consulter le client secret** » sur la même ligne.
 
-**Deux pièges à éviter (spécifiques à notre plugin) :**
-
-- **Créez une application de PRODUCTION, pas Sandbox.** L'application `APP_SANDBOX_<votre-email>` créée automatiquement à l'inscription ne marche pas avec le plugin (le plugin appelle l'URL Production `oauth.piste.gouv.fr`, pas `sandbox-oauth.piste.gouv.fr`).
-- **Dans l'onglet Authentification, utilisez les "Identifiants Oauth", pas les "API Keys".** Ce sont deux méthodes d'authentification distinctes ; le plugin consomme uniquement les identifiants Oauth (flux Client Credentials, type "Confidentiel", URL de rappel et certificat X.509 laissés vides).
-
-Une fois sur la page Authentification de votre application Production, vous lisez votre **Client ID** directement, et le **Client Secret** via "Consulter le client secret".
+   Attention à ne pas inverser les deux : un couple mélangé (ou pris pour moitié sur les API Keys) donne `invalid_client` sur `oauth.piste.gouv.fr`.
 
 ### Étape 2 — Définir deux variables d'environnement
 
