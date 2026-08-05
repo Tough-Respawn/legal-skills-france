@@ -6,6 +6,13 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Credentials PISTE : support d'un fichier `.env` à la racine du projet (fallback des variables d'environnement), `.env.example` fourni avec le plugin.
+- README : tutoriel pas-à-pas d'obtention des clés PISTE, vérifié en conditions réelles le 2026-08-05 (consentement CGU, application Production, identifiants OAuth).
+
 ## [3.0.1] — 2026-08-04
 
 ### Fixed
