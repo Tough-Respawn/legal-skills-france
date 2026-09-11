@@ -38,6 +38,11 @@ directly enforceable in France). Apply the methodology defined in
 
 ## Required reads
 
+First apply `skills/legal-france/references/qualification.md` and the
+« Faits décisifs et pièces » section of this domain reference. Ask only
+missing facts that change the analysis; preserve material hypotheses,
+source versions and evidence gaps in every response format.
+
 1. Read `references/numerique.md` for applicable texts (RGPD, LIL,
    LCEN, ePrivacy), CNIL guidelines and sanctions, recent reforms (DSA,
    DMA, AI Act if relevant).

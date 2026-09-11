@@ -2,7 +2,7 @@
 
 This document is read by any skill that needs to produce a legal document
 (letter, mise en demeure, plainte, recours, statuts, etc.). It defines the
-six-step workflow, the template contract, and the reinforced disclaimer.
+qualification and drafting workflow, the template contract, and the reinforced disclaimer.
 
 There is no compiled engine code. Skills perform the workflow by reading
 templates and asking the user questions.
@@ -42,94 +42,106 @@ to the user grouped by domain, then resume once they pick one.
 
 ## 3. Template contract
 
-Each template file has YAML frontmatter with:
+Each template has YAML frontmatter with:
 
-- `type` : the slug shown above.
-- `domain` : `meta` | `civil` | `travail` | `penal` | `affaires` | `administratif` | `numerique` | `europeen`.
-- `short_description` : one-line summary shown to the user.
-- `required_fields` : list of field names the user must provide.
-- `optional_fields` : list of field names the engine asks about but accepts skipping.
-- `applicable_law` : list of statute citations the engine MUST verify on Legifrance before output.
-- `disclaimer_level` : `standard` | `high`. `high` adds the reinforced disclaimer (used for all v3 templates).
+- `type`, `domain`, `short_description`: identity and routing.
+- `qualification_fields`: facts to establish when relevant to selecting the
+  legal regime, checking a deadline or substantiating the document.
+- `required_fields`: information needed to personalize the selected document.
+- `optional_fields`: information used only when applicable.
+- `derived_fields`: conclusions, dates, amounts or passages derived from
+  collected facts and verified law; never guessed or treated as user evidence.
+- `applicable_law`: texts to verify in the version applicable to the situation.
+- `disclaimer_level`: `high` preserves both mandatory disclaimers below.
 
-Below the frontmatter, three required sections:
+The body contains `## Qualification préalable`, `## Questionnaire`,
+`## Template` and `## Vérifications juridiques avant envoi`.
+Qualification defines the supported situation, useful pieces and cases
+requiring a different procedure before using the document body.
 
-1. `## Questionnaire` : numbered list of questions to ask, in order. Each
-   question can be ALL CAPS to indicate a required field, or italicized to
-   indicate optional. Conditional questions begin with `*Si…* :`.
-2. `## Template` : the document body using `{{field_name}}` placeholders
-   and conditional blocks `{{#if optional_field}}…{{/if}}`.
-3. `## Vérifications juridiques avant envoi` : checklist of points to
-   verify against Legifrance + practical advice (delays, send-by method,
-   pièces jointes).
+Placeholders use `{{field_name}}`. A condition tests the established value,
+not merely the presence of a nonempty string: « non », « inconnu » and
+« non vérifié » must not activate a positive branch. Every placeholder and
+condition must refer to a declared field. Only supported branches are rendered.
 
 ---
 
 ## 4. Workflow
 
-### Step 1 : Resolve template
+### Step 1 : Qualify the request and resolve the template
 
-If `/rediger` invoked without args → list available templates.
-If invoked with an unknown slug → suggest 2-3 closest matches.
-Once resolved, `Read` the template file.
+Apply `skills/legal-france/references/qualification.md`. Identify the user's
+objective and any urgent deadline; read the selected template's qualification
+before its body. A general information request needs no drafting questionnaire.
+If the template does not cover the situation, explain the missing procedure
+and continue the relevant analysis; do not force the situation into the body.
 
-### Step 2 : Ask the questionnaire
+### Step 2 : Collect decisive facts and useful pieces
 
-Iterate the `## Questionnaire` items one at a time. Wait for the user's
-answer before asking the next. Keep questions short and concrete. If an
-answer is ambiguous, ask one short follow-up before continuing.
+Start with the legal facts and dates in the questionnaire, using answers
+already provided. Group related missing questions and ask follow-ups only
+when an answer changes the regime or remains ambiguous. Request the useful
+pieces or excerpts, allowing irrelevant personal information to be masked.
+Collect identity and address details last; accept explicit placeholders for
+an anonymized model. Do not block an explanation for missing identity.
 
-For numerical or date fields, repeat back the parsed value before
-proceeding ("J'ai compris : montant = 1 500 €, date = 12 mars 2026.
-C'est correct ?").
+Distinguish reported, corroborated, disputed and unknown facts. A missing
+piece may leave a claim unproven without preventing a factual draft. Ask
+for confirmation of a date or amount only if it is ambiguous, contradictory
+or materially different from the user's statement.
 
-### Step 3 : Verify cited law
+If a missing fact determines the applicable procedure, admissibility or
+whether a claimed sum is due, ask the targeted questions **before producing
+the personalized act**. A request to “draft the letter” does not establish
+those facts. An explicitly requested incomplete/anonymized draft may still
+be supplied, using factual placeholders. Permission to use fictional names
+concerns identities; it does not authorize fictional legal facts.
 
-For each entry in `applicable_law`, run a `WebFetch legifrance.gouv.fr`
-to confirm the article is still in force and that any numerical thresholds
-in the template (délais, plafonds) match the current version. If a
-modification is detected → adjust the template's delay/threshold values
-and signal it to the user before generating.
+### Step 3 : Verify applicability and establish the result
 
-### Step 4 : Generate the document
+For the selected legal regime, consult official sources, their effective
+dates and transitional provisions. Check relevant agreements and exceptions.
+The latest text is not automatically applicable to older facts.
 
-Replace `{{field_name}}` placeholders with collected values. Resolve
-`{{#if …}}` conditionals based on whether the optional field was filled.
+Before generation, give a short assessment: supported regime, material
+unknowns, evidence available, sums that can be claimed and deadlines that
+can actually be determined. For each calculation state its inputs, legal
+basis/version, triggering event, computation and result. If an event has
+not occurred (for example first presentation of a future letter), keep the
+result conditional or undetermined. Recheck arithmetic independently.
 
-A template body may use placeholders that are not declared in the
-frontmatter `required_fields` / `optional_fields`. Three categories of
-such placeholders exist; handle them as follows:
+A web/API failure does not validate an embedded rule. Identify the missing
+verification and its consequence. Do not label a disputed or unverified
+procedure, deadline, consent, authorization or amount as established.
 
-- **Auto-derived from context** (`{{date_du_jour}}`, `{{ville_expediteur}}`,
-  `{{ville_locataire}}`, `{{ville_salarie}}`, `{{ville_contrevenant}}`,
-  `{{ville_requerant}}`, `{{ville_plaignant}}`, `{{ville_signature}}`,
-  `{{date_signature}}`) : derive from the current date or from the city
-  part of an address already collected. No new question needed.
-- **Derived from another collected field** (`{{duree_preavis}}`,
-  `{{date_debut_preavis}}`, `{{date_fin_preavis}}`, `{{delai_legal}}`,
-  `{{tribunal_competent_ville}}`, `{{tribunal_adresse}}`,
-  `{{adresse_omp_indique_sur_avis}}`, `{{titre_autorite}}`,
-  `{{situation_vehicule}}`) : compute from the user's earlier answers,
-  the convention collective indicated, or from the document the user
-  is contesting/responding to. Confirm the computed value with the user
-  before insertion.
-- **Free-text follow-ups** (`{{employeur_signataire_nom}}`,
-  `{{employeur_signataire_fonction}}`, `{{recherche_reclassement_detail}}`,
-  `{{justification_locataire}}`) : ask one short follow-up question for
-  each, in the natural flow after the related questionnaire item.
+### Step 4 : Generate the appropriate document
 
-Output the final document inside a Markdown code block prefixed and
-suffixed by a line of dashes for visual separation:
+Use only the branches supported by the assessment. Compute `derived_fields`
+from known inputs and verified rules; ask a targeted question when a needed
+input is absent. A named party's version can be expressed as its claim,
+without asserting that a court has established it.
 
-```
------ DOCUMENT GENERATED -----
-<final document text>
------ END DOCUMENT -----
-```
+For a personalized document, resolve every material legal prerequisite.
+If the user wants a draft despite an unknown, visibly mark it **BROUILLON
+INCOMPLET : points à compléter**, retain explicit placeholders and list the
+blocking points outside the act. Never invent a past procedural step or a
+legal conclusion to finish a sentence. An unsupported scenario requires
+adaptation of the workflow, not just an added disclaimer.
 
-Below the document, output the verification checklist (the
-`## Vérifications juridiques avant envoi` content from the template, with
-context-specific notes added).
+Keep the loaded template's structure and supported clauses; do not substitute
+a more elaborate stock template from memory. Before output, review every
+factual assertion **inside the act** against the supplied facts and examined
+pieces. For an unsupported assertion, replace the entire assertion with a
+field to complete, or omit it. A warning after an affirmative sentence, or
+only in the checklist, does not make that sentence conditional. In particular,
+an unknown fact is not a negative fact, an intended step is not a completed
+step, and a requested document is not an attachment already available.
+Keep documents still to obtain in the checklist outside the act.
+
+Output the document in a Markdown code block. Then show the verification
+checklist, distinguishing completed checks from remaining checks, and useful
+attachments actually available from those still to obtain. Do not list an
+unseen or unavailable document as already enclosed.
 
 ### Step 5 : Reinforced disclaimer
 
@@ -147,11 +159,13 @@ language), per `skills/legal-france/SKILL.md`.
 
 ## 5. Failure modes
 
-- **User refuses to provide a required field** → cannot generate; explain
-  why and abort gracefully.
-- **Legifrance verification fails (no network, ambiguous result)** → warn
-  the user clearly:
-  > Je n'ai pas pu vérifier en ligne la version en vigueur de <article>. Le modèle utilise les références embarquées. Vérifiez sur legifrance.gouv.fr avant envoi.
-- **Cited article amended since embedded reference** → use the current
-  version values and flag:
-  > Note : <article> a été modifié depuis la dernière mise à jour des références. Le modèle utilise la version en vigueur consultée sur Legifrance.
+- **Decisive fact missing or conflicting**: ask the targeted question; a
+  conditional analysis or visibly incomplete draft may continue, without a
+  definite deadline or unsupported factual assertion.
+- **Identity withheld**: offer anonymized placeholders for a model.
+- **Unsupported regime or unmet prerequisite**: explain the needed procedure
+  before finalizing the act; continue useful research and fact collection.
+- **Verification unavailable**: state the exact unverified rule/version and
+  its impact; use the embedded material only as provisional background.
+- **Official text differs from the fund**: select the applicable version
+  using the facts and transitional rules, and explain the change.

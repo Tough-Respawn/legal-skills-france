@@ -1,5 +1,14 @@
 # Digital Law : French Digital & Data Protection Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Site / traitement** : activité et publics visés, caractère professionnel, rôle réel (responsable/sous-traitant), pays, données et origine directe/indirecte, finalité et base envisagée pour chaque traitement. Pièces : registre, formulaires, contrats prestataires et configuration réelle.
+- **Information / cookies** : destinataires, durées par finalité et archivage, prestataires et pays de traitement/transfert, traceurs effectivement déposés, exemptions éventuelles, mécanisme de choix réellement disponible. Ne pas déduire une base légale ou une certification du seul nom du prestataire.
+- **Exercice de droits / incident** : droit demandé, dates d'envoi/réception/réponse ou de connaissance de l'incident, périmètre, personnes concernées, mesures prises, preuves des échanges. Examiner les échéances propres à l'obligation concernée.
+- **Publication / surveillance** : contenu et contexte, auteur, personnes identifiables, consentement allégué, intérêt public, statut professionnel et préjudice. Pièces : URL, captures datées, demandes antérieures ; articuler les droits concurrents et la preuve.
+
 ## Applicable Texts
 - Règlement général sur la protection des données (RGPD) : Règlement UE 2016/679 du 27 avril 2016
 - Loi Informatique et Libertés (loi n° 78-17 du 6 janvier 1978, modifiée par la loi n° 2018-493 du 20 juin 2018)

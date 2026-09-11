@@ -1,5 +1,14 @@
 # Labor Law : French Labor Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Rupture du contrat** : employeur privé ou public, CDI/CDD/essai, initiateur et stade de la rupture, motif précis (disciplinaire, insuffisance, inaptitude, économique), dates des faits et de leur connaissance, présentation de la convocation, entretien et notification. Pièces : contrat/avenants, convocation et preuve de présentation, lettre de rupture, échanges et éléments objectifs.
+- **Protections / procédure** : mandat, candidature ou ancien mandat ; maternité, accident du travail, arrêt ou signalement ; effectif pertinent, CSE, nombre de ruptures envisagées et période ; autorisation administrative éventuelle. Ne pas présumer l'absence de protection faute de mention.
+- **Préavis / indemnités / salaires** : IDCC et champ de la convention, classification, ancienneté avec reprises et interruptions, rémunération de référence, primes, horaires et sommes déjà versées. Pièces : bulletins utiles, convention/accord et clause invoquée, relevés de temps, reçu.
+- **Harcèlement / discrimination** : chronologie, faits précis et comparateurs pertinents, signalements, réactions, pièces disponibles et contestations. Vérifier l'aménagement de la preuve et le délai de chaque demande ; ne pas réduire toutes les actions à la contestation ordinaire de la rupture.
+
 ## Applicable Codes
 - Code du travail (C. trav.) : consolidated, Parts L (legislative), R (regulatory), D (decree)
   - Employment contract: L1221-1 et seq.
@@ -367,7 +376,7 @@ Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI0000
 ## Core Principles
 
 - **Lien de subordination (Subordination test)**: The existence of an employment contract is determined by the factual presence of subordination, the employer's power to give instructions, control execution, and discipline the worker. This test is assessed regardless of how the parties label their relationship (*requalification* is possible). Cass. soc., 13 nov. 1996.
-- **Cause réelle et sérieuse**: Any dismissal for personal reasons must rest on an objective, existing, and sufficiently important cause. The employer bears the burden of proof. Art. L1232-1. Courts undertake a full review of the facts.
+- **Cause réelle et sérieuse**: Any dismissal for personal reasons must rest on an objective, existing, and sufficiently important cause. Pour apprécier la cause réelle et sérieuse, le juge examine les éléments apportés par les deux parties ; un doute persistant bénéficie au salarié. Distinguer les régimes spécifiques de preuve selon le grief. Art. L1232-1 et L1235-1, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000035643446 (version depuis le 24/09/2017, vérifié le 2026-09-10).
 - **Faveur (In dubio pro labore)**: Where a conflict exists between a statute, collective agreement, or individual contract, the more favorable provision for the worker applies, unless the law expressly provides otherwise.
 - **Obligation de sécurité de résultat (pre-2015) / moyens renforcés (post-2015)**: The employer has a duty to protect workers' physical and mental health. After Cass. soc., 25 nov. 2015 (*Air France*), the obligation evolved from strict liability (*résultat*) to a reinforced obligation of means, the employer exonerates itself by proving it took all necessary measures under Art. L4121-1.
 - **Égalité de traitement**: Equal pay for equal work; prohibition of discrimination on enumerated grounds (Art. L1132-1, 25 prohibited criteria including origin, sex, age, disability, union activity).
@@ -466,9 +475,9 @@ Source: Legifrance, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI0000
 
 - **"How does rupture conventionnelle work?"** → Arts. L1237-11 et seq.: mutual agreement, no imposition by either party. Procedure: one or more meetings, signing of a convention, 15-day withdrawal period (*délai de rétractation*), then approval (*homologation*) by the *DREETS* (formerly DIRECCTE) within 15 working days. Employee receives specific indemnity (at least equal to the *indemnité légale de licenciement*) and can claim unemployment benefits (*ARE*).
 
-- **"What is the barème Macron and does it apply to my case?"** → Art. L1235-3: binding scale capping damages for unfair dismissal (no real and serious cause), expressed in months of gross salary, based solely on seniority. Applies to all CDI dismissals. Does NOT apply to: dismissals in violation of a fundamental freedom (Art. L1235-3-1), null dismissals (discrimination, harassment, maternity/paternity), or economic dismissal irregularities with specific damage provisions.
+- **"What is the barème Macron and does it apply to my case?"** → Art. L1235-3: binding scale capping damages for unfair dismissal (no real and serious cause), expressed in months of gross salary, tenant compte de l’ancienneté et, pour certains minima, de l’effectif habituel inférieur à onze salariés. Vérifier le champ temporel et les exclusions avant de chiffrer. Art. L1235-3, https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036762052 (vérifié le 2026-09-10). Does NOT apply to: dismissals in violation of a fundamental freedom (Art. L1235-3-1), null dismissals (discrimination, harassment, maternity/paternity), or economic dismissal irregularities with specific damage provisions.
 
-- **"Can my employer access my work emails?"** → *Nikon* doctrine: emails marked "personal" are covered by privacy protection even on work equipment. Employer may consult non-personal professional emails only; must notify employees of any monitoring (*charte informatique*); CNIL regulations apply. Covert monitoring without prior notification is generally inadmissible as evidence (Art. L1222-4 C. trav.).
+- **"Can my employer access my work emails?"** → *Nikon* doctrine: emails marked "personal" are covered by privacy protection even on work equipment. Employer may consult non-personal professional emails only; must notify employees of any monitoring (*charte informatique*); CNIL regulations apply. L’irrégularité de la collecte et la recevabilité de la preuve sont deux questions à examiner séparément : une preuve illicite ou déloyale n’est pas automatiquement exclue du procès civil ; vérifier son caractère indispensable et la stricte proportionnalité de l’atteinte. Cass. ass. plén., 22 déc. 2023, n° 20-20.648, https://www.courdecassation.fr/decision/65855660673fa80008f8d98d (vérifié le 2026-09-10).
 
 - **"What is moral harassment and what can I do?"** → Art. L1152-1: repeated actions that degrade working conditions and affect the employee's rights, dignity, health, or professional future. No need to prove intent, effects suffice. Employer has an obligation to prevent and stop harassment (Art. L1152-4). Employee may: alert the *CSE*, file a complaint with the labor inspectorate, or bring a claim before the *conseil de prud'hommes*; criminal prosecution under Art. 222-33-2 CP (2 years + €30,000 fine).
 

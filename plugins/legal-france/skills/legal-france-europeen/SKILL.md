@@ -35,6 +35,11 @@ methodology defined in `skills/legal-france/methodology.md`.
 
 ## Required reads
 
+First apply `skills/legal-france/references/qualification.md` and the
+« Faits décisifs et pièces » section of this domain reference. Ask only
+missing facts that change the analysis; preserve material hypotheses,
+source versions and evidence gaps in every response format.
+
 1. Read `references/europeen.md` for treaties, key CJUE/Trib. decisions,
    landmark directives and regulations.
 2. Read `skills/legal-france/references/codes-index.md`.

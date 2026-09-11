@@ -35,6 +35,11 @@ You handle French criminal-law questions. Apply the methodology defined in
 
 ## Required reads
 
+First apply `skills/legal-france/references/qualification.md` and the
+« Faits décisifs et pièces » section of this domain reference. Ask only
+missing facts that change the analysis; preserve material hypotheses,
+source versions and evidence gaps in every response format.
+
 1. Read `references/penal.md` for applicable articles (Code pénal + Code
    de procédure pénale), key Cass. crim. decisions, recent reforms.
 2. Read `skills/legal-france/references/codes-index.md`.

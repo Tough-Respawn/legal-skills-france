@@ -1,5 +1,14 @@
 # EU Law : French Application of European Union Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Élément européen** : États impliqués, résidence/établissement et nationalité si pertinente, qualité des parties, activité ou droit exercé, dates des faits et de la procédure. Ne pas assimiler automatiquement UE, EEE et Conseil de l'Europe.
+- **Texte applicable** : règlement/directive/convention invoquée, date d'application, mesures nationales de transposition, droit national concerné et type de relation (État/particulier, personnes privées). Pièces : décision, contrat et texte invoqué.
+- **Juridiction / recours** : procédure nationale en cours, décisions et dates de notification, voies déjà exercées, objectif (application d'une norme, question préjudicielle, recours européen). Demander les actes utiles avant de promettre l'accès direct à une juridiction européenne.
+- **Mobilité / contrat transfrontalier** : pays d'emploi, livraison ou prestation, choix de loi et de juridiction, statut du demandeur, chronologie. Distinguer loi applicable, compétence et reconnaissance/exécution.
+
 ## Applicable Texts
 - Traité sur l'Union européenne (TUE) : version consolidée, JOUE C 326/13 du 26 octobre 2012
 - Traité sur le fonctionnement de l'Union européenne (TFUE) : version consolidée, JOUE C 326/47 du 26 octobre 2012

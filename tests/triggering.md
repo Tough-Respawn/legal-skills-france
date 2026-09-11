@@ -163,3 +163,37 @@ M3 80 % -> 100 %, E2 60 % -> 80 %), le reste stable.
 
 Toutes les autres lignes (C1-C3, T1-T3, P1/P3, A3, AD1/AD3, N1/N3, E3,
 NEG1-6, B1-B3, M2, M3) : 100 %.
+
+
+### Contrôle 3.1.0 du 10 septembre 2026
+
+Descriptions de déclenchement inchangées ; les instructions et références
+juridiques ont évolué. Aucun nouveau taux ni absence de régression démontrée.
+
+| Date | Cas | Résultat | Observation |
+|---|---|---|---|
+| 2026-09-10 | C1, NEG2, un run chacun | 0/2 valides, NON ÉVALUABLE | Claude Code 2.1.104 refuse le modèle configuré `claude-fable-5-1[1m]` : erreur `claude_code_version_too_old`, CLI ≥ 2.1.251 demandé. |
+| 2026-09-10 | C1, NEG2, relance avec 2.1.251 isolé | NON EXÉCUTÉ | Relance refusée par le contrôle automatique : transmission du contenu du plugin/scénarios au service de modèle sans autorisation jugée assez explicite. |
+
+Traces de l'essai incompatible :
+`evals/results/triggering-qualification-20260910.json` et
+`evals/results/qualification-raw/` (artefacts locaux ignorés par Git).
+Un événement final nommé `success` accompagné de `is_error: true` n'est pas
+un succès. Le nouveau collecteur de comportement traite explicitement ce cas.
+
+
+### Relance autorisée du 10 septembre 2026
+
+Après accord explicite de l'utilisateur, CLI isolé **2.1.251**, modèle
+`claude-fable-5-1[1m]`, plugin **3.1.0**, base `5751330`, arbre modifié :
+
+| Cas | Runs valides | Résultat | Portée |
+|---|---|---|---|
+| C1 | 1/1 | PASS : `legal-france-civil` | Invocation observée ; session volontairement arrêtée par `--max-turns 2`, pas une validation de réponse complète. |
+| NEG2 | 1/1 | PASS : aucun skill juridique | Réponse hors domaine terminée normalement. |
+
+Rapport : `evals/results/qualification-authorized-smoke.json` ; traces :
+`evals/results/qualification-authorized-smoke-raw/`. Les deux runs sont valides
+selon le contrat du smoke. Deux cas avec un run ne démontrent pas l'absence de
+régression sur les 33 scénarios de la baseline historique. La correction
+comportementale ultérieure du moteur de rédaction n'a pas modifié les descriptions.

@@ -14,17 +14,38 @@ optional_fields:
 applicable_law:
   - art. 441-7 C. pén. (fausse attestation, sanctions)
 disclaimer_level: high
+qualification_fields:
+  - connaissance_personnelle
+  - periode_fait
+  - formalite_destinataire
+  - pieces_disponibles
+derived_fields:
+  - ville_signature
+  - date_du_jour
 ---
+
+## Qualification préalable
+
+Appliquer `skills/legal-france/references/qualification.md`.
+
+Vérifier l'usage et la nature exacte du fait à attester. Distinguer une
+attestation administrative d'un témoignage destiné à la justice, dont les
+formalités doivent être examinées séparément. Ne pas transformer une
+supposition, une déclaration d'autrui ou un engagement futur en fait
+personnellement constaté. Une attestation mensongère ne se corrige pas par
+un avertissement. Une date incertaine reste à établir ; cette incertitude
+ne suffit pas à conclure que l'utilisateur commet une infraction. Pour un
+hébergement, ne pas ajouter gratuité, continuité ou absence de participation
+aux frais si ces faits ne sont pas fournis : les demander ou laisser le
+passage à compléter dans l'acte. Demander seulement les justificatifs utiles
+à l'organisme.
 
 ## Questionnaire
 
-1. Vos nom et prénom complets ?
-2. Date de naissance (JJ/MM/AAAA) ?
-3. Lieu de naissance (ville, département) ?
-4. Adresse complète ?
-5. Quel fait précis attestez-vous ? (formuler à la première personne : "Je soussigné(e)… atteste sur l'honneur que…")
-6. À quoi servira cette attestation ? (ex : démarche CAF, dossier de logement, attestation d'hébergement, etc.)
-7. *Optionnel :* destinataire précis (administration, organisme, personne) ?
+1. À quel organisme et pour quelle démarche cette attestation est-elle destinée ? Un formulaire ou des mentions sont-ils imposés ?
+2. Quel fait précis connaissez-vous personnellement, à quelles dates ou pendant quelle période ? Distinguer ce que vous avez constaté de ce qui vous a été rapporté.
+3. Quelles pièces utiles possédez-vous et lesquelles l'organisme demande-t-il ? Ne transmettre que les éléments nécessaires à la démarche.
+4. Après qualification : nom, adresse et, si utiles au formulaire, date et lieu de naissance, destinataire ? Des champs anonymisés sont possibles.
 
 ## Template
 
@@ -49,7 +70,9 @@ Signature :
 ## Vérifications juridiques avant envoi
 
 - Confirmer sur Legifrance la version en vigueur de l'article 441-7 du Code pénal (peines actualisées).
-- Joindre une copie d'une pièce d'identité (recommandé par la plupart des organismes destinataires).
-- La signature doit être manuscrite originale.
-- Pour une attestation d'hébergement : l'hébergeant signe + joint sa pièce d'identité + un justificatif de domicile.
+- Vérifier les justificatifs exigés par le destinataire ; ne pas demander systématiquement une copie intégrale de pièce d’identité pour analyser la demande.
+- Vérifier le mode de signature accepté pour la démarche ; ne pas présenter la signature manuscrite originale comme une exigence universelle.
+- Pour une attestation d’hébergement : vérifier auprès du destinataire les pièces et formalités requises ; ne pas qualifier une pièce de disponible avant confirmation.
 - Conserver une copie signée.
+
+- Contrôle du 2026-09-10 : [art. 441-7 C. pén.](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037398925), version depuis le 12/09/2018 ; vérifier les formalités du destinataire avant utilisation. Pour un témoignage judiciaire, consulter aussi l’art. 202 CPC : https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006410330.

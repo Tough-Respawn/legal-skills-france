@@ -1,5 +1,14 @@
 # Business Law : French Business Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Créance / impayé** : qualité des parties, identité juridique du débiteur, contrat, prestation exécutée, facture, échéance, contestation, paiements et garanties. Pièces : contrat/CGV, commande, réception, factures, relevé des paiements et relances.
+- **Société / associés** : forme, qualité et pouvoirs du demandeur, statuts et pacte pertinents, répartition du capital, décision et dates de convocation/vote, stade du litige. Pièces : extraits des statuts, PV, convocations, registre utile.
+- **Difficultés du débiteur** : procédure collective connue, jugement/publication et dates, nature et naissance de la créance, mandataire identifié. Consulter les publications et actes pertinents avant de proposer un recouvrement individuel ; aucune absence de résultat ne prouve la solvabilité.
+- **Marque / concurrence** : signe, titulaire, territoire, produits/services, dates de dépôt et d'usage, actes reprochés et préjudice. Pièces : titre, registre, contrats et captures datées ; examiner la portée territoriale et les éléments internationaux.
+
 ## Applicable Codes
 - Code de commerce (C. com.) : commercial law, company law, insolvency
   - Acts of commerce: L110-1 et seq.

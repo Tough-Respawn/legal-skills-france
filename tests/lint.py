@@ -13,7 +13,8 @@ Contrôles :
      espaces/retours à la ligne)
   5. Motifs interdits (citations corrigées le 2026-08-04, commandes fantômes)
   6. Inventaire /rediger (lib/redacteur-engine.md) <-> fichiers templates réels
-  7. Contrat de template : clés frontmatter + les 3 sections obligatoires
+  7. Contrat de template : qualification, champs et conditions
+  8. Accès à la qualification commune depuis chaque skill
 
 Complément manuel : `claude plugin validate plugins/legal-france`
 (la racine du marketplace échoue sur Claude Code 2.1.104 à cause des clés
@@ -152,8 +153,8 @@ for orphan in sorted(on_disk - listed):
 print("6. inventaire /rediger : %d entrees" % len(inventory))
 
 # 7. Contrat de template
-REQ_KEYS = ["type", "domain", "short_description", "required_fields", "applicable_law", "disclaimer_level"]
-REQ_SECTIONS = ["## Questionnaire", "## Template", "## Vérifications juridiques avant envoi"]
+REQ_KEYS = ["type", "domain", "short_description", "qualification_fields", "required_fields", "derived_fields", "applicable_law", "disclaimer_level"]
+REQ_SECTIONS = ["## Qualification préalable", "## Questionnaire", "## Template", "## Vérifications juridiques avant envoi"]
 for p in sorted(glob.glob(os.path.join(PLUGIN, "skills", "*", "templates", "*.md"))):
     block = fm(p)
     if block is None:
@@ -166,7 +167,63 @@ for p in sorted(glob.glob(os.path.join(PLUGIN, "skills", "*", "templates", "*.md
     for s in REQ_SECTIONS:
         if s not in body:
             FAIL.append("template %s : section manquante `%s`" % (rel(p), s))
-print("7. contrat de template : ok")
+    laws = data.get("applicable_law")
+    if not isinstance(laws, list) or not laws or any(not isinstance(v, str) or not v.strip() for v in laws):
+        FAIL.append("template %s : applicable_law doit être une liste de chaînes" % rel(p))
+    if data.get("disclaimer_level") != "high":
+        FAIL.append("template %s : avertissement renforcé manquant" % rel(p))
+    # A declared input/derived field is needed for every rendered value or branch.
+    declared = set()
+    for key in ("qualification_fields", "required_fields", "optional_fields", "derived_fields"):
+        fields = data.get(key, [])
+        if not isinstance(fields, list) or any(not isinstance(v, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", v) for v in fields):
+            FAIL.append("template %s : liste de champs invalide `%s`" % (rel(p), key))
+            continue
+        if len(fields) != len(set(fields)) or declared.intersection(fields):
+            FAIL.append("template %s : champs répétés dans `%s`" % (rel(p), key))
+        declared.update(fields)
+    if all(section in body for section in REQ_SECTIONS):
+        positions = [body.index(section) for section in REQ_SECTIONS]
+        if positions != sorted(positions):
+            FAIL.append("template %s : qualification/questionnaire après le corps" % rel(p))
+        rendered = body.split("## Template", 1)[1].split("## Vérifications juridiques avant envoi", 1)[0]
+        stack = []
+        for token in re.findall(r"\{\{(.*?)\}\}", rendered, re.S):
+            token = token.strip()
+            if token == "else":
+                if not stack or stack[-1]:
+                    FAIL.append("template %s : else sans if ou répété" % rel(p))
+                else:
+                    stack[-1] = True
+                continue
+            if token == "/if":
+                if not stack:
+                    FAIL.append("template %s : fermeture if sans ouverture" % rel(p))
+                else:
+                    stack.pop()
+                continue
+            if token.startswith("#if "):
+                expression = token[4:].strip()
+                match = re.fullmatch(r'([a-z][a-z0-9_]*)(?:=="[^"\n]*")?', expression)
+                stack.append(False)
+            else:
+                match = re.fullmatch(r"([a-z][a-z0-9_]*)", token)
+            if not match:
+                FAIL.append("template %s : expression non prise en charge %r" % (rel(p), token))
+            elif match.group(1) not in declared:
+                FAIL.append("template %s : champ non déclaré `%s`" % (rel(p), match.group(1)))
+        if stack:
+            FAIL.append("template %s : condition if non fermée" % rel(p))
+print("7. contrat de template : vérifié")
+
+# 8. Every domain must reach the common contract without loading the meta skill.
+qualification = "skills/legal-france/references/qualification.md"
+if not os.path.isfile(os.path.join(PLUGIN, qualification.replace("/", os.sep))):
+    FAIL.append("contrat de qualification absent")
+for p in sorted(glob.glob(os.path.join(PLUGIN, "skills", "*", "SKILL.md"))):
+    if qualification not in read(p):
+        FAIL.append("qualification commune non chargée par %s" % rel(p))
+print("8. accès à la qualification : vérifié")
 
 print()
 if FAIL:

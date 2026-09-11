@@ -12,30 +12,52 @@ required_fields:
   - date_faits
   - lieu_faits
   - description_faits
-  - qualification_envisagee   # ex: vol, escroquerie, dégradation, harcèlement, etc.
   - prejudice_subi
 optional_fields:
   - auteur_identifie
   - temoins
   - pieces_jointes
+  - qualification_envisagee
 applicable_law:
   - art. 40 et 40-1 C. proc. pén. (signalement au procureur)
   - art. 7, 8, 9 C. proc. pén. (prescription)
 disclaimer_level: high
+qualification_fields:
+  - danger_actuel
+  - age_au_moment_faits
+  - chronologie_procedures
+  - origine_preuves
+derived_fields:
+  - tribunal_competent_ville
+  - tribunal_adresse
+  - ville_plaignant
+  - date_du_jour
 ---
+
+## Qualification préalable
+
+Appliquer `skills/legal-france/references/qualification.md`.
+
+Identifier d'abord les faits, la sécurité immédiate et le stade de la
+procédure. Demander les dates/périodes connues, sans fabriquer une date
+précise. Le manque de qualification pénale ou de preuve complète ne doit
+pas empêcher le récit d'une plainte. Distinguer constat personnel,
+soupçon, propos rapporté et pièce disponible.
+
+Pièces utiles selon les faits : échanges, captures et fichiers d'origine,
+certificat, facture, constat, témoignages ou récépissé antérieur. Examiner
+la prescription et ses exceptions selon la qualification, l'âge et les
+actes intervenus ; ne pas conclure à l'irrecevabilité sur le seul âge des faits.
 
 ## Questionnaire
 
-1. Vos nom, prénoms, date de naissance, lieu de naissance, nationalité, profession ?
-2. Votre adresse complète ?
-3. Date(s) et heure(s) des faits ?
-4. Lieu précis des faits (adresse, ville) ?
-5. Description chronologique et factuelle des faits (qui, quoi, quand, comment) ?
-6. Quelle qualification pénale envisagez-vous ? (vol, escroquerie, dégradation, harcèlement, menaces, abus de confiance, agression, etc. : si vous ne savez pas, dites "qualification à laisser au procureur").
-7. Quel préjudice avez-vous subi (matériel, corporel, moral, financier) ?
-8. *Optionnel :* l'auteur des faits est-il identifié ? (nom, ou éléments de description, sinon mentionner "auteur inconnu" / "plainte contre X").
-9. *Optionnel :* y a-t-il des témoins ? (nom et coordonnées)
-10. *Optionnel :* avez-vous des pièces à joindre ? (constat, factures, photos, captures d'écran, certificats médicaux, etc.)
+1. Y a-t-il un danger actuel ou une mesure urgente ? Quels faits souhaitez-vous signaler, où, à quelles dates ou pendant quelle période ?
+2. Qu'avez-vous personnellement constaté, que vous a-t-on rapporté et que soupçonnez-vous ? L'auteur est-il connu, sinon quels éléments descriptifs sont fiables ?
+3. Quel âge avaient les personnes concernées au moment des faits, si cela influe sur leur qualification ou la prescription ?
+4. Quels préjudices et quelles pièces/témoins sont disponibles ? Préciser l'origine des pièces et ce qu'elles permettent d'établir ; ne pas inventer un témoin manquant.
+5. Une plainte, une main courante, une décision ou une autre démarche existe-t-elle déjà ? Quelles dates et quels récépissés/réponses ?
+6. Avez-vous une qualification envisagée ? Elle peut rester indéterminée ; le récit suffit pour préparer ce courrier.
+7. Après cette analyse : identité, coordonnées et informations utiles pour vous contacter, ou champs anonymisés pour le brouillon ?
 
 ## Template
 
@@ -54,15 +76,15 @@ Tribunal judiciaire de {{tribunal_competent_ville}}
 
 À {{ville_plaignant}}, le {{date_du_jour}}
 
-Objet : Plainte simple contre {{#if auteur_identifie}}{{auteur_identifie}}{{else}}X{{/if}} pour {{qualification_envisagee}}
+Objet : Plainte simple contre {{#if auteur_identifie}}{{auteur_identifie}}{{else}}X{{/if}} {{#if qualification_envisagee}}pour {{qualification_envisagee}}{{else}}pour les faits exposés ci-dessous{{/if}}
 
 Monsieur le Procureur de la République,
 
-J'ai l'honneur de porter plainte contre {{#if auteur_identifie}}{{auteur_identifie}}{{else}}X{{/if}} pour les faits suivants, susceptibles de constituer le délit (ou la contravention) de {{qualification_envisagee}}.
+J'ai l'honneur de porter plainte contre {{#if auteur_identifie}}{{auteur_identifie}}{{else}}X{{/if}} pour les faits suivants{{#if qualification_envisagee}}, susceptibles de relever de la qualification de {{qualification_envisagee}}{{/if}}, sous réserve de la qualification retenue par vos services.
 
 ### Description des faits
 
-Le {{date_faits}}, à {{lieu_faits}} :
+Date ou période connue : {{date_faits}}. Lieu : {{lieu_faits}}.
 
 {{description_faits}}
 
@@ -103,9 +125,11 @@ Veuillez agréer, Monsieur le Procureur de la République, l'expression de ma ha
   - Délits : 6 ans (art. 8 CPP).
   - Crimes : 20 ans (art. 7 CPP).
   - Délais spécifiques (mineurs, infractions sexuelles, terrorisme…) : vérifier.
-- Identifier le **procureur de la République territorialement compétent** (tribunal judiciaire du lieu de l'infraction OU du domicile du suspect OU du domicile de la victime selon les cas).
+- Identifier le procureur territorialement compétent selon les faits et les règles applicables ; le seul domicile de la victime ne suffit pas à présumer la compétence.
 - Envoi recommandé : lettre recommandée avec accusé de réception, OU dépôt au commissariat / gendarmerie qui la transmettra au procureur (l'envoi direct est rapide mais le commissariat conserve une copie horodatée utile).
-- Le procureur a 3 mois pour répondre. En cas de classement sans suite ou silence, possibilité de plainte avec constitution de partie civile devant le doyen des juges d'instruction.
+- Ne pas promettre une réponse du procureur sous trois mois. Une plainte avec constitution de partie civile peut être envisagée après un classement ou un délai, sous les conditions et exceptions de l’art. 85 CPP ; vérifier les actes et leur preuve avant de la recommander.
 - Joindre **copies** des pièces, jamais d'originaux.
 - Conserver une copie complète de la plainte signée.
 - Si urgence ou danger immédiat → appeler le 17 et/ou se rendre au commissariat sans délai.
+
+- Correction du délai de réponse et du questionnaire, contrôle ciblé le 2026-09-10 : https://www.service-public.gouv.fr/particuliers/vosdroits/F35505. Les délais pénaux doivent être recontrôlés pour la qualification et la version du CPP applicables.

@@ -1,5 +1,14 @@
 # Criminal Law : French Criminal Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Plainte** : récit concret, dates/périodes et lieu, âge au moment des faits si pertinent, préjudice, auteur connu ou inconnu, danger actuel, procédures déjà engagées. Pièces : récépissé, échanges, photos, attestations, certificat ou factures utiles. La victime n'a pas à fournir une qualification pénale certaine pour raconter les faits.
+- **Amende** : copie complète de l'acte ; contravention forfaitaire initiale ou majorée, ordonnance pénale, jugement, forfait de post-stationnement ou autre ; dates figurant sur l'avis et de notification, paiement/consignation, destinataire, motif et justificatifs. Identifier la voie ouverte avant de calculer un délai.
+- **Procédure en cours** : qualité (victime, suspect, prévenu…), convocation et date d'audience, mesures imposées, avocat, actes reçus et recours déjà exercés. Ne pas substituer les délais d'une plainte à ceux d'un recours.
+- **Prescription / preuve** : qualification envisagée, chronologie, âge, caractère continu/occulte allégué, actes susceptibles d'interrompre ou suspendre ; origine et intégrité des pièces. Vérifier le régime spécifique avant toute conclusion de prescription ou de recevabilité.
+
 ## Applicable Codes
 - Code pénal (CP) : substantive criminal law
   - Crimes and délits: Books I–IV (Arts. 111-1 et seq.)

@@ -1,220 +1,77 @@
-# Judilibre Client : Workflow Documentation
+# Judilibre : client portable facultatif
 
-This document is read by the meta skill `legal-france` (and by any domain
-skill needing case-law research) when the user asks for jurisprudence and
-the PISTE credentials are configured. It defines the call sequence, the
-fallback policy, and the citation conventions for Judilibre results.
+## 1. Web prioritaire, API sur demande
 
-There is no compiled client code. The skills perform the HTTP calls below
-via the **Bash tool (`curl`)**, NOT via `WebFetch`: the OAuth token
-request is a POST with a form-urlencoded body and the API calls need an
-`Authorization` header, neither of which `WebFetch` can produce.
+Pour la jurisprudence, rechercher et lire d'abord les sources officielles
+sur le web. Ne pas vérifier les identifiants ni proposer une inscription
+PISTE à chaque question. Utiliser Judilibre uniquement si l'utilisateur
+l'a demandé pour la recherche ou a déjà choisi ce mode dans la session.
+La présence de clés seule ne change pas ce choix.
 
-Run token + search in a **single Bash invocation** (shell state does not
-persist between tool calls). Never print the secret or the raw token
-response; capture the token in a variable and only output the search
-result:
+Le client est `skills/legal-france/scripts/legal_api.py`, partagé avec
+Légifrance et fondé sur la bibliothèque standard Python 3.9 ou ultérieure.
+Il remplace les appels Bash/curl et l'extraction des secrets par sed.
+Aucun outil propre à un modèle n'est nécessaire : utiliser la capacité
+locale d'exécution disponible dans le harnais, si elle existe.
 
-```bash
-if [ -z "$PISTE_CLIENT_ID" ] && [ -f .env ]; then
-  PISTE_CLIENT_ID=$(sed -n 's/^PISTE_CLIENT_ID=//p' .env | head -1 | tr -d '"\r')
-  PISTE_CLIENT_SECRET=$(sed -n 's/^PISTE_CLIENT_SECRET=//p' .env | head -1 | tr -d '"\r')
-  export PISTE_CLIENT_ID PISTE_CLIENT_SECRET
-fi
-TOKEN=$(curl -s -X POST "https://oauth.piste.gouv.fr/api/oauth/token" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  --data-urlencode "grant_type=client_credentials" \
-  --data-urlencode "client_id=${PISTE_CLIENT_ID}" \
-  --data-urlencode "client_secret=${PISTE_CLIENT_SECRET}" \
-  --data-urlencode "scope=openid" \
-  | sed -n 's/.*"access_token" *: *"\([^"]*\)".*/\1/p')
-if [ -z "$TOKEN" ]; then
-  echo "JUDILIBRE_AUTH_FAILED"   # then fall back to WebSearch per §5
-else
-  curl -s -G "https://api.piste.gouv.fr/cassation/judilibre/v1.0/search" \
-    -H "Authorization: Bearer ${TOKEN}" -H "Accept: application/json" \
-    --data-urlencode "query=<requête utilisateur>" \
-    --data-urlencode "page_size=10"
-fi
+## 2. Configuration
+
+Lire les modalités communes dans `lib/legifrance-client.md`, section 2.
+Pour Judilibre, le couple spécifique est `JUDILIBRE_CLIENT_ID` et
+`JUDILIBRE_CLIENT_SECRET`. Sans couple spécifique, le couple historique
+`PISTE_CLIENT_ID` / `PISTE_CLIENT_SECRET` reste accepté. L'application doit
+être abonnée à Judilibre en production. Les identifiants sont lus par le
+programme depuis l'environnement ou textuellement depuis `.env`, jamais
+récupérés dans la conversation ni transmis comme arguments de commande.
+
+Résoudre le chemin du script depuis le plugin réellement chargé, sans
+supposer que le dossier courant est la racine du dépôt. Les exemples sont
+relatifs à `plugins/legal-france/`. Garder le dossier courant de l'utilisateur
+pour `.env`, ou préciser `--env-file` avant le service, entre le service et
+l'opération, ou après les arguments de l'opération.
+
+## 3. Rechercher puis lire la décision
+
+```text
+python skills/legal-france/scripts/legal_api.py --use-api judilibre search --query "harcèlement moral employeur" --chamber soc --page 0 --page-size 10
 ```
 
----
+Le programme obtient un jeton OAuth, puis appelle `GET /search` avec les
+paramètres encodés. Il ne télécharge pas automatiquement toutes les pages.
+Paramètres disponibles : `--jurisdiction`, `--chamber`, `--date-start`,
+`--date-end`, `--page`, `--page-size`, `--sort` et `--order`. La première page
+est 0 ; le maximum par page est 50. Le défaut est la Cour de cassation (`cc`),
+avec tri `scorepub` descendant. Le champ de date d'une décision retournée
+est `decision_date`, à distinguer de `update_date`.
 
-## 1. Credentials
+Le schéma déclare `jurisdiction` et `chamber` comme tableaux sans
+`collectionFormat` explicite. Le format par défaut de
+[Swagger 2.0](https://spec.openapis.org/oas/v2.0.html#parameter-object) est CSV :
+pour un élément, `jurisdiction=cc` et `chamber=soc` sont les représentations
+attendues. Les exemples du client sélectionnent une valeur par filtre ;
+cette conformité au schéma ne constitue pas un test du serveur de production.
 
-Two credentials, `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET`, are resolved
-at call time, in this order:
+Pour un pourvoi précis, rechercher son numéro puis utiliser exclusivement
+un identifiant retourné par la source :
 
-1. Environment variables.
-2. Fallback: a `.env` file at the project root (current working
-   directory). **Never `source` it**: a `.env` shipped by an untrusted
-   repository would then execute arbitrary shell code. Extract the two
-   keys textually (restricted parser below); the `tr -d '"\r'` also
-   strips quotes and Windows carriage returns that would silently break
-   authentication. Shell state does not persist between Bash tool calls,
-   so **every** Bash step that uses the credentials must start with this
-   block.
-
-If neither source provides both values, **skip Judilibre entirely and
-fall back to WebSearch**. Surface this one-time hint to the user:
-
-> Pour des recherches jurisprudentielles plus rapides et structurées, configurez l'API Judilibre (gratuit). Voir README pour la procédure d'inscription PISTE.
-
-To check: in a Bash step, run a **silent** presence test that never prints
-the values:
-
-```bash
-if [ -z "$PISTE_CLIENT_ID" ] && [ -f .env ]; then
-  PISTE_CLIENT_ID=$(sed -n 's/^PISTE_CLIENT_ID=//p' .env | head -1 | tr -d '"\r')
-  PISTE_CLIENT_SECRET=$(sed -n 's/^PISTE_CLIENT_SECRET=//p' .env | head -1 | tr -d '"\r')
-  export PISTE_CLIENT_ID PISTE_CLIENT_SECRET
-fi
-[ -n "$PISTE_CLIENT_ID" ] && [ -n "$PISTE_CLIENT_SECRET" ] && echo PISTE_OK || echo PISTE_MISSING
+```text
+python skills/legal-france/scripts/legal_api.py --use-api judilibre search --query "19-13.340"
+python skills/legal-france/scripts/legal_api.py --use-api judilibre decision --id IDENTIFIANT_RETOURNE_PAR_LA_RECHERCHE
 ```
 
----
+`GET /decision` restitue notamment le texte et ses zones. Un résultat de
+recherche n'est pas une lecture de l'arrêt : ouvrir la décision avant de
+présenter son raisonnement comme vérifié. Ne jamais inventer le contenu,
+un identifiant, un visa ou les faits d'une décision.
 
-## 2. OAuth2 token
+## 4. Citations et périmètre
 
-**Endpoint:** `POST https://oauth.piste.gouv.fr/api/oauth/token`
+Construire la référence depuis les métadonnées effectivement reçues :
+chambre, `decision_date`, numéro, ECLI si présent, puis `(Judilibre: <id>)`.
+L'identifiant Judilibre complète la citation usuelle ; il ne la remplace pas.
+Ne pas doubler le préfixe `ECLI:` s'il est déjà dans la valeur.
 
-**Headers:**
-- `Content-Type: application/x-www-form-urlencoded`
-
-**Body (form-urlencoded):**
-- `grant_type=client_credentials`
-- `client_id=${PISTE_CLIENT_ID}`
-- `client_secret=${PISTE_CLIENT_SECRET}`
-- `scope=openid`
-
-**Response (200):**
-```json
-{
-  "access_token": "ey...",
-  "token_type": "Bearer",
-  "expires_in": 3600,
-  "scope": "openid"
-}
-```
-
-The token is valid for one hour. Cache the value in a session variable
-(do not write it to disk). On 401 responses to API calls, re-fetch the
-token once before falling back.
-
----
-
-## 3. Search endpoint
-
-**Endpoint:** `GET https://api.piste.gouv.fr/cassation/judilibre/v1.0/search`
-
-**Headers:**
-- `Authorization: Bearer <access_token>`
-- `Accept: application/json`
-
-**Query parameters (most useful):**
-- `query` : full-text query (e.g., `harcèlement moral employeur`)
-- `jurisdiction` : `cc` (Cour de cassation), `ca` (Cours d'appel, partial), `cassation` for legacy alias
-- `chamber` : for cc: `civ1`, `civ2`, `civ3`, `soc`, `com`, `crim`, `mixte`, `pl`
-- `date_start`, `date_end` : `YYYY-MM-DD` format
-- `page_size` : default 10, max 50
-- `page` : 0-indexed (première page = `page=0` ; vérifié le 2026-08-04 sur le dépôt officiel github.com/Cour-de-cassation/judilibre-search, exemple de réponse `"page":0` avec `next_page` pointant vers `page=1`)
-- `sort` : `score` (default, relevance), `date` (most recent first)
-
-**Response (200):**
-```json
-{
-  "total": 42,
-  "page": 1,
-  "page_size": 10,
-  "results": [
-    {
-      "id": "61234abc...",
-      "jurisdiction": "cc",
-      "chamber": "soc",
-      "date": "2021-11-10",
-      "number": "20-12.345",
-      "ecli": "ECLI:FR:CCASS:2021:SO01234",
-      "publication": ["b"],
-      "solution": "rejet",
-      "summary": "...",
-      "title": "..."
-    }
-  ]
-}
-```
-
----
-
-## 4. Decision endpoint
-
-**Endpoint:** `GET https://api.piste.gouv.fr/cassation/judilibre/v1.0/decision`
-
-**Query parameters:**
-- `id` : decision identifier returned by `/search`
-
-**Headers:** same as `/search`.
-
-**Response:** full decision document including `text` (texte intégral),
-`zones` (motifs, dispositif), `themes`, `visa` (articles visés), and
-`bulletin` info if published.
-
----
-
-## 5. Workflow when a skill needs case law
-
-1. **Read credentials.** If either env var is empty → fallback to
-   `WebSearch site:legifrance.gouv.fr <user query>` (current v2 behaviour)
-   and emit the configuration hint **once per session**.
-
-2. **Fetch token.** If a session-cached token is still valid (< 60 min
-   old), reuse it. Otherwise call the token endpoint.
-
-3. **Search.** Issue a `GET /search` with the user's query, optionally
-   refined with `chamber=` if the user mentioned a specific chamber, and
-   `date_start=` if the user wants recent decisions.
-
-4. **Filter results.** Keep the top 5 by score. If the user wants a
-   specific decision (pourvoi number cited), use `?query=<pourvoi>` then
-   request `/decision?id=<id>` for the full text.
-
-5. **Cite using French standard.** Build citations from the search
-   metadata in the form `<chamber-fr>, <date-fr>, n° <number>, ECLI:<ecli>`,
-   where `<chamber-fr>` is the full citation form from the chamber mapping
-   table in section 7 below (e.g., `Cass. soc.`, `Cass. civ. 1re`). The
-   "Cass." prefix is already included in the mapping : do not duplicate it.
-
-   Append the Judilibre decision ID as a supplementary reference:
-   `(Judilibre: <id>)`.
-
-6. **On error.** Any 4xx/5xx that is not 401 → fall back to `WebSearch`
-   silently for this query; surface a small note in the response footer:
-
-   > Note : la recherche Judilibre a renvoyé une erreur (<code>), je suis passé sur recherche web. La citation peut être moins précise.
-
-   On 401 → retry once after fetching a fresh token; if still 401, fall
-   back as above and emit:
-
-   > Note : impossible d'authentifier sur Judilibre, vérifiez vos identifiants PISTE.
-
-7. **Rate limiting.** Respect `Retry-After` headers when present. If
-   429 is returned, fall back to `WebSearch` for this query.
-
----
-
-## 6. Out of scope
-
-- **Conseil d'État (CE)**: Judilibre coverage is partial; prefer
-  `WebFetch conseil-etat.fr` or `WebSearch site:conseil-etat.fr`.
-- **Conseil constitutionnel**: not in Judilibre. Use
-  `WebFetch conseil-constitutionnel.fr`.
-- **CJUE / Tribunal UE**: not in Judilibre. Use
-  `WebFetch curia.europa.eu` or `WebFetch eur-lex.europa.eu`.
-
----
-
-## 7. Quick reference: chamber code mapping
-
-| Judilibre code | French citation form |
+| Code de chambre | Forme française |
 |---|---|
 | `civ1` | Cass. civ. 1re |
 | `civ2` | Cass. civ. 2e |
@@ -224,3 +81,33 @@ token once before falling back.
 | `crim` | Cass. crim. |
 | `mixte` | Cass. ch. mixte |
 | `pl` | Cass. ass. plén. |
+
+Judilibre concerne l'ordre judiciaire ; la couverture dépend de la
+juridiction et de la période. Pour le Conseil d'État, le Conseil
+constitutionnel ou les juridictions européennes, consulter les sites
+respectifs (CE/Légifrance, Conseil constitutionnel, CURIA/EUR-Lex/HUDOC).
+Ne pas envoyer ces recherches à Judilibre ni conclure à l'absence d'une
+décision à partir d'un seul résultat vide.
+
+## 5. Échecs et repli
+
+Les sorties et codes sont décrits dans `lib/legifrance-client.md`, section 5.
+Sans `--use-api`, aucune lecture de secrets et aucun appel réseau. Si le
+mode API a été choisi mais que la configuration manque, expliquer brièvement
+la configuration facultative et poursuivre sur le web. Ne pas répéter
+l'invitation à configurer le service dans une session restée en mode web.
+
+Sur erreur réseau, 403, 429 ou 5xx : repli vers la recherche et la lecture
+web, avec une note factuelle sur l'échec. Sur 401 d'un appel métier : un seul
+renouvellement du jeton, puis repli si nécessaire. Ne pas prétendre qu'une
+citation issue du web est par nature moins précise qu'une citation API.
+Si aucune source n'est lisible, conserver le statut non vérifié.
+
+## 6. Sources techniques
+
+[Spécification publiée par la Cour de cassation](https://github.com/Cour-de-cassation/judilibre-search/blob/master/public/JUDILIBRE-public-swagger.json),
+version 1.2.5 consultée le **2026-09-11** : `/search`, `/decision`, pagination,
+tri et champ `decision_date`. [Présentation officielle](https://github.com/Cour-de-cassation/judilibre-search).
+L'hôte de production et le flux OAuth PISTE reprennent l'intégration existante.
+Le fonctionnement du client Python avec des identifiants valides reste à
+vérifier ; les résultats historiques du client curl ne le valident pas.

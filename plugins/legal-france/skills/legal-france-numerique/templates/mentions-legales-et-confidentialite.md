@@ -3,7 +3,7 @@ type: mentions-legales-et-confidentialite
 domain: numerique
 short_description: Mentions légales (LCEN) + politique de confidentialité (RGPD) pour un site web ou e-commerce
 required_fields:
-  - editeur_type           # "personne-physique" | "personne-morale"
+  - editeur_type
   - editeur_nom
   - editeur_adresse
   - editeur_email
@@ -13,38 +13,90 @@ required_fields:
   - hebergeur_adresse
   - hebergeur_telephone
   - site_url
-  - traitements_donnees    # short description: visiteurs, comptes, commandes, newsletter, cookies
+  - traitements_donnees
   - duree_conservation
 optional_fields:
-  - editeur_siret           # if morale
-  - editeur_capital         # if morale
-  - editeur_rcs             # if morale
-  - editeur_tva             # if assujetti
-  - dpo_nom                 # if appointed
+  - editeur_siret
+  - editeur_capital
+  - editeur_rcs
+  - editeur_tva
+  - dpo_nom
   - dpo_email
 applicable_law:
-  - art. 1-1 de la loi n° 2004-575 du 21 juin 2004 (LCEN, mentions légales obligatoires ; article issu de la loi SREN n° 2024-449 du 21 mai 2024 : l'ancien fondement « art. 6-III » n'existe plus, vérifié le 2026-08-05)
-  - art. 13 et 14 RGPD (information des personnes, politique de confidentialité)
-  - art. 82 loi 78-17 modifiée + délibération CNIL n° 2020-091 du 17 sept. 2020 (cookies)
+  - art. 1-1 de la loi n° 2004-575 du 21 juin 2004 (LCEN, mentions de l’éditeur)
+  - art. 5, 6, 12 à 14 et 15 à 22 RGPD (traitements et information)
+  - art. 82 loi n° 78-17 modifiée et lignes directrices/recommandation CNIL sur les traceurs
 disclaimer_level: high
+qualification_fields:
+  - activite_public
+  - role_traitement
+  - origine_donnees
+  - bases_legales
+  - destinataires
+  - transferts
+  - traceurs
+  - procedure_droits
+  - decision_automatisee
+  - pieces_disponibles
+derived_fields:
+  - presentation_responsable
+  - date_du_jour
+  - tableau_traitements
+  - information_destinataires
+  - information_transferts
+  - information_cookies
+  - information_droits
+  - information_complementaire
+  - modalites_conservation
 ---
+
+## Qualification préalable
+
+Appliquer `skills/legal-france/references/qualification.md`. Identifier
+l'activité, les publics et territoires visés, le caractère professionnel,
+et le rôle réel de l'éditeur dans chaque traitement. Vérifier les mentions
+requises pour ce type d'éditeur ; ne pas qualifier automatiquement toute
+personne physique d'entrepreneur individuel.
+
+La politique décrit des traitements réels : demander l'inventaire,
+formulaires, contrats des prestataires, paramètres des traceurs et parcours
+d'exercice des droits. Pour chaque finalité, déterminer données, origine,
+base légale, destinataires et durée/critère de conservation. Vérifier
+séparément les transferts, le consentement aux traceurs et les informations
+supplémentaires dues lors d'une collecte indirecte ou d'une décision automatisée.
+
+Si ces informations manquent, produire une trame avec lacunes identifiées,
+sans affirmer que le site est conforme, qu'un contrat de sous-traitance est
+signé, qu'aucune donnée n'est vendue ou qu'un prestataire est certifié.
+
+**Remplissage d'une trame sans inventaire** : le caractère « site marchand »
+ne permet pas d'inventer des comptes clients, une collecte directe, des
+champs obligatoires, un traitement antifraude ou des destinataires. Dans
+`tableau_traitements`, reprendre seulement les finalités déclarées ; chaque
+donnée, origine, base et durée inconnue reste un champ à établir. Laisser
+`information_cookies`, `information_droits` et les autres paragraphes inconnus
+comme champs entiers à compléter. Ne pas y préremplir un bandeau, un lien
+de désabonnement, une absence de stockage ou de décision automatisée, même
+suivis de « à confirmer ». Distinguer ce qui serait requis de ce qui existe.
+Lorsque seul le nom d'une finalité est fourni, `tableau_traitements` est un
+**tableau de collecte à compléter** : seule la colonne « Finalité déclarée »
+est renseignée. Les colonnes données, origine, base et durée portent chacune
+« À documenter » tant que leur valeur n'est pas donnée. L'origine de collecte
+ne se déduit ni de la finalité ni du nom d'un outil. Les questions et pistes
+de vérification restent hors de ce tableau ; elles ne deviennent pas ses
+valeurs factuelles.
+Si les sources n'ont pas été consultées dans la session, le dire explicitement
+avant la trame ; la date historique du modèle ne constitue pas ce contrôle.
 
 ## Questionnaire
 
-1. L'éditeur est-il une **personne physique** (auto-entrepreneur, particulier) ou une **personne morale** (société, association) ?
-2. Nom complet (ou raison sociale) ?
-3. Adresse postale complète du siège ou du domicile professionnel ?
-4. Email de contact ?
-5. Téléphone de contact ?
-6. Directeur de la publication (nom de la personne responsable du contenu) ?
-7. *Si personne morale :* SIRET, capital social, RCS ville, numéro de TVA intra (le cas échéant) ?
-8. Nom de l'hébergeur ?
-9. Adresse complète de l'hébergeur ?
-10. Téléphone de l'hébergeur ?
-11. URL du site ?
-12. Quels traitements de données personnelles effectuez-vous ? (visiteurs anonymes, comptes utilisateurs, commandes e-commerce, newsletter, formulaire de contact, cookies analytics, autres ?)
-13. Durée de conservation principale des données (par exemple : 3 ans après dernier contact pour prospect, 10 ans pour facturation, etc.) ?
-14. *Optionnel :* avez-vous désigné un Délégué à la Protection des Données (DPO) ? Si oui, nom et email.
+1. Quelle activité, quel public (dont mineurs si concernés), quels pays et quel caractère professionnel ? Qui décide des finalités et moyens des traitements ?
+2. Pour chaque traitement réellement effectué : quelle finalité, quelles données, quelle origine directe ou indirecte, quelle base envisagée et quelles pièces permettent de le vérifier ?
+3. Qui reçoit les données et quels prestataires interviennent ? Dans quels pays, avec quels contrats et mécanismes de transfert effectivement vérifiables ?
+4. Quelles durées ou critères de conservation par finalité, puis quelles modalités d'archivage et de suppression sont réellement pratiquées ?
+5. Quels cookies/traceurs sont effectivement utilisés, à quoi servent-ils, et quels mécanismes de choix existent ? Une exemption est-elle revendiquée et documentée ?
+6. Comment les personnes exercent-elles leurs droits ? Quel contact/DPO, et existe-t-il une décision automatisée ou des traitements demandant une analyse particulière ?
+7. Après qualification : forme et identité de l'éditeur, identifiants pertinents, coordonnées, directeur de publication, hébergeur et URL ? Des champs à compléter sont possibles pour la trame.
 
 ## Template
 
@@ -58,12 +110,12 @@ disclaimer_level: high
 {{#if editeur_type=="personne-morale"}}
 {{editeur_nom}}
 Forme juridique : [SAS / SARL / SA / Association loi 1901 / autre]
-Capital social : {{editeur_capital}}
-SIRET : {{editeur_siret}}
-RCS : {{editeur_rcs}}
+{{#if editeur_capital}}Capital social : {{editeur_capital}}{{/if}}
+{{#if editeur_siret}}SIRET : {{editeur_siret}}{{/if}}
+{{#if editeur_rcs}}RCS : {{editeur_rcs}}{{/if}}
 {{#if editeur_tva}}N° TVA intracommunautaire : {{editeur_tva}}{{/if}}
 {{else}}
-{{editeur_nom}} (entrepreneur individuel)
+{{editeur_nom}}
 {{#if editeur_siret}}SIRET : {{editeur_siret}}{{/if}}
 {{/if}}
 Adresse : {{editeur_adresse}}
@@ -86,7 +138,7 @@ Téléphone : {{hebergeur_telephone}}
 
 ### 2.1 Responsable du traitement
 
-Le responsable du traitement des données personnelles collectées sur le site {{site_url}} est : {{editeur_nom}}, {{editeur_adresse}}. Contact : {{editeur_email}}.
+{{presentation_responsable}}
 
 {{#if dpo_nom}}
 Délégué à la Protection des Données (DPO) : {{dpo_nom}}, contact : {{dpo_email}}.
@@ -98,65 +150,43 @@ Les traitements suivants sont mis en œuvre sur le site :
 
 {{traitements_donnees}}
 
-Pour chaque traitement, les bases légales sont précisées dans le tableau suivant (à compléter selon vos traitements réels) :
+{{tableau_traitements}}
 
-| Finalité | Données | Base légale (RGPD art. 6) |
-|---|---|---|
-| Gestion du compte utilisateur | Nom, email, mot de passe haché | Exécution du contrat (art. 6.1.b) |
-| Commandes et facturation | Nom, adresse, paiement | Exécution du contrat + obligation légale (art. 6.1.b et c) |
-| Newsletter | Email | Consentement (art. 6.1.a) |
-| Statistiques de visite | Adresse IP, données techniques | Intérêt légitime (art. 6.1.f) après consentement cookies si applicable |
-| Lutte contre la fraude | Adresse IP, logs | Intérêt légitime (art. 6.1.f) |
+{{information_complementaire}}
 
 ### 2.3 Destinataires
 
-Les données ne sont communiquées qu'aux destinataires habilités au sein de l'éditeur et à ses sous-traitants techniques (hébergeur, prestataire de paiement, service de routage email) liés par contrat conforme à l'art. 28 RGPD.
-
-Aucune donnée n'est cédée ni revendue à des tiers à des fins commerciales sans le consentement explicite de l'utilisateur.
+{{information_destinataires}}
 
 ### 2.4 Transferts hors UE
 
-[Préciser si applicable : ex. "Nos sous-traitants Google Analytics / Mailchimp peuvent traiter certaines données aux États-Unis ; ces transferts sont encadrés par les clauses contractuelles types de la Commission européenne / certifiés Data Privacy Framework."]
+{{information_transferts}}
 
 ### 2.5 Durée de conservation
 
 Les durées de conservation principales sont les suivantes : {{duree_conservation}}.
 
-Au-delà de ces durées, les données sont supprimées ou anonymisées.
+{{modalites_conservation}}
 
 ### 2.6 Droits des personnes
 
-Conformément aux articles 15 à 22 du RGPD et à la loi n° 78-17 modifiée, vous disposez des droits suivants sur vos données :
+{{information_droits}}
 
-- **Droit d'accès** (art. 15)
-- **Droit de rectification** (art. 16)
-- **Droit à l'effacement** (art. 17 : « droit à l'oubli »)
-- **Droit à la limitation** (art. 18)
-- **Droit à la portabilité** (art. 20)
-- **Droit d'opposition** (art. 21)
-- **Droit de retrait du consentement** à tout moment lorsque ce dernier est la base légale du traitement
-
-Pour exercer ces droits, contactez : {{editeur_email}}{{#if dpo_nom}} ou directement le DPO : {{dpo_email}}{{/if}}. Une preuve d'identité pourra vous être demandée.
-
-En cas de difficulté, vous pouvez introduire une réclamation auprès de la **CNIL** : www.cnil.fr, 3 Place de Fontenoy, 75007 Paris.
+En cas de difficulté, vous pouvez introduire une réclamation auprès de la **CNIL** : https://www.cnil.fr.
 
 ### 2.7 Cookies et traceurs
 
-Le site utilise des cookies pour son fonctionnement et, sous réserve de votre consentement préalable, pour la mesure d'audience ou la personnalisation.
-
-À votre première visite, un bandeau vous permet d'accepter, refuser, ou personnaliser le dépôt des cookies non strictement nécessaires. Votre choix (consentement ou refus) est conservé pendant 6 mois, durée recommandée par la CNIL (recommandation « cookies », délibération n° 2020-092 du 17 septembre 2020 ; c'est une bonne pratique recommandée, pas un maximum réglementaire).
-
-Vous pouvez à tout moment modifier vos choix via la page « Gestion des cookies ».
+{{information_cookies}}
 
 ---
 
 ## 3. Propriété intellectuelle
 
-L'ensemble du contenu du site (textes, images, logos, marques, code source) est protégé par le droit d'auteur et le droit des marques. Toute reproduction non autorisée est interdite (art. L. 122-4 CPI).
+Les contenus du site peuvent être protégés par des droits de propriété intellectuelle. Les utilisations doivent respecter les droits des titulaires et les exceptions légales applicables (Code de la propriété intellectuelle).
 
 ## 4. Droit applicable et juridiction compétente
 
-Les présentes mentions légales sont régies par le droit français. En cas de litige, et à défaut de résolution amiable, les juridictions françaises seront seules compétentes.
+Les règles de droit applicable et de compétence sont déterminées selon la situation, en tenant compte des dispositions impératives, notamment celles protégeant les consommateurs.
 
 ---
 
@@ -168,8 +198,13 @@ Dernière mise à jour : {{date_du_jour}}
 - Confirmer sur Legifrance la version en vigueur de l'art. 1-1 de la loi n° 2004-575 (LCEN), https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000049568614 (vérifié le 2026-08-05).
 - Confirmer sur eur-lex.europa.eu la version actuelle du RGPD (règlement 2016/679) : articles 13, 14, 15-22.
 - Vérifier sur cnil.fr la dernière délibération sur les cookies (n° 2020-091 ou plus récente).
-- Sur le bandeau cookies : il doit présenter de manière équivalente les boutons "Accepter", "Refuser" et "Personnaliser". Pas de cases pré-cochées. Action positive obligatoire.
+- Vérifier la nécessité du consentement pour les traceurs réellement utilisés et les conditions des exemptions éventuelles ; vérifier que refuser est aussi simple qu’accepter lorsque le consentement est requis. Décrire seulement les fonctions effectivement disponibles.
 - Si transferts hors UE : préciser le mécanisme légal (CCT, BCR, décision d'adéquation, Data Privacy Framework si États-Unis). NE PAS oublier, c'est un point d'audit CNIL fréquent.
-- Si vous traitez des données sensibles (santé, opinions, biométrie, mineurs) : l'analyse d'impact (AIPD, art. 35 RGPD) peut être obligatoire, consulter un DPO ou un avocat spécialisé.
+- Distinguer les catégories particulières de données de l’art. 9 (notamment santé, opinions et biométrie aux fins d’identifier une personne de manière unique) des données de mineurs. Examiner les risques du traitement et les critères de l’art. 35 pour déterminer si une AIPD est nécessaire ; ne pas présumer que toute donnée de mineur relève de l’art. 9.
 - Le DPO devient obligatoire (art. 37 RGPD) dans certains cas : organisme public, surveillance régulière de personnes à grande échelle, traitement à grande échelle de données sensibles.
 - Pour un site e-commerce : ces mentions doivent être complétées par des **CGV** distinctes (non couvertes par ce modèle).
+
+- `presentation_responsable` identifie le ou les responsables réellement déterminés, leur contact et le site concerné ; ne pas assimiler automatiquement éditeur et responsable de tous les traitements.
+- `tableau_traitements` reprend les finalités réelles, données et bases vérifiées ; aucun tableau fictif compte/newsletter/statistiques n'est conservé par défaut. Les champs `information_*` et `modalites_conservation` décrivent les pratiques établies ou restent explicitement à compléter.
+- Adapter l'information sur les droits à leurs conditions d'exercice ; ne pas imposer systématiquement une pièce d'identité. Examiner les informations complémentaires des art. 13/14 (origine, fourniture obligatoire, conséquences, décision automatisée…) selon la collecte.
+- Source du contrat d'information, contrôle ciblé le 2026-09-10 : RGPD, art. 5, 6, 12 à 14, https://eur-lex.europa.eu/eli/reg/2016/679/oj/fra. Les affirmations factuelles doivent être confirmées par l'éditeur et les pièces.

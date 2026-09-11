@@ -4,3 +4,4 @@ AGENTS.md
 evals/
 .playwright-mcp/
 .env
+__pycache__/

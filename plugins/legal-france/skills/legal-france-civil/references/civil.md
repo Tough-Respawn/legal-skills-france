@@ -1,5 +1,14 @@
 # Civil Law : French Civil Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Dépôt de garantie / bail** : résidence principale, bail vide/meublé ou autre régime ; date du bail ; remise effective des clés et preuve ; comparaison des deux états des lieux ; sommes déjà rendues, retenues et justificatifs ; adresse nouvelle transmise et date ; immeuble collectif et charges au réel/forfait. Pièces : bail, états des lieux, reçu des clés, décompte, échanges et preuve de versement.
+- **Contrat / consommation** : qualité de chaque partie, objet, mode et date de conclusion, prestation et échéance, inexécution alléguée, demandes déjà faites. Pièces : contrat/CGV applicables, commande, facture, livraison, échanges.
+- **Responsabilité / voisinage** : faits datés, dommage, lien causal allégué, acteurs, assurances et démarches antérieures. Pièces : constat, photos datées, factures, échanges ; distinguer constat personnel et témoignage indirect.
+- **Famille / succession** : lien des personnes, dates pertinentes, régime matrimonial ou statut, décès/actes existants, mineurs, lieux de résidence et biens à l'étranger. Demander seulement les extraits d'actes utiles ; ne pas appliquer un régime français sans examiner l'élément international.
+
 ## Applicable Codes
 - Code civil (consolidated text, last amended at least 2025 : loi n° 2025-568 du 23 juin 2025 ; vérifié le 2026-08-04)
   - Persons and family: Arts. 7–515-13-1 (Livre Ier)

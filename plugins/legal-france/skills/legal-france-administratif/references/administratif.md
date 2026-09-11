@@ -1,5 +1,14 @@
 # Administrative Law : French Administrative Law
 
+## Faits décisifs et pièces
+
+À utiliser selon la situation, avec `skills/legal-france/references/qualification.md`. Ces questions sont conditionnelles ; réutiliser les faits et pièces déjà fournis.
+
+- **Décision / recours** : décision complète et annexes, autorité, objet exact, bénéficiaire/destinataire, dates de décision, publication, présentation et réception, voies/délais indiqués, demande initiale et accusé de réception. Pièces : acte, enveloppe/notification, accusés, échanges.
+- **Voie à suivre** : recours déjà fait, gracieux/hiérarchique ou préalable obligatoire, réponse ou silence, juridiction compétente et régime spécial (urbanisme, étrangers, fiscal, prestations sociales…). Ne pas appliquer automatiquement deux mois ni promettre un effet interruptif au recours gracieux.
+- **Urgence / territoire** : exécution imminente, audience, mesure d'éloignement, résidence et lieu de la juridiction si les délais de distance sont pertinents ; demander ces éléments avant d'annoncer une échéance.
+- **Fond du litige** : qualité juridique et intérêt à agir, faits invoqués par l'administration et faits contestés, demande concrète, pièces établissant chaque moyen ; ne pas demander à un particulier de fournir lui-même la bonne qualification juridique.
+
 ## Applicable Codes
 - Code de justice administrative (CJA) : arts. L1, L211-1, L311-1, L521-1, L521-2, L911-1, R421-1, R421-5, L761-1 and following
 - Code des relations entre le public et l'administration (CRPA) : arts. L100-1, L211-1, L211-2, L231-1, L311-1, L311-5, L311-6, L411-1 and following

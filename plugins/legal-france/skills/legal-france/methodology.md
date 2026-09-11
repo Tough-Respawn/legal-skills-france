@@ -2,6 +2,14 @@
 
 This file defines the seven structured response templates used by the legal-france skill. Each template includes trigger conditions, section structure, tone guidance, and an example skeleton. The template to use is selected by `SKILL.md`'s Response Protocol (command > role > request nature).
 
+Before selecting a response format, apply
+`skills/legal-france/references/qualification.md`. This applies to all seven
+formats and to directly invoked domain skills. Ask only decisive missing
+questions for a concrete case; answer general questions directly. Preserve
+the distinction between reported facts, examined evidence, disputed facts
+and hypotheses. State material assumptions and unresolved deadlines near
+the conclusions they affect, including in the plain-language short answer.
+
 ---
 
 ## Core Principle
@@ -301,10 +309,10 @@ Clauses abusives : ...
 **Section structure:**
 
 ### 1. Réponse courte (Short Answer)
-One to two sentences. Answer the question directly. No conditions, no hedging : just the clearest possible answer to what was asked. The user should understand the answer before reading any further.
+One to two sentences. Answer directly, with any condition that changes the outcome in the same short answer. If a decisive fact is unknown, say what can be concluded and what depends on that fact. Do not substitute confident wording for missing evidence or a verified applicable rule.
 
 ### 2. Explication (Context)
-Explain the answer in plain language. Give enough background for the user to understand why the law says what it says. Use analogies if helpful. Avoid "however" walls of caveats : save nuance for the next section.
+Explain the answer in plain language, including relevant exceptions. For a concrete dispute, briefly identify useful evidence, what has actually been examined, and any disputed or missing facts. Do not require a proof discussion for a purely general question.
 
 ### 3. Ce que dit la loi (What the Law Says)
 Cite the relevant article in simplified form: "Article 2224 of the Civil Code says you have 5 years to file a claim after you discover the damage." Provide the Legifrance or service-public.fr link if retrieved. Do not quote full article text, paraphrase clearly.
@@ -333,7 +341,7 @@ Source : https://www.legifrance.gouv.fr/...
 **Que faire concrètement**
 1. Demandez le bulletin par écrit (e-mail ou lettre) à votre employeur ou service RH.
 2. Si l'employeur refuse, signalez-le à l'Inspection du travail.
-3. Délai de prescription pour agir : 3 ans (art. L. 3245-1 C. trav.).
+3. Distinguez la demande de remise du bulletin et une éventuelle demande de paiement du salaire : vérifiez le délai propre à chaque action avant de donner une échéance.
 
 **Pour aller plus loin**
 - service-public.fr : https://www.service-public.fr/particuliers/vosdroits/F559
@@ -447,13 +455,13 @@ Le droit à la vie privée du salarié (art. 8 CEDH, art. 9 C. civ.) entre en te
 Résolution : La CEDH a posé le test de proportionnalité (CEDH, Barbulescu c. Roumanie, 2017)...
 
 **Synthèse croisée**
-Si la surveillance est déclarée illicite (problème n°2), les preuves obtenues sont irrecevables, ce qui affaiblit le fondement du licenciement (problème n°1). Par ailleurs, si la qualité de lanceur d'alerte est retenue (problème n°3), le licenciement constituerait une mesure de représailles prohibée...
+Si la surveillance est déclarée illicite (problème n°2), la preuve n'est pas automatiquement écartée dans le procès civil : il faut examiner le droit à la preuve, le caractère indispensable de sa production et la stricte proportionnalité de l'atteinte aux droits concurrents (Cass. ass. plén., 22 déc. 2023, n° 20-20.648 ; source : https://www.courdecassation.fr/decision/65855660673fa80008f8d98d, vérification ciblée le 2026-09-10). Si un signalement protégé et un lien avec la rupture sont établis, examiner séparément le régime des représailles et la nullité éventuelle...
 Conclusion globale : ...
 
 **Solutions & recommandations**
 1. Contester le licenciement devant le CPH en soulevant les trois moyens conjointement...
 2. Saisir la CNIL pour la surveillance illicite des e-mails...
-Recommandation : Priorité à l'action 1 (délai de prescription : 12 mois, art. L. 1471-1 C. trav.)...
+Recommandation : qualifier chaque action et son délai ; ne pas appliquer automatiquement le délai de douze mois aux demandes relevant d'une exception de l'art. L. 1471-1 C. trav. Demander les dates et faits nécessaires avant d'annoncer une échéance...
 
 ---
 *Ces informations sont fournies à titre indicatif et ne constituent pas un avis juridique...*
@@ -461,39 +469,22 @@ Recommandation : Priorité à l'action 1 (délai de prescription : 12 mois, art.
 
 ---
 
-## Judilibre Protocol
+## Accès aux sources : web et API facultatives
 
-When a user requests case-law research (the `/jurisprudence` command, or
-the Complex Case Protocol triggers a jurisprudential lookup), follow this
-protocol BEFORE falling back to `WebSearch site:legifrance.gouv.fr`:
+La recherche et la lecture des pages officielles constituent le parcours
+par défaut pour les textes comme pour la jurisprudence. Sélectionner la
+version applicable et déclarer les limites de lecture. La présence d'un
+compte PISTE ou de secrets dans l'environnement n'active aucune API.
 
-### Step 1 : Check PISTE credentials
+Si l'utilisateur demande l'API ou a déjà choisi ce mode dans la session :
 
-Verify `PISTE_CLIENT_ID` and `PISTE_CLIENT_SECRET` env vars are both set.
-If either is missing → skip Judilibre, use `WebSearch`, and emit the
-configuration hint once per session.
+- Textes français datés : lire `lib/legifrance-client.md` et utiliser le
+  client portable ; date utile et identifiant doivent être établis.
+- Jurisprudence de l'ordre judiciaire : lire `lib/judilibre-client.md`,
+  rechercher puis consulter les décisions nécessaires.
 
-### Step 2 : Follow the Judilibre client workflow
-
-Read `plugins/legal-france/lib/judilibre-client.md` and execute the call
-sequence (token, search, optional decision fetch). Use the chamber-code
-mapping table for French-format citations.
-
-### Step 3 : Cite using French legal citation standards
-
-Build citations from Judilibre metadata as defined in `## Citation
-Standards` of `skills/legal-france/SKILL.md`. Always append the Judilibre
-decision ID in parentheses: `Cass. soc., 25 nov. 2020, n° 19-13.340
-(Judilibre: 5fcb...)`.
-
-### Step 4 : On error, fall back
-
-Per the client workflow: silent fallback to `WebSearch` on 4xx/5xx (except
-401 which gets one retry). Add a one-line note in the response footer when
-the fallback was used.
-
-### Out of scope
-
-Judilibre covers Cour de cassation (and partially Cours d'appel) only.
-For Conseil d'État, Conseil constitutionnel, and CJUE, always use
-`WebFetch` against the relevant primary source.
+Les scripts ne sont pas requis pour la recherche web. Si l'API choisie ou
+son exécution est indisponible, revenir aux pages officielles en indiquant
+la limite. Ne pas inventer de résultat API ou de version applicable.
+Le choix d'un moyen d'accès ne remplace ni la qualification des faits ni
+la vérification des dispositions transitoires.

@@ -4,6 +4,50 @@ This reference covers the primary legal databases for French and European law: w
 
 ---
 
+## Qualification et consultation datée
+
+Appliquer `skills/legal-france/references/qualification.md` : rechercher la
+version applicable aux faits, examiner les dispositions transitoires et
+conserver URL, version, date de consultation et limites d'accès. Une API
+et une page web sont deux moyens d'accès ; aucune ne détermine seule le
+régime applicable. Ne pas présenter un résultat de recherche comme une
+lecture intégrale du texte.
+
+### Sources complémentaires selon la question
+
+- **Conventions collectives (KALI/Légifrance)** : rechercher par IDCC ou
+  intitulé dans https://www.legifrance.gouv.fr/liste/idcc?init=true ; vérifier
+  champ, classification, texte de base, avenants, extension et dates
+  pertinentes. Confronter l'identifiant figurant sur les pièces à l'activité
+  réelle et aux accords d'entreprise utiles, sans déduire la convention du
+  seul intitulé de poste. Annuaire consulté le 2026-09-10.
+- **BOSS / Urssaf** : https://boss.gouv.fr/ pour la doctrine administrative
+  sur les cotisations et contributions ; https://www.urssaf.fr/ pour les
+  démarches et informations pratiques. Chercher la rubrique et le paragraphe
+  correspondant à la période de paie ; vérifier les conditions d'application
+  et d'opposabilité, sans assimiler toute fiche pratique à un texte de loi.
+  Rôle du BOSS confirmé par l'Urssaf le 2026-09-10 :
+  https://www.urssaf.fr/accueil/services/mon-conseil-urssaf.html.
+  Accès direct au BOSS indisponible lors de cette revue : aucune doctrine
+  de paie individuelle n'est certifiée ici.
+- **ANIL / ADIL** : https://www.anil.org/ pour la documentation spécialisée
+  sur le logement et l'orientation locale ; sélectionner le type de bail et
+  le problème, puis remonter aux textes et décisions cités. Site consulté le
+  2026-09-10 ; l'information documentaire ne remplace pas le texte applicable.
+- **BODACC** : https://www.bodacc.fr/pages/annonces-commerciales/ ; chercher
+  l'entreprise par SIREN, contrôler son identité, filtrer les publications
+  pertinentes et lire les annonces de procédures collectives. Distinguer
+  date du jugement et date de publication ; conserver l'annonce et vérifier
+  les conséquences procédurales dans le texte applicable. L'absence de
+  résultat n'établit pas la solvabilité. Annuaire et données consultés le
+  2026-09-10 : https://www.bodacc.fr/explore/dataset/annonces-commerciales/.
+
+Ces indications décrivent une méthode de recherche ; elles n'ajoutent
+aucun connecteur ni abonnement API. Prochain contrôle : à chaque usage
+décisif ou changement identifié, selon le contrat commun.
+
+---
+
 ## 1. Légifrance
 
 **URL:** https://www.legifrance.gouv.fr
@@ -23,6 +67,17 @@ This reference covers the primary legal databases for French and European law: w
 - **Search by article number:** Enter the article number directly (e.g., "article 1240 code civil")
 - **Search case law:** Go to "Jurisprudence" → filter by court, date range, or keywords
 - **Search by decision number:** For Cour de cassation, use the pourvoi number; for Conseil d'État, use the requête number
+
+### API facultative
+
+La recherche et la lecture des pages restent le mode par défaut. Utiliser
+l'API seulement à la demande de l'utilisateur ou selon une préférence déjà
+exprimée dans la session, jamais à cause de la seule présence d'identifiants.
+Pour consulter un article ou un texte LEGI à une date explicite, suivre
+`lib/legifrance-client.md`. Pour la jurisprudence judiciaire, suivre
+`lib/judilibre-client.md`. Les deux utilisent le client Python portable
+`skills/legal-france/scripts/legal_api.py`. En cas d'échec, reprendre le
+parcours web ; l'absence d'API n'empêche pas la recherche juridique.
 
 ### URL patterns
 - Code article: `https://www.legifrance.gouv.fr/codes/article_lc/[LEGIARTI_ID]`

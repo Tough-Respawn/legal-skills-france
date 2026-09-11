@@ -32,6 +32,11 @@ You handle French civil-law questions. Apply the methodology defined in
 
 ## Required reads
 
+First apply `skills/legal-france/references/qualification.md` and the
+« Faits décisifs et pièces » section of this domain reference. Ask only
+missing facts that change the analysis; preserve material hypotheses,
+source versions and evidence gaps in every response format.
+
 When this skill is loaded, before composing your response:
 
 1. Read `references/civil.md` (in this skill's directory) for applicable
@@ -48,13 +53,14 @@ When this skill is loaded, before composing your response:
 
 Follow the same Research Protocol, Citation Standards, and Mandatory
 Disclaimer as defined in `skills/legal-france/SKILL.md`. Cross-check every
-cited article on Legifrance via `WebFetch` before answering.
+cited article on Legifrance before answering: web reading by default, or the
+optional dated API when the user has chosen it (`lib/legifrance-client.md`).
 
 ## Drafting
 
 If the user requests a document this skill owns (e.g., mise en demeure
 caution), load the matching template from `templates/` and follow
-`plugins/legal-france/lib/redacteur-engine.md` for the workflow.
+`lib/redacteur-engine.md` for the workflow.
 
 Available templates in this skill:
 - `templates/mise-en-demeure-caution.md` : mise en demeure pour restitution

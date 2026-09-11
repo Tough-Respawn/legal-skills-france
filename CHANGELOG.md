@@ -6,6 +6,84 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.1.0-beta.1] - 2026-09-11
+
+Version bêta : les appels API avec des identifiants valides et la régression
+complète sur la version finale restent à vérifier.
+
+### Added
+
+- Contrat commun de qualification, chargé par les huit skills : objectif,
+  urgence, faits décisifs, pièces utiles, contradictions, hypothèses explicites,
+  version temporelle applicable et calcul traçable des délais. Questions
+  conditionnelles par domaine ; identité demandée après les faits juridiques.
+- Client Python standard commun : consultation Légifrance d'articles et
+  textes LEGI à une date explicite, recherche et lecture Judilibre.
+  Activation par `--use-api`, OAuth en mémoire, erreurs structurées et repli
+  web. Identifiants communs PISTE ou couples spécifiques à chaque API.
+- Méthodes de recherche KALI, BOSS/Urssaf, ANIL et BODACC. Les journaux de
+  vérification et l'outillage d'évaluation restent locaux dans `evals/`.
+
+### Changed
+
+- Recherche et lecture web prioritaires pour tous les utilisateurs. L'API
+  nécessite une demande ou une préférence de session explicite ; la présence
+  d'identifiants seule n'active plus Judilibre. Aucune configuration imposée
+  au parcours web.
+- Ancien workflow Judilibre Bash/curl remplacé par le client Python portable.
+- Runner, tests du runner, quinze scénarios et deux journaux déplacés de
+  `tests/` vers `evals/`, déjà ignoré. Scénarios manuels et lint existants
+  conservés dans le dépôt ; liens publics vers les fichiers locaux retirés.
+- Fins de ligne des fichiers modifiés uniformisées en LF, convention ajoutée
+  dans `.gitattributes` ; quatre cadratins réintroduits remplacés par des
+  deux-points dans les modèles et le moteur.
+- Les dix modèles commencent par le régime applicable, les dates et les
+  preuves ; distinction entre faits à recueillir, identité, champs facultatifs
+  et résultats à calculer. Les inconnues décisives restent visibles dans un
+  brouillon incomplet. Les deux avertissements sont conservés.
+- Les réponses vulgarisées exposent aussi les hypothèses et lacunes de preuve
+  déterminantes. Vérification des sources décisives à l'usage ; les dates
+  historiques du fonds ne sont pas actualisées en bloc.
+- Lint étendu aux quatre sections du contrat, aux champs/conditions déclarés,
+  aux listes de textes et à l'accès au protocole commun. Versions des deux
+  manifests synchronisées à 3.1.0-beta.1 ; descriptions de déclenchement inchangées.
+
+### Fixed
+
+- Option `--env-file` acceptée avant le service, au niveau du service et
+  après l'opération, en préservant la valeur fournie aux niveaux précédents.
+  README clarifié sur la portée historique de la vérification du client curl.
+- Dépôt de garantie : remise des clés, conformité des états des lieux,
+  retenues, immeuble collectif, nouvelle adresse et majoration conditionnelle.
+- Travail : protection du salarié, calendrier de procédure, préavis à partir
+  de la notification et suppression des affirmations de régularité inventées.
+- Amendes et recours administratifs : suppression des délais universels et de
+  la prorogation automatique ; contrôle des actes et régimes spéciaux.
+- Plainte, attestation et confidentialité : pas de fait, pièce, formalité ou
+  conformité inventés pour compléter le document. Charge de la preuve et
+  recevabilité des preuves illicites corrigées dans les exemples concernés.
+- Corrections issues des exécutions : contrôle des assertions dans le corps
+  même de l'acte, chronologie d'entretien non présumée, qualité du destinataire
+  de l'amende à établir, réserve neutre dans le recours et tableau de collecte
+  pour les traitements non inventoriés.
+
+### Validation
+
+- Lint, huit tests hors ligne et validation du manifest réussis. Après
+  autorisation de l'utilisateur, smoke C1/NEG2 réussi avec Claude Code 2.1.251
+  et `claude-fable-5-1[1m]`. Trente-deux exécutions comportementales valides
+  réparties en quatre séries ; quinze cas disposent d'un PASS ciblé après
+  corrections, dont le parcours complet F1. Les échecs et réserves sont
+  conservés localement dans `evals/`. Ce bilan du 10 septembre précède le
+  changement de priorité web/API ; il ne valide pas la version finale ni une
+  absence de régression sur les 33 scénarios.
+- Passe du 11 septembre : documentation technique consultée et code relu,
+  sans tests ni appels authentifiés des nouveaux clients, à la demande de
+  l'utilisateur. Aucun succès API en production revendiqué.
+- Le protocole juridique est neutre ; la distribution reste celle du plugin
+  existant. Adaptateurs supplémentaires et descriptions conformes à la limite
+  Agent Skills de 1 024 caractères restent à traiter dans une autre passe.
+
 ## [3.0.3] - 2026-08-05
 
 ### Security

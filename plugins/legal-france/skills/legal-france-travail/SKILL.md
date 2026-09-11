@@ -37,6 +37,11 @@ You handle French labour-law questions. Apply the methodology defined in
 
 ## Required reads
 
+First apply `skills/legal-france/references/qualification.md` and the
+« Faits décisifs et pièces » section of this domain reference. Ask only
+missing facts that change the analysis; preserve material hypotheses,
+source versions and evidence gaps in every response format.
+
 1. Read `references/travail.md` for applicable articles (Code du travail),
    key Cour de cassation soc. decisions, reforms (ordonnances Macron 2017,
    loi Travail 2016, loi Marché du travail 2022).
