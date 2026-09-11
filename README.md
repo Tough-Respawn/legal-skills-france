@@ -1,15 +1,33 @@
 # legal-france : Plugin Claude Code pour le droit français / French Law Plugin for Claude Code
 
-> **FR :** Assistant juridique français pour Claude Code, 8 skills modulaires auto-déclenchants, 10 modèles de documents juridiques, intégration jurisprudence Cour de cassation (Judilibre).
-> **EN:** French law assistant for Claude Code, 8 modular auto-triggering skills, 10 legal document templates, Cour de cassation case-law integration (Judilibre).
+> **FR :** Assistant juridique français pour Claude Code, 8 skills modulaires auto-déclenchants et 10 modèles de documents juridiques. Recherche web prioritaire ; API Légifrance (textes datés) et Judilibre (jurisprudence judiciaire) facultatives.
+> **EN:** French law assistant for Claude Code, 8 modular auto-triggering skills and 10 legal document templates. Web search by default; optional Légifrance API for dated legislation and Judilibre API for judicial case law.
+
+**Version actuelle / Current version : [v3.1.0-beta.1](https://github.com/Tough-Respawn/claude-legal-skills-france/releases/tag/v3.1.0-beta.1) (préversion / prerelease).**
+
+Les appels API avec des identifiants valides et la régression complète sur la
+version finale restent à vérifier. L'installation documentée concerne Claude Code.
+_API calls with valid credentials and a full regression run on the final version
+remain to be verified. These installation instructions apply to Claude Code._
 
 ---
 
 ## Installation
 
+Avec Claude Code installé, exécutez ces deux commandes dans votre terminal :
+ajoutez d'abord le marketplace du projet, puis installez le plugin.
+_With Claude Code installed, run these two commands in your terminal: add the
+project's marketplace first, then install the plugin._
+
 ```bash
-claude plugin install legal-france
+claude plugin marketplace add Tough-Respawn/claude-legal-skills-france
+claude plugin install legal-france@legal-france
 ```
+
+Ouvrez ensuite une nouvelle session Claude Code pour charger le plugin.
+_Then start a new Claude Code session to load the plugin._
+
+[Documentation d'installation / Installation documentation](https://code.claude.com/docs/en/discover-plugins)
 
 ---
 
@@ -92,6 +110,8 @@ _7 structured templates aligned with French legal methodology:_
 | Procédure | Procedural law | `legal-france` (meta) | `skills/legal-france/references/procedure.md` |
 
 Références transversales / Cross-cutting references (méta skill `legal-france`) :
+
+- `skills/legal-france/references/qualification.md` : Faits décisifs, pièces utiles, hypothèses et délais / Decisive facts, supporting documents, assumptions and deadlines
 - `skills/legal-france/references/jurisprudence-cle.md` : 96 décisions clés / 96 landmark decisions
 - `skills/legal-france/references/glossaire.md` : ~170 termes / ~170 terms
 - `skills/legal-france/references/codes-index.md` : Index des codes français / Index of French legal codes
@@ -253,7 +273,7 @@ pas cette validation.
 
 | Version | Date | Description |
 |---------|------|-------------|
-| **v3.1.0-beta.1** | Septembre 2026 | Bêta : qualification commune, dix modèles révisés, API Légifrance datée et client Judilibre portable facultatifs |
+| **[v3.1.0-beta.1](https://github.com/Tough-Respawn/claude-legal-skills-france/releases/tag/v3.1.0-beta.1)** | Septembre 2026 | Bêta : qualification commune, dix modèles révisés, API Légifrance datée et client Judilibre portable facultatifs |
 | **v3.0.3** | Août 2026 | Durcissement : `.env` lu par extraction textuelle, jamais exécuté / Hardening: `.env` parsed textually, never executed |
 | **v3.0.2** | Août 2026 | Credentials PISTE via fichier `.env` (+ `.env.example`), tutoriel pas-à-pas d'obtention des clés vérifié en réel / PISTE credentials via `.env` file (+ `.env.example`), step-by-step key setup tutorial verified end-to-end |
 | **v3.0.1** | Août 2026 | Citations corrigées et sourcées (audit externe), lint statique, baseline de déclenchement mesurée, workflow Judilibre curl / Verified citations, static lint, measured triggering baseline, curl-based Judilibre workflow |
