@@ -1,15 +1,79 @@
 # Changelog : legal-france
 
-All notable changes to this plugin are documented here. The format is based
+All notable changes to this project are documented here. The format is based
 on [Keep a Changelog](https://keepachangelog.com/), and this project adheres
 to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [4.0.0] - 2026-09-12
+
+### Added
+
+- Installateur Python 3.10+ sans dépendance tierce, inspiré d'accounting :
+  portée personnelle par défaut, sélection d'un ou plusieurs harnais, portée
+  projet facultative et emplacement personnalisé. Destinations communes
+  dédupliquées, simulation, refus des conflits sans remplacement explicite.
+- Génération d'une archive de huit skills autonomes et d'exports Markdown
+  par domaines. Les références et les modèles partagés, les contrats API,
+  le client Python et la licence sont inclus dans chaque skill installé.
+- Matrice de compatibilité : chemins personnels et de projet documentés
+  pour dix applications, distinction entre installation, outils et modèle.
+
+### Changed
+
+- Présentation du projet indépendante d'un harnais. L'installation et les
+  commandes du plugin Claude restent disponibles pour les utilisateurs actuels.
+- Dépôt renommé `legal-skills-france`, liens d'installation et description
+  publique actualisés. Les noms du plugin et du marketplace restent `legal-france`.
+- Les paquets portables ont des descriptions sous 1 024 caractères, des
+  chemins internes résolus depuis leur SKILL.md et des instructions adaptées
+  aux capacités de l'application. La source juridique et les descriptions
+  historiques Claude ne sont pas dupliquées ni modifiées à la main.
+- Documentation PISTE : une application commune abonnée à plusieurs API,
+  configuration utilisée pour Légifrance et Judilibre lors de la validation,
+  ou applications séparées avec couples spécifiques. Priorité des identifiants
+  et refus des couples incomplets explicités dans le README et le modèle `.env`.
+- Les versions des deux manifests sont alignées sur 4.0.0, publiée sans statut
+  de préversion. Les limites de validation par harnais restent documentées.
+
+### Fixed
+
+- Refus des destinations Windows trop longues avant toute écriture :
+  contrôle des chemins de fichiers et de leurs dossiers parents en unités
+  UTF-16, y compris avec `--force` et en simulation. Une destination plus
+  courte est demandée pour éviter l'installation partielle signalée en revue.
+- Exclusion Git étendue aux variantes `.env.*`, dont les sauvegardes et les
+  fichiers locaux, avec exception pour le modèle versionné `.env.example`.
+
+### Validation
+
+- Génération du ZIP et d'un export civil effectuée, relecture des artefacts
+  et contrôles statiques. La revue indépendante communiquée le 12 septembre
+  rapporte des vérifications de l'installation et des huit skills, leur
+  découverte dans Claude Code 2.1.251 et une invocation explicite du skill
+  civil avec lecture de ses ressources. Le routage naturel était perturbé
+  par un ancien plugin global en doublon.
+- Vérification complémentaire du 12 septembre : refus des chemins Windows
+  trop longs avant toute écriture, en installation et simulation ; installation
+  en chemin court de 304 fichiers. Lint et validation du manifest réussis,
+  d'après le compte rendu fourni.
+- Douze cas API réussis sur douze, consignés dans le journal local du
+  12 septembre : appels authentifiés Légifrance et Judilibre, sélection datée,
+  bornes de version, erreurs explicites, recherche filtrée et lecture de
+  décision. Le couple commun `PISTE_*` sert les deux API dans la configuration
+  testée. Contrôle des six fichiers de sortie : aucune valeur d'identifiant
+  détectée, selon le compte rendu. Aucun rejeu lors de la mise à jour documentaire.
+- Les autres harnais, le routage portable, les parcours complets avec un modèle,
+  la pagination Judilibre au-delà de la première page, le tri, les filtres de
+  date et les limites de débit restent à vérifier. Ces essais techniques ne
+  valident pas une conclusion juridique ni une actualisation complète du fonds.
+
 ## [3.1.0-beta.1] - 2026-09-11
 
-Version bêta : les appels API avec des identifiants valides et la régression
-complète sur la version finale restent à vérifier.
+À la publication de cette bêta, les appels API avec des identifiants valides
+et la régression complète restaient à vérifier. Les essais API du 12 septembre
+sont consignés dans la section v4 ci-dessus.
 
 ### Added
 

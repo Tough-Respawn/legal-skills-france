@@ -34,6 +34,15 @@ commun `PISTE_CLIENT_ID` / `PISTE_CLIENT_SECRET` si aucun couple spécifique
 n'est renseigné. Les variables d'environnement priment sur les valeurs du
 fichier `.env`. Ne pas mélanger deux applications pour compléter un couple.
 
+Une seule application PISTE de production peut être abonnée à Légifrance et
+Judilibre : renseigner seulement `PISTE_*` pour partager son couple, comme
+dans la configuration validée le 12 septembre 2026. Autre possibilité : gérer
+deux applications depuis le même compte PISTE, chacune abonnée à son service,
+avec les couples `LEGIFRANCE_*` et `JUDILIBRE_*` correspondants. Accepter les
+CGU et souscrire à chaque API sur l'application qui l'appellera.
+Laisser les couples inutilisés vides ou absents, y compris dans l'environnement.
+Un couple spécifique incomplet est refusé sans emprunt au couple commun.
+
 Le compte et l'application PISTE doivent avoir accès à l'API **Légifrance
 stable en production** : un accès Judilibre ne prouve pas cet abonnement.
 Ne jamais lire les secrets avec un outil qui les afficherait dans la
@@ -114,7 +123,7 @@ les capacités web du harnais ; le programme ne lance pas lui-même de scraper.
 
 ## 6. Sources techniques
 
-Documentation consultée le **2026-09-11**, sans appel métier authentifié :
+Documentation consultée le **2026-09-11** :
 
 - [DILA : présentation de l'API stable](https://www.legifrance.gouv.fr/contenu/pied-de-page/open-data-et-api).
 - [Catalogue public PISTE](https://piste.gouv.fr/api-catalog-sandbox?sort=nd) :
@@ -123,6 +132,11 @@ Documentation consultée le **2026-09-11**, sans appel métier authentifié :
   réponses `GetArticleResponse`, `GetListArticleResponse`, `ConsultTextResponse`.
 - [Client SocialGouv : hôte de production et OAuth](https://github.com/SocialGouv/dila-api-client).
 
-La consultation du schéma et les contrôles sur données synthétiques ne
-valident pas le fonctionnement réel avec des identifiants valides. Cette
-validation authentifiée reste à effectuer.
+La validation technique du **2026-09-12**, consignée dans le journal local,
+comprend des appels authentifiés : articles et texte LEGI datés, résolution
+d'identifiant, bornes de version et refus d'une version absente. Le couple
+commun `PISTE_*` fonctionne dans l'application abonnée aux deux API qui a été
+testée. Ces résultats font partie des douze cas API réussis sur douze sous
+Windows 11 avec Python 3.12.9. Ils ne valident ni une conclusion juridique,
+ni un parcours complet avec un modèle, ni le comportement sous limitation
+de débit. KALI et JORF restent hors périmètre du client.

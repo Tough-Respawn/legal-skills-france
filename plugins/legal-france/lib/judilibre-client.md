@@ -24,6 +24,14 @@ Pour Judilibre, le couple spécifique est `JUDILIBRE_CLIENT_ID` et
 programme depuis l'environnement ou textuellement depuis `.env`, jamais
 récupérés dans la conversation ni transmis comme arguments de commande.
 
+Pour une application commune, l'abonner à Judilibre et Légifrance puis
+renseigner uniquement `PISTE_*`. Pour des applications séparées, renseigner
+`JUDILIBRE_*` avec le couple de l'application Judilibre et `LEGIFRANCE_*`
+avec celui de l'application Légifrance ; un même compte PISTE peut les gérer.
+Laisser les couples inutilisés vides ou absents. Un couple spécifique est
+prioritaire ; s'il est incomplet, le client le refuse sans emprunter la
+valeur manquante au couple commun.
+
 Résoudre le chemin du script depuis le plugin réellement chargé, sans
 supposer que le dossier courant est la racine du dépôt. Les exemples sont
 relatifs à `plugins/legal-france/`. Garder le dossier courant de l'utilisateur
@@ -109,5 +117,11 @@ Si aucune source n'est lisible, conserver le statut non vérifié.
 version 1.2.5 consultée le **2026-09-11** : `/search`, `/decision`, pagination,
 tri et champ `decision_date`. [Présentation officielle](https://github.com/Cour-de-cassation/judilibre-search).
 L'hôte de production et le flux OAuth PISTE reprennent l'intégration existante.
-Le fonctionnement du client Python avec des identifiants valides reste à
-vérifier ; les résultats historiques du client curl ne le valident pas.
+La validation technique du **2026-09-12**, consignée dans le journal local,
+comprend une recherche authentifiée filtrée par chambre, la lecture du texte
+intégral d'une décision et une recherche par numéro de pourvoi. Le couple
+commun `PISTE_*` sert Judilibre et Légifrance dans la configuration testée.
+Ces résultats font partie des douze cas API réussis sur douze sous Windows 11
+avec Python 3.12.9. La pagination au-delà de la première page, le tri, les
+filtres de date, les limites de débit et les parcours avec un modèle restent
+à vérifier. Un résultat technique réussi ne certifie pas une conclusion juridique.

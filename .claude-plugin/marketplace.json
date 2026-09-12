@@ -9,14 +9,14 @@
   "plugins": [
     {
       "name": "legal-france",
-      "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Judilibre case-law API integration. Covers civil, criminal, labor, business, administrative, digital, and European law.",
-      "version": "3.1.0-beta.1",
+      "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Legifrance and Judilibre APIs. Covers civil, criminal, labor, business, administrative, digital, and European law.",
+      "version": "4.0.0",
       "author": {
         "name": "Amine Harrak"
       },
       "source": "./plugins/legal-france",
       "category": "knowledge",
-      "homepage": "https://github.com/Tough-Respawn/claude-legal-skills-france"
+      "homepage": "https://github.com/Tough-Respawn/legal-skills-france"
     }
   ]
 }

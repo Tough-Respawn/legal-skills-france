@@ -4,4 +4,7 @@ AGENTS.md
 evals/
 .playwright-mcp/
 .env
+.env.*
+!.env.example
 __pycache__/
+dist/

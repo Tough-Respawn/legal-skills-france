@@ -87,8 +87,12 @@ credentials alone do not activate Judilibre.
 
 
 La vérification documentaire ne vaut pas réussite de l'intégration. Les
-mesures du 10 septembre portent sur le parcours web d'alors ; le nouveau
-client Python et la priorité web/API du 11 septembre n'ont pas été testés.
+mesures du 10 septembre portent sur le parcours web d'alors. La validation
+technique du 12 septembre a ensuite couvert les appels authentifiés du client
+Python Judilibre : recherche filtrée, lecture de décision et recherche par
+pourvoi, avec le couple commun PISTE. Ces essais techniques ne constituent
+pas un rejeu des scénarios conversationnels J1 à J5 ci-dessus ; leur table
+historique reste inchangée. La priorité web/API avec un modèle reste à vérifier.
 Les scénarios nécessitant l'API demandent une session capable d'exécuter le
 client. Consigner séparément les statuts HTTP, la source effective, la citation
 et les limites ; ne jamais conserver de secrets dans les traces. L'outillage
