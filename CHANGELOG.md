@@ -6,7 +6,7 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [4.1.0] - En préparation
+## [4.1.0] - 2026-09-12
 
 ### Changed
 

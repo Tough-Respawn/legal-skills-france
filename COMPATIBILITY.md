@@ -187,7 +187,7 @@ contexte et limiter les domaines. Aucun outil web ou exécutable n'est ajouté.
 
 ## Portée de la validation
 
-La v4.1.0 en préparation ajoute la source commune, le modèle `.env.example`
+La v4.1.0 ajoute la source commune, le modèle `.env.example`
 dans chaque skill, le parcours API direct et la délégation à l'installateur
 natif Claude. Les générations ont été effectuées ; aucun nouveau test de
 modèle, appel API ou installation dans un profil personnel n'a été lancé.
