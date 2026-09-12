@@ -13,6 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins/legal-france"
+SOURCE = ROOT / "src/legal-france"
 META = "legal-france"
 DOMAINS = ("civil", "penal", "travail", "affaires", "administratif", "numerique", "europeen")
 NAMES = (META, *(f"{META}-{domain}" for domain in DOMAINS))
@@ -30,16 +31,6 @@ AGENTS = {
     "roo-code": (".agents/skills", ".agents/skills"),
     "amp": (".agents/skills", ".agents/skills"),
 }
-DESCRIPTIONS = {
-    META: "Droit français : questions générales sur ses droits, procédure, délais, recours et litiges mêlant plusieurs domaines. Recherche de jurisprudence et rédaction transversale de documents. French law, legal research, case law, limitation periods, multi-domain disputes and legal drafting.",
-    "legal-france-civil": "Droit civil français : bail, locataire, proprio, caution, dépôt de garantie, loyer, voisinage, contrat, vente, remboursement, responsabilité, dommage, divorce, famille et succession. Rédaction de mise en demeure. French civil law, tenancy deposit, consumer rights, family and inheritance.",
-    "legal-france-penal": "Droit pénal français : plainte, victime, infraction, amende, contravention, garde à vue, vol, escroquerie, violences, procureur et procédure pénale. Rédaction de plainte et contestation d'amende. French criminal law, police custody, criminal complaint and traffic fines.",
-    "legal-france-travail": "Droit du travail français : CDI, CDD, salarié, employeur, patron, licenciement, viré, démission, rupture conventionnelle, salaire, harcèlement et prud'hommes. Rédaction de documents de rupture du contrat de travail. French labor law, dismissal, employment rights and workplace harassment.",
-    "legal-france-affaires": "Droit des affaires français : société, SAS, SARL, associé, dirigeant, commerce, concurrence, marque, brevet, recouvrement, liquidation et entreprise en difficulté. French business law, company formation, shareholder disputes, commercial debt and insolvency.",
-    "legal-france-administratif": "Droit administratif français : préfecture, administration, mairie, permis, décision administrative, recours gracieux, tribunal administratif, fonction publique et marchés publics. French administrative law, public authorities, permits and administrative appeals.",
-    "legal-france-numerique": "Droit numérique français et européen : RGPD, CNIL, données personnelles, cookies, e-commerce, mentions légales, confidentialité, cybersécurité, DPO et droit à l'oubli. GDPR, French digital law, privacy policy, personal data and data protection complaints.",
-    "legal-france-europeen": "Droit européen : droit de l'Union, directive, règlement, CJUE, primauté, transposition, marché intérieur, libre circulation, Charte des droits fondamentaux et CEDH. European Union law, EU regulations, directives, fundamental rights and European courts.",
-}
 PORTABLE_CONTEXT = """## Environnement et ressources
 
 Le dossier contenant ce SKILL.md est la racine du skill. Tous les chemins
@@ -48,32 +39,6 @@ de cette racine, même depuis un document imbriqué. Résoudre les fichiers depu
 l'emplacement réellement chargé, jamais depuis le dossier courant du projet.
 Les protocoles placés dans resources sont des documents, pas d'autres skills
 à installer. Ne charger que les références utiles à la question.
-
-Utiliser les capacités de lecture, de recherche et d'exécution réellement
-disponibles dans l'application, en respectant ses permissions. Les noms de
-commandes slash mentionnés dans les protocoles illustrent le plugin Claude ;
-ils ne créent pas de commandes dans les autres applications. La sélection
-du skill ou une demande en langage naturel permettent les mêmes tâches.
-Si un fichier ou le web est inaccessible, demander les extraits nécessaires
-ou présenter les points non vérifiés, sans simuler une consultation.
-Afficher la progression seulement si l'interface et le format demandé le
-permettent ; préserver notamment une sortie JSON unique si elle est demandée.
-
-Une demande explicite de rédaction ou de recherche de jurisprudence suffit
-à sélectionner ce parcours, sans commande slash. Pour rédiger un document,
-lire resources/lib/redacteur-engine.md et choisir son modèle dans le catalogue ;
-si le type manque ou ne correspond pas, présenter les modèles pertinents.
-Ce parcours prime sur le format de réponse par défaut du profil utilisateur.
-Pour une recherche de décisions, utiliser le format Recherche de jurisprudence
-de resources/legal-france/methodology.md, lire les décisions et distinguer
-les juridictions couvertes par les sources consultées. Conserver les règles
-de qualification, de vérification, de cas complexe et l'avertissement juridique.
-
-Le web reste prioritaire. Exécuter scripts/legal_api.py seulement après un
-choix explicite du mode API, avec Python disponible et --use-api. Utiliser le
-chemin absolu du script, conserver le dossier courant de l'utilisateur pour
-.env, ou fournir --env-file. Ne jamais afficher les identifiants. Les scripts
-ne sont pas requis pour lire les instructions et les références.
 
 """
 
@@ -132,19 +97,19 @@ def source_files():
     """Explicit allowlist: never collect .env, caches, evaluations or settings."""
     files = {}
     for name in NAMES:
-        directory = PLUGIN / "skills" / name
+        directory = SOURCE / "skills" / name
         if not (directory / "SKILL.md").is_file():
             raise ValueError(f"Skill source absent : {directory}")
         for path in sorted(directory.rglob("*")):
             if is_link(path):
                 raise ValueError(f"Lien dans les sources : {path}")
             if path.is_file() and path.suffix == ".md":
-                files[path.relative_to(PLUGIN).as_posix()] = path.read_bytes()
+                files[path.relative_to(SOURCE).as_posix()] = path.read_bytes()
     for name in ("redacteur-engine.md", "legifrance-client.md", "judilibre-client.md"):
-        path = PLUGIN / "lib" / name
+        path = SOURCE / "lib" / name
         files[f"lib/{name}"] = path.read_bytes()
     script = "skills/legal-france/scripts/legal_api.py"
-    files[script] = (PLUGIN / script).read_bytes()
+    files[script] = (SOURCE / script).read_bytes()
     return files
 
 
@@ -164,7 +129,6 @@ def portable_text(text, origin, sources):
     for source in sources:
         target = resource_path(source)
         mapping[source] = target
-        mapping[f"plugins/legal-france/{source}"] = target
         if source.startswith("skills/"):
             relative = "/".join(source.split("/")[2:])
             if relative != "SKILL.md":
@@ -173,13 +137,9 @@ def portable_text(text, origin, sources):
     mapping["templates/"] = f"resources/{context}/templates/"
     pattern = r"(?<![\w./-])(?:" + "|".join(re.escape(key) for key in sorted(mapping, key=len, reverse=True)) + r")(?![\w.-])"
     text = re.sub(pattern, lambda match: mapping[match.group()], text)
-    text = text.replace("using the Read tool", "using the available file-reading capability")
-    text = text.replace("use the Read tool", "use the available file-reading capability")
-    text = text.replace("WebFetch", "web page reading").replace("WebSearch", "web search")
-    text = text.replace("la racine `plugins/legal-france/`", "la racine du skill installé")
-    text = text.replace("relatifs à `plugins/legal-france/`", "relatifs à la racine du skill installé")
-    text = text.replace("depuis le plugin réellement chargé", "depuis le skill réellement chargé")
-    text = text.replace("l'emplacement réellement chargé du plugin", "l'emplacement réellement chargé du skill")
+    text = text.replace("la racine du module chargé", "la racine du skill installé")
+    text = text.replace("depuis le module réellement chargé", "depuis le skill réellement chargé")
+    text = text.replace("l'emplacement réellement chargé du module", "l'emplacement réellement chargé du skill")
     text = text.replace("adjacent au skill méta", "inclus dans chaque skill installé")
     text = re.sub(r"beside this resources/[^\s]+\.md", "at the installed skill root", text)
     return text
@@ -187,41 +147,51 @@ def portable_text(text, origin, sources):
 
 def portable_files():
     sources = source_files()
-    version = json.loads((PLUGIN / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))["version"]
+    version = json.loads((ROOT / "project.json").read_text(encoding="utf-8"))["version"]
     license_bytes = (ROOT / "LICENSE").read_bytes()
+    example_bytes = (ROOT / ".env.example").read_bytes()
+    runtime = portable_text((SOURCE / "runtime.md").read_text(encoding="utf-8"), "runtime.md", sources)
     common = {}
     bodies = {}
+    descriptions = {}
     for source, content in sources.items():
         if source.endswith(".py"):
             common[resource_path(source)] = content
             continue
         text = content.decode("utf-8").replace("\r\n", "\n")
         if source.endswith("/SKILL.md"):
-            _, text = split_skill(text)
-            bodies[source.split("/")[1]] = portable_text(text, source, sources)
+            frontmatter, text = split_skill(text)
+            name = source.split("/")[1]
+            # Canonical descriptions use JSON strings, a YAML-compatible subset.
+            descriptions[name] = json.loads(re.search(r"^description: (.+)$", frontmatter, re.M).group(1))
+            bodies[name] = portable_text(text, source, sources)
         common[resource_path(source)] = portable_text(text, source, sources).encode("utf-8")
     files = {}
     for name in NAMES:
-        description = DESCRIPTIONS[name]
+        description = descriptions[name]
         if not 1 <= len(description) <= 1024:
             raise ValueError(f"Description portable hors limite : {name}")
         header = (
             f"---\nname: {name}\ndescription: {json.dumps(description, ensure_ascii=False)}\n"
             f"license: MIT\nmetadata:\n  version: {json.dumps(version)}\n  distribution: portable\n---\n\n"
         )
-        files[f"{name}/SKILL.md"] = (header + PORTABLE_CONTEXT + bodies[name]).encode("utf-8")
+        files[f"{name}/SKILL.md"] = (header + PORTABLE_CONTEXT + runtime + "\n" + bodies[name]).encode("utf-8")
         files[f"{name}/LICENSE"] = license_bytes
+        files[f"{name}/.env.example"] = example_bytes
         for relative, content in common.items():
             files[f"{name}/{relative}"] = content
     return files
 
 
-def write_files(plan, force=False, dry_run=False):
+def write_files(plan, force=False, dry_run=False, generated=False):
     """Preflight every destination before writing; never remove extra files."""
     pending = []
     for target, content in plan.items():
         target = checked_path(target)
-        if target.is_relative_to(PLUGIN) or target == ROOT / "LICENSE":
+        if (target.is_relative_to(SOURCE) or target.is_relative_to(ROOT / "adapters")
+                or target.is_relative_to(ROOT / "scripts")
+                or target in {ROOT / "LICENSE", ROOT / ".env.example", ROOT / "project.json"}
+                or (target.is_relative_to(PLUGIN) and not generated)):
             raise ValueError(f"Refus de modifier les sources : {target}")
         for parent in target.parents:
             check_windows_path_length(parent, directory=True)
@@ -275,26 +245,38 @@ def installation_roots(args):
     base = checked_path(args.project if scope == "project" else Path.home())
     if not base.is_dir():
         raise ValueError(f"Dossier de projet ou personnel absent : {base}")
-    agents = args.agent or choose_agents()
+    agents = args.agent or []
     print(f"Portée : {'tous vos projets (compte utilisateur)' if scope == 'user' else 'projet sélectionné'}")
-    return list(dict.fromkeys(checked_path(base / AGENTS[agent][scope == "project"]) for agent in agents))
+    return list(dict.fromkeys(checked_path(base / AGENTS[agent][scope == "project"]) for agent in agents if agent != "claude-code"))
 
 
 def install(args):
+    if args.skills_dir is None and not args.agent:
+        args.agent = choose_agents()
     roots = installation_roots(args)
+    from claude_adapter import prepare_install, run_install, refuse_duplicate_copy
+    native = None
+    if "claude-code" in (args.agent or []):
+        native = prepare_install(ROOT, args, NAMES)
+    for directory in roots:
+        refuse_duplicate_copy(directory, args, NAMES)
     files = portable_files()
     plan = {}
     for directory in roots:
         for name in NAMES:
             destination = directory / name
-            if destination.is_relative_to(PLUGIN) or PLUGIN.is_relative_to(destination):
+            if any(destination.is_relative_to(path) or path.is_relative_to(destination) for path in (PLUGIN, SOURCE)):
                 raise ValueError(f"La destination recouvre les sources : {destination}")
         print(f"Destination des huit skills : {directory}")
         plan.update((directory / relative, content) for relative, content in files.items())
+    # Validate every copy before asking the native manager to change anything.
+    if native:
+        write_files(plan, args.force, dry_run=True)
+        run_install(native, args.dry_run)
     write_files(plan, args.force, args.dry_run)
     if not args.dry_run:
         print("Rechargez les skills ou ouvrez une nouvelle session dans l'application choisie.")
-        print("Les commandes du plugin Claude ne sont pas installées par cette copie de skills.")
+        print("Le plugin natif Claude conserve ses commandes ; les autres harnais utilisent les skills.")
         print("Évitez une seconde copie du même skill dans un autre dossier découvert par l'application.")
 
 
@@ -310,6 +292,13 @@ def package(args):
     target = checked_path(args.output)
     write_files({target: buffer.getvalue()}, args.force, args.dry_run)
     print(f"Archive : {target} ({len(buffer.getvalue())} octets, huit dossiers autonomes)")
+
+
+def build(args):
+    from claude_adapter import distribution
+    metadata = json.loads((ROOT / "project.json").read_text(encoding="utf-8"))
+    plan = distribution(ROOT, source_files(), metadata, (SOURCE / "runtime.md").read_text(encoding="utf-8"))
+    write_files(plan, args.force, args.dry_run, generated=True)
 
 
 def export(args):
@@ -347,6 +336,7 @@ def parser():
     result = argparse.ArgumentParser(description=__doc__)
     commands = result.add_subparsers(dest="command", required=True)
     commands.add_parser("list", help="Afficher les applications et les destinations")
+    builder = commands.add_parser("build", help="Générer le plugin Claude depuis la source commune")
     installer = commands.add_parser("install", help="Installer pour tous vos projets par défaut")
     targets = installer.add_mutually_exclusive_group()
     targets.add_argument("--agent", nargs="+", choices=AGENTS)
@@ -358,7 +348,7 @@ def parser():
     exporter = commands.add_parser("export", help="Créer un contexte Markdown pour les interfaces sans skills")
     exporter.add_argument("--domain", nargs="+", choices=(*DOMAINS, "all"), required=True)
     exporter.add_argument("--output", type=Path, required=True)
-    for command in (installer, packager, exporter):
+    for command in (installer, packager, exporter, builder):
         command.add_argument("--dry-run", action="store_true", help="Afficher les écritures prévues sans écrire")
         command.add_argument("--force", action="store_true", help="Remplacer les fichiers distribués différents, conserver les fichiers supplémentaires")
     return result
@@ -369,12 +359,17 @@ def main(argv=None):
     try:
         if args.command == "list":
             for name, (personal, project) in AGENTS.items():
-                print(f"{name:16} personnel : ~/{personal:30} projet : {project}")
+                if name == "claude-code":
+                    print(f"{name:16} gestionnaire natif de plugins ; portée user ou project")
+                else:
+                    print(f"{name:16} personnel : ~/{personal:30} projet : {project}")
             print("Les applications utilisant .agents/skills partagent une seule copie.")
         elif args.command == "install":
             install(args)
         elif args.command == "package":
             package(args)
+        elif args.command == "build":
+            build(args)
         else:
             export(args)
     except (OSError, ValueError, EOFError) as error:

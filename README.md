@@ -5,6 +5,13 @@
 
 **Version : [v4.0.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.0.0).**
 
+**Dans cette branche : v4.1.0 en préparation**, avec source commune,
+installation Claude native depuis le même installateur et parcours API direct.
+La release v4.0.0 et son ZIP ne contiennent pas encore ces changements.
+
+**Configuration API facultative : [.env.example](.env.example)**, à la racine
+du dépôt. Le même modèle vide est inclus dans chaque skill portable généré.
+
 Les destinations d'installation sont documentées pour dix applications.
 La validation technique du 12 septembre 2026 compte douze cas API réussis,
 dont des appels authentifiés à Légifrance et Judilibre. Le chargement et le
@@ -30,11 +37,13 @@ python scripts/skill.py install
 Selon votre installation de Python, utilisez `python3` sous macOS/Linux ou
 `py -3` sous Windows à la place de `python`.
 
-Choisissez une ou plusieurs applications dans le menu. Le script installe
-les huit skills dans votre dossier personnel : ils sont disponibles dans
-tous vos projets sur cette machine, selon les capacités de votre harnais.
-Les applications utilisant le même dossier partagent une seule copie.
-Rechargez ensuite les skills ou ouvrez une nouvelle session.
+Choisissez une ou plusieurs applications dans le menu. Pour Claude Code,
+l'installateur utilise son gestionnaire natif : il installe ou met à jour le
+plugin publié, avec ses commandes habituelles. Pour les autres applications,
+il copie les huit skills depuis le dépôt téléchargé vers votre dossier personnel.
+La portée par défaut couvre tous vos projets. Les applications utilisant le
+même dossier de skills partagent une copie. Rechargez ensuite les skills ou
+ouvrez une nouvelle session.
 
 Pour indiquer directement les applications :
 
@@ -42,9 +51,11 @@ Pour indiquer directement les applications :
 python scripts/skill.py install --agent codex cursor
 ```
 
-**Vous utilisez déjà le plugin Claude Code ?** Gardez l'installation ci-dessous
-et sélectionnez uniquement vos autres harnais dans l'installateur portable.
-Évitez deux installations des mêmes skills dans une application.
+**Vous utilisez déjà le plugin Claude Code ?** Vous pouvez le sélectionner
+dans le même installateur : sa mise à jour passe par le gestionnaire natif,
+sans ajouter de copie autonome. Les noms du plugin et des commandes restent
+inchangés. Si des skills Claude autonomes sont déjà présents, l'installateur
+signale le conflit et les conserve ; leur migration demande un choix explicite.
 
 L'installation par projet reste facultative :
 
@@ -55,11 +66,14 @@ python scripts/skill.py install --agent cursor --project "C:\Projets\mon-projet"
 Le dossier de projet doit exister. `list` affiche les applications et leurs
 destinations ; `--dry-run` simule les écritures. Un fichier différent n'est
 remplacé qu'avec `--force`, après sauvegarde de vos adaptations éventuelles.
-Sous Windows, une destination trop longue est refusée avant toute écriture :
+Pour les copies portables sous Windows, une destination trop longue est refusée avant toute écriture :
 choisissez alors un dossier plus court. Les limites sont précisées dans
 [COMPATIBILITY.md](COMPATIBILITY.md#écritures-et-mises-à-jour).
 Pour mettre à jour, télécharger la nouvelle version et relancer la même
-commande. Le script ne modifie pas les réglages de vos applications.
+commande, avec `--force` pour remplacer les fichiers portables modifiés.
+Pour Claude, le gestionnaire natif conserve la gestion de sa configuration
+et télécharge la version publiée du marketplace. Le mode `--dry-run` affiche
+ses commandes sans les lancer. Voir [COMPATIBILITY.md](COMPATIBILITY.md).
 
 **Sans Python :** télécharger [legal-france-skills.zip](https://github.com/Tough-Respawn/legal-skills-france/releases/download/v4.0.0/legal-france-skills.zip)
 puis décompresser et copier ses huit dossiers dans le dossier personnel de skills de
@@ -71,6 +85,9 @@ more hosts interactively or with `--agent`. Use `--project` only for a project
 installation. The generated ZIP also supports manual installation without Python._
 
 ## Plugin Claude Code / Claude Code plugin
+
+L'installateur commun prend maintenant en charge ce parcours. Les commandes
+natives suivantes restent disponibles pour les utilisateurs qui les préfèrent.
 
 Avec Claude Code installé, exécutez ces deux commandes dans votre terminal :
 ajoutez d'abord le marketplace du projet, puis installez le plugin.
@@ -291,7 +308,17 @@ présentées dans l'option A.
 
 ##### Option A : Fichier `.env` à la racine du projet (le plus simple à gérer)
 
-Créez un fichier nommé `.env` **dans le dossier de travail de votre session**, quelle que soit l'application utilisée. Pour un autre emplacement, indiquez son chemin afin que le client utilise `--env-file`. Un modèle est fourni dans le dépôt : [.env.example](plugins/legal-france/.env.example).
+Le modèle vide est à la racine du dépôt : **[.env.example](.env.example)**.
+Dans un skill portable installé, il se trouve à côté de son `SKILL.md`.
+Dans le plugin Claude, la copie historique `plugins/legal-france/.env.example`
+reste fournie. Si votre explorateur masque les fichiers commençant par un
+point, utilisez le lien ci-dessus ou activez leur affichage.
+
+Copiez ce modèle sous le nom `.env` **dans le dossier de travail de votre
+session**, puis renseignez-le localement. Conservez tout `.env` déjà présent.
+Pour un autre emplacement, indiquez son chemin afin que le client utilise
+`--env-file`. Le client peut aussi utiliser les variables d'environnement,
+sans fichier `.env`.
 
 **Avec une seule application abonnée aux deux API**, renseignez uniquement :
 
@@ -472,15 +499,21 @@ Limitez les domaines et vérifiez la capacité de contexte de votre application.
 
 ## Contribuer / Contributing
 
+La source commune est dans `src/legal-france/`, les métadonnées et la version
+dans `project.json`. Modifier ces sources, puis générer le plugin avec
+`python scripts/skill.py build --force`. Le dossier `plugins/legal-france/`
+est une distribution générée conservée pour les utilisateurs Claude.
+Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le cycle de génération.
+
 **Règle de traçabilité / Traceability rule :** toute citation juridique ajoutée dans `references/` doit être vérifiée sur Legifrance et accompagnée de l'URL de l'article et de la date de vérification (voir le format dans `legal-france-administratif/references/administratif.md`). _Any legal citation added to `references/` must be verified on Legifrance and carry the article URL + verification date._
 
 Pour enrichir les références :
-- **Référence d'un domaine spécifique** : ajoutez dans `plugins/legal-france/skills/legal-france-<domaine>/references/<domaine>.md` (par exemple `legal-france-travail/references/travail.md`).
-- **Référence transversale** (procédure, jurisprudence clé, glossaire, codes-index, sources) : ajoutez dans `plugins/legal-france/skills/legal-france/references/<fichier>.md`.
+- **Référence d'un domaine spécifique** : ajoutez dans `src/legal-france/skills/legal-france-<domaine>/references/<domaine>.md`.
+- **Référence transversale** (procédure, jurisprudence clé, glossaire, codes-index, sources) : ajoutez dans `src/legal-france/skills/legal-france/references/<fichier>.md`.
 
 _To enrich references:_
-- _Domain-specific: add to `plugins/legal-france/skills/legal-france-<domain>/references/<domain>.md`._
-- _Cross-cutting (procedure, key case law, glossary, codes-index, sources): add to `plugins/legal-france/skills/legal-france/references/<file>.md`._
+- _Domain-specific: add to `src/legal-france/skills/legal-france-<domain>/references/<domain>.md`._
+- _Cross-cutting: add to `src/legal-france/skills/legal-france/references/<file>.md`._
 
 ---
 

@@ -6,6 +6,30 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [4.1.0] - En préparation
+
+### Changed
+
+- Source commune dans `src/legal-france/`, version dans `project.json` et
+  particularités Claude dans son adaptateur. Le plugin généré conserve son
+  emplacement, ses noms, ses commandes et ses descriptions de déclenchement.
+- Un seul installateur : gestion native du plugin pour Claude, copies autonomes
+  pour les autres harnais. Détection des doublons dans les emplacements Claude
+  connus ; aucune suppression automatique des installations existantes.
+- Accès API direct lorsque le service est explicitement choisi et que les
+  paramètres utiles sont présents. Le web reste le mode par défaut et le repli
+  explicite ; les références juridiques sont chargées selon l'analyse demandée.
+- Modèle `.env.example` visible à la racine, conservé dans le plugin historique
+  et inclus dans chaque skill portable. Le fichier d'identifiants `.env` de
+  l'utilisateur n'est ni lu ni modifié par la génération ou l'installation.
+
+### Validation
+
+- Génération du plugin, du ZIP et de l'export documentaire, avec relecture
+  statique. Aucun test de modèle, appel API ou installation dans les profils
+  personnels dans cette passe. L'accélération des appels et l'installation
+  native commune restent à mesurer ; les résultats v4.0.0 restent historiques.
+
 ## [4.0.0] - 2026-09-12
 
 ### Added

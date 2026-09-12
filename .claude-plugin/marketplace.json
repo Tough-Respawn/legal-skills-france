@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "legal-france",
-  "description": "French law assistant with domain-specific expertise across civil, criminal, labor, business, administrative, digital, and European law",
+  "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Legifrance and Judilibre APIs. Covers civil, criminal, labor, business, administrative, digital, and European law.",
   "owner": {
     "name": "Amine Harrak",
     "email": "leebrdataconsulting@proton.me"
@@ -9,8 +9,8 @@
   "plugins": [
     {
       "name": "legal-france",
+      "version": "4.1.0",
       "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Legifrance and Judilibre APIs. Covers civil, criminal, labor, business, administrative, digital, and European law.",
-      "version": "4.0.0",
       "author": {
         "name": "Amine Harrak"
       },

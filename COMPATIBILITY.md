@@ -26,8 +26,10 @@ python scripts/skill.py install --agent codex cursor
 La portée par défaut est **user** : tous les projets du compte utilisateur
 sur cette machine, pour les applications qui découvrent ce dossier. Aucune
 installation administrateur ni synchronisation vers d'autres ordinateurs.
-Le script affiche les destinations, ne modifie aucun réglage d'application,
-ne télécharge rien et n'accède pas aux identifiants API.
+Le script affiche les destinations. Pour les skills portables, il copie les
+fichiers sans téléchargement ni modification des réglages. Pour Claude Code,
+il délègue au gestionnaire natif, qui peut télécharger le plugin et actualiser
+sa configuration. Aucun de ces parcours n'utilise les identifiants PISTE.
 
 ## Destinations documentées
 
@@ -38,7 +40,7 @@ installateur, parmi les emplacements documentés par les applications.
 
 | Application | `--agent` | Installation personnelle | Installation de projet | Source officielle |
 |---|---|---|---|---|
-| Claude Code | `claude-code` | `~/.claude/skills/` | `.claude/skills/` | [Claude Code](https://code.claude.com/docs/en/skills) |
+| Claude Code | `claude-code` | Plugin natif, portée `user` | Plugin natif, portée `project` | [Claude Code](https://code.claude.com/docs/en/discover-plugins) |
 | Codex | `codex` | `~/.agents/skills/` | `.agents/skills/` | [OpenAI](https://learn.chatgpt.com/docs/build-skills) |
 | Cursor | `cursor` | `~/.agents/skills/` | `.agents/skills/` | [Cursor](https://cursor.com/docs/skills) |
 | GitHub Copilot | `github-copilot` | `~/.agents/skills/` | `.agents/skills/` | [GitHub](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) |
@@ -56,9 +58,24 @@ d'un réglage qui limite l'accès aux seuls harnais nommés dans la commande.
 
 Un harnais peut découvrir plusieurs dossiers. Éviter de cumuler une copie
 personnelle, une copie projet et un plugin contenant les mêmes skills.
-Pour un utilisateur actuel du plugin Claude, conserver l'installation du
-plugin et sélectionner seulement les autres applications dans cet utilitaire.
-Les priorités entre copies dépendent du harnais.
+Pour un utilisateur actuel du plugin Claude, le même installateur appelle la
+mise à jour native dans la portée demandée. Il conserve le nom
+`legal-france@legal-france` et ses commandes. Les copies autonomes détectées
+dans les dossiers Claude personnels ou du projet bloquent l'ajout du plugin ;
+elles ne sont pas supprimées. Une copie personnalisée dans un dossier Claude
+est également refusée si le plugin est déjà installé.
+
+Les métadonnées d'installation Claude sont lues dans le dossier de configuration
+habituel ou `CLAUDE_CONFIG_DIR`, sans lire les réglages contenant des secrets.
+Un marketplace du même nom pointant vers une autre source est conservé et
+demande une gestion manuelle. Les autres emplacements personnalisés, profils
+et environnements distants ne sont pas inventoriés automatiquement.
+
+Claude utilise la version publiée du marketplace ; les autres harnais reçoivent
+la version du dépôt téléchargé. Pour développer le plugin généré localement,
+utiliser le mécanisme `--plugin-dir` de Claude. En simulation, aucune commande
+Claude n'est exécutée. Si un téléchargement natif échoue, les étapes suivantes
+ne sont pas lancées ; vérifier l'état dans le gestionnaire avant de reprendre.
 
 ## Projet et emplacement personnalisé
 
@@ -87,7 +104,7 @@ python scripts/skill.py install --agent cursor --dry-run
 python scripts/skill.py install --agent cursor --force
 ```
 
-La simulation affiche les destinations et le nombre de fichiers sans écrire.
+Pour les copies portables, la simulation affiche les destinations et le nombre de fichiers sans écrire.
 Tous les conflits sont recherchés avant l'écriture. Les fichiers identiques
 restent intacts ; un fichier différent bloque l'installation sans `--force`.
 Avec `--force`, les fichiers distribués sont remplacés et les fichiers
@@ -104,10 +121,15 @@ chemins tiennent dans ces limites. Voir les
 Une interruption ou erreur disque pendant l'écriture peut laisser une copie
 partielle ; relancer la même version pour compléter les fichiers.
 
-Pour mettre à jour, télécharger la nouvelle version puis relancer la même
-commande, avec `--force` si les fichiers distribués ont changé. Aucune mise
-à jour automatique, suppression d'anciens fichiers ou désinstallation
-d'autres plugins n'est effectuée.
+Pour mettre à jour les copies portables, télécharger la nouvelle version puis
+relancer la même commande, avec `--force` si les fichiers distribués ont changé.
+Ces copies ne se mettent pas à jour automatiquement ; les fichiers supplémentaires
+et les autres plugins sont conservés.
+
+Pour Claude Code, relancer `install --agent claude-code` demande la mise à jour
+au gestionnaire natif. Ce parcours suit ses propres règles de téléchargement
+et d'écriture ; les contrôles de longueur et de conflit ci-dessus concernent
+les copies effectuées par Python. `--force` ne force pas le gestionnaire Claude.
 
 ## Paquet autonome et installation sans Python
 
@@ -118,22 +140,25 @@ python scripts/skill.py package --output dist/legal-france-skills.zip
 ```
 
 L'utilisateur peut décompresser cette archive et copier ses huit dossiers
-directement dans un dossier de skills du tableau. Aucun Python n'est requis
+directement dans un dossier de skills du tableau. Pour une installation
+autonome Claude sans plugin existant, les dossiers sont `~/.claude/skills/`
+ou `.claude/skills/` dans le projet. Aucun Python n'est requis
 pour cette copie ni pour la lecture des instructions ; les API facultatives
 continuent à demander Python 3.9 ou ultérieur et un outil d'exécution.
 
-Chaque dossier contient son `SKILL.md`, la licence, le client API et les
-ressources nécessaires. Les références sont embarquées dans chaque dossier
+Chaque dossier contient son `SKILL.md`, la licence, le client API, le modèle
+vide `.env.example` et les ressources nécessaires. Les références sont embarquées dans chaque dossier
 pour éviter une dépendance à des skills voisins ou au dépôt téléchargé.
 Cette duplication est produite automatiquement, jamais maintenue à la main.
 Les protocoles embarqués portent le nom `protocol.md` pour ne pas être
 découverts comme de nouveaux skills imbriqués. Les lectures restent sélectives.
 
-La source juridique reste dans `plugins/legal-france/`. L'export réécrit ses
-chemins vers la racine de chaque skill installé et remplace les références
-aux outils de lecture/recherche propres à un harnais par leurs capacités.
-Les descriptions portables courtes sont dans `scripts/skill.py`, sous
-1 024 caractères chacune. Les descriptions du plugin Claude sont conservées.
+La source juridique est dans `src/legal-france/`, la version dans `project.json`
+et le modèle de configuration à la racine du dépôt. Le plugin Claude est
+généré dans son dossier historique ; les autres distributions utilisent la
+même source. Les chemins sont adaptés à la racine de chaque skill installé.
+Les descriptions courtes sont dans les SKILL.md sources, sous 1 024 caractères.
+Les descriptions Claude historiques sont conservées dans son adaptateur.
 La préservation des textes ne démontre pas une qualité de routage identique.
 
 ## Utilisation et export pour les interfaces sans skills
@@ -161,6 +186,13 @@ Sa taille est annoncée en octets, pas en tokens ; vérifier sa fenêtre de
 contexte et limiter les domaines. Aucun outil web ou exécutable n'est ajouté.
 
 ## Portée de la validation
+
+La v4.1.0 en préparation ajoute la source commune, le modèle `.env.example`
+dans chaque skill, le parcours API direct et la délégation à l'installateur
+natif Claude. Les générations ont été effectuées ; aucun nouveau test de
+modèle, appel API ou installation dans un profil personnel n'a été lancé.
+Le gain en nombre de tours et le nouveau parcours d'installation native
+ne sont donc pas encore mesurés. Les résultats ci-dessous concernent la v4.0.0.
 
 Cette version fournit les chemins documentés et un mécanisme de distribution.
 La génération du ZIP et d'un export civil a été effectuée ; les fichiers
