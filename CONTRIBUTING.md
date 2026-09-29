@@ -20,6 +20,7 @@ une source officielle avec son URL et sa date de vérification.
 ```bash
 python scripts/skill.py build --force
 python scripts/skill.py package --output dist/legal-france-skills.zip --force
+python scripts/skill.py package-claude-ai --output dist/legal-france-claude-ai.zip --force
 python scripts/skill.py export --domain civil --output dist/legal-france-civil.md --force
 ```
 
@@ -28,6 +29,23 @@ commune et l'adaptateur Claude. Les sorties restent versionnées pour que le
 marketplace historique puisse les installer sans étape de génération locale.
 `package` et `install` pour les autres harnais lisent directement la source
 commune. Les parcours API s'appuient sur le même client Python.
+
+## Publier une version
+
+1. Mettre à jour `version` dans `project.json` et `CHANGELOG.md`, puis
+   lancer `build --force` et le lint.
+2. Commiter, puis pousser un tag identique à la version : `git tag v4.2.0`
+   et `git push origin v4.2.0`.
+3. Le workflow `.github/workflows/release-assets.yml` vérifie que le tag
+   correspond à `project.json`, relance le lint, construit
+   `legal-france-skills.zip` et `legal-france-claude-ai.zip` depuis la source,
+   puis les joint à la release du tag (créée si absente).
+
+Les noms des archives ne changent pas d'une version à l'autre : les liens
+`releases/latest/download/...` des guides pointent ainsi toujours vers la
+dernière version. Le numéro est inscrit dans le SKILL.md de chaque archive.
+
+## Descriptions
 
 Les descriptions courtes sont dans les frontmatters des SKILL.md sources,
 sous forme de chaînes JSON compatibles YAML. Les frontmatters Claude d'origine

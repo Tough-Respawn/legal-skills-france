@@ -1,0 +1,37 @@
+# Build the downloadable archives from the common source and attach them to
+# the GitHub release of the pushed tag. Tag vX.Y.Z must match project.json.
+name: release-assets
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check tag against project.json
+        run: |
+          version=$(python -c "import json; print(json.load(open('project.json'))['version'])")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME différent de project.json (v$version)"; exit 1
+          fi
+      - name: Lint
+        run: pip install pyyaml && python tests/lint.py
+      - name: Build archives
+        run: |
+          python scripts/skill.py package --output dist/legal-france-skills.zip
+          python scripts/skill.py package-claude-ai --output dist/legal-france-claude-ai.zip
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes "Voir CHANGELOG.md"
+          gh release upload "$GITHUB_REF_NAME" dist/legal-france-skills.zip dist/legal-france-claude-ai.zip --clobber
