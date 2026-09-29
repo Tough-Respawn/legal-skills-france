@@ -161,6 +161,24 @@ Les descriptions courtes sont dans les SKILL.md sources, sous 1 024 caractères.
 Les descriptions Claude historiques sont conservées dans son adaptateur.
 La préservation des textes ne démontre pas une qualité de routage identique.
 
+## Import dans Claude.ai
+
+```bash
+python scripts/skill.py package-claude-ai --output dist/legal-france-claude-ai.zip
+```
+
+Claude.ai importe un skill par fichier ZIP, dossier du skill à la racine,
+et limite la description à 200 caractères
+([aide officielle](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills),
+consultée le 29 septembre 2026). Les huit descriptions sources dépassent
+cette limite. Cette commande produit donc un **skill unique** `legal-france`,
+avec une description courte dédiée, les ressources des sept domaines et une
+consigne de lecture des protocoles de domaine. Le frontmatter se limite à
+`name` et `description`, et le modèle `.env.example` est retiré : les
+identifiants PISTE ne sont pas utilisables dans ce parcours. Le guide
+utilisateur est [CLAUDE-AI.md](CLAUDE-AI.md). L'import et le déclenchement
+dans Claude.ai restent à vérifier.
+
 ## Utilisation et export pour les interfaces sans skills
 
 Sélectionner le skill depuis le menu de l'application ou demander :

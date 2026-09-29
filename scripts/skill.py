@@ -31,6 +31,11 @@ AGENTS = {
     "roo-code": (".agents/skills", ".agents/skills"),
     "amp": (".agents/skills", ".agents/skills"),
 }
+CLAUDE_AI_DESCRIPTION = (
+    "Droit français : bail, travail, famille, amende, plainte, préfecture, CAF, "
+    "société, RGPD. Explique droits, recours et délais avec sources, rédige "
+    "lettres et mises en demeure."
+)
 PORTABLE_CONTEXT = """## Environnement et ressources
 
 Le dossier contenant ce SKILL.md est la racine du skill. Tous les chemins
@@ -281,7 +286,35 @@ def install(args):
 
 
 def package(args):
-    files = portable_files()
+    payload = zip_bytes(portable_files())
+    target = checked_path(args.output)
+    write_files({target: payload}, args.force, args.dry_run)
+    print(f"Archive : {target} ({len(payload)} octets, huit dossiers autonomes)")
+
+
+def claude_ai_files():
+    """Single skill for the Claude.ai upload: every domain is already embedded
+    in the meta folder, and the web form caps the description at 200 characters."""
+    prefix = f"{META}/"
+    files = {relative: content for relative, content in portable_files().items()
+             if relative.startswith(prefix) and relative != f"{prefix}.env.example"}
+    _, body = split_skill(files[f"{prefix}SKILL.md"].decode("utf-8"))
+    if not 1 <= len(CLAUDE_AI_DESCRIPTION) <= 200:
+        raise ValueError(f"Description Claude.ai hors limite : {len(CLAUDE_AI_DESCRIPTION)} caractères")
+    version = json.loads((ROOT / "project.json").read_text(encoding="utf-8"))["version"]
+    header = (
+        f"---\nname: {META}\ndescription: {json.dumps(CLAUDE_AI_DESCRIPTION, ensure_ascii=False)}\n---\n\n"
+        f"## Skill unique, version {version}\n\n"
+        "Si l'utilisateur demande la version installée, répondre avec ce numéro.\n"
+        "Cette version regroupe les huit skills. Pour une question relevant d'un\n"
+        "domaine, lire aussi `resources/legal-france-<domaine>/protocol.md` avec\n"
+        "ses références : ce sont des consignes, pas des skills à installer.\n\n"
+    )
+    files[f"{prefix}SKILL.md"] = (header + body).encode("utf-8")
+    return files
+
+
+def zip_bytes(files):
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for relative, content in sorted(files.items()):
@@ -289,9 +322,14 @@ def package(args):
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
             archive.writestr(info, content)
+    return buffer.getvalue()
+
+
+def package_claude_ai(args):
+    payload = zip_bytes(claude_ai_files())
     target = checked_path(args.output)
-    write_files({target: buffer.getvalue()}, args.force, args.dry_run)
-    print(f"Archive : {target} ({len(buffer.getvalue())} octets, huit dossiers autonomes)")
+    write_files({target: payload}, args.force, args.dry_run)
+    print(f"Archive Claude.ai : {target} ({len(payload)} octets, un skill {META} avec tous les domaines)")
 
 
 def build(args):
@@ -345,10 +383,12 @@ def parser():
     installer.add_argument("--project", type=Path, help="Dossier existant ; sélectionne la portée projet")
     packager = commands.add_parser("package", help="Créer un ZIP pour une installation sans Python")
     packager.add_argument("--output", type=Path, required=True)
+    claude_ai = commands.add_parser("package-claude-ai", help="Créer le ZIP à importer dans Claude.ai (un seul skill)")
+    claude_ai.add_argument("--output", type=Path, required=True)
     exporter = commands.add_parser("export", help="Créer un contexte Markdown pour les interfaces sans skills")
     exporter.add_argument("--domain", nargs="+", choices=(*DOMAINS, "all"), required=True)
     exporter.add_argument("--output", type=Path, required=True)
-    for command in (installer, packager, exporter, builder):
+    for command in (installer, packager, claude_ai, exporter, builder):
         command.add_argument("--dry-run", action="store_true", help="Afficher les écritures prévues sans écrire")
         command.add_argument("--force", action="store_true", help="Remplacer les fichiers distribués différents, conserver les fichiers supplémentaires")
     return result
@@ -368,6 +408,8 @@ def main(argv=None):
             install(args)
         elif args.command == "package":
             package(args)
+        elif args.command == "package-claude-ai":
+            package_claude_ai(args)
         elif args.command == "build":
             build(args)
         else:
