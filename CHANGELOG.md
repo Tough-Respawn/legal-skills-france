@@ -6,6 +6,34 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [4.2.0] - 2026-09-29
+
+### Added
+
+- Import dans Claude.ai sans installation, formule gratuite comprise :
+  commande `package-claude-ai` produisant `legal-france-claude-ai.zip`, un
+  skill unique regroupant les huit, avec une description de 174 caractères
+  (limite Claude.ai : 200 ; les descriptions sources la dépassent).
+  Version inscrite dans le SKILL.md, `.env.example` retiré de ce parcours.
+- Guide grand public [CLAUDE-AI.md](CLAUDE-AI.md) : téléchargement, activation,
+  import, questions en langage courant, autorisation durable des sites
+  officiels consultés.
+- Workflow `release-assets` : à chaque tag `vX.Y.Z` conforme à `project.json`,
+  lint puis construction des deux archives et ajout à la release.
+
+### Changed
+
+- Liens de téléchargement vers `releases/latest/download/...`, noms
+  d'archives stables d'une version à l'autre.
+
+### Validation
+
+- Import de l'archive dans Claude.ai réussi le 29 septembre 2026 : compétence
+  chargée, ressources lues, vérification sur service-public.fr, réponse
+  sourcée avec avertissement. Test manuel sur une question de dépôt de
+  garantie, pas une mesure du routage. Workflow vérifié en local (contrôle
+  du tag, lint, génération), pas encore sur GitHub avant ce tag.
+
 ## [4.1.0] - 2026-09-12
 
 ### Changed
