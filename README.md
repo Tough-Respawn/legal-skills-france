@@ -3,9 +3,9 @@
 > **FR :** Assistant juridique français, 8 skills modulaires et 10 modèles de documents. Installation personnelle pour plusieurs harnais, avec le plugin Claude Code conservé. Recherche web prioritaire ; API Légifrance (textes datés) et Judilibre (jurisprudence judiciaire) facultatives.
 > **EN:** French law assistant with 8 modular skills and 10 legal document templates. User-level installation for multiple agent applications, alongside the existing Claude Code plugin. Web search by default; optional Légifrance and Judilibre APIs.
 
-**Version : [v4.2.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.2.0).**
-Import dans Claude.ai sans installation, avec un guide grand public, et
-archives construites automatiquement à chaque version.
+**Version : [v4.3.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.3.0).**
+Import sans installation dans Claude.ai et ChatGPT, avec des guides grand
+public, et archives construites automatiquement à chaque version.
 
 **Configuration API facultative : [.env.example](.env.example)**, à la racine
 du dépôt. Le même modèle vide est inclus dans chaque skill portable généré.
@@ -22,12 +22,15 @@ hosts, portable routing and full regression validation remain pending._
 
 ---
 
-## Sans installation, dans Claude.ai / No install, in Claude.ai
+## Sans installation, dans Claude.ai ou ChatGPT / No install
 
 **Vous n'êtes pas développeur ?** Utilisez legal-france directement dans
-Claude.ai, formule gratuite comprise : un fichier à télécharger et à importer,
-sans terminal. Suivez le guide [CLAUDE-AI.md](CLAUDE-AI.md).
-_Not a developer? Upload one ZIP file to Claude.ai, free plan included._
+votre assistant : un fichier à télécharger et à importer, sans terminal.
+
+- **Claude.ai** (formule gratuite comprise) : guide [CLAUDE-AI.md](CLAUDE-AI.md).
+- **ChatGPT** (import de plugin, selon votre compte) : guide [CHATGPT.md](CHATGPT.md).
+
+_Not a developer? Upload one ZIP file to Claude.ai or ChatGPT._
 
 ---
 
@@ -428,6 +431,7 @@ de date Judilibre et les limites de débit restent à vérifier.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **[v4.3.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.3.0)** | Septembre 2026 | Plugin ChatGPT importable (skill unique, logo LSF), guide grand public |
 | **[v4.2.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.2.0)** | Septembre 2026 | Import dans Claude.ai sans installation (skill unique), guide grand public, archives générées à chaque tag |
 | **[v4.1.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.1.0)** | Septembre 2026 | Source commune et distributions générées, installateur unique gérant aussi le plugin Claude natif, accès API direct sur demande |
 | **[v4.0.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.0.0)** | Septembre 2026 | Installation personnelle pour plusieurs harnais, paquets de skills autonomes et exports documentaires ; plugin Claude conservé |

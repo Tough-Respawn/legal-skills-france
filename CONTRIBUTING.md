@@ -21,6 +21,7 @@ une source officielle avec son URL et sa date de vérification.
 python scripts/skill.py build --force
 python scripts/skill.py package --output dist/legal-france-skills.zip --force
 python scripts/skill.py package-claude-ai --output dist/legal-france-claude-ai.zip --force
+python scripts/skill.py package-chatgpt --output dist/legal-france-chatgpt.zip --force
 python scripts/skill.py export --domain civil --output dist/legal-france-civil.md --force
 ```
 
@@ -38,7 +39,8 @@ commune. Les parcours API s'appuient sur le même client Python.
    et `git push origin v4.2.0`.
 3. Le workflow `.github/workflows/release-assets.yml` vérifie que le tag
    correspond à `project.json`, relance le lint, construit
-   `legal-france-skills.zip` et `legal-france-claude-ai.zip` depuis la source,
+   `legal-france-skills.zip`, `legal-france-claude-ai.zip` et
+   `legal-france-chatgpt.zip` depuis la source,
    puis les joint à la release du tag (créée si absente).
 
 Les noms des archives ne changent pas d'une version à l'autre : les liens

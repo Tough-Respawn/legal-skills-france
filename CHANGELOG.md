@@ -6,6 +6,27 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [4.3.0] - 2026-09-30
+
+### Added
+
+- Import dans ChatGPT : commande `package-chatgpt` produisant
+  `legal-france-chatgpt.zip`, plugin au format Agent Plugins (`plugin.json`
+  validé contre le schéma 1.0.0) contenant le skill unique de l'archive
+  Claude.ai, avec logo, catégorie « Legal » et trois questions d'exemple.
+- Guide grand public [CHATGPT.md](CHATGPT.md), dont la procédure de mise à
+  jour d'un plugin importé.
+- Logo LSF (`assets/logo.png`), Tenor Sans aux couleurs du drapeau.
+- Le workflow `release-assets` construit et joint aussi l'archive ChatGPT.
+
+### Validation
+
+- Import dans ChatGPT réussi le 30 septembre 2026 sur un compte personnel :
+  logo, catégorie « Legal », questions d'exemple, version et skill affichés.
+  Un nouvel import de la même version est refusé tant que le plugin existe ;
+  la mise à jour passe par « Modifier » avec une version supérieure.
+  Réponse du plugin dans une conversation pas encore testée.
+
 ## [4.2.0] - 2026-09-29
 
 ### Added

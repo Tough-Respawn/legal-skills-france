@@ -332,6 +332,50 @@ def package_claude_ai(args):
     print(f"Archive Claude.ai : {target} ({len(payload)} octets, un skill {META} avec tous les domaines)")
 
 
+def chatgpt_files():
+    """ChatGPT plugin archive (Agent Plugins format): manifest at the archive
+    root, the Claude.ai single skill under skills/."""
+    metadata = json.loads((ROOT / "project.json").read_text(encoding="utf-8"))
+    manifest = {
+        "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+        "name": META,
+        "version": metadata["version"],
+        "description": CLAUDE_AI_DESCRIPTION,
+        "author": {"name": metadata["author"]["name"], "url": "https://github.com/Tough-Respawn"},
+        "homepage": metadata["repository"],
+        "repository": metadata["repository"],
+        "license": metadata["license"],
+        "keywords": ["droit", "juridique", "france", "legal"],
+        "extensions": {"com.openai": {"interface": {
+            "displayName": "Droit français (legal-france)",
+            "shortDescription": "Vos droits, recours et délais en droit français, avec sources",
+            "longDescription": CLAUDE_AI_DESCRIPTION,
+            "developerName": metadata["author"]["name"],
+            "category": "Legal",
+            "websiteURL": metadata["repository"],
+            "brandColor": "#00235F",
+            "composerIcon": "./assets/logo.png",
+            "logo": "./assets/logo.png",
+            "defaultPrompt": [
+                "Mon propriétaire refuse de me rendre ma caution",
+                "Je veux contester une amende",
+                "Rédige une mise en demeure pour une facture impayée",
+            ],
+        }}},
+    }
+    files = {f"skills/{relative}": content for relative, content in claude_ai_files().items()}
+    files["assets/logo.png"] = (ROOT / "assets/logo.png").read_bytes()
+    files["plugin.json"] = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    return files
+
+
+def package_chatgpt(args):
+    payload = zip_bytes(chatgpt_files())
+    target = checked_path(args.output)
+    write_files({target: payload}, args.force, args.dry_run)
+    print(f"Archive ChatGPT : {target} ({len(payload)} octets, plugin avec le skill {META})")
+
+
 def build(args):
     from claude_adapter import distribution
     metadata = json.loads((ROOT / "project.json").read_text(encoding="utf-8"))
@@ -385,10 +429,12 @@ def parser():
     packager.add_argument("--output", type=Path, required=True)
     claude_ai = commands.add_parser("package-claude-ai", help="Créer le ZIP à importer dans Claude.ai (un seul skill)")
     claude_ai.add_argument("--output", type=Path, required=True)
+    chatgpt = commands.add_parser("package-chatgpt", help="Créer l'archive de plugin à importer dans ChatGPT")
+    chatgpt.add_argument("--output", type=Path, required=True)
     exporter = commands.add_parser("export", help="Créer un contexte Markdown pour les interfaces sans skills")
     exporter.add_argument("--domain", nargs="+", choices=(*DOMAINS, "all"), required=True)
     exporter.add_argument("--output", type=Path, required=True)
-    for command in (installer, packager, claude_ai, exporter, builder):
+    for command in (installer, packager, claude_ai, chatgpt, exporter, builder):
         command.add_argument("--dry-run", action="store_true", help="Afficher les écritures prévues sans écrire")
         command.add_argument("--force", action="store_true", help="Remplacer les fichiers distribués différents, conserver les fichiers supplémentaires")
     return result
@@ -410,6 +456,8 @@ def main(argv=None):
             package(args)
         elif args.command == "package-claude-ai":
             package_claude_ai(args)
+        elif args.command == "package-chatgpt":
+            package_chatgpt(args)
         elif args.command == "build":
             build(args)
         else:
