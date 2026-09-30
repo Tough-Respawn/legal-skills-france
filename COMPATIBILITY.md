@@ -179,6 +179,28 @@ identifiants PISTE ne sont pas utilisables dans ce parcours. Le guide
 utilisateur est [CLAUDE-AI.md](CLAUDE-AI.md). L'import et le déclenchement
 dans Claude.ai restent à vérifier.
 
+## Import dans ChatGPT
+
+```bash
+python scripts/skill.py package-chatgpt --output dist/legal-france-chatgpt.zip
+```
+
+ChatGPT importe des plugins au format [Agent Plugins](https://agent-plugins.org/)
+depuis Plugins > Ajouter > Importer une archive de plugin
+([documentation OpenAI](https://developers.openai.com/plugins/build/plugins),
+consultée le 30 septembre 2026). L'archive contient `plugin.json` à la racine,
+validé contre le schéma 1.0.0, et le skill unique de l'archive Claude.ai dans
+`skills/legal-france/`, avec le logo `assets/logo.png`, la catégorie
+« Legal » et trois questions d'exemple. Aucune application MCP n'est incluse.
+
+L'aide OpenAI réserve l'import de *skills* aux espaces Business, Enterprise,
+Healthcare et Edu et ne précise pas les formules autorisées pour l'import de
+plugins ; l'option a été constatée sur un compte personnel le 30 septembre
+2026. La création de GPT personnalisés est fermée aux comptes personnels et
+leur retrait est annoncé ; ils ne sont pas proposés. L'import a été vérifié
+le 30 septembre 2026 ; un plugin existant se met à jour par « Modifier » avec
+une version supérieure. La réponse dans une conversation reste à vérifier.
+
 ## Utilisation et export pour les interfaces sans skills
 
 Sélectionner le skill depuis le menu de l'application ou demander :

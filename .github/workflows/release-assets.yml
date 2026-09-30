@@ -29,9 +29,10 @@ jobs:
         run: |
           python scripts/skill.py package --output dist/legal-france-skills.zip
           python scripts/skill.py package-claude-ai --output dist/legal-france-claude-ai.zip
+          python scripts/skill.py package-chatgpt --output dist/legal-france-chatgpt.zip
       - name: Attach to release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes "Voir CHANGELOG.md"
-          gh release upload "$GITHUB_REF_NAME" dist/legal-france-skills.zip dist/legal-france-claude-ai.zip --clobber
+          gh release upload "$GITHUB_REF_NAME" dist/legal-france-skills.zip dist/legal-france-claude-ai.zip dist/legal-france-chatgpt.zip --clobber
