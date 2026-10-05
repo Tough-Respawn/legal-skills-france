@@ -16,6 +16,17 @@ to [Semantic Versioning](https://semver.org/).
   une copie, et reste dédupliquée avec les autres harnais du même dossier.
   Racines et valeur par défaut d'`agentsHome` vérifiées le 2026-10-05 dans
   `docs/subsystems/skills.md` du dépôt `deepseek-ai/deepseek-harness`.
+- Cible d'installation `qwen-code`. Qwen Code ne documente que
+  `~/.qwen/skills` et `.qwen/skills`, sans alias `.agents` : il reçoit sa
+  propre copie au lieu d'être dédupliqué. Vérifié le 2026-10-05 dans
+  `docs/users/features/skills.md` du dépôt `QwenLM/qwen-code`.
+
+### Changed
+
+- Source officielle de Gemini CLI corrigée vers la documentation du dépôt
+  `google-gemini/gemini-cli`, qui confirme `.agents/skills` comme alias
+  interopérable prioritaire sur `.gemini/skills`. La destination écrite par
+  l'installateur était déjà la bonne.
 
 ---
 
