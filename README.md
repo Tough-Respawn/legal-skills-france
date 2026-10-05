@@ -3,9 +3,10 @@
 > **FR :** Assistant juridique français, 8 skills modulaires et 10 modèles de documents. Installation personnelle pour plusieurs harnais, avec le plugin Claude Code conservé. Recherche web prioritaire ; API Légifrance (textes datés) et Judilibre (jurisprudence judiciaire) facultatives.
 > **EN:** French law assistant with 8 modular skills and 10 legal document templates. User-level installation for multiple agent applications, alongside the existing Claude Code plugin. Web search by default; optional Légifrance and Judilibre APIs.
 
-**Version : [v4.3.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.3.0).**
-Import sans installation dans Claude.ai et ChatGPT, avec des guides grand
-public, et archives construites automatiquement à chaque version.
+**Version : [v4.4.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.4.0).**
+Installation pour DeepSeek Harness et Qwen Code, qui partagent la copie
+`.agents/skills` des autres harnais. Import sans installation dans Claude.ai
+et ChatGPT, et archives construites automatiquement à chaque version.
 
 **Configuration API facultative : [.env.example](.env.example)**, à la racine
 du dépôt. Le même modèle vide est inclus dans chaque skill portable généré.
@@ -431,6 +432,7 @@ de date Judilibre et les limites de débit restent à vérifier.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **[v4.4.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.4.0)** | Octobre 2026 | Cibles d'installation DeepSeek Harness et Qwen Code, dédupliquées dans `.agents/skills` ; source Gemini CLI corrigée |
 | **[v4.3.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.3.0)** | Septembre 2026 | Plugin ChatGPT importable (skill unique, logo LSF), guide grand public |
 | **[v4.2.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.2.0)** | Septembre 2026 | Import dans Claude.ai sans installation (skill unique), guide grand public, archives générées à chaque tag |
 | **[v4.1.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.1.0)** | Septembre 2026 | Source commune et distributions générées, installateur unique gérant aussi le plugin Claude natif, accès API direct sur demande |

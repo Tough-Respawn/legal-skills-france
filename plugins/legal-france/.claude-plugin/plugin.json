@@ -1,6 +1,6 @@
 {
   "name": "legal-france",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "French law assistant. 8 modular skills (1 meta + 7 domain) for high-recall auto-triggering on everyday phrasings. 10 ready-to-customize legal templates. Optional Legifrance and Judilibre APIs. Covers civil, criminal, labor, business, administrative, digital, and European law.",
   "author": {
     "name": "Amine Harrak"
