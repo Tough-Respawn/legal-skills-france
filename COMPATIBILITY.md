@@ -44,13 +44,29 @@ installateur, parmi les emplacements documentés par les applications.
 | Codex | `codex` | `~/.agents/skills/` | `.agents/skills/` | [OpenAI](https://learn.chatgpt.com/docs/build-skills) |
 | Cursor | `cursor` | `~/.agents/skills/` | `.agents/skills/` | [Cursor](https://cursor.com/docs/skills) |
 | GitHub Copilot | `github-copilot` | `~/.agents/skills/` | `.agents/skills/` | [GitHub](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) |
-| Gemini CLI | `gemini-cli` | `~/.agents/skills/` | `.agents/skills/` | [Gemini CLI](https://geminicli.com/docs/cli/skills/) |
+| Gemini CLI | `gemini-cli` | `~/.agents/skills/` | `.agents/skills/` | [gemini-cli, docs/cli/skills.md](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/skills.md) |
 | OpenCode | `opencode` | `~/.agents/skills/` | `.agents/skills/` | [OpenCode](https://opencode.ai/docs/skills/) |
 | Windsurf / Cascade | `windsurf` | `~/.codeium/windsurf/skills/` | `.windsurf/skills/` | [Cascade](https://docs.devin.ai/desktop/cascade/skills) |
 | Cline | `cline` | `~/.cline/skills/` | `.cline/skills/` | [Cline](https://docs.cline.bot/customization/skills) |
 | Roo Code | `roo-code` | `~/.agents/skills/` | `.agents/skills/` | [Roo Code](https://roocodeinc.github.io/Roo-Code/features/skills/) |
 | Amp | `amp` | `~/.agents/skills/` | `.agents/skills/` | [Amp](https://ampcode.com/docs/customize/skills) |
 | DeepSeek Harness (dsh) | `deepseek-harness` | `~/.agents/skills/` | `.agents/skills/` | [deepseek-harness, docs/subsystems/skills.md](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md) |
+| Qwen Code | `qwen-code` | `~/.agents/skills/` | `.agents/skills/` | [qwen-code, config/storage.ts](https://github.com/QwenLM/qwen-code/blob/main/packages/core/src/config/storage.ts) (code source) |
+
+Gemini CLI documente `.agents/skills` comme alias interopérable de
+`.gemini/skills`, côté utilisateur comme côté projet, et cet alias l'emporte
+sur le dossier propre à Gemini en cas de doublon. L'installateur écrit donc
+dans l'alias, partagé avec les autres harnais.
+
+Qwen Code lit aussi `.agents/skills`, mais seul son code source l'établit :
+sa documentation utilisateur ne cite que `~/.qwen/skills` et `.qwen/skills`.
+La liste des dossiers vaut `.qwen` puis `.agents` dans
+`packages/core/src/config/storage.ts`, et la fonction `getSkillsBaseDirs` de
+`packages/core/src/skills/skill-manager.ts` les parcourt côté projet comme
+côté utilisateur. `.qwen` l'emporte en cas de doublon. Ce comportement non
+documenté peut changer sans annonce : si Qwen ne voit plus les skills,
+installez-les dans `~/.qwen/skills` avec `--skills-dir`.
+Sources vérifiées le 2026-10-05.
 
 DeepSeek Harness lit six racines par rang. Les deux qui nous concernent sont
 `<projet>/.agents/skills` (rang 200) et `<agentsHome>/skills` (rang 500), où

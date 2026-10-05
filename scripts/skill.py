@@ -31,6 +31,8 @@ AGENTS = {
     "roo-code": (".agents/skills", ".agents/skills"),
     "amp": (".agents/skills", ".agents/skills"),
     "deepseek-harness": (".agents/skills", ".agents/skills"),
+    # Qwen Code lit .qwen puis .agents (code source, absent de sa doc utilisateur).
+    "qwen-code": (".agents/skills", ".agents/skills"),
 }
 CLAUDE_AI_DESCRIPTION = (
     "Droit français : bail, travail, famille, amende, plainte, préfecture, CAF, "
