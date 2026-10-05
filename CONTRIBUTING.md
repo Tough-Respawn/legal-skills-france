@@ -43,6 +43,13 @@ commune. Les parcours API s'appuient sur le même client Python.
    `legal-france-chatgpt.zip` depuis la source,
    puis les joint à la release du tag (créée si absente).
 
+Le même workflow tourne sur chaque pull request, sans rien publier : il
+relance le lint et la construction des trois archives. Une PR dont ce
+contrôle échoue ne doit pas être mergée. Il s'exécute sur une machine
+virtuelle GitHub éphémère, image `ubuntu-26.04` fixée explicitement ; les
+actions `checkout` et `setup-python` sont en v7, sous Node 24. Le projet
+lui-même n'utilise pas Node.
+
 Les noms des archives ne changent pas d'une version à l'autre : les liens
 `releases/latest/download/...` des guides pointent ainsi toujours vers la
 dernière version. Le numéro est inscrit dans le SKILL.md de chaque archive.
