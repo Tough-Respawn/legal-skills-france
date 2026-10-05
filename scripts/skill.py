@@ -30,6 +30,7 @@ AGENTS = {
     "cline": (".cline/skills", ".cline/skills"),
     "roo-code": (".agents/skills", ".agents/skills"),
     "amp": (".agents/skills", ".agents/skills"),
+    "deepseek-harness": (".agents/skills", ".agents/skills"),
 }
 CLAUDE_AI_DESCRIPTION = (
     "Droit français : bail, travail, famille, amende, plainte, préfecture, CAF, "

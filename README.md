@@ -498,7 +498,9 @@ Voir [COMPATIBILITY.md](COMPATIBILITY.md) pour les limites par application.
 ## Chat, API et modèles locaux
 
 Choisissez le harnais qui exécute votre modèle (DeepSeek, Qwen ou autre).
-Une interface sans chargeur de skills peut recevoir un export documentaire :
+Pour DeepSeek Harness, utilisez directement l'installateur : `--agent
+deepseek-harness` écrit dans les dossiers qu'il scanne déjà. Une interface
+sans chargeur de skills peut recevoir un export documentaire :
 
 ```bash
 python scripts/skill.py export --domain civil --output dist/legal-france-civil.md
