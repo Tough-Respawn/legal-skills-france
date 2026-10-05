@@ -51,14 +51,22 @@ installateur, parmi les emplacements documentés par les applications.
 | Roo Code | `roo-code` | `~/.agents/skills/` | `.agents/skills/` | [Roo Code](https://roocodeinc.github.io/Roo-Code/features/skills/) |
 | Amp | `amp` | `~/.agents/skills/` | `.agents/skills/` | [Amp](https://ampcode.com/docs/customize/skills) |
 | DeepSeek Harness (dsh) | `deepseek-harness` | `~/.agents/skills/` | `.agents/skills/` | [deepseek-harness, docs/subsystems/skills.md](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md) |
-| Qwen Code | `qwen-code` | `~/.qwen/skills/` | `.qwen/skills/` | [qwen-code, docs/users/features/skills.md](https://github.com/QwenLM/qwen-code/blob/main/docs/users/features/skills.md) |
+| Qwen Code | `qwen-code` | `~/.agents/skills/` | `.agents/skills/` | [qwen-code, config/storage.ts](https://github.com/QwenLM/qwen-code/blob/main/packages/core/src/config/storage.ts) (code source) |
 
 Gemini CLI documente `.agents/skills` comme alias interopérable de
 `.gemini/skills`, côté utilisateur comme côté projet, et cet alias l'emporte
 sur le dossier propre à Gemini en cas de doublon. L'installateur écrit donc
-dans l'alias, partagé avec les autres harnais. Qwen Code, bien que proche,
-ne documente que `~/.qwen/skills` et `.qwen/skills` : il reçoit sa propre
-copie. Sources vérifiées le 2026-10-05.
+dans l'alias, partagé avec les autres harnais.
+
+Qwen Code lit aussi `.agents/skills`, mais seul son code source l'établit :
+sa documentation utilisateur ne cite que `~/.qwen/skills` et `.qwen/skills`.
+La liste des dossiers vaut `.qwen` puis `.agents` dans
+`packages/core/src/config/storage.ts`, et la fonction `getSkillsBaseDirs` de
+`packages/core/src/skills/skill-manager.ts` les parcourt côté projet comme
+côté utilisateur. `.qwen` l'emporte en cas de doublon. Ce comportement non
+documenté peut changer sans annonce : si Qwen ne voit plus les skills,
+installez-les dans `~/.qwen/skills` avec `--skills-dir`.
+Sources vérifiées le 2026-10-05.
 
 DeepSeek Harness lit six racines par rang. Les deux qui nous concernent sont
 `<projet>/.agents/skills` (rang 200) et `<agentsHome>/skills` (rang 500), où
