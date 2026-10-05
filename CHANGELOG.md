@@ -6,6 +6,19 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Cible d'installation `deepseek-harness`. Le harnais scanne
+  `<projet>/.agents/skills` et `~/.agents/skills`, déjà écrits par
+  l'installateur : la cible nomme un emplacement existant au lieu d'ajouter
+  une copie, et reste dédupliquée avec les autres harnais du même dossier.
+  Racines et valeur par défaut d'`agentsHome` vérifiées le 2026-10-05 dans
+  `docs/subsystems/skills.md` du dépôt `deepseek-ai/deepseek-harness`.
+
+---
+
 ## [4.3.0] - 2026-09-30
 
 ### Added

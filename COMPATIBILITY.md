@@ -50,6 +50,16 @@ installateur, parmi les emplacements documentés par les applications.
 | Cline | `cline` | `~/.cline/skills/` | `.cline/skills/` | [Cline](https://docs.cline.bot/customization/skills) |
 | Roo Code | `roo-code` | `~/.agents/skills/` | `.agents/skills/` | [Roo Code](https://roocodeinc.github.io/Roo-Code/features/skills/) |
 | Amp | `amp` | `~/.agents/skills/` | `.agents/skills/` | [Amp](https://ampcode.com/docs/customize/skills) |
+| DeepSeek Harness (dsh) | `deepseek-harness` | `~/.agents/skills/` | `.agents/skills/` | [deepseek-harness, docs/subsystems/skills.md](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md) |
+
+DeepSeek Harness lit six racines par rang. Les deux qui nous concernent sont
+`<projet>/.agents/skills` (rang 200) et `<agentsHome>/skills` (rang 500), où
+`agentsHome` vaut `$DSH_AGENTS_HOME` ou `~/.agents`. L'installateur écrit donc
+aux emplacements déjà documentés, sans cible propre à DeepSeek. Ses racines
+`.dsh/skills` sont prioritaires si vous y placez vos propres skills. Le harnais
+n'explore pas les `SKILL.md` imbriqués : nos ressources vivent sous `resources/`
+et portent le nom `protocol.md`, elles ne sont donc pas vues comme des skills.
+Source vérifiée le 2026-10-05.
 
 Les destinations communes sont dédupliquées : sélectionner Codex et Cursor
 écrit une seule copie dans `.agents/skills/`. Les autres applications qui
