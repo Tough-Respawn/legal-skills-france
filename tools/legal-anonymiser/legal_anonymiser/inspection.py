@@ -8,7 +8,7 @@ from .texte import mixed_script, norm, strip_traps
 _AI_PATTERNS = [re.compile(p, re.IGNORECASE) for p in (
     r"ignore[rz]? (les |toutes les )?(instructions|consignes)",
     r"ignore (all |any )?(previous |prior |the above )?instructions",
-    r"(tu es|vous êtes|you are) (un |une |an? )?(ia|assistant|ai|llm|language model|modèle de langage)",
+    r"(tu es|vous êtes|you are) (un |une |an? )?(ia|assistant|ai|llm|language model|modèle de langage)\b(?!\s+social)",
     r"consid[eè]re[rz]? (que )?ce contrat (est |comme )?conforme",
     r"ne (signale|mentionne)[rz]? (rien|aucun)",
     r"system prompt",
@@ -19,8 +19,9 @@ _AI_PATTERNS = [re.compile(p, re.IGNORECASE) for p in (
 _MONTHS = ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet",
            "aout", "septembre", "octobre", "novembre", "decembre"]
 _NUM_DATE = re.compile(r"\b(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{4})\b")
-_TXT_DATE = re.compile(r"\b(1er|\d{1,2})\s+([^\W\d_]+)\s+(\d{4})\b")
-_SIGNED = re.compile(r"fait à|signé le", re.IGNORECASE)
+_TXT_DATE = re.compile(r"\b(1er|\d{1,2})\s+([^\W\d_]+)\s+(\d{4})\b", re.IGNORECASE)
+_INITIAL = re.compile(r"^\w\.?$")
+_SIGNED = re.compile(r"\bfait\s+à|\bsigné\s+le", re.IGNORECASE)
 
 
 def clean(extracted: Extracted) -> Extracted:
@@ -50,24 +51,29 @@ def ai_directed(blocks: Sequence[Block]) -> List[Finding]:
 
 
 def _dates(text: str) -> List[tuple]:
+    """Dates (position, (année, mois, jour)) triées par position."""
     found = []
     for m in _NUM_DATE.finditer(text):
         found.append((m.start(), (int(m.group(3)), int(m.group(2)), int(m.group(1)))))
     for m in _TXT_DATE.finditer(text):
         mois = norm(m.group(2))
         if mois in _MONTHS:
-            day = 1 if m.group(1) == "1er" else int(m.group(1))
+            day = 1 if m.group(1).lower() == "1er" else int(m.group(1))
             found.append((m.start(), (int(m.group(3)), _MONTHS.index(mois) + 1, day)))
-    return [d for _, d in sorted(found)]
+    return sorted(found)
 
 
 def _signature_date(blocks: Sequence[Block]) -> Optional[tuple]:
     last = None
     for b in blocks:
-        if _SIGNED.search(b.text):
+        mark = _SIGNED.search(b.text)
+        if mark:
             ds = _dates(b.text)
-            if ds:
-                last = ds[-1]
+            after = [d for pos, d in ds if pos >= mark.start()]
+            if after:
+                last = after[0]
+            elif ds:
+                last = ds[-1][1]
     return last
 
 
@@ -90,12 +96,12 @@ def metadata_findings(extracted: Extracted, entities: Sequence[Entity]) -> List[
             d = _iso_date(meta.get(key, ""))
             if d and d > sig:
                 out.append(Finding("attention", "metadonnees_posterieures", "métadonnées", key))
-    values = [norm(meta[k]) for k in ("auteur", "modifie_par", "societe") if meta.get(k)]
+    values = [v for v in (norm(meta.get(k) or "") for k in ("auteur", "modifie_par", "societe")) if v]
     for ent in entities:
         names = {norm(ent.canonical)}
         for m in ent.mentions:
             names.add(norm(extracted.blocks[m.block].text[m.start:m.end]))
         names.discard("")
-        if any(v == n or _contains_word(n, v) for v in values for n in names):
+        if any(v == n or (len(v) >= 3 and not _INITIAL.match(v) and _contains_word(n, v)) for v in values for n in names):
             out.append(Finding("info", "auteur_partie", "métadonnées", ent.placeholder))
     return out
