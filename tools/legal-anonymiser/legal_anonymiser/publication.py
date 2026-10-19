@@ -5,6 +5,7 @@ Publier est le seul moment où un fichier masqué quitte le coffre. Rien n'est a
 from __future__ import annotations
 
 import hashlib
+import re
 from pathlib import Path
 
 from .coffre import Vault, atomic_write
@@ -14,9 +15,12 @@ from .rendu import MARKER_RE
 def publish(vault: Vault, cid: str, text: str, destination: Path) -> Path:
     """Écrit `destination/contrat-<id>.masque.md`, inscrit son empreinte au registre et dans l'état.
 
-    Refuse (`ValueError`) un texte dont la première ligne n'est pas le marqueur `valide_humain` de
-    ce contrat : publier autre chose est une erreur de programmation.
+    Refuse (`ValueError`), avant toute écriture, un identifiant qui n'est pas un id neutre connu du
+    coffre (6 caractères hexadécimaux : ni `NUL`, ni `CON`, ni `../x`) et un texte dont la première
+    ligne n'est pas le marqueur `valide_humain` de ce contrat : c'est une erreur de programmation.
     """
+    if not re.fullmatch(r"[0-9a-f]{6}", cid) or cid not in vault.known_ids():
+        raise ValueError("Publication refusée : identifiant de contrat invalide ou inconnu du coffre.")
     m = MARKER_RE.match(text.split("\n", 1)[0])
     if not m or m.group("statut") != "valide_humain" or m.group("id") != cid:
         raise ValueError("Publication refusée : la première ligne n'est pas le marqueur valide_humain de ce contrat.")
@@ -41,6 +45,6 @@ def verify(vault: Vault, file: Path) -> str:
         return "inconnu"
     if vault.lookup_published(hashlib.sha256(data).hexdigest()) is not None:
         return "publie"
-    first = data.split(b"\n", 1)[0].rstrip(b"\r").decode("utf-8", "replace").lstrip("﻿")
+    first = data.split(b"\n", 1)[0].rstrip(b"\r").decode("utf-8", "replace").lstrip("\ufeff")
     m = MARKER_RE.match(first)
     return "modifie" if m and m.group("id") in vault.known_ids() else "inconnu"

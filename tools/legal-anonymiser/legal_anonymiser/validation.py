@@ -35,11 +35,24 @@ def default_open(path: Path) -> None:
         pass
 
 
+def _ignore(_event: object) -> str:
+    return "break"
+
+
 def _dialog(tk, question: str, choices: Sequence[str]) -> str:
-    """Fenêtre à un bouton par choix ; fermer la fenêtre vaut abandon. Aucun bouton n'a le focus."""
+    """Fenêtre à un bouton par choix ; fermer la fenêtre vaut abandon.
+
+    Seul un clic publie : aucun bouton n'a le focus au départ, « Publier » est hors de l'ordre de
+    tabulation (Tab puis Espace ne peut pas l'atteindre), Entrée ne déclenche aucun bouton, et la
+    commande Tk `send` est retirée pour qu'une autre application Tk ne puisse pas cliquer à distance.
+    """
     answer = [_ABANDON]
     root = tk.Tk()
     try:
+        try:
+            root.tk.call("rename", "send", "")
+        except tk.TclError:
+            pass  # `send` n'existe pas (Windows, macOS) : rien à retirer.
         root.title("legal-france")
         root.protocol("WM_DELETE_WINDOW", root.destroy)
         tk.Label(root, text=question, wraplength=420, justify="left", padx=20, pady=16).pack()
@@ -49,7 +62,11 @@ def _dialog(tk, question: str, choices: Sequence[str]) -> str:
             def pick(c: str = choice) -> None:
                 answer[0] = c
                 root.destroy()
-            tk.Button(row, text=choice.capitalize(), width=12, command=pick).pack(side="left", padx=6)
+            extra = {"takefocus": 0} if choice == "publier" else {}
+            button = tk.Button(row, text=choice.capitalize(), width=12, command=pick, **extra)
+            button.bind("<Return>", _ignore)
+            button.bind("<KP_Enter>", _ignore)
+            button.pack(side="left", padx=6)
         root.attributes("-topmost", True)
         root.lift()
         root.focus_force()
@@ -72,15 +89,14 @@ def _interactive() -> bool:
 
 
 def _terminal(question: str, choices: Sequence[str]) -> str:
-    numbered = ", ".join("%d %s" % (i, c) for i, c in enumerate(choices, 1))
+    """Le mot entier est exigé (casse indifférente) ; toute autre saisie, vide comprise, redemande."""
     while True:
         try:
-            reply = input("%s (%s) : " % (question, numbered)).strip().lower()
+            reply = input("%s (tapez %s) : " % (question, ", ".join(choices))).strip().lower()
         except (EOFError, KeyboardInterrupt):
             return _ABANDON
-        for i, c in enumerate(choices, 1):
-            if reply in (c, str(i)):
-                return c
+        if reply in choices:
+            return reply
 
 
 def default_ask(question: str, choices: Sequence[str]) -> str:
@@ -100,15 +116,16 @@ def default_ask(question: str, choices: Sequence[str]) -> str:
     return _terminal(question, choices) if _interactive() else IMPOSSIBLE
 
 
-def confirm(files: List[Path], *, open_file: Callable[[Path], None] = default_open,
+def confirm(files: List[Path], *, question: str = QUESTION, open_file: Callable[[Path], None] = default_open,
             ask: Callable[[str, Sequence[str]], str] = default_ask) -> str:
     """Ouvre chaque fichier, puis demande : `publier`, `ajuster`, `abandonner` ou `impossible`.
 
-    Aucun paramètre ne peut accepter à la place de l'utilisateur. `open_file` et `ask` n'existent
-    que pour les tests : la CLI ne passe jamais autre chose que les valeurs par défaut.
-    Une réponse inattendue vaut abandon.
+    Aucun paramètre ne peut accepter à la place de l'utilisateur. `question` n'est que le texte
+    affiché : la CLI y place l'identifiant neutre du contrat (jamais une valeur du document).
+    `open_file` et `ask` n'existent que pour les tests : la CLI ne passe jamais autre chose que les
+    valeurs par défaut. Une réponse inattendue vaut abandon.
     """
     for f in files:
         open_file(Path(f))
-    answer = ask(QUESTION, CHOICES)
+    answer = ask(question, CHOICES)
     return answer if answer in CHOICES or answer == IMPOSSIBLE else _ABANDON
