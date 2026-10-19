@@ -55,6 +55,24 @@ complété par les tâches suivantes.
   légendes (« Le Locataire  Le Bailleur ») : noms des blocs de signature, colonnes comprises,
   commune de « Fait à », et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un
   rôle connu ni au vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
+- **Reconnaissance des noms** (`detection/ner.py`) : modèle spaCy `fr_core_news_lg`, local,
+  chargé une fois par processus sans ses composants inutiles (seuls `tok2vec` et `ner` restent).
+  PER devient PERSONNE, ORG SOCIETE, LOC COMMUNE (un seul mot) ou LIEU. Une entité faite de mots
+  du vocabulaire (rôles, institutions) est ignorée ; articles, mots d'annonce et forme sociale
+  sont retirés de ses bords. Un bloc plus long que `nlp.max_length` est découpé aux fins de
+  paragraphe ou de phrase. Un bloc surtout en capitales est lu sur une copie à l'initiale
+  majuscule, et seules ses entités de 2 à 4 mots sont gardées. Modèle absent : `ModelMissing`.
+- **Entités et placeholders** (`entites.py`, `propagation.py`) : chevauchements résolus par la
+  mention la plus longue (à égalité : règles, structure, NER, propagation). Une partie de la
+  comparution forme une entité, chaque représentant une autre. Un nom ailleurs rejoint l'entité
+  unique qui porte sa forme ; deux entités qui la portent (homonymes, époux, « M. Kerbrat ») en
+  font une mention ambiguë, à arbitrer. Chaque nom est ensuite cherché partout, sans casse ni
+  accents : forme complète, nom seul, prénom seul (3 lettres ou plus, hors vocabulaire),
+  initiales (« J.-P. D. », « J. Dupont », « JP Dupont »), nom de société sans article ; un mot
+  seul n'est pris qu'avec une majuscule (« Claire », pas « claire »). Placeholders `[BAILLEUR_1]`,
+  `[REPRESENTANT_1]`… dès qu'un rôle est défini, sinon `[PERSONNE_1]`, `[ADRESSE_1]`… ; une
+  ambiguïté `M1` devient `[AMBIGU_1]`. Les décisions (ambiguïté tranchée, entité démasquée,
+  commune gardée, texte à masquer en plus) ne renumérotent jamais les placeholders.
 - **Vocabulaire** (`data/vocabulaire.txt`) : environ 400 formes juridiques et courantes
   (mois, jours, intitulés, rôles, codes, institutions, formes sociales), sans prénom, sans
   nom d'entreprise réelle, sans nom de ville sauf France.
