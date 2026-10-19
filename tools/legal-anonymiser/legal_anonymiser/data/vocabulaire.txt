@@ -171,6 +171,32 @@ Entre
 Fait
 Approuvé
 
+# Formules de comparution (relues en capitales par la seconde passe)
+Location
+Part
+Convenu
+Été
+Capital
+Siège
+Social
+Immatriculé
+Immatriculée
+Représenté
+Représentée
+Demeurant
+Domicilié
+Domiciliée
+Né
+Née
+Situé
+Située
+Nationalité
+Numéro
+Téléphone
+Courriel
+IBAN
+BIC
+
 # Termes définis usuels
 Fonds
 Bien

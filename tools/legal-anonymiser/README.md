@@ -120,9 +120,45 @@ complété par les tâches suivantes.
   `[REPRESENTANT_1]`… dès qu'un rôle est défini, sinon `[PERSONNE_1]`, `[ADRESSE_1]`… ; une
   ambiguïté `M1` devient `[AMBIGU_1]`. Les décisions (ambiguïté tranchée, entité démasquée,
   commune gardée, texte à masquer en plus) ne renumérotent jamais les placeholders.
-- **Vocabulaire** (`data/vocabulaire.txt`) : environ 400 formes juridiques et courantes
-  (mois, jours, intitulés, rôles, codes, institutions, formes sociales), sans prénom, sans
-  nom d'entreprise réelle, sans nom de ville sauf France.
+- **Vocabulaire** (`data/vocabulaire.txt`) : environ 420 formes juridiques et courantes
+  (mois, jours, intitulés, rôles, codes, institutions, formes sociales, formules de comparution
+  comme « D'UNE PART », « IL A ÉTÉ CONVENU », « AU CAPITAL DE »), sans prénom, sans nom
+  d'entreprise réelle, sans nom de ville sauf France.
+
+## Masquage et seconde passe (état actuel)
+
+- **Masquage** (`masquage.py`) : chaque mention, dans tous les blocs (corps, en-têtes, révisions,
+  commentaires, texte caché), est remplacée par son placeholder de droite à gauche ; une ambiguïté
+  non tranchée par `[AMBIGU_<n>]`. La civilité collée devant une personne part avec elle
+  (« M. Kerbrat », « Mme et M. Dupont »). Deux étendues qui se chevauchent : la plus longue, puis la
+  plus à gauche.
+- **Seconde passe** (`controle.py`) : relit le texte masqué et produit des alertes `A1`, `A2`… dans
+  l'ordre du document, positions sur le texte masqué :
+  - `valeur_connue` : valeur d'une entité (forme canonique et ses formes, texte de chaque mention si
+    les blocs d'origine sont passés) encore visible, sans casse ni accents, minuscules comprises
+    (« le dossier kerbrat ») ; jamais exemptée par une décision garder. Ignorées : valeurs de moins de
+    3 caractères, mot seul courant, capital social.
+  - `majuscule` : mot capitalisé hors début de phrase (début de bloc, après `. ! ? : ;` sauf
+    abréviation « M. », « J. », « art. », après une puce), hors placeholder, sauf mot du vocabulaire
+    ou mot-outil non juxtaposé (particules sautées, ponctuation et colonnes non) à une civilité, un
+    rôle ou un mot de voie (« Mme France », « avenue de la République » alertent ; « M. le Maire »
+    non). En début de ligne sans ponctuation avant, et en tête de phrase pour un mot en capitales
+    (« DUPONT a signé »), seul un mot courant est exempté. Ligne en capitales (60 % des lettres) :
+    chaque mot de 3 lettres ou plus qui n'est ni au vocabulaire, ni mot-outil, ni verbe courant, ni
+    mot vide de spaCy (facultatif).
+  - `chiffres` : 6 chiffres ou plus, séparés au plus par une espace, un point, une barre ou un tiret
+    (« 06.12.34.56.78 », « 23/01234 »), hors date, montant (€, euros, EUR ou % dans les 3
+    caractères), référence d'article (« art. L. 1234-5 ») ou de texte (« loi n° 89-462 »).
+  - `arobase`, `url` ; `date_naissance` : date dans les 40 caractères après « né(e) » ou « date de
+    naissance » (« née MARTIN le 2 juin 1965 » compris).
+  - Une décision garder exempte une occurrence (clé `entites.occurrence_key` sur le texte masqué)
+    des motifs autres que `valeur_connue` ; une commune gardée n'est plus signalée. Une étendue ne
+    porte qu'une alerte, `valeur_connue` d'abord.
+  - Limites connues : un mot capitalisé en début de phrase ou après « : » (« Témoin : Fabre. ») n'est
+    signalé que s'il est une valeur connue ou en capitales ; un nom en minuscules inconnu, des
+    initiales (« J. D. »), un code postal seul ne sont pas signalés. En capitales, tout mot hors
+    vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé sur un contrat tout en
+    capitales.
 
 ## Licences des dépendances
 
