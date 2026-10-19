@@ -41,12 +41,13 @@ complété par les tâches suivantes.
   « habitant » (arrêt sur « et » devant une civilité ou une forme sociale). Quand une forme
   sociale a un nom plausible de chaque côté (« LA SOCIÉTÉ SAS DUVALCOURT CONSEIL »,
   « DUVALCOURT CONSEIL SAS IMMATRICULÉE »), chaque côté est jugé seul : un nom placé avant sa
-  forme perd ses mots d'ouverture (« CONTRAT », « Gérant », articles, prépositions), ne commence
+  forme perd ses mots d'ouverture (« CONTRAT », « CONVENTION », « Gérant », articles, prépositions), ne commence
   pas par un article ou une préposition devant un mot capitalisé, garde ses mots courants
   (« Société Générale SA », « L'Oréal SA ») mais n'est pas fait que de mots d'annonce
   (« LA SOCIÉTÉ SAS X ») ; « et », « & » lient les mots d'un nom (« Dupont et Fils SARL »).
   « SA » en capitales devant un mot connu est le possessif, sauf si un marqueur de société suit
-  (virgule, « au capital », « immatriculée », RCS…) ou si « la », « entre », « et » précède. Les
+  (virgule, « au capital », « immatriculée », RCS…), si ce mot est une préposition (« X SA ENTRE
+  LES SOUSSIGNÉS ») ou si « la », « entre », « et » précède comme mot entier (pas « MET SA »). Les
   titres (« M. le Maire », « Maître d'Œuvre ») ne sont pas pris pour des noms. Après une ligne
   qui commence par « Fait à », « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un
   lieu après une fin de phrase (« La Rochelle » admis, jamais un lieu fait seulement de mots

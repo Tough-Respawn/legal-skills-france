@@ -7,8 +7,8 @@ deux côtés sont des candidats indépendants, jugés chacun sur ses propres mot
 candidat est rejeté s'il n'est fait que de mots du vocabulaire ou de mots vides, et un
 nom placé avant sa forme ne commence jamais par un article ou une préposition suivis
 d'un mot capitalisé. Un côté ne supprime jamais l'autre. La forme sociale reste hors
-du nom, elle demeure visible (spec 6.4). « SA » suivi d'un mot connu en capitales est
-le possessif (« EXERCER SA MISSION »), pas une forme.
+du nom, elle demeure visible (spec 6.4). « SA » suivi d'un mot connu en capitales autre
+qu'une préposition est le possessif (« EXERCER SA MISSION »), pas une forme.
 """
 from __future__ import annotations
 
@@ -67,14 +67,14 @@ FUNC_START = (r"(?i:le|la|les|un|une|de|du|des|a|à|au|aux|en|par|pour|sur|dans|
               r"|envers|selon|vers|dont|qui|que|et|ou)" + SP + r"+[" + UP + "]")   # « L'Oréal SA » reste admis
 # Mots d'ouverture retirés en tête d'un nom placé avant sa forme (« CONTRAT X SAS », « Gérant SARL X ») ;
 # un reste fait seulement de mots d'annonce (« LA SOCIÉTÉ SAS X ») n'est pas un nom.
-LEAD_STRIP = {"entre", "contrat", "pour", "gerant", "president", "directeur", "la", "le", "les", "l", "de", "du",
-              "des", "a", "par", "contre"}
+LEAD_STRIP = {"entre", "contrat", "convention", "pour", "gerant", "president", "directeur", "la", "le", "les", "l",
+              "de", "du", "des", "a", "par", "contre"}
 GENERIC = {"societe", "association", "entreprise", "groupe", "cabinet", "ets", "etablissements"}
 # « SA » en capitales : forme sociale si un marqueur de société suit dans les 80 caractères ou si « la société »,
 # « la », « entre », « et » précède ; sinon possessif devant un mot connu en capitales (« EXERCER SA MISSION »).
 SA_MARK_RX = re.compile(r"(?i:,|au" + SP + r"+capital|immatricul|rcs|siren|siret|dont" + SP + r"+le" + SP
                         + r"+si[èe]ge|repr[ée]sent[ée]e?" + SP + r"+par|ci-apr[èe]s)")
-SA_LEAD_RX = re.compile(r"(?i:la" + SP + r"+soci[ée]t[ée]|la|entre|et)" + SP + r"+$")
+SA_LEAD_RX = re.compile(r"(?<!\w)(?i:la" + SP + r"+soci[ée]t[ée]|la|entre|et)" + SP + r"+$")
 CO_CAP_ANY = r"(?!" + FORMS + r"\b)" + CAP_ANY
 CO_START = r"(?!" + FUNC_START + r")" + CO_CAP_ANY
 CO_IN = r"(?!" + PREP_CORE + SP + r"+[" + UP + r"])" + CO_CAP_ANY
@@ -165,8 +165,9 @@ def _possessive(text: str, m: "re.Match[str]", vocab: Set[str]) -> bool:
     """Vrai si la forme du candidat est un « SA » possessif (« EXERCER SA MISSION »), pas une société."""
     fs, fe = m.span("form")
     nxt = WORD_RX.search(text, fe)
-    if m.group("form") != "SA" or not nxt or not nxt.group().isupper() or not known(nxt.group(), vocab):
-        return False
+    if (m.group("form") != "SA" or not nxt or not nxt.group().isupper() or not known(nxt.group(), vocab)
+            or re.fullmatch(PREP_CORE, nxt.group())):
+        return False   # « DUVALCOURT CONSEIL SA ENTRE LES SOUSSIGNÉS » : forme sociale
     return not SA_MARK_RX.search(text, fe, fe + 80) and not SA_LEAD_RX.search(text, 0, fs)
 
 
