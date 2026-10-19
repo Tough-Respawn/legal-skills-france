@@ -31,7 +31,8 @@
 4. Placeholders : `[<ROLE>_<n>]` si un rôle est défini, sinon `[<TYPE>_<n>]`, numérotés par
    étiquette dans l'ordre de première apparition ; les décisions ne changent jamais ces numéros.
    Une ambiguïté non tranchée `M<n>` se masque en `[AMBIGU_<n>]`.
-5. Décisions : `resolve` rattache une occurrence (clé `occurrence_key`) à un placeholder ou à
+5. Décisions : `resolve` rattache une occurrence (clé `occurrence_key` : rang compté sur tous les blocs
+   de même localisation, corps puis autres sections dans l'ordre d'émission) à un placeholder ou à
    une nouvelle entité (« nouveau ») ; `unmask` retire des entités ; une commune « garder » (clé :
    texte.norm de sa forme canonique) est retirée ; `mask_more` crée une entité AUTRE par texte, sur
    chaque occurrence encore libre, sans casse ni accents, bornes de mot comprises.
@@ -39,6 +40,7 @@
 from __future__ import annotations
 
 import re
+from bisect import bisect_left
 from dataclasses import replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -56,13 +58,39 @@ _ALPHA_RX = re.compile(r"[^\W\d_]+(?:['-][^\W\d_]+)*")
 NEW = "nouveau"
 
 
-def occurrence_key(block: Block, start: int, end: int) -> Key:
-    """Clé d'une occurrence : (location, texte normalisé, rang de ce texte dans le bloc, à partir de 1)."""
-    form = texte.norm(block.text[start:end])
-    if not form:
-        return block.location, form, 1
-    text, pos = folded(block.text)
-    return block.location, form, 1 + sum(1 for m in pattern(form).finditer(text) if pos[m.start()] < start)
+class Ranks:
+    """Clés d'occurrence sur un jeu de blocs : chaque bloc plié une fois, chaque forme cherchée une fois
+    par localisation (une page PDF et son texte caché, un paragraphe DOCX et ses révisions la partagent)."""
+
+    def __init__(self, blocks: Sequence[Block]) -> None:
+        self.blocks = blocks
+        self.folds: Dict[int, Tuple[str, List[int]]] = {}
+        self.found: Dict[Tuple[str, str], List[Tuple[int, int]]] = {}
+
+    def fold(self, bi: int) -> Tuple[str, List[int]]:
+        if bi not in self.folds:
+            self.folds[bi] = folded(self.blocks[bi].text)
+        return self.folds[bi]
+
+    def key(self, bi: int, start: int, end: int) -> Key:
+        """(location, texte normalisé, rang de ce texte parmi les blocs de cette localisation, depuis 1)."""
+        loc = self.blocks[bi].location
+        form = texte.norm(self.blocks[bi].text[start:end])
+        if not form:
+            return loc, form, 1
+        if (loc, form) not in self.found:
+            hits = []
+            for j, b in enumerate(self.blocks):
+                if b.location == loc:
+                    text, pos = self.fold(j)
+                    hits += [(j, pos[m.start()]) for m in pattern(form).finditer(text)]
+            self.found[(loc, form)] = hits
+        return loc, form, 1 + bisect_left(self.found[(loc, form)], (bi, start))
+
+
+def occurrence_key(blocks: Sequence[Block], bi: int, start: int, end: int) -> Key:
+    """Clé de l'occurrence [start, end) du bloc bi (voir Ranks.key) ; pour plusieurs clés, réutiliser Ranks."""
+    return Ranks(blocks).key(bi, start, end)
 
 
 def ambiguity_placeholder(a: Ambiguity) -> str:
@@ -283,11 +311,12 @@ class _Builder:
     def decide(self, decisions: Decisions, counters: Dict[str, int]) -> List[Ambiguity]:
         """Résolutions, retraits (unmask, communes gardées), puis ajouts libres (mask_more)."""
         by_ph = {e.placeholder: e for e in self.ents}
+        ranks = Ranks(self.blocks)
         ambs: List[Ambiguity] = []
         for m, own, form in sorted(self.pending, key=lambda p: (p[0].block, p[0].start)):
             live = [self.ents[i].placeholder for i in own if i in self.owners.get(form, ())]   # formes à jour
             target = live[0] if len(live) == 1 else decisions.resolve.get(
-                occurrence_key(self.blocks[m.block], m.start, m.end), None if live else NEW)   # sans candidat : nouvelle
+                ranks.key(m.block, m.start, m.end), None if live else NEW)   # sans candidat : nouvelle
             if target == NEW:
                 e = Entity(m.kind, None, "", "", [])
                 self.label(e, counters)

@@ -135,30 +135,43 @@ complété par les tâches suivantes.
 - **Seconde passe** (`controle.py`) : relit le texte masqué et produit des alertes `A1`, `A2`… dans
   l'ordre du document, positions sur le texte masqué :
   - `valeur_connue` : valeur d'une entité (forme canonique et ses formes, texte de chaque mention si
-    les blocs d'origine sont passés) encore visible, sans casse ni accents, minuscules comprises
-    (« le dossier kerbrat ») ; jamais exemptée par une décision garder. Ignorées : valeurs de moins de
-    3 caractères, mot seul courant, capital social.
+    les blocs d'origine sont passés à `check(..., original=blocs)`) encore visible, sans casse ni
+    accents, minuscules comprises (« le dossier kerbrat ») ; jamais exemptée par une décision garder.
+    Ignorées : valeurs de moins de 3 caractères, capital social. Une valeur d'un seul mot courant
+    (« Juin », « Poste ») n'alerte que collée à une civilité, un rôle ou une voie (« M. JUIN »).
   - `majuscule` : mot capitalisé hors début de phrase (début de bloc, après `. ! ? : ;` sauf
     abréviation « M. », « J. », « art. », après une puce), hors placeholder, sauf mot du vocabulaire
-    ou mot-outil non juxtaposé (particules sautées, ponctuation et colonnes non) à une civilité, un
-    rôle ou un mot de voie (« Mme France », « avenue de la République » alertent ; « M. le Maire »
-    non). En début de ligne sans ponctuation avant, et en tête de phrase pour un mot en capitales
-    (« DUPONT a signé »), seul un mot courant est exempté. Ligne en capitales (60 % des lettres) :
-    chaque mot de 3 lettres ou plus qui n'est ni au vocabulaire, ni mot-outil, ni verbe courant, ni
-    mot vide de spaCy (facultatif).
+    ou mot-outil non juxtaposé à une civilité qui le précède, un rôle ou un mot de voie (particules
+    sautées ; ponctuation, point compris, et colonnes coupent : « Mme France », « avenue de la
+    République » alertent ; « M. le Maire », « en Avril. M. Kerbrat » non pour le mot courant). En
+    début de ligne sans ponctuation avant, et en tête de phrase pour un mot en capitales (« DUPONT a
+    signé »), seul un mot courant est exempté. Ligne en capitales (60 % des lettres) : mot collé à
+    une civilité (« M. FRANCE », « M. LI »), ou mot de 3 lettres ou plus qui n'est ni au vocabulaire,
+    ni mot-outil, ni verbe courant, ni mot vide de spaCy (facultatif). La civilité elle-même n'est
+    jamais signalée. Mots signalés consécutifs (espace, trait d'union, apostrophe) : une seule alerte
+    (« DUVALCOURT MORVAN IMMOBILIER », « M. Le Gall ») ; un mot exempté par sa seule place en tête de
+    phrase s'y joint (« Locataire : Paul Durand ») mais n'alerte jamais seul.
   - `chiffres` : 6 chiffres ou plus, séparés au plus par une espace, un point, une barre ou un tiret
     (« 06.12.34.56.78 », « 23/01234 »), hors date, montant (€, euros, EUR ou % dans les 3
     caractères), référence d'article (« art. L. 1234-5 ») ou de texte (« loi n° 89-462 »).
-  - `arobase`, `url` ; `date_naissance` : date dans les 40 caractères après « né(e) » ou « date de
-    naissance » (« née MARTIN le 2 juin 1965 » compris).
-  - Une décision garder exempte une occurrence (clé `entites.occurrence_key` sur le texte masqué)
-    des motifs autres que `valeur_connue` ; une commune gardée n'est plus signalée. Une étendue ne
-    porte qu'une alerte, `valeur_connue` d'abord.
-  - Limites connues : un mot capitalisé en début de phrase ou après « : » (« Témoin : Fabre. ») n'est
-    signalé que s'il est une valeur connue ou en capitales ; un nom en minuscules inconnu, des
-    initiales (« J. D. »), un code postal seul ne sont pas signalés. En capitales, tout mot hors
-    vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé sur un contrat tout en
-    capitales.
+  - `arobase`, `url` ; `date_naissance` : date dans les 40 caractères après « né(e)(s) », « NE LE »
+    ou « NE À » (capitales sans accent) ou « date de naissance » (« née MARTIN le 2 juin 1965 »
+    compris ; la négation « ne pourra … avant le 1er juillet » non).
+  - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
+    (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte
+    normalisé, rang)`, le rang étant compté sur **tous les blocs de même localisation** dans l'ordre
+    du document (corps, puis révisions, texte caché… dans l'ordre d'émission) : garder « Orange » du
+    corps de la page 1 n'exempte pas « Orange » du texte caché de la page 1. La clé porte sur le
+    texte masqué : quand le masquage change (nouvelle décision), les rangs peuvent bouger et le
+    fichier d'ajustements (tâche 11) doit recalculer les clés sur le nouveau texte masqué. Une
+    commune gardée n'est plus signalée, sauf collée à une civilité (« M. Valence »). Une étendue ne
+    porte qu'une alerte, `valeur_connue` d'abord. Clés calculées seulement pour les formes gardées :
+    un bloc de 200 000 caractères est relu en moins d'une seconde.
+  - Limites connues : un mot capitalisé seul en début de phrase ou après « : » (« Témoin : Fabre. »,
+    « Fabre signera ») n'est signalé que s'il est une valeur connue ou en capitales ; un nom en
+    minuscules inconnu, des initiales (« J. D. »), un code postal seul ne sont pas signalés. En
+    capitales, tout mot hors vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé
+    sur un contrat tout en capitales, à mesurer sur le corpus.
 
 ## Licences des dépendances
 
