@@ -6,6 +6,27 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Outil local `tools/legal-anonymiser/` : pseudonymisation d'un contrat
+  (DOCX, PDF, numérisation) sur le poste de l'utilisateur, sans réseau,
+  avant toute analyse par un modèle. Identifiants masqués par règles,
+  structure du contrat, reconnaissance des noms (spaCy `fr_core_news_lg`) et
+  propagation ; seconde passe sur le texte masqué ; arbitrage dans
+  `ajustements.txt` ; validation humaine obligatoire (fenêtre native ou
+  terminal interactif, aucune option ne publie) ; publication avec empreinte
+  au registre (`verifier`) ; inspection technique du fichier (texte caché,
+  caractères piégés, révisions, champs, macros, objets, JavaScript, mises à
+  jour incrémentales, signature partielle, métadonnées, texte adressé à une
+  IA) ; réidentification locale du rapport. Commandes `traiter`, `relancer`,
+  `valider`, `verifier`, `reidentifier`. Seule exception à la règle « Python
+  standard » du dépôt (pypdf, Pillow, spaCy, Tesseract installés par
+  l'utilisateur) ; les 8 skills et les trois archives restent sans dépendance.
+
+---
+
 ## [4.4.0] - 2026-10-05
 
 ### Added

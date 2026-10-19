@@ -497,6 +497,13 @@ portables sont courtes et leur routage reste à évaluer sans plugin concurrent.
 Les autres harnais n'ont pas encore été testés.
 Voir [COMPATIBILITY.md](COMPATIBILITY.md) pour les limites par application.
 
+## Anonymiser un contrat avant analyse / Anonymise a contract before analysis
+
+> **FR :** `tools/legal-anonymiser/` masque, **sur votre poste et sans réseau**, les identifiants d'un contrat (noms, adresses, numéros, e-mails, IBAN, SIREN, dates de naissance, commune) et signale les anomalies techniques du fichier (texte caché, révisions, macros, JavaScript, signature partielle). Vous relisez le texte masqué, le publiez d'un clic, puis ne transmettez au modèle que `contrat-<id>.masque.md`. Le rapport renvoyé se réidentifie localement. Installation, parcours, format du fichier d'ajustements et limites : [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md). L'outil s'exécute en amont, y compris pour Claude.ai et ChatGPT, qui ne peuvent pas le lancer. Le masquage est automatique et peut manquer un élément : la relecture avant publication fait partie du parcours.
+> **EN:** `tools/legal-anonymiser/` pseudonymises a contract **locally, with no network access**, flags technical anomalies in the file, and lets you review and publish the masked text yourself; only the published `contrat-<id>.masque.md` is meant to be shared with a model. It runs upstream of Claude.ai and ChatGPT, which cannot run it. Automatic masking can miss an item: the review step is part of the workflow. See [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md).
+
+---
+
 ## Chat, API et modèles locaux
 
 Choisissez le harnais qui exécute votre modèle (DeepSeek, Qwen ou autre).
