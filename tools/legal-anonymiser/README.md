@@ -24,6 +24,23 @@ complété par les tâches suivantes.
   actions du catalogue et des liens, chaînes `/Next` comprises, pas dans les actions des
   pages ni des champs ; autres annotations (surlignage, etc.) non extraites.
 
+## Détection (état actuel)
+
+- **Règles** (`detection/regles.py`) : identifiants à forme fixe (IBAN, SIREN, SIRET, NIR,
+  TVA, RCS, e-mail, téléphone, adresse, date et lieu de naissance, immatriculation, pièce
+  d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
+- **Structure** (`detection/structure.py`) : le bloc de comparution (« Entre les
+  soussignés » jusqu'à « Il a été convenu », « Préambule » ou « Article 1 ») est découpé en
+  parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » (rôle connu
+  ou mot du vocabulaire) et ses représentants (« représenté(e) par »). Partout : civilité
+  suivie d'un nom (civilité incluse), société désignée par sa forme (la forme sociale reste
+  visible). Après « Fait à » ou « Lu et approuvé » : noms des blocs de signature, commune
+  de « Fait à », et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un rôle
+  connu ni au vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
+- **Vocabulaire** (`data/vocabulaire.txt`) : environ 400 formes juridiques et courantes
+  (mois, jours, intitulés, rôles, codes, institutions, formes sociales), sans prénom, sans
+  nom d'entreprise réelle, sans nom de ville sauf France.
+
 ## Licences des dépendances
 
 Vérifiées à la source le 2026-10-19. Le projet ne redistribue aucune dépendance.
