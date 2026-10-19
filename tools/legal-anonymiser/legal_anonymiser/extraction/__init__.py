@@ -23,8 +23,13 @@ def _docx(path: Path, workdir: Path) -> Extracted:
     return docx.extract_docx(path)
 
 
-# Les tâches 4 et 5 ajoutent .pdf et les images ici.
-_DISPATCH = {".docx": _docx}
+def _pdf(path: Path, workdir: Path) -> Extracted:
+    from . import pdf
+    return pdf.extract_pdf(path)
+
+
+# La tâche 5 ajoute les images ici.
+_DISPATCH = {".docx": _docx, ".pdf": _pdf}
 
 
 def extract(path: Path, workdir: Path) -> Extracted:
