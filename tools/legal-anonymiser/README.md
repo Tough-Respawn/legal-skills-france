@@ -39,7 +39,8 @@ complété par les tâches suivantes.
   forme (la forme sociale reste visible), adresse après « demeurant », « domicilié », « dont
   le siège est », « sis », « résidant », « habitant ». Les titres (« M. le Maire », « Maître
   d'Œuvre ») ne sont pas pris pour des noms. Après une ligne qui commence par « Fait à »,
-  « Lu et approuvé » ou « Signature », un « Fait à » qui suit une fin de phrase, ou une
+  « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un lieu après une fin de
+  phrase, ou une
   ligne de légendes (« Le Locataire  Le Bailleur ») : noms des blocs de signature, colonnes
   comprises, commune de « Fait à »,
   et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un rôle connu ni au

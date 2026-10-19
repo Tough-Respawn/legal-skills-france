@@ -5,7 +5,8 @@ est lu ligne à ligne et découpé en parties : chaque nom de partie reçoit un
 index `party`, le rôle défini par « ci-après » (ou annoncé par « LE SALARIÉ : »),
 ses représentants et ses noms de naissance ou d'usage. Partout : civilité suivie
 d'un nom, société désignée par sa forme, adresse après « demeurant », « dont le
-siège est »… Après « Fait à » ou « Lu et approuvé » en début de ligne : noms des
+siège est »… Après « Fait à », « Lu et approuvé » ou « Signature » en début de
+ligne, ou « Fait à <Lieu> » (lieu capitalisé) après une fin de phrase : noms des
 blocs de signature (colonnes comprises) et commune de « Fait à ». Les
 chevauchements avec les règles (regles.py) ne sont pas résolus ici.
 
@@ -40,23 +41,29 @@ FIRST = r"[" + UP + r"][" + LOW + r"]+(?:['’-][" + UP + r"]?[" + LOW + r"]+)*"
 CIVILITY = (r"(?:(?:M|MM|MME|MR|MLLE)\.|(?:Mr|Mme|Mmes|Mlle|Dr|Pr|MME|MR|MLLE|PR)\.?|Monsieur|Madame|"
             r"Mademoiselle|MONSIEUR|MADAME|MADEMOISELLE|Me|Maître|MAÎTRE|Docteur|Professeur"
             r"|M(?=" + SP + r"+" + ALLCAPS + SP + r"+" + ALLCAPS + r"))")   # M sans point : « M JEAN DUPONT »
-FUNC = (r"(?:Et|ET|Ou|OU|À|AU|AUX|EN|PAR|POUR|SUR|SOUS|DANS|AVEC|CHEZ|DEVANT|CONTRE|ENTRE|ENVERS|SELON|VERS"
-        r"|SANS|APRÈS|AVANT|DONT|QUI|QUE)\b")   # mots outils en capitales, jamais dans un nom
+FORMS = r"(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|SCP|SELARL|SELAS|SCM|GIE|SCEA|EARL|SCOP)"
+# Prépositions en capitales : hors d'un nom seulement quand un autre mot les suit (« AVANT LE », pas « M. AVANT »).
+PREP = (r"(?:À|AU|AUX|EN|PAR|POUR|SUR|SOUS|DANS|AVEC|CHEZ|DEVANT|CONTRE|ENTRE|ENVERS|SELON|VERS|SANS|APRÈS|AVANT"
+        r"|DONT|QUI|QUE)" + SP + r"+(?!" + FORMS + r"\b)[^\W\d_]")
 CONTEXT = (r"(?i:née?s?|épouse|veuve|divorcée?|dite?|demeurant|domiciliée?s?|représentée?s?"
            r"|ci-après|ci-dessous)\b")
-# Mot capitalisé (Jean-Pierre, N'Diaye, DUPONT, LE) : ni mot outil, ni civilité, ni « LE » d'une date (LE 3 MARS).
-CAP = (r"(?!" + FUNC + r")(?!" + CONTEXT + r")(?!" + CIVILITY + "(?:" + SP + r"|$))"
-       r"(?!(?i:le|la|les|de|du|des)" + SP + r"+\d)[" + UP + r"][^\W\d_]*(?:['’-][^\W\d_]+)*")
+# Mot capitalisé (Jean-Pierre, N'Diaye, DUPONT, LE) : ni « Et », ni civilité, ni « LE » d'une date (LE 3 MARS).
+CAP_ANY = (r"(?!(?:Et|ET|Ou|OU)\b)(?!" + CONTEXT + r")(?!" + CIVILITY + "(?:" + SP + r"|$))"
+           r"(?!(?i:le|la|les|de|du|des)" + SP + r"+\d)[" + UP + r"][^\W\d_]*(?:['’-][^\W\d_]+)*")
+CAP = r"(?!" + PREP + r")" + CAP_ANY
 PARTICLES = r"(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter|le|la)"
 JOIN_P = SP + r"(?:" + PARTICLES + SP + r"){0,2}(?:[dl]['’])?"
 # Particule en tête de nom (M. de Villiers, Mme d'Arcy) ; jamais « le », « la », « l' » seuls (M. le Maire).
 LEAD_P = (r"(?:(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter)" + SP + r"+(?:" + PARTICLES + SP
           + r"+)?(?:[dl]['’])?|d['’])")
 JOIN_C = SP + r"(?:(?:de|du|des|la|le|les|et|&|au|aux|en|sur)" + SP + r")?(?:[dl]['’])?"
-FORMS = r"(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|SCP|SELARL|SELAS|SCM|GIE|SCEA|EARL|SCOP)"
 PERSON = CAP + r"(?:" + JOIN_P + CAP + r"){0,3}"
 CO_CAP = r"(?!" + FORMS + r"\b)" + CAP  # la forme sociale reste hors du nom
 COMPANY = CO_CAP + r"(?:" + JOIN_C + CO_CAP + r"){0,5}"
+# Nom placé avant sa forme sociale (« SANS SOUCI SAS ») : la forme borne le nom, les prépositions y sont admises.
+CO_CAP_ANY = r"(?!" + FORMS + r"\b)" + CAP_ANY
+COMPANY_BEFORE_FORM = CO_CAP_ANY + r"(?:" + JOIN_C + CO_CAP_ANY + r"){0,5}"
+_BEFORE_FORM = {"la", "le", "les", "de", "du", "des", "l", "a", "par", "contre", "entre"}  # « DE LA SARL X »
 
 CIVIL_RX = re.compile(r"(?<![\w.])(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?(?P<civ>" + CIVILITY + ")"
                       + SP + r"+(?P<lead>" + LEAD_P + r")?(?P<name>" + PERSON + ")")
@@ -66,9 +73,9 @@ NUMBER_BEFORE_RX = re.compile(r"(?:\d|\b(?i:un|une|deux|trois|quatre|cinq|six|se
                               + SP + r"*$")   # « 2 M DE HAUTEUR » : M est une unité
 CO_PRE_RX = re.compile(
     r"(?<!\w)(?:(?:[Ll]a|LA)" + SP + r"+(?:société|Société|SOCIÉTÉ)|[Ll]['’](?:association|Association|ASSOCIATION)"
-    r"|Société|SOCIÉTÉ|Sté|Ets\.?|Établissements|Etablissements|Association|" + FORMS + r"\b)"
-    + SP + r"+(" + COMPANY + ")")
-CO_POST_RX = re.compile(r"(?<![\w'’-])(" + COMPANY + ")" + SP + r"+(?P<form>" + FORMS + r")\b")
+    r"|Société|SOCIÉTÉ|Sté|Ets\.?|Établissements|Etablissements|Association|(?P<form>" + FORMS + r")\b)"
+    + SP + r"+(?P<co>" + COMPANY + ")")
+CO_POST_RX = re.compile(r"(?<![\w'’-])(?P<co>" + COMPANY_BEFORE_FORM + ")" + SP + r"+(?P<form>" + FORMS + r")\b")
 # Nom sans civilité : DUPONT Jean, Jean DUPONT ; seulement en contexte (comparution, signature, né le).
 BARE_RX = re.compile(
     r"(?<![\w'’-])(?:" + ALLCAPS + r"(?:" + SP + ALLCAPS + r")?(?:" + SP + FIRST + r"){1,2}"
@@ -99,23 +106,23 @@ ADDR_RX = re.compile(
     + r"+est(?:" + SP + r"+situé|" + SP + r"+sis)?(?:" + SP + r"+au|" + SP + r"+à)?|sise?(?:" + SP + r"+à|"
     + SP + r"+au)?|résidant|habitant)" + SP + r"+(?i:(?:ensemble|au|à|aux)" + SP + r"+)?")
 POSTAL_RX = re.compile(r"\d{5}" + SP + r"?" + PLACE)
-ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?:(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
+ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
                           r"|d['’](?:une|autre)" + SP + r"+part|de" + SP + r"+nationalité|agissant|en" + SP
-                          + r"+qualité)|(?:Et|ET)\b)")
+                          + r"+qualité)|," + SP + r"*(?:Et|ET)\b")   # « , Et Mme Y » ; pas « RUE PIERRE ET MARIE CURIE »
 ADDR_NEXT_RX = re.compile(r"," + SP + r"*[" + UP + r"0-9][^,;\n]*")
 _ADDR_REACH = 120
 
-START_RX = re.compile(r"\s*(?:ENTRE\b|(?i:entre)(?:(?i:\s+les\s+soussign|\s+d['’](?:une|autre)\s+part)"
-                      r"|\s*[:,]|\s*$))")
-# « Entre la société X », « Entre M. X » : ouvre seulement si un nom commence à cet endroit (_opens).
-START_NAME_RX = re.compile(r"\s*(?i:entre)\s+(?P<key>(?i:la\s+société|l['’]association)\b|(?=" + CIVILITY + SP
-                           + r")|" + FORMS + r"\b)")
+START_RX = re.compile(r"\s*(?i:entre)(?:(?i:\s+les\s+soussign|\s+d['’](?:une|autre)\s+part)|\s*[:,]|\s*$)")
+# « Entre la société X », « ENTRE LA SARL X », « Entre M. X » : ouvre seulement si un nom suit (_opens).
+START_NAME_RX = re.compile(r"\s*(?i:entre)" + SP + r"+")
+ARTICLE_GAP_RX = re.compile(r"(?i:(?:la|le|les)" + SP + r"+|l['’])?")
 END_RX = re.compile(
     r"(?:^|(?<=[.:;]))\s*(?i:il\s+(?:a\s+été|est)\s+(?:préalablement\s+)?(?:convenu|arrêté|exposé)"
     r"|préambule|ceci\s+exposé|exposé\b|art(?:icle|\.)\s*(?:1(?!\d)|1er|premier|i\b))")
-# Marqueur de signature en début de ligne, ou « Fait à » après une fin de phrase ; jamais cité dans une clause.
+# Marqueur de signature en début de ligne, ou « Fait à <Lieu> » après une fin de phrase ; jamais cité dans
+# une clause (« lu et approuvé » entre guillemets, « Fait à la demande du Bailleur »).
 SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b|lu\s+et\s+approuvé|signatures?\b)"
-                       r"|(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)\b")
+                       r"|(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+[" + UP + r"]")
 HEADING_RX = re.compile(r"\s*(?:ANNEXE|Annexe|ARTICLE|Article|TITRE|Titre|CHAPITRE|Chapitre)\b")
 FAIT_RX = re.compile(r"\b(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
@@ -192,12 +199,14 @@ def _addresses(text: str) -> List[Span]:
     return out
 
 
-def _trim(text: str, s: int, e: int, vocab: Set[str]) -> Span:
-    """Nom de société sans les mots du vocabulaire en tête ; vide s'il n'a que des mots connus ou vides."""
+def _trim(text: str, s: int, e: int, vocab: Set[str], form: bool) -> Span:
+    """Nom de société, vide s'il n'a que des articles. Avec une forme (« SARL Expert Conseil ») il reste
+    entier ; sans forme, les mots connus en tête sont retirés et un nom tout connu est rejeté."""
     words = list(WORD_RX.finditer(text, s, e))
-    if all(_known(w.group(), vocab) or texte.norm(w.group()) in _STOPWORDS for w in words):
+    real = [w for w in words if texte.norm(w.group()) not in _STOPWORDS]
+    if not real or (not form and all(_known(w.group(), vocab) for w in real)):
         return e, e
-    return next(w.start() for w in words if not _known(w.group(), vocab)), e
+    return (s, e) if form else (next(w.start() for w in words if not _known(w.group(), vocab)), e)
 
 
 def _cells(text: str, vocab: Set[str]) -> List[Tuple[bool, Optional[Span]]]:
@@ -228,16 +237,19 @@ def _names(text: str, vocab: Set[str], bare: bool, skip: List[Span]) -> List[Can
     for m in ALIAS_RX.finditer(text):
         if not all(_known(w, vocab) for w in _tokens(m.group("name"))):   # pas « la dite Société »
             cands.append((m.start("name"), m.end(), m.start(), m.end(), "ALIAS"))
-    pre: Set[int] = set()
+    pre = {}   # début de « SARL X » -> rang du candidat
     for m in CO_PRE_RX.finditer(text):
-        s, e = _trim(text, *m.span(1), vocab)
+        s, e = _trim(text, *m.span("co"), vocab, m.group("form") is not None)
         if s < e:
+            pre[m.start()] = len(cands)
             cands.append((s, e, m.start(), m.end(), "SOCIETE"))
-            pre.add(m.start())
+    dropped = set()
     for m in CO_POST_RX.finditer(text):
-        s, e = _trim(text, *m.span(1), vocab)
-        if s < e and m.start("form") not in pre:   # « ASSIGNATION DE LA SARL X » : le nom suit la forme
-            cands.append((s, e, m.start(), m.end(), "SOCIETE"))
+        s, e = _trim(text, *m.span("co"), vocab, True)
+        if s < e and texte.norm(WORD_RX.findall(m.group("co"))[-1]) not in _BEFORE_FORM:
+            cands.append((s, e, m.start(), m.end(), "SOCIETE"))   # « X SAS IMMATRICULÉE » : le nom précède
+            dropped.add(pre.get(m.start("form")))                 # la forme ; « DE LA SARL X » : il la suit
+    cands = [c for i, c in enumerate(cands) if i not in dropped]
     for m in BARE_RX.finditer(text):
         if (bare or BORN_RX.match(text, m.end())) and not any(_known(w, vocab) for w in _tokens(m.group())):
             cands.append((m.start(), m.end(), m.start(), m.end(), "PERSONNE"))
@@ -336,11 +348,13 @@ def _outside(bi: int, base: int, text: str, vocab: Set[str], sig: bool) -> List[
 
 
 def _opens(line: str, vocab: Set[str]) -> bool:
-    """Début de comparution : « Entre les soussignés », ou « Entre » suivi d'un vrai nom de partie."""
+    """Début de comparution : « Entre les soussignés », ou « Entre » suivi (après un article au plus)
+    d'un vrai nom de partie, en minuscules comme en capitales."""
     if START_RX.match(line):
         return True
     m = START_NAME_RX.match(line)
-    return bool(m) and any(c[2] == m.start("key") for c in _names(line, vocab, False, []))
+    first = next((c for c in _names(line, vocab, False, []) if c[2] >= m.end()), None) if m else None
+    return bool(first) and bool(ARTICLE_GAP_RX.fullmatch(line, m.end(), first[2]))
 
 
 def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
@@ -377,7 +391,8 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
 
 def relabel_signature_images(blocks: List[Block]) -> List[Block]:
     """[IMAGE] devient [SIGNATURE] à partir du premier bloc dont une ligne commence par « Fait à »,
-    « Lu et approuvé » ou « Signature(s) »."""
+    « Lu et approuvé » ou « Signature(s) », ou qui contient « Fait à <Lieu> » (lieu capitalisé)
+    après une fin de phrase."""
     out, signed = [], False
     for b in blocks:
         signed = signed or bool(SIGNED_RX.search(b.text))
