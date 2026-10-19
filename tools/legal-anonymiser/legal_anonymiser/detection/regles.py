@@ -16,7 +16,10 @@ W = r"[A-ZÀ-Ü][\w'-]*"
 NAME = W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + W + r"){0,3}"
 MONTHS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre"
 BIRTH = r"(?i:n[ée]e? le) (\d{1,2}(?i:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS   # capitales comprises
-NOT_AMOUNT = r"(?!\s?(?:€|euros?|EUR|%))"
+# Lieu de naissance : un mot, composé par trait d'union ou apostrophe (Aix-en-Provence, L'Isle-Adam), après
+# « Saint » ou un article au plus ; « À LYON DE NATIONALITÉ FRANÇAISE » donne LYON.
+BIRTH_PLACE = r"(?:(?:La|Le|Les|LA|LE|LES) |(?i:saint|sainte) )?" + W
+NOT_AMOUNT =r"(?!\s?(?:€|euros?|EUR|%))"
 STREET_WORD = (r"(?i:rue|avenue|av\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|"
                r"passage|voie)(?=\W)")
 # Queue de rue : 60 caractères max, arrêt avant , ; saut de ligne ou un mot de liaison.
@@ -82,7 +85,7 @@ RULES: List[Rule] = [
     _r("ADRESSE", r"(?i:lieu-dit|résidence|bâtiment) (" + NAME + ")", 1),
     _r("COMMUNE", r"(?<!\d)\d{5} (" + NAME + ")", 1),
     _r("DATE_NAISSANCE", BIRTH, 1),
-    _r("LIEU", BIRTH + r" (?i:à) (" + NAME + ")", 2),
+    _r("LIEU", BIRTH + r" (?i:à) (" + BIRTH_PLACE + ")", 2),
     _r("IMMATRICULATION", r"\b[A-Z]{2}-\d{3}-[A-Z]{2}\b"),
     _r("IMMATRICULATION", r"\b\d{1,4} (?!(?:EUR|USD|UE|TTC|HT)\b)[A-Z]{2,3} \d{2,3}\b"),
     _r("PIECE_IDENTITE", r"(?i:passeport|CNI|carte (?:nationale )?d'identité|titre de séjour|permis(?: de conduire)?)"

@@ -12,13 +12,17 @@
    (forme complète, ou nom seul pour une mention réduite au nom) ; portée par plusieurs entités
    (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, un nom en capitales
    sur-capturé (« N'DIAYE EST ENGAGÉE ») est rogné à la plus longue forme connue qui l'ouvre et
-   rattaché sans en tirer de formes ; sinon il crée une entité. Un nom de la structure ne rejoint
+   rattaché sans en tirer de formes, si cette forme fait deux mots ou si le mot qui la suit est un
+   mot vide, connu ou sans majuscule ; sinon il crée une entité (« AWA DUPONT EST TÉMOIN » entier),
+   dont seules les formes du début, avant le premier mot vide ou connu, sont inscrites (« AWA
+   DUPONT », jamais « TÉMOIN »). Un nom de la structure ne rejoint
    qu'une entité de même type (« M. Dupont » jamais « SCI Dupont ») ; un nom de la NER, dont le
    type est peu fiable, rejoint toute entité de même forme (son type cède alors).
 3. Propagation : chaque forme d'entité (propagation.forms) est cherchée dans tous les blocs, sans
    casse ni accents, bornes de mot comprises (une élision ne borne pas : « d'Élodie »), hors des
    étendues déjà prises, la plus longue d'abord ; un nom de la NER contenu dans l'occurrence ou
-   qui la chevauche lui cède la place (une entité ainsi vidée perd ses formes). Une forme d'un
+   qui la chevauche lui cède la place ; le reste d'un chevauchement n'est gardé que s'il fait deux
+   mots capitalisés hors vocabulaire (une entité vidée perd ses formes). Une forme d'un
    seul mot n'est prise que si l'occurrence porte une majuscule (« Claire », pas « claire »).
 4. Placeholders : `[<ROLE>_<n>]` si un rôle est défini, sinon `[<TYPE>_<n>]`, numérotés par
    étiquette dans l'ordre de première apparition ; les décisions ne changent jamais ces numéros.
@@ -35,9 +39,12 @@ from dataclasses import replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
 from . import texte
+from .detection.ner import stop_words
+from .detection.noms import known
 from .detection.structure import load_vocab
 from .modele import Ambiguity, Block, Decisions, Entity, Mention
-from .propagation import Key, folded, forms, name_part, name_words, pattern, span, strip_civility
+from .propagation import (PARTICLE_RX, WORD_RX, Key, folded, forms, name_part, name_words, pattern, span,
+                          strip_civility)
 
 PRIORITY = {"regle": 0, "structure": 1, "ner": 2, "propagation": 3}
 NAMED = ("PERSONNE", "SOCIETE")
@@ -111,29 +118,71 @@ class _Builder:
                             lst.remove(i)
         self.pending = [p for p in self.pending if p[0] != k]
 
+    def swap(self, k: Mention, new: Mention) -> None:
+        """Remplace une mention posée par une autre, partout où elle figure."""
+        self.taken[k.block][self.taken[k.block].index(k)] = new
+        for e in self.ents:
+            if k in e.mentions:
+                e.mentions[e.mentions.index(k)] = new
+        self.pending = [(new if p[0] == k else p[0], p[1]) for p in self.pending]
+
+    def cut(self, k: Mention, s: int, e: int) -> None:
+        """Nom de la NER chevauché par une forme connue en [s, e) : son reste n'est gardé que s'il fait au
+        moins deux mots capitalisés hors vocabulaire (« Jean Dupont »), sinon il est abandonné."""
+        # ponytail: reste d'un mot abandonné (« SIGNENT » : sous-masquage possible d'un vrai nom), reste de deux mots
+        # gardé (sur-masquage possible) ; la seconde passe (tâche 10) relit le texte laissé en clair
+        rs, rend = (k.start, s) if k.start < s else (e, k.end)
+        words = list(WORD_RX.finditer(self.blocks[k.block].text, rs, rend)) if rs < rend else []
+        if len(words) >= 2 and all(w.group()[0].isupper() and not known(w.group(), self.vocab) for w in words):
+            self.swap(k, replace(k, start=words[0].start(), end=words[-1].end()))
+        else:
+            self.drop(k)
+
+    def head(self, name: str) -> str:
+        """Début d'un nom en capitales sur-capturé, avant le premier mot vide ou connu hors particule
+        (« AWA DUPONT EST TÉMOIN » donne « AWA DUPONT ») : seules ses formes sont inscrites."""
+        kept: list = []
+        for w in WORD_RX.finditer(name):
+            word = w.group()
+            if kept and not PARTICLE_RX.fullmatch(word) and (word.lower() in stop_words() or known(word, self.vocab)):
+                break
+            kept.append(w)
+        while len(kept) > 1 and PARTICLE_RX.fullmatch(kept[-1].group()):
+            kept.pop()
+        return name[:kept[-1].end()] if kept else name
+
     def compatible(self, m: Mention, own: List[int]) -> List[int]:
         """Entités que la mention peut rejoindre : même type, ou tout type pour la NER (type peu fiable)."""
         return [i for i in own if m.source == "ner" or self.ents[i].kind == m.kind]
 
     def prefix(self, m: Mention, name: str) -> Optional[Tuple[Mention, List[int]]]:
         """Plus longue forme connue qui ouvre un nom en capitales sur-capturé (« N'DIAYE EST ENGAGÉE ») :
-        mention rognée à cette forme et entités qui la portent."""
+        mention rognée à cette forme et entités qui la portent. Une forme d'un seul mot ne rogne que si
+        le mot suivant est un mot vide, un mot du vocabulaire ou sans majuscule : « AWA DUPONT » n'est
+        pas Awa N'Diaye (le nom entier devient alors une nouvelle entité)."""
         text, pos = folded(name)
         base = m.end - len(name)
         for f in sorted((f for f in self.owners if text.startswith(f + " ")), key=len, reverse=True):
             own = self.compatible(m, self.owners[f])
-            if own:
-                return replace(m, end=base + span(name, pos, 0, len(f))[1]), own
+            if not own:
+                continue
+            end = span(name, pos, 0, len(f))[1]
+            nxt = WORD_RX.search(name, end)
+            word = nxt.group() if nxt else ""
+            if " " in f or not word or word.lower() in stop_words() or known(word, self.vocab) or word[0].islower():
+                return replace(m, end=base + end), own
+            return None
         return None
 
     def new(self, kind: str, role: Optional[str] = None) -> int:
         self.ents.append(Entity(kind, role, "", "", []))
         return len(self.ents) - 1
 
-    def add(self, i: int, m: Mention) -> None:
+    def add(self, i: int, m: Mention, text: Optional[str] = None) -> None:
+        """Rattache la mention et inscrit les formes de son texte (ou de text, s'il est donné)."""
         e = self.ents[i]
         e.mentions.append(m)
-        for f in forms(e.kind, self.text(m), self.vocab):
+        for f in forms(e.kind, text or self.text(m), self.vocab):
             lst = self.owners.setdefault(f, [])
             if i not in lst:
                 lst.append(i)
@@ -183,8 +232,10 @@ class _Builder:
                     continue
             if len(own) > 1:
                 self.pending.append((m, own))
+            elif own:
+                self.add(own[0], m)
             else:
-                self.add(own[0] if own else self.new(m.kind), m)
+                self.add(self.new(m.kind), m, self.head(name) if name.isupper() else None)
 
     def propagate(self) -> None:
         """Formes cherchées partout, la plus longue d'abord ; une forme alphabétique d'un seul mot
@@ -202,9 +253,9 @@ class _Builder:
                         continue
                     clash = self.clash(bi, s, e)
                     if any(k.source != "ner" or (k.start <= s and e <= k.end) for k in clash):
-                        continue   # déjà pris ; un nom de la NER qui déborde ou est contenu cède à la forme connue
+                        continue   # déjà pris ; un nom de la NER contenu ou chevauchant cède à la forme connue
                     for k in clash:
-                        self.drop(k)
+                        self.cut(k, s, e)
                     first = self.ents[own[0]]
                     m = Mention(bi, s, e, first.kind, "propagation")
                     if len(own) == 1:

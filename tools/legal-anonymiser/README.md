@@ -30,7 +30,9 @@ complété par les tâches suivantes.
   TVA, RCS, e-mail, téléphone, adresse, date et lieu de naissance, immatriculation, pièce
   d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
   Naissance (« NÉE LE 2 JUIN 1990 À SAINT-ÉTIENNE »), capital (« 10 000 EUROS ») et RCS
-  (« RCS DE LYON … ») sont lus aussi en capitales.
+  (« RCS DE LYON … ») sont lus aussi en capitales ; le lieu de naissance est un seul nom, composé
+  par trait d'union ou apostrophe, après « Saint » ou un article au plus (« À LYON DE NATIONALITÉ
+  FRANÇAISE » donne « LYON »).
 - **Structure** (`detection/structure.py`) : le bloc de comparution (« Entre les
   soussignés » jusqu'à « Il a été convenu », « Préambule » ou « Article 1 ») est découpé en
   parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » ou
@@ -51,8 +53,8 @@ complété par les tâches suivantes.
   « SA » devant un mot en capitales est le possessif (« MET SA VOITURE », « EXERCER SA MISSION, »),
   sauf si un marqueur de société suit dans les 80 caractères (« au capital », « immatriculée »,
   RCS, SIREN, SIRET, « dont le siège », « représentée par », « ci-après », « société anonyme » ;
-  une virgule seule n'en est pas un), si « la », « entre », « et », « société » précède comme mot
-  entier (pas « MET SA »), ou si une préposition suit (« X SA ENTRE LES SOUSSIGNÉS »). Les
+  une virgule seule n'en est pas un), si « la », « entre », « société » précède comme mot
+  entier, ou si une préposition suit (« X SA ENTRE LES SOUSSIGNÉS »). Les
   titres (« M. le Maire », « Maître d'Œuvre ») ne sont pas pris pour des noms. Après une ligne
   qui commence par « Fait à », « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un
   lieu après une fin de phrase (« La Rochelle » admis, jamais un lieu fait seulement de mots
@@ -63,8 +65,10 @@ complété par les tâches suivantes.
 - **Reconnaissance des noms** (`detection/ner.py`) : modèle spaCy `fr_core_news_lg`, local,
   chargé une fois par processus sans ses composants inutiles (seuls `tok2vec` et `ner` restent).
   PER devient PERSONNE, ORG SOCIETE, LOC COMMUNE (un seul mot) ou LIEU. Une entité faite de mots
-  du vocabulaire (rôles, institutions) ou qui contient une ponctuation de phrase est ignorée ;
-  articles, mots d'annonce et forme sociale sont retirés de ses bords. Un bloc plus long que
+  du vocabulaire (rôles, institutions) est ignorée ; coupée par une ponctuation de phrase, elle
+  garde sa plus longue partie (un saut de ligne n'en est pas une : un prénom en fin de ligne et
+  le nom à la ligne suivante restent un seul nom) ; articles, mots d'annonce et forme sociale sont
+  retirés de ses bords. Un bloc plus long que
   `nlp.max_length` est découpé aux fins de paragraphe ou de phrase. Un bloc surtout en capitales
   est lu sur une copie à l'initiale majuscule, et seules ses entités de 2 à 4 mots sont gardées :
   une commune d'un seul mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE …
@@ -76,7 +80,9 @@ complété par les tâches suivantes.
   unique de même type qui porte sa forme (une personne ne rejoint jamais une société) ; deux
   entités qui la portent (homonymes, époux, « M. Kerbrat ») en font une mention ambiguë, à
   arbitrer. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
-  longue forme connue qui l'ouvre. Chaque nom est ensuite cherché partout, sans casse ni
+  longue forme connue qui l'ouvre, si elle fait deux mots ou si un mot vide ou courant la suit ;
+  sinon (« MADAME AWA DUPONT EST TÉMOIN », où seul « AWA » est connu) il reste entier, en nouvelle
+  entité. Chaque nom est ensuite cherché partout, sans casse ni
   accents, aussi après une élision (« d'Élodie », « D'AWA ») : forme complète, nom seul, prénom
   seul (3 lettres ou plus, hors vocabulaire), initiales (« J.-P. D. », « J. Dupont », « JP
   Dupont »), nom de société sans article ; un mot seul n'est pris qu'avec une majuscule

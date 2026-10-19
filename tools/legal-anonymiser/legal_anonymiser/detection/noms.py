@@ -71,13 +71,13 @@ LEAD_STRIP = {"entre", "contrat", "convention", "pour", "gerant", "president", "
               "de", "du", "des", "a", "par", "contre"}
 GENERIC = {"societe", "association", "entreprise", "groupe", "cabinet", "ets", "etablissements"}
 # « SA » devant un mot en capitales : forme sociale seulement si un marqueur de société suit dans les 80
-# caractères, si « la », « entre », « et », « société » précède, ou si une préposition suit (« X SA ENTRE ») ;
+# caractères, si « la », « entre », « société » précède, ou si une préposition suit (« X SA ENTRE ») ;
 # sinon possessif, quel que soit le mot qui suit (« EXERCER SA MISSION », « MET SA VOITURE »). Une virgule
 # seule n'est pas un marqueur.
 SA_MARK_RX = re.compile(r"(?<!\w)(?i:au" + SP + r"+capital|immatricul|rcs|siren|siret|dont" + SP + r"+le" + SP
                         + r"+si[èe]ge|repr[ée]sent[ée]e?" + SP + r"+par|ci-apr[èe]s|soci[ée]t[ée]" + SP
                         + r"+anonyme)")
-SA_LEAD_RX = re.compile(r"(?<!\w)(?i:(?:la" + SP + r"+)?soci[ée]t[ée]|la|entre|et)" + SP + r"+$")
+SA_LEAD_RX = re.compile(r"(?<!\w)(?i:(?:la" + SP + r"+)?soci[ée]t[ée]|la|entre)" + SP + r"+$")
 CO_CAP_ANY = r"(?!" + FORMS + r"\b)" + CAP_ANY
 CO_START = r"(?!" + FUNC_START + r")" + CO_CAP_ANY
 CO_IN = r"(?!" + PREP_CORE + SP + r"+[" + UP + r"])" + CO_CAP_ANY

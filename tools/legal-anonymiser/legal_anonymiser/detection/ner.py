@@ -5,12 +5,14 @@ ou LIEU ; MISC est ignoré. Le texte part bloc par bloc, découpé aux fins de p
 de phrase quand il dépasse `nlp.max_length`. Les étendues perdent la ponctuation qui les
 borde, les articles, mots d'annonce (« société ») et formes sociales placés en tête, et la
 forme sociale finale (elle reste visible, spec 6.4). Une entité faite seulement de mots du
-vocabulaire (rôles, institutions, intitulés), ou qui contient une ponctuation de phrase
-(« , », « « », « ; »…), est ignorée : la sortie va droit au masquage.
+vocabulaire (rôles, institutions, intitulés) est ignorée : la sortie va droit au masquage.
+Une entité qui contient une ponctuation de phrase (« , », « « », « ( »…) est réduite à sa plus
+longue partie propre ; un saut de ligne n'en est pas une (nom coupé en fin de ligne).
 
 Le modèle lit mal les capitales : un bloc dont 60 % des lettres au moins sont des capitales
 est lu sur une copie à l'initiale majuscule (même longueur, mêmes positions), et seules
-les entités de 2 à 4 mots porteurs y sont gardées : un mot seul y est souvent un mot courant
+les entités de 2 à 4 mots porteurs, sans mot vide intérieur autre qu'une particule ou « et »
+(« TÉMOIN EST PRÉSENT » écarté), y sont gardées : un mot seul y est souvent un mot courant
 (« CI-APRÈS », « DÉNOMMÉ »), au-delà de 4 c'est une clause entière. Une commune d'un seul mot
 en capitales n'est donc pas trouvée ici : elle l'est après un code postal, après « NÉ(E) LE …
 À » (règles), après « FAIT À » (structure), et ailleurs par propagation de ces mentions ; seule
@@ -29,7 +31,7 @@ from typing import Iterator, List, Optional, Set, Tuple
 from .. import texte
 from ..extraction import MissingDependency
 from ..modele import Block, Mention
-from .noms import FORMS, GENERIC, STOPWORDS, WORD_RX, known, stem, tokens
+from .noms import FORMS, GENERIC, PARTICLES, STOPWORDS, WORD_RX, known, stem, tokens
 
 MODEL = "fr_core_news_lg"
 _EXCLUDE = ["tagger", "parser", "attribute_ruler", "lemmatizer", "morphologizer", "senter"]
@@ -37,7 +39,8 @@ _KINDS = {"PER": "PERSONNE", "ORG": "SOCIETE", "LOC": "LIEU"}
 _CAPS_SHARE = 0.6
 _CAPS_MAX_WORDS = 4
 _FORM_RX = re.compile(FORMS)
-_PUNCT_RX = re.compile(r"[«»“”\"(),;:!?\n]")
+_JOIN_RX = re.compile(r"(?i:" + PARTICLES + r"|et)")   # mots vides admis à l'intérieur d'un nom
+_CLEAN_RX = re.compile(r"[^«»“”\"(),;:!?]+")   # parties sans ponctuation de phrase ; un saut de ligne est une espace
 
 
 class ModelMissing(MissingDependency):
@@ -94,11 +97,20 @@ def _chunks(text: str, size: int) -> Iterator[Tuple[int, str]]:
     yield start, text[start:]
 
 
+@lru_cache(maxsize=1)
+def stop_words() -> frozenset:
+    """Mots vides français de spaCy, en minuscules accentuées ; repli sur ceux de noms.py sans spaCy."""
+    try:
+        from spacy.lang.fr.stop_words import STOP_WORDS
+    except ImportError:
+        return frozenset(STOPWORDS)
+    return frozenset(STOP_WORDS)
+
+
 def _edge(word: str, lead: bool) -> bool:
     """Mot à retirer au bord d'une entité : mot vide, forme sociale, et en tête mot d'annonce."""
-    from spacy.lang.fr.stop_words import STOP_WORDS
     w = stem(word)
-    return (w in STOPWORDS or word.lower() in STOP_WORDS or _FORM_RX.fullmatch(word) is not None
+    return (w in STOPWORDS or word.lower() in stop_words() or _FORM_RX.fullmatch(word) is not None
             or (lead and w in GENERIC))
 
 
@@ -116,13 +128,25 @@ def _trim(text: str, s: int, e: int) -> Tuple[int, int]:
     return (words[0].start(), words[-1].end()) if words else (s, s)
 
 
+def _clean(text: str, s: int, e: int) -> Tuple[int, int]:
+    """Plus longue partie de l'entité entre deux ponctuations de phrase (« Mme Sophie Carrel (gérante »),
+    bornée par _trim ; un nom coupé par un saut de ligne reste entier."""
+    parts = [_trim(text, m.start(), m.end()) for m in _CLEAN_RX.finditer(text, s, e)]
+    return max(parts, key=lambda p: p[1] - p[0], default=(s, s))
+
+
+def _inner_stop(name: str) -> bool:
+    """Vrai si un mot vide autre qu'une particule ou « et » est à l'intérieur (« TÉMOIN EST PRÉSENT »)."""
+    return any(w.lower() in stop_words() and not _JOIN_RX.fullmatch(w) for w in WORD_RX.findall(name)[1:-1])
+
+
 def _kind(label: str, name: str, vocab: Set[str], caps: bool) -> Optional[str]:
     """Type de la mention, ou None si l'entité est à ignorer."""
     kind = _KINDS.get(label)
     words = tokens(name)
     if (not kind or len(name) < 2 or not any(c.isalpha() for c in name) or texte.norm(name) in vocab
-            or not words or all(known(w, vocab) for w in words) or _PUNCT_RX.search(name)
-            or (caps and not 2 <= len(words) <= _CAPS_MAX_WORDS)):
+            or not words or all(known(w, vocab) for w in words)
+            or (caps and not 2 <= len(words) <= _CAPS_MAX_WORDS) or (caps and _inner_stop(name))):
         return None
     if kind == "LIEU" and len(WORD_RX.findall(name)) == 1 and name[0].isupper():
         return "COMMUNE"
@@ -144,7 +168,7 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
     for (bi, base, caps, _), doc in zip(jobs, docs):
         text = blocks[bi].text
         for ent in doc.ents:
-            s, e = _trim(text, base + ent.start_char, base + ent.end_char)
+            s, e = _clean(text, base + ent.start_char, base + ent.end_char)
             kind = _kind(ent.label_, text[s:e], vocab, caps) if e > s else None
             if kind:
                 out.append(Mention(bi, s, e, kind, "ner"))
