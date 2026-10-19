@@ -127,6 +127,7 @@ Habitation
 Logement
 Locaux
 Local
+Loué
 Immeuble
 Lot
 Parking

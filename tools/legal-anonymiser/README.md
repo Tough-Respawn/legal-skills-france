@@ -31,12 +31,17 @@ complété par les tâches suivantes.
   d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
 - **Structure** (`detection/structure.py`) : le bloc de comparution (« Entre les
   soussignés » jusqu'à « Il a été convenu », « Préambule » ou « Article 1 ») est découpé en
-  parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » (rôle connu
-  ou mot du vocabulaire) et ses représentants (« représenté(e) par »). Partout : civilité
-  suivie d'un nom (civilité incluse), société désignée par sa forme (la forme sociale reste
-  visible). Après « Fait à » ou « Lu et approuvé » : noms des blocs de signature, commune
-  de « Fait à », et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un rôle
-  connu ni au vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
+  parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » ou
+  « ci-dessous » (rôle connu, féminin ou pluriel compris, ou mot du vocabulaire) ou annoncé
+  par « LE SALARIÉ : », ses représentants (« représenté(e) par », plusieurs possibles) et ses
+  noms de naissance ou d'usage (« née MARTIN », « épouse LEROY »). Partout : civilité suivie
+  d'un nom (civilité incluse, particules et capitales comprises), société désignée par sa
+  forme (la forme sociale reste visible), adresse après « demeurant », « domicilié », « dont
+  le siège est », « sis », « résidant », « habitant ». Après une ligne qui commence par
+  « Fait à », « Lu et approuvé » ou « Signature », ou une ligne de légendes (« Le Locataire
+  Le Bailleur ») : noms des blocs de signature, colonnes comprises, commune de « Fait à »,
+  et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un rôle connu ni au
+  vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
 - **Vocabulaire** (`data/vocabulaire.txt`) : environ 400 formes juridiques et courantes
   (mois, jours, intitulés, rôles, codes, institutions, formes sociales), sans prénom, sans
   nom d'entreprise réelle, sans nom de ville sauf France.

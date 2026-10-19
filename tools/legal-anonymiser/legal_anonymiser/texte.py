@@ -13,11 +13,13 @@ CONFUSABLES: Dict[str, str] = {
 
 _ZERO_WIDTH = re.compile("[\u200b-\u200d\u2060\ufeff]")
 _BIDI = re.compile("[\u202a-\u202e\u2066-\u2069]")
-_TABLE = str.maketrans(CONFUSABLES)
+# Apostrophes typographiques (Word remplace ' par ’) ramenées à l'apostrophe droite.
+_APOSTROPHES = {"’": "'", "ʼ": "'", "‘": "'"}
+_TABLE = str.maketrans({**CONFUSABLES, **_APOSTROPHES})
 
 
 def norm(s: str) -> str:
-    """Minuscules, sans accents, confusables ramenes au latin, espaces fusionnes."""
+    """Minuscules, sans accents, confusables et apostrophes ramenés au latin, espaces fusionnés."""
     s = unicodedata.normalize("NFKD", s.translate(_TABLE))
     s = "".join(c for c in s if not unicodedata.combining(c))
     return re.sub(r"\s+", " ", s.casefold()).strip()
