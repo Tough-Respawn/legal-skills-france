@@ -17,9 +17,10 @@ NAME = W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + W + r"){0,3}"
 MONTHS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre"
 BIRTH = r"(?i:n[ée]e? le) (\d{1,2}(?i:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS   # capitales comprises
 # Lieu de naissance : un mot, composé par trait d'union ou apostrophe (Aix-en-Provence, L'Isle-Adam), après
-# « Saint » ou un article au plus ; « À LYON DE NATIONALITÉ FRANÇAISE » donne LYON.
-BIRTH_PLACE = r"(?:(?:La|Le|Les|LA|LE|LES) |(?i:saint|sainte) )?" + W
-NOT_AMOUNT =r"(?!\s?(?:€|euros?|EUR|%))"
+# « Saint » ou un article au plus, suivi au plus de « sur|sous|lès|en » et d'un mot (Boulogne sur Mer) ;
+# « À LYON DE NATIONALITÉ FRANÇAISE » donne LYON.
+BIRTH_PLACE = r"(?:(?:La|Le|Les|LA|LE|LES) |(?i:saint|sainte) )?" + W + r"(?: (?i:sur|sous|lès|en) " + W + ")?"
+NOT_AMOUNT = r"(?!\s?(?:€|euros?|EUR|%))"
 STREET_WORD = (r"(?i:rue|avenue|av\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|"
                r"passage|voie)(?=\W)")
 # Queue de rue : 60 caractères max, arrêt avant , ; saut de ligne ou un mot de liaison.

@@ -16,7 +16,8 @@ from functools import lru_cache
 from typing import List, Set, Tuple
 
 from . import texte
-from .detection.noms import CIVILITY, PARTICLES, STOPWORDS, known
+from .detection.noms import (CAPS_VERBS, CIVILITY, FUNCTION_WORDS, NAME_JOINERS, PARTICLES, STOPWORDS, caps_verb,
+                             function_word, known)
 from .detection.regles import SP
 
 Key = Tuple[str, str, int]
@@ -26,6 +27,7 @@ ARTICLE_RX = re.compile(r"(?i:(?:le|la|les)" + SP + r"+|l['’])")
 PARTICLE_RX = re.compile(r"(?i:" + PARTICLES + r")")
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
 PROPAGATED = ("PERSONNE", "SOCIETE", "COMMUNE", "LIEU")
+BANNED = frozenset(texte.norm(w) for w in FUNCTION_WORDS | CAPS_VERBS)   # jamais une forme d'un mot
 
 
 @lru_cache(maxsize=None)
@@ -76,7 +78,23 @@ def name_words(name: str) -> List[str]:
 
 
 def _single(form: str, vocab: Set[str], letters: int) -> bool:
-    return len(re.sub(r"\W", "", form)) >= letters and form not in STOPWORDS and not known(form, vocab)
+    return (len(re.sub(r"\W", "", form)) >= letters and form not in STOPWORDS and form not in BANNED
+            and not known(form, vocab))
+
+
+def head(name: str, vocab: Set[str]) -> str:
+    """Début d'un nom en capitales sur-capturé, avant le premier verbe courant, mot-outil (hors liaisons
+    de nom : de, la, sur…) ou mot du vocabulaire : « AWA DUPONT EST TÉMOIN » donne « AWA DUPONT »."""
+    kept: list = []
+    for w in WORD_RX.finditer(name):
+        word = w.group()
+        joiner = word.lower().replace("’", "'") in NAME_JOINERS
+        if kept and not joiner and (caps_verb(word) or function_word(word) or known(word, vocab)):
+            break
+        kept.append(w)
+    while len(kept) > 1 and kept[-1].group().lower() in NAME_JOINERS:
+        kept.pop()
+    return name[:kept[-1].end()] if kept else name
 
 
 def _person(name: str, vocab: Set[str]) -> Set[str]:

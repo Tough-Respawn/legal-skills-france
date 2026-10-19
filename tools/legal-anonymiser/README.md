@@ -31,8 +31,9 @@ complété par les tâches suivantes.
   d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
   Naissance (« NÉE LE 2 JUIN 1990 À SAINT-ÉTIENNE »), capital (« 10 000 EUROS ») et RCS
   (« RCS DE LYON … ») sont lus aussi en capitales ; le lieu de naissance est un seul nom, composé
-  par trait d'union ou apostrophe, après « Saint » ou un article au plus (« À LYON DE NATIONALITÉ
-  FRANÇAISE » donne « LYON »).
+  par trait d'union ou apostrophe, après « Saint » ou un article au plus, suivi au plus de « sur »,
+  « sous », « lès » ou « en » et d'un mot (« BOULOGNE SUR MER ») ; « À LYON DE NATIONALITÉ
+  FRANÇAISE » donne « LYON ».
 - **Structure** (`detection/structure.py`) : le bloc de comparution (« Entre les
   soussignés » jusqu'à « Il a été convenu », « Préambule » ou « Article 1 ») est découpé en
   parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » ou
@@ -70,19 +71,32 @@ complété par les tâches suivantes.
   le nom à la ligne suivante restent un seul nom) ; articles, mots d'annonce et forme sociale sont
   retirés de ses bords. Un bloc plus long que
   `nlp.max_length` est découpé aux fins de paragraphe ou de phrase. Un bloc surtout en capitales
-  est lu sur une copie à l'initiale majuscule, et seules ses entités de 2 à 4 mots sont gardées :
-  une commune d'un seul mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE …
-  À », « FAIT À », ou par propagation ; seule dans le texte libre, elle reste visible et la
-  seconde passe la signale. Modèle absent : `ModelMissing`.
+  est lu sur une copie à l'initiale majuscule, et seules ses entités de 2 à 4 mots sont gardées,
+  sans mot-outil à l'intérieur autre qu'une liaison de nom (« TÉMOIN EST PRÉSENT » écarté,
+  « BOULOGNE SUR MER » gardé) ; une entité en capitales s'arrête avant son premier verbe courant
+  (« AWA DUPONT SIGNE » donne « AWA DUPONT »). Une commune d'un seul mot en capitales n'y est
+  trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par propagation ; seule dans le
+  texte libre, elle reste visible et la seconde passe la signale. Une entité qui court sur deux
+  lignes en fait deux si chaque ligne porte au moins deux mots capitalisés. Modèle absent :
+  `ModelMissing`.
+- **Mots-outils et verbes** (`detection/noms.py`) : `FUNCTION_WORDS` (est, et, de, la, par, pour,
+  avec, dans, qui, que, dont, au, ce, se, lui, leur, notre…) et `CAPS_VERBS` (SIGNE, ACCEPTE,
+  DÉCLARE, EST, SONT, SERA, A, ONT, DOIT, PEUT, REMET, VERSE, PAIE, OCCUPE, DEMEURE, AGISSANT…) sont
+  des listes fixes. Elles servent à couper un nom en capitales sur-capturé, jamais les mots vides de
+  spaCy, qui contiennent de vrais noms (HUI, MIN, SON, VU, LI…) ; aucune n'est jamais une forme
+  d'un mot.
 - **Entités et placeholders** (`entites.py`, `propagation.py`) : chevauchements résolus par la
   mention la plus longue (à égalité : règles, structure, NER, propagation). Une partie de la
   comparution forme une entité, chaque représentant une autre. Un nom ailleurs rejoint l'entité
   unique de même type qui porte sa forme (une personne ne rejoint jamais une société) ; deux
   entités qui la portent (homonymes, époux, « M. Kerbrat ») en font une mention ambiguë, à
   arbitrer. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
-  longue forme connue qui l'ouvre, si elle fait deux mots ou si un mot vide ou courant la suit ;
-  sinon (« MADAME AWA DUPONT EST TÉMOIN », où seul « AWA » est connu) il reste entier, en nouvelle
-  entité. Chaque nom est ensuite cherché partout, sans casse ni
+  longue forme connue qui l'ouvre, si elle fait deux mots ou si un verbe courant, un mot-outil ou
+  un mot du vocabulaire la suit ; sinon (« MADAME AWA DUPONT », où seul « AWA » est connu) il
+  devient une nouvelle entité, dont les formes ne viennent que du début du nom (avant le premier
+  verbe, mot-outil ou mot connu). Un nom de la NER chevauché par une forme connue n'en garde le
+  reste que si celui-ci fait deux mots capitalisés hors vocabulaire, et l'entité recalcule ses
+  formes. Chaque nom est ensuite cherché partout, sans casse ni
   accents, aussi après une élision (« d'Élodie », « D'AWA ») : forme complète, nom seul, prénom
   seul (3 lettres ou plus, hors vocabulaire), initiales (« J.-P. D. », « J. Dupont », « JP
   Dupont »), nom de société sans article ; un mot seul n'est pris qu'avec une majuscule

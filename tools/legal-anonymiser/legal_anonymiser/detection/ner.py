@@ -7,7 +7,11 @@ borde, les articles, mots d'annonce (« société ») et formes sociales placés
 forme sociale finale (elle reste visible, spec 6.4). Une entité faite seulement de mots du
 vocabulaire (rôles, institutions, intitulés) est ignorée : la sortie va droit au masquage.
 Une entité qui contient une ponctuation de phrase (« , », « « », « ( »…) est réduite à sa plus
-longue partie propre ; un saut de ligne n'en est pas une (nom coupé en fin de ligne).
+longue partie propre ; un saut de ligne n'en est pas une (nom coupé en fin de ligne), sauf si chaque
+ligne porte deux mots capitalisés (deux noms). En capitales, l'entité s'arrête avant son premier
+verbe courant (noms.CAPS_VERBS : « AWA SIGNE LE CONTRAT » donne « AWA »). Les bords et l'intérieur
+se jugent sur une liste fixe de mots-outils (noms.FUNCTION_WORDS), jamais sur les mots vides de
+spaCy, qui contiennent de vrais noms (« LI HUI MIN »).
 
 Le modèle lit mal les capitales : un bloc dont 60 % des lettres au moins sont des capitales
 est lu sur une copie à l'initiale majuscule (même longueur, mêmes positions), et seules
@@ -31,7 +35,8 @@ from typing import Iterator, List, Optional, Set, Tuple
 from .. import texte
 from ..extraction import MissingDependency
 from ..modele import Block, Mention
-from .noms import FORMS, GENERIC, PARTICLES, STOPWORDS, WORD_RX, known, stem, tokens
+from .noms import (FORMS, FUNCTION_WORDS, GENERIC, NAME_JOINERS, STOPWORDS, WORD_RX, before_verb, function_word,
+                   known, stem, tokens)
 
 MODEL = "fr_core_news_lg"
 _EXCLUDE = ["tagger", "parser", "attribute_ruler", "lemmatizer", "morphologizer", "senter"]
@@ -39,7 +44,8 @@ _KINDS = {"PER": "PERSONNE", "ORG": "SOCIETE", "LOC": "LIEU"}
 _CAPS_SHARE = 0.6
 _CAPS_MAX_WORDS = 4
 _FORM_RX = re.compile(FORMS)
-_JOIN_RX = re.compile(r"(?i:" + PARTICLES + r"|et)")   # mots vides admis à l'intérieur d'un nom
+_INNER = FUNCTION_WORDS - NAME_JOINERS   # mots-outils jamais à l'intérieur d'un nom
+_LINE_RX = re.compile(r"[^\n]+")
 _CLEAN_RX = re.compile(r"[^«»“”\"(),;:!?]+")   # parties sans ponctuation de phrase ; un saut de ligne est une espace
 
 
@@ -99,7 +105,8 @@ def _chunks(text: str, size: int) -> Iterator[Tuple[int, str]]:
 
 @lru_cache(maxsize=1)
 def stop_words() -> frozenset:
-    """Mots vides français de spaCy, en minuscules accentuées ; repli sur ceux de noms.py sans spaCy."""
+    """Mots vides français de spaCy, en minuscules accentuées ; repli sur ceux de noms.py sans spaCy.
+    Jamais pour couper un nom : la liste contient de vrais noms (HUI, MIN, SON, VU…)."""
     try:
         from spacy.lang.fr.stop_words import STOP_WORDS
     except ImportError:
@@ -108,9 +115,9 @@ def stop_words() -> frozenset:
 
 
 def _edge(word: str, lead: bool) -> bool:
-    """Mot à retirer au bord d'une entité : mot vide, forme sociale, et en tête mot d'annonce."""
+    """Mot à retirer au bord d'une entité : mot-outil, forme sociale, et en tête mot d'annonce."""
     w = stem(word)
-    return (w in STOPWORDS or word.lower() in stop_words() or _FORM_RX.fullmatch(word) is not None
+    return (w in STOPWORDS or function_word(word) or _FORM_RX.fullmatch(word) is not None
             or (lead and w in GENERIC))
 
 
@@ -135,9 +142,21 @@ def _clean(text: str, s: int, e: int) -> Tuple[int, int]:
     return max(parts, key=lambda p: p[1] - p[0], default=(s, s))
 
 
+def _lines(text: str, s: int, e: int) -> List[Tuple[int, int]]:
+    """Une entité sur plusieurs lignes : un nom par ligne si chaque ligne porte au moins deux mots
+    capitalisés (« Jean Dupont », puis « Marie Durand » à la ligne), sinon un seul nom
+    (« Jean-Baptiste » en fin de ligne, « Lemaire » à la suivante)."""
+    parts = [(m.start(), m.end()) for m in _LINE_RX.finditer(text, s, e)]
+    if len(parts) > 1 and all(sum(w.group()[0].isupper() for w in WORD_RX.finditer(text, a, b)) >= 2
+                              for a, b in parts):
+        return [_trim(text, a, b) for a, b in parts]
+    return [(s, e)]
+
+
 def _inner_stop(name: str) -> bool:
-    """Vrai si un mot vide autre qu'une particule ou « et » est à l'intérieur (« TÉMOIN EST PRÉSENT »)."""
-    return any(w.lower() in stop_words() and not _JOIN_RX.fullmatch(w) for w in WORD_RX.findall(name)[1:-1])
+    """Vrai si un mot-outil autre qu'une liaison de nom (de, la, sur, et…) est à l'intérieur
+    (« TÉMOIN EST PRÉSENT ») ; jamais les mots vides de spaCy (« LI HUI MIN » reste un nom)."""
+    return any(w.lower().replace("’", "'") in _INNER for w in WORD_RX.findall(name)[1:-1])
 
 
 def _kind(label: str, name: str, vocab: Set[str], caps: bool) -> Optional[str]:
@@ -169,7 +188,8 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
         text = blocks[bi].text
         for ent in doc.ents:
             s, e = _clean(text, base + ent.start_char, base + ent.end_char)
-            kind = _kind(ent.label_, text[s:e], vocab, caps) if e > s else None
-            if kind:
-                out.append(Mention(bi, s, e, kind, "ner"))
+            for s, e in _lines(text, s, before_verb(text, s, e)):
+                kind = _kind(ent.label_, text[s:e], vocab, caps) if e > s else None
+                if kind:
+                    out.append(Mention(bi, s, e, kind, "ner"))
     return out

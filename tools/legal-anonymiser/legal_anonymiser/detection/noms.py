@@ -28,6 +28,22 @@ ROLE_WORDS = frozenset({
 _SUFFIXES = (("eresse", "eur"), ("euse", "eur"), ("trice", "teur"), ("es", ""), ("e", ""), ("s", ""))
 _COLLECTIVE = {"PARTIE", "PARTIES"}  # « ci-après ensemble les Parties » : pas un rôle
 STOPWORDS = {"de", "du", "des", "la", "le", "les", "l", "d", "a", "et", "en", "au", "aux", "un", "une", "&"}
+# Mots-outils sans ambiguïté, jamais un nom : liste fixe, car les mots vides de spaCy contiennent de vrais
+# noms (HUI, MIN, SON, VU, TA, LI…). Comparés en minuscules, apostrophe droite.
+FUNCTION_WORDS = frozenset({
+    "est", "et", "ou", "de", "du", "des", "le", "la", "les", "l'", "un", "une", "en", "par", "pour", "sur", "sous",
+    "avec", "sans", "dans", "qui", "que", "dont", "au", "aux", "ce", "ces", "cette", "ne", "se", "lui", "leur",
+    "leurs", "nos", "vos", "votre", "notre", "à",
+})
+NAME_JOINERS = frozenset({"de", "du", "des", "le", "la", "les", "l'", "d'", "sur", "sous", "en", "lès", "et", "&"})
+# Verbes et auxiliaires courants des contrats : en capitales, un nom s'arrête avant eux (« AWA SIGNE LE CONTRAT »).
+CAPS_VERBS = frozenset({
+    "SIGNE", "SIGNENT", "ACCEPTE", "ACCEPTENT", "DÉCLARE", "DÉCLARENT", "RECONNAÎT", "RECONNAISSENT", "S'ENGAGE",
+    "S'ENGAGENT", "EST", "SONT", "SERA", "SERONT", "A", "ONT", "AURA", "AURONT", "DOIT", "DOIVENT", "PEUT",
+    "PEUVENT", "CERTIFIE", "ATTESTE", "REMET", "REMETTRA", "VERSE", "VERSERA", "PAIE", "PAIERA", "OCCUPE",
+    "OCCUPERA", "LOUE", "PREND", "PRENDRA", "DONNE", "DONNERA", "RENCONTRE", "ACQUITTE", "RESTITUE", "RECEVRA",
+    "REÇOIT", "EXERCE", "EXERCERA", "TRAVAILLE", "TRAVAILLERA", "DEMEURE", "RÉSIDE", "AGIT", "AGISSANT",
+})
 
 UP = "A-ZÀ-ÖØ-ÞŒ"
 LOW = "a-zß-öø-ÿœ"
@@ -108,6 +124,25 @@ WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*|&")
 
 Cand = Tuple[int, int, int, int, str]  # début, fin, étendue (début, fin) du motif, type (ALIAS = nom d'usage)
 Span = Tuple[int, int]
+
+
+def function_word(word: str) -> bool:
+    return word.lower().replace("’", "'") in FUNCTION_WORDS
+
+
+def caps_verb(word: str) -> bool:
+    return word.replace("’", "'") in CAPS_VERBS
+
+
+def before_verb(text: str, s: int, e: int) -> int:
+    """Fin d'une étendue tout en capitales coupée avant son premier verbe courant (« AWA SIGNE LE CONTRAT »
+    donne « AWA ») ; s si elle commence par un verbe. « A. » est une initiale, pas le verbe."""
+    if not text[s:e].isupper():
+        return e
+    for w in WORD_RX.finditer(text, s, e):
+        if caps_verb(w.group()) and not (len(w.group()) == 1 and text.startswith(".", w.end())):
+            return max(s, len(text[:w.start()].rstrip(" ,\u00a0\u202f\n")))
+    return e
 
 
 def stem(word: str) -> str:
