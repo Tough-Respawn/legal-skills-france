@@ -64,7 +64,10 @@ def _parse(line: str):
     text = q.group(1).strip().replace("««", "«").replace("»»", "»")
     rest = line[q.end():]   # " | localisation | rang | motif" ; la localisation peut contenir " | "
     fields = rest[3:].rsplit(" | ", 2) if rest.startswith(" | ") else []
-    return h.group(1), h.group(2), text, [x.strip() for x in fields]
+    fields = [x.strip() for x in fields]
+    if len(fields) == 3 and fields[2] == "-":   # motif ou candidats vides, écrits « - » par write
+        fields[2] = ""
+    return h.group(1), h.group(2), text, fields
 
 
 def _valid(kind: str, choice: str) -> bool:
@@ -122,7 +125,7 @@ def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity],
         k = ranks.key(a.block, a.start, a.end)
         seen.add(k)
         choice = "garder" if k in previous.keep else "masquer" if a.text in previous.mask_more else "?"
-        out.append("%s %s %s | %s | %d | %s" % (a.id, choice, _quote(a.text), k[0], k[2], _flat(a.reason).replace(" | ", " / ")))
+        out.append("%s %s %s | %s | %d | %s" % (a.id, choice, _quote(a.text), k[0], k[2], _flat(a.reason).replace(" | ", " / ").strip() or "-"))
     out.append("# Mentions ambiguës : remplacer ? par un des placeholders proposés, ou nouveau.")
     ranks = Ranks(blocks) if ambiguities else None
     for m in ambiguities:
@@ -130,7 +133,7 @@ def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity],
         k = ranks.key(t.block, t.start, t.end)
         seen.add(k)
         out.append("%s %s %s | %s | %d | %s" % (m.id, previous.resolve.get(k, "?"), _quote(blocks[t.block].text[t.start:t.end]),
-                                                 k[0], k[2], " ".join(m.candidates)))
+                                                 k[0], k[2], " ".join(m.candidates) or "-"))
     out.append("# Communes, masquées par défaut : garder si la commune est utile à l'analyse.")
     for i, e in enumerate(communes, 1):
         keep = previous.communes.get(texte.norm(e.canonical)) == "garder"
