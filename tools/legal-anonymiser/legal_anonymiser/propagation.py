@@ -12,13 +12,15 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from dataclasses import replace
 from functools import lru_cache
 from typing import List, Set, Tuple
 
 from . import texte
 from .detection.noms import (CAPS_VERBS, CIV_RX, FUNCTION_WORDS, NAME_JOINERS, PARTICLE_RX, STOPWORDS, caps_verb,
-                             function_word, known)
+                             function_word, known, verb_cut)
 from .detection.regles import SP
+from .modele import Mention
 
 Key = Tuple[str, str, int]
 Span = Tuple[int, int]
@@ -61,6 +63,12 @@ def span(text: str, pos: List[int], start: int, end: int) -> Tuple[int, int]:
     return s, e
 
 
+def cut_verbs(text: str, m: Mention) -> Mention:
+    """Mention bornée par ses verbes courants en capitales (noms.verb_cut)."""
+    s, e = verb_cut(text, m.start, m.end)
+    return replace(m, start=s, end=e)
+
+
 def strip_civility(text: str) -> str:
     m = CIV_RX.match(text)
     return text[m.end():] if m and m.end() < len(text) else text
@@ -95,15 +103,26 @@ def head(name: str, vocab: Set[str]) -> str:
     return name[:kept[-1].end()] if kept else name
 
 
+def _split(names: List[str]) -> Tuple[List[str], List[str]]:
+    """(nom, prénoms) : le nom est fait des mots en capitales s'il y en a, sinon du dernier mot."""
+    caps = [w for w in names if w.isupper() and len(w) > 1]
+    surname = caps if caps and len(caps) < len(names) else names[-1:]
+    return surname, [w for w in names if w not in surname]
+
+
+def given_name(text: str) -> str:
+    """Premier prénom normalisé d'une mention de personne (« MONSIEUR JEAN KERBRAT » donne « jean »), ou ""."""
+    first = _split(name_words(strip_civility(text)))[1]
+    return texte.norm(first[0]) if first else ""
+
+
 def _person(name: str, vocab: Set[str]) -> Set[str]:
     words = WORD_RX.findall(name)
     names = name_words(name)
     out = {texte.norm(name)}
     if not names:
         return out
-    caps = [w for w in names if w.isupper() and len(w) > 1]
-    surname = caps if caps and len(caps) < len(names) else names[-1:]
-    first = [w for w in names if w not in surname]
+    surname, first = _split(names)
     sur = texte.norm(" ".join(surname))
     if _single(sur, vocab, 2):
         out.add(sur)

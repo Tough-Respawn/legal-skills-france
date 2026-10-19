@@ -14,8 +14,8 @@
    (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, un nom en capitales
    sur-capturé (« N'DIAYE LE LOGEMENT ») est rogné à la plus longue forme connue qui l'ouvre et
    rattaché sans en tirer de formes, si cette forme fait deux mots ou si le mot qui la suit est un
-   verbe courant, un mot-outil (noms.FUNCTION_WORDS, liste fixe), un mot connu ou sans majuscule ;
-   une particule après la forme (« JEAN LE GALL », « JEAN DE LA FONTAINE ») dit que le nom continue :
+   verbe courant, un mot-outil (noms.FUNCTION_WORDS, liste fixe), un mot connu, sans majuscule ou une
+   particule (« AWA N'DIAYE LA SOMME »), sauf après le seul prénom du propriétaire (« JEAN LE GALL ») ;
    sinon il crée une entité (« MADAME AWA DUPONT »), dont seules les formes du début, avant le
    premier verbe, mot-outil hors liaison de nom ou mot connu, sont inscrites (propagation.head),
    jamais un verbe, un mot-outil ou un mot du vocabulaire seul. Un nom de la structure ne rejoint
@@ -43,10 +43,11 @@ from dataclasses import replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
 from . import texte
-from .detection.noms import PARTICLE_RX, caps_verb, function_word, known, verb_cut
+from .detection.noms import PARTICLE_RX, caps_verb, function_word, known
 from .detection.structure import load_vocab
 from .modele import Ambiguity, Block, Decisions, Entity, Mention
-from .propagation import WORD_RX, Key, folded, forms, head, name_part, name_words, pattern, span, strip_civility
+from .propagation import (WORD_RX, Key, cut_verbs, folded, forms, given_name, head, name_part, name_words, pattern,
+                          span, strip_civility)
 
 PRIORITY = {"regle": 0, "structure": 1, "ner": 2, "propagation": 3}
 NAMED = ("PERSONNE", "SOCIETE")
@@ -151,7 +152,8 @@ class _Builder:
         """Plus longue forme connue qui ouvre un nom en capitales sur-capturé (« N'DIAYE LE LOGEMENT ») :
         mention rognée à cette forme, entités qui la portent, forme. Une forme d'un seul mot ne rogne que
         si le mot suivant est un verbe courant, un mot-outil, un mot du vocabulaire ou sans majuscule ;
-        un autre mot capitalisé est un nom (« AWA DUPONT » n'est pas Awa N'Diaye : nouvelle entité)."""
+        un autre mot capitalisé est un nom (« AWA DUPONT » n'est pas Awa N'Diaye : nouvelle entité), une
+        particule aussi après le seul prénom (« JEAN LE GALL »), mais pas après un nom (« N'DIAYE LA SOMME »)."""
         text, pos = folded(name)
         base = m.end - len(name)
         for f in sorted((f for f in self.owners if text.startswith(f + " ")), key=len, reverse=True):
@@ -161,10 +163,12 @@ class _Builder:
             end = span(name, pos, 0, len(f))[1]
             nxt = WORD_RX.search(name, end)
             word = nxt.group() if nxt else ""
-            if PARTICLE_RX.fullmatch(word):
-                return None   # « JEAN LE GALL » n'est pas Jean Kerbrat : le nom continue
-            if (" " in f or not word or caps_verb(word) or function_word(word) or known(word, self.vocab)
-                    or word[0].islower()):
+            particle = PARTICLE_RX.fullmatch(word) is not None
+            if particle and " " not in f and any(given_name(self.sources.get(m, "")) == f for i in own
+                                                  for m in self.ents[i].mentions):
+                return None   # « JEAN LE GALL » n'est pas Jean Kerbrat : après le prénom seul, le nom continue
+            if (" " in f or not word or particle or caps_verb(word) or function_word(word) or known(word, self.vocab)
+                    or word[0].islower()):   # après un nom entier ou un nom seul, la particule est un article
                 return replace(m, end=base + end), own, f
             return None
         return None
@@ -330,16 +334,11 @@ def _party(e: Entity) -> Optional[int]:
     return next((m.party for m in e.mentions if m.party is not None), None)
 
 
-def _verb_cut(text: str, m: Mention) -> Mention:
-    s, e = verb_cut(text, m.start, m.end)
-    return replace(m, start=s, end=e)
-
-
 def build(blocks: List[Block], mentions: List[Mention], decisions: Decisions) -> Tuple[List[Entity], List[Ambiguity]]:
     """Entités (placeholder, forme canonique, mentions) et ambiguïtés à arbitrer, dans l'ordre du document."""
     b = _Builder(blocks)
     # En capitales, une personne sans partie est bornée par ses verbes (« AWA SIGNE ») ; une partie ou une société non.
-    mentions = [_verb_cut(blocks[m.block].text, m) if m.kind == "PERSONNE" and m.party is None
+    mentions = [cut_verbs(blocks[m.block].text, m) if m.kind == "PERSONNE" and m.party is None
                 and m.source in ("ner", "structure") else m for m in mentions]
     b.group(_overlaps([m for m in mentions if m.end > m.start]))
     b.propagate()

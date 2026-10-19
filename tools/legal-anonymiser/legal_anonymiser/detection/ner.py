@@ -18,7 +18,7 @@ spaCy, qui contiennent de vrais noms (« LI HUI MIN »).
 Le modèle lit mal les capitales : un bloc dont 60 % des lettres au moins sont des capitales
 est lu sur une copie à l'initiale majuscule (même longueur, mêmes positions), et seules
 les entités de 2 à 4 mots porteurs, sans mot vide intérieur autre qu'une particule ou « et »
-(« TÉMOIN EST PRÉSENT » écarté), y sont gardées : un mot seul y est souvent un mot courant
+(« TÉMOIN EST PRÉSENT » écarté) ni chiffre (« SOMME DE 300 EUROS » lu LOC), y sont gardées : un mot seul y est souvent un mot courant
 (« CI-APRÈS », « DÉNOMMÉ »), au-delà de 4 c'est une clause entière. Une commune d'un seul mot
 en capitales n'est donc pas trouvée ici : elle l'est après un code postal, après « NÉ(E) LE …
 À » (règles), après « FAIT À » (structure), et ailleurs par propagation de ces mentions ; seule
@@ -160,7 +160,8 @@ def _kind(label: str, name: str, vocab: Set[str], caps: bool) -> Optional[str]:
     words = tokens(name)
     if (not kind or len(name) < 2 or not any(c.isalpha() for c in name) or texte.norm(name) in vocab
             or not words or all(known(w, vocab) for w in words)
-            or (caps and not 2 <= len(words) <= _CAPS_MAX_WORDS) or (caps and _inner_stop(name))):
+            or (caps and not 2 <= len(words) <= _CAPS_MAX_WORDS) or (caps and _inner_stop(name))
+            or (caps and any(c.isdigit() for c in name))):   # « SOMME DE 300 EUROS » lu LOC : un bout de clause
         return None
     if kind == "LIEU" and len(WORD_RX.findall(name)) == 1 and name[0].isupper():
         return "COMMUNE"

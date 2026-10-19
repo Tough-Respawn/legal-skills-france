@@ -98,10 +98,12 @@ complété par les tâches suivantes.
   « MADAME SIGNE HANSEN »), et une société (« GRAND EST BÂTIMENT », « VERSE ») gardent leur
   étendue. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
   longue forme connue qui l'ouvre, si elle fait deux mots ou si un verbe courant, un mot-outil ou
-  un mot du vocabulaire la suit ; une particule après elle (« MONSIEUR JEAN LE GALL », « JEAN DE
-  LA FONTAINE », pour un Jean Kerbrat connu) dit que le nom continue ; sinon (« MADAME AWA
-  DUPONT », où seul « AWA » est connu) il devient une nouvelle entité, dont les formes ne viennent
-  que du début du nom (avant le premier verbe, mot-outil ou mot connu). Un nom de la NER chevauché par une forme connue n'en garde le
+  un mot du vocabulaire ou une particule la suit (« AWA N'DIAYE LA SOMME », « PAUL KERBRAT DU
+  SERVICE » : rattachés à la partie) ; une particule après le seul prénom d'une partie
+  (« MONSIEUR JEAN LE GALL », « JEAN DE LA FONTAINE », pour un Jean Kerbrat connu) dit au contraire
+  que le nom continue ; sinon (« MADAME AWA DUPONT », où seul « AWA » est connu) il devient une
+  nouvelle entité, dont les formes ne viennent que du début du nom (avant le premier verbe,
+  mot-outil ou mot connu). Un nom de la NER chevauché par une forme connue n'en garde le
   reste que si celui-ci fait deux mots capitalisés hors vocabulaire, et l'entité recalcule ses
   formes. Chaque nom est ensuite cherché partout, sans casse ni
   accents, aussi après une élision (« d'Élodie », « D'AWA ») : forme complète, nom seul, prénom
