@@ -47,7 +47,7 @@ _CAPS_SHARE = 0.6
 _CAPS_MAX_WORDS = 4
 _FORM_RX = re.compile(FORMS)
 _INNER = FUNCTION_WORDS - NAME_JOINERS   # mots-outils jamais à l'intérieur d'un nom
-_LINE_RX = re.compile(r"[^\n]+")
+_LINE_RX = re.compile(r"(?:[^\n\t ]| (?![ \t]))+")   # ligne ou colonne : saut de ligne, tabulation, deux espaces
 _CLEAN_RX = re.compile(r"[^«»“”\"(),;:!?]+")   # parties sans ponctuation de phrase ; un saut de ligne est une espace
 
 
@@ -134,9 +134,10 @@ def _clean(text: str, s: int, e: int) -> Tuple[int, int]:
 
 
 def _lines(text: str, s: int, e: int) -> List[Tuple[int, int]]:
-    """Une entité sur plusieurs lignes : une ligne qui porte au moins deux mots capitalisés hors particules
-    est un nom entier (« Jean Dupont », puis « Marie Durand » à la ligne) ; une autre ligne se rattache à
-    la précédente (« Jean-Baptiste » puis « Lemaire », « JEAN DUPONT » puis « DE LA FONTAINE »)."""
+    """Une entité sur plusieurs lignes ou colonnes (deux espaces ou plus, tabulation : « Paul Kerbrat
+    Awa N'Diaye » d'un bloc de signature) : une ligne qui porte au moins deux mots capitalisés hors
+    particules est un nom entier (« Jean Dupont », puis « Marie Durand » à la ligne) ; une autre ligne se
+    rattache à la précédente (« Jean-Baptiste » puis « Lemaire », « JEAN DUPONT » puis « DE LA FONTAINE »)."""
     out: List[List] = []   # [début, fin, nom entier ?]
     for m in _LINE_RX.finditer(text, s, e):
         full = sum(w.group()[0].isupper() and not PARTICLE_RX.fullmatch(w.group())

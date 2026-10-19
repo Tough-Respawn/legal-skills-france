@@ -45,12 +45,12 @@ def _luhn_ok(digits: str) -> bool:
 
 
 def _iban_ok(text: str) -> bool:
-    s = re.sub(SP, "", text).upper()
+    s = re.sub(r"\s", "", text).upper()
     return int("".join(str(int(c, 36)) for c in s[4:] + s[:4])) % 97 == 1
 
 
 def _nir_ok(text: str) -> bool:
-    s = re.sub(SP, "", text).upper().replace("2A", "19").replace("2B", "18")
+    s = re.sub(r"\s", "", text).upper().replace("2A", "19").replace("2B", "18")
     return len(s) == 15 and s.isdigit() and 97 - int(s[:13]) % 97 == int(s[13:])
 
 
@@ -65,7 +65,7 @@ def _r(kind: str, pattern: str, group: int = 0, typer: Optional[Callable[[str], 
     return (kind, re.compile(pattern), group, typer)
 
 
-S = SP + "?"
+S = r"\s?"   # espace, insécable ou saut de ligne : un IBAN coupé par une ligne (PDF, OCR) reste un IBAN
 RULES: List[Rule] = [
     _r("TVA", r"\bFR" + S + r"\d{2}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}\b"),
     _r("IBAN", r"(?i:\bFR\d{2}(?:" + S + r"[A-Z0-9]{4}){5}" + S + r"[A-Z0-9]{3}\b)", 0, _typed("IBAN", _iban_ok)),
