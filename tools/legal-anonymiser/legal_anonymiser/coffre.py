@@ -121,6 +121,10 @@ class Vault:
     def known_ids(self) -> set:
         return {e["id"] for e in self._load()["originaux"].values()}
 
+    def original_for(self, cid: str) -> Optional[Path]:
+        """Chemin de l'original enregistré sous cet identifiant, ou None."""
+        return next((Path(p) for p, e in self._load()["originaux"].items() if e["id"] == cid), None)
+
     def read_state(self, cid: str) -> dict:
         try:
             return _read_json(self.root / cid / "etat.json", "coffre/<id>/etat.json")

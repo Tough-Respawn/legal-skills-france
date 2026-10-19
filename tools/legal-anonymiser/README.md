@@ -1,7 +1,61 @@
 # legal-anonymiser
 
-Pseudonymisation locale de contrats, sans réseau. Squelette : le contenu est
-complété par les tâches suivantes.
+Pseudonymisation locale de contrats, sans réseau.
+
+## Ligne de commande
+
+`python -m legal_anonymiser <commande>` ou, après installation, `legal-anonymiser <commande>`. Le
+coffre est `~/.legal-france/coffre/` (variable `LEGAL_FRANCE_COFFRE` pour le déplacer). La garde
+réseau (`nonet.install()`) est la première instruction de `main`, avant tout import de pypdf, Pillow ou
+spaCy.
+
+| Commande | Effet | Codes |
+|---|---|---|
+| `traiter [CHEMIN]` | sans chemin : sélecteur de fichier natif (DOCX, PDF, JPG, PNG) ; masquage complet ; sans rien en attente, passe à la validation | 0 publié, 3 arbitrage en attente, 4 non publié, 5 fichier introuvable, illisible ou format inconnu, 6 dépendance manquante |
+| `relancer ID` | relit `ajustements.txt`, relance le masquage, puis comme `traiter` | idem (4 si l'identifiant est invalide ou inconnu) |
+| `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
+| `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
+| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 |
+
+Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
+`ajustements.txt` mal formé). La trace complète d'une erreur imprévue va dans `coffre/<id>/erreur.txt`
+(ou `coffre/erreurs/<horodatage>.txt` quand aucun contrat n'est en cours) ; la console ne reçoit que le
+message générique et le chemin neutre de la trace.
+
+**Chaîne d'un passage** (`pipeline.run`) : extraction, inspection (pièges Unicode, NFC, texte adressé à
+une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le modèle est installé (sinon
+le passage continue sans elle, constat `ner_absente`), entités avec les décisions relues, constats de
+métadonnées, masquage, risque résiduel, seconde passe. Écrit dans `coffre/<id>/` : `masque.md`
+(version en préparation, marqueur `valide_humain` daté du jour), `rapport.md` (valeurs réelles, jamais
+publié), `ajustements.txt`, `correspondance.json` (placeholder vers valeur, ambiguïtés `[AMBIGU_n]`
+comprises) et `etat.json` (`destination` : dossier courant du premier `traiter`, où sera publié le
+fichier ; `pending` ; `date` ; `original_name_hidden`). Les décisions survivent à la réécriture du
+fichier d'ajustements : une alerte gardée reste écrite `A<n> garder`, une ambiguïté tranchée
+`M<n> [PLACEHOLDER]` (numérotée après les ambiguïtés ouvertes, sa clé ne change pas), une commune gardée
+`C<n> garder`. Seuls les points encore marqués `?` comptent comme en attente.
+
+**Validation** : `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et
+`rapport.md` sont ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier
+ce contrat masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est
+publié (« fichier modifié pendant la relecture, relancez », code 4) ; sinon il est publié dans la
+destination enregistrée (`contrat-<id>.masque.md`), un dossier inaccessible en écriture donne le code 4.
+`ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la fenêtre : code 4.
+`impossible` (ni fenêtre ni terminal, cas d'un outil piloté par un modèle) : « validation impossible ici :
+lancez vous-même `legal-anonymiser valider <id>` dans un terminal », code 4. Sans chemin, un sélecteur
+annulé ou un `tkinter` absent donne le code 4.
+
+**Ce que la console affiche** (`sortie.py`, dictionnaire `MESSAGES`) : des comptes (entités, alertes,
+ambiguïtés, points en attente), l'identifiant neutre du contrat et des chemins neutres (`./…` sous le
+dossier courant, `coffre/<id>/…` sous le coffre, sinon `[chemin masqué]`). Jamais un texte du document,
+le nom du fichier original, un chemin absolu ni le message d'une exception imprévue ; les sorties,
+avertissements et journaux de pypdf et spaCy sont absorbés pendant l'extraction et le chargement du
+modèle (`sortie.quiet`). Le chemin choisi n'est jamais affiché ; si l'original est dans le dossier
+courant, un avertissement sans chemin le signale. `--help` et les erreurs d'arguments affichent
+`legal-anonymiser`, jamais le chemin du script.
+
+**Réidentification** (`reidentification.py`) : chaque `[PLACEHOLDER]` connu de `correspondance.json`
+est remplacé par sa valeur, les autres (`[INCONNU_1]`, `[IMAGE]`) restent tels quels ; le résultat,
+`coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
 
 ## Formats lus (état actuel)
 
