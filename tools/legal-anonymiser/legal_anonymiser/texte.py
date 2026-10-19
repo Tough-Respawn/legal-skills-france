@@ -11,8 +11,8 @@ CONFUSABLES: Dict[str, str] = {
     **dict(zip("ΑΒΕΖΗΙΚΜΝΟΡΤΥΧ", "ABEZHIKMNOPTYX")),
 }
 
-_ZERO_WIDTH = re.compile("[​-‍⁠﻿]")
-_BIDI = re.compile("[‪-‮⁦-⁩]")
+_ZERO_WIDTH = re.compile("[\u200b-\u200d\u2060\ufeff]")
+_BIDI = re.compile("[\u202a-\u202e\u2066-\u2069]")
 _TABLE = str.maketrans(CONFUSABLES)
 
 

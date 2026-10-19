@@ -27,3 +27,6 @@ def install() -> None:
     socket.socket = _OfflineSocket
     socket.create_connection = _blocked
     socket.getaddrinfo = _blocked
+    socket.gethostbyname = _blocked
+    socket.gethostbyname_ex = _blocked
+    socket.gethostbyaddr = _blocked

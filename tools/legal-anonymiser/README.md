@@ -1,13 +1,13 @@
 # legal-anonymiser
 
-Pseudonymisation locale de contrats, sans reseau. Squelette : le contenu est
-complete par les taches suivantes.
+Pseudonymisation locale de contrats, sans réseau. Squelette : le contenu est
+complété par les tâches suivantes.
 
-## Licences des dependances
+## Licences des dépendances
 
-Verifiees a la source le 2026-10-19. Le projet ne redistribue aucune dependance.
+Vérifiées à la source le 2026-10-19. Le projet ne redistribue aucune dépendance.
 
-| Bibliotheque | Licence | Source | Verifiee le |
+| Bibliothèque | Licence | Source | Vérifiée le |
 |---|---|---|---|
 | pypdf | BSD 3-Clause | https://github.com/py-pdf/pypdf/blob/main/LICENSE | 2026-10-19 |
 | Pillow | MIT-CMU (HPND) | https://github.com/python-pillow/Pillow/blob/main/LICENSE | 2026-10-19 |
