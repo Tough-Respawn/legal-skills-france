@@ -65,7 +65,7 @@ def _r(kind: str, pattern: str, group: int = 0, typer: Optional[Callable[[str], 
     return (kind, re.compile(pattern), group, typer)
 
 
-S = r"\s?"   # espace, insécable ou saut de ligne : un IBAN coupé par une ligne (PDF, OCR) reste un IBAN
+S = r"\s*"   # espaces, insécables, saut de ligne même CRLF (OCR) : un IBAN coupé par une ligne reste un IBAN
 RULES: List[Rule] = [
     _r("TVA", r"\bFR" + S + r"\d{2}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}\b"),
     _r("IBAN", r"(?i:\bFR\d{2}(?:" + S + r"[A-Z0-9]{4}){5}" + S + r"[A-Z0-9]{3}\b)", 0, _typed("IBAN", _iban_ok)),
