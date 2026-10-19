@@ -12,10 +12,15 @@ complété par les tâches suivantes.
   image part dans une section `cache` et produit un constat. Sont aussi signalés :
   JavaScript, action d'ouverture, fichier joint, mises à jour incrémentales, signature qui
   ne couvre pas tout le fichier. Un PDF chiffré, tronqué ou corrompu est refusé.
-- **Limites PDF** : couleurs `sc`/`scn`, rectangles couvrants et transparence ignorés ;
-  JavaScript cherché dans le catalogue seulement ; valeurs de champs de formulaire et
-  annotations non extraites ; une page sans texte mais avec image est repérée pour l'OCR,
-  qui n'est pas encore branché.
+  Les valeurs des champs texte et liste vont dans le corps, les notes `/Text` et
+  `/FreeText` en commentaire.
+- **Numérisations** : le texte invisible ou recouvert, posé sur une image qui couvre au
+  moins 90 % de la page, est lu comme une couche OCR (corps, constat `texte_ocr`). Une
+  telle page, ou une page avec image sans texte, est repérée pour l'OCR, qui n'est pas
+  encore branché.
+- **Limites PDF** : rectangles couvrants et transparence de l'état graphique ignorés ;
+  espaces de couleur Separation et Indexed lus comme du gris ; JavaScript cherché dans le
+  catalogue seulement ; autres annotations (surlignage, etc.) non extraites.
 
 ## Licences des dépendances
 

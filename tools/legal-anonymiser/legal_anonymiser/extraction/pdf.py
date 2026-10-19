@@ -15,7 +15,11 @@ _INVISIBLE_MODES = (3, 7)   # sans remplissage ni contour
 _NO_FILL_MODES = (1, 5)     # contour seul : la couleur de remplissage ne compte pas
 _MIN_SIZE = 2.0             # points, après matrices
 _WHITE = 0.95               # composante à partir de laquelle la couleur passe pour blanche
+_SCAN_COVER = 0.9           # part de la page couverte par une image de numérisation
+_SCAN_TEXT = 200            # caractères visibles au plus sur une page numérisée
+_OCR_FLAGS = {"texte_invisible", "texte_sous_image"}
 _MAX_FIELDS = 10000
+_ENCRYPTED = "Fichier PDF chiffré : retirer la protection avant l'analyse."
 
 
 def _mul(m: List[float], n: List[float]) -> List[float]:
@@ -28,6 +32,31 @@ def _mul(m: List[float], n: List[float]) -> List[float]:
 def _get(d: Any, key: str) -> Any:
     """Valeur résolue d'une clé de dictionnaire PDF, ou None."""
     return d[key] if isinstance(d, dict) and key in d else None
+
+
+def _resolve(x: Any) -> Any:
+    return x.get_object() if hasattr(x, "get_object") else x
+
+
+def _rect(r: Any) -> Tuple[float, float, float, float]:
+    """Rectangle normalisé (x0, y0, x1, y1), coins opposés dans n'importe quel ordre."""
+    x0, y0, x1, y1 = (float(v) for v in r)
+    return min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)
+
+
+def _white(values: list) -> bool:
+    """Couleur de remplissage blanche, selon le nombre de composantes (gris, RVB, CMJN)."""
+    v = [float(a) for a in values]
+    # ponytail: espaces Separation et Indexed lus comme gris ; résoudre l'espace si besoin
+    if len(v) == 4:
+        return max(v) <= 1 - _WHITE
+    return len(v) in (1, 3) and all(_WHITE <= c <= 1 for c in v)
+
+
+def _masked(image: Any) -> bool:
+    """Image transparente (masque doux, masque ou pochoir) : elle ne cache pas le texte."""
+    return (_get(image, "/SMask") is not None or _get(image, "/Mask") is not None
+            or _get(image, "/ImageMask") == True or _get(image, "/IM") == True)  # noqa: E712
 
 
 class _Op:
@@ -48,19 +77,20 @@ class _PageScan:
     """
 
     def __init__(self, page: Any) -> None:
-        box = page.cropbox  # zone visible ; vaut la MediaBox en l'absence de CropBox
-        self.box = (float(box.left), float(box.bottom), float(box.right), float(box.top))
+        crop, media = _rect(page.cropbox), _rect(page.mediabox)  # zone visible : intersection
+        self.box = (max(crop[0], media[0]), max(crop[1], media[1]),
+                    min(crop[2], media[2]), min(crop[3], media[3]))
         self.ops: List[_Op] = []
         self.pending: List[_Op] = []
         self.segments: List[Tuple[str, List[_Op]]] = []
-        self.image = False
+        self.images: List[Tuple[float, float, float, float, float]] = []  # boîte, couverture
         self.state = [0, False, 12.0]  # mode de rendu, remplissage blanc, corps de police
         self.saved: List[list] = []
         self.frames: List[tuple] = []
         self.base = list(_IDENTITY)  # matrice du XObject de formulaire en cours
         self.resources = _get(page, "/Resources")
 
-    def before(self, op: bytes, args: list, cm: List[float], tm: List[float]) -> None:
+    def before(self, op: bytes, args: Any, cm: List[float], tm: List[float]) -> None:
         if op == b"Do":  # empilé avant tout, dépilé par after() même si la suite échoue
             self.frames.append((self.base, self.resources, list(self.state), len(self.saved)))
         try:
@@ -68,19 +98,17 @@ class _PageScan:
         except (TypeError, ValueError, IndexError, KeyError, AttributeError):
             pass  # opérateur mal formé : ignoré, comme le fait pypdf
 
-    def _before(self, op: bytes, args: list, cm: List[float], tm: List[float]) -> None:
+    def _before(self, op: bytes, args: Any, cm: List[float], tm: List[float]) -> None:
         if op == b"q":
             self.saved.append(list(self.state))
         elif op == b"Q" and self.saved:
             self.state = self.saved.pop()
         elif op == b"Tr":
             self.state[0] = int(args[0])
-        elif op == b"rg":
-            self.state[1] = min(float(a) for a in args[:3]) >= _WHITE
-        elif op == b"g":
-            self.state[1] = float(args[0]) >= _WHITE
-        elif op == b"k":
-            self.state[1] = max(float(a) for a in args[:4]) <= 1 - _WHITE
+        elif op == b"cs":  # nouvel espace de couleur : remplissage remis au noir
+            self.state[1] = False
+        elif op in (b"rg", b"g", b"k", b"sc", b"scn"):
+            self.state[1] = _white(args)
         elif op == b"Tf":
             self.state[2] = float(args[1])
         elif op in _SHOW:
@@ -88,10 +116,10 @@ class _PageScan:
         elif op == b"Do":
             self._do(args[0], cm)
         elif op == b"INLINE IMAGE":
-            self._image(cm)
-        # ponytail: couleurs sc/scn, rectangles « re f » couvrants et transparence ignorés
+            self._image(cm, not _masked(_get(args, "settings")))
+        # ponytail: rectangles « re f » couvrants et transparence de l'état graphique ignorés
 
-    def after(self, op: bytes, args: list, cm: List[float], tm: List[float]) -> None:
+    def after(self, op: bytes, args: Any, cm: List[float], tm: List[float]) -> None:
         if op == b"Do" and self.frames:
             self.base, self.resources, self.state, depth = self.frames.pop()
             del self.saved[depth:]
@@ -124,35 +152,53 @@ class _PageScan:
         xobject = _get(_get(self.resources, "/XObject"), name)
         subtype = _get(xobject, "/Subtype")
         if subtype == "/Image":
-            self._image(cm)
+            self._image(cm, not _masked(xobject))
         elif subtype == "/Form":  # pypdf repart d'une matrice identité dans le formulaire
             matrix = [float(v) for v in (_get(xobject, "/Matrix") or _IDENTITY)]
             self.base = _mul(matrix, _mul(cm, self.base))
             self.resources = _get(xobject, "/Resources") or self.resources
 
-    def _image(self, cm: List[float]) -> None:
-        """L'image occupe le carré unité transformé : le texte déjà peint dessous est caché."""
-        self.image = True
+    def _image(self, cm: List[float], opaque: bool) -> None:
+        """L'image occupe le carré unité transformé ; opaque, elle cache le texte déjà peint."""
         a, b, c, d, e, f = _mul(cm, self.base)
-        xs = (e, a + e, c + e, a + c + e)
-        ys = (f, b + f, d + f, b + d + f)
-        # ponytail: origine du texte seulement, sans largeur ni masque de transparence
-        for op in self.ops:
-            if min(xs) <= op.x <= max(xs) and min(ys) <= op.y <= max(ys):
-                op.flags.add("texte_sous_image")
+        xs, ys = (e, a + e, c + e, a + c + e), (f, b + f, d + f, b + d + f)
+        x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+        px0, py0, px1, py1 = self.box
+        page = max(0.0, px1 - px0) * max(0.0, py1 - py0)
+        inter = (max(0.0, min(x1, px1) - max(x0, px0)) * max(0.0, min(y1, py1) - max(y0, py0)))
+        self.images.append((x0, y0, x1, y1, inter / page if page else 0.0))
+        if opaque:  # ponytail: origine du texte seulement, sans sa largeur
+            for op in self.ops:
+                if x0 <= op.x <= x1 and y0 <= op.y <= y1:
+                    op.flags.add("texte_sous_image")
 
-    def blocks(self, location: str) -> Tuple[List[Block], List[Finding]]:
-        """Un bloc corps par page, puis un bloc cache par suite de paquets aux mêmes codes."""
+    def blocks(self, location: str) -> Tuple[List[Block], List[Finding], bool]:
+        """Bloc corps (couche OCR comprise), blocs cache par suite de codes, constats, OCR."""
+        scans = [im for im in self.images if im[4] >= _SCAN_COVER]
+
+        def in_scan(ops: List[_Op]) -> bool:
+            return bool(ops) and all(any(x0 <= o.x <= x1 and y0 <= o.y <= y1
+                                         for x0, y0, x1, y1, _ in scans) for o in ops)
+
         body: List[str] = []
         hidden: List[list] = []
+        ocr = False
+        visible_on_scan = 0
         for text, ops in self.segments:
-            flags = tuple(sorted(set().union(*(op.flags for op in ops))))
-            if not flags:
+            flags = set().union(*(op.flags for op in ops))
+            if flags and flags <= _OCR_FLAGS and in_scan(ops):  # couche OCR d'une numérisation
+                ocr = True
                 body.append(text)
-            elif hidden and hidden[-1][0] == flags:
+            elif not flags:
+                body.append(text)
+                if in_scan(ops):
+                    visible_on_scan += len(text.strip())
+            elif hidden and hidden[-1][0] == sorted(flags):
+                if not (hidden[-1][1][-1:].isspace() or text[:1].isspace()):
+                    hidden[-1][1] += "\n"  # lignes distinctes : ne pas recoller les valeurs
                 hidden[-1][1] += text
             else:
-                hidden.append([flags, text])
+                hidden.append([sorted(flags), text])
         blocks: List[Block] = []
         findings: List[Finding] = []
         corps = "".join(body).strip()
@@ -162,25 +208,79 @@ class _PageScan:
             if text.strip():
                 blocks.append(Block(text.strip(), location, "cache"))
                 findings.extend(Finding("attention", code, location) for code in flags)
-        if self.image and not blocks:
+        if ocr:
+            findings.append(Finding("info", "texte_ocr", location))
+        if self.images and (not blocks or (scans and visible_on_scan <= _SCAN_TEXT)):
             findings.append(Finding("info", "page_sans_texte", location))  # OCR : tâche 5
-        return blocks, findings
+        return blocks, findings, ocr
+
+
+def _annotations(page: Any, location: str) -> Tuple[List[Block], List[Finding]]:
+    """Notes /Text et /FreeText : section commentaire."""
+    blocks, findings = [], []
+    for annot in _get(page, "/Annots") or []:
+        annot = _resolve(annot)
+        contents = _get(annot, "/Contents")
+        if (_get(annot, "/Subtype") in ("/Text", "/FreeText") and isinstance(contents, str)
+                and contents.strip()):
+            blocks.append(Block(contents.strip(), location, "commentaire"))
+            findings.append(Finding("info", "commentaire", location))
+    return blocks, findings
 
 
 def _is_js(action: Any) -> bool:
     return isinstance(action, dict) and (_get(action, "/S") == "/JavaScript" or "/JS" in action)
 
 
+def _fields(root: Any, data: bytes, pages: Dict[int, int]) -> Tuple[List[Block], List[Finding]]:
+    """Champs AcroForm : valeurs texte et liste en blocs, signatures en constats."""
+    blocks: List[Block] = []
+    found: List[Finding] = []
+    stack = [(f, None) for f in reversed(_get(_get(root, "/AcroForm"), "/Fields") or [])]
+    for _ in range(_MAX_FIELDS):  # borne contre les arbres de champs cycliques
+        if not stack:
+            break
+        ref, inherited = stack.pop()
+        field = _resolve(ref)
+        if not isinstance(field, dict):
+            continue
+        ft = _get(field, "/FT") or inherited
+        kids = [_resolve(k) for k in _get(field, "/Kids") or []]
+        stack.extend((k, ft) for k in reversed(kids))
+        value = _get(field, "/V")
+        if ft == "/Sig" and isinstance(value, dict):
+            found.append(Finding("info", "signature", "document"))
+            byte_range = _get(value, "/ByteRange")
+            try:
+                covered = int(byte_range[2]) + int(byte_range[3]) == len(data)
+            except (TypeError, ValueError, IndexError):
+                covered = False
+            if not covered:
+                found.append(Finding("alerte", "signature_partielle", "document"))
+        elif ft in ("/Tx", "/Ch") and value is not None:
+            items = value if isinstance(value, list) else [value]
+            text = "\n".join(v for v in map(_resolve, items) if isinstance(v, str)).strip()
+            if not text:
+                continue
+            refs = [field.get("/P")] + [k.get("/P") for k in kids if isinstance(k, dict)]
+            page = next((pages[r.idnum] for r in refs if getattr(r, "idnum", None) in pages), None)
+            blocks.append(Block(text, "page %d" % page if page else "champ %d" % (len(blocks) + 1),
+                                "corps"))
+    return blocks, found
+
+
 def _structure(root: Any, data: bytes) -> List[Finding]:
-    """Contenu actif du catalogue, signatures et mises à jour incrémentales."""
+    """Contenu actif du catalogue et mises à jour incrémentales."""
     found: List[Finding] = []
     names = _get(root, "/Names")
     if _get(names, "/JavaScript") is not None:
         found.append(Finding("alerte", "javascript", "document"))
     if _get(names, "/EmbeddedFiles") is not None:
         found.append(Finding("attention", "fichier_joint", "document"))
-    # Une /OpenAction tableau n'est qu'une vue initiale ; seule une action compte.
-    actions = [a for a in (_get(root, "/OpenAction"),) if isinstance(a, dict)]
+    # /OpenAction tableau ou /GoTo : simple vue initiale ; toute autre action compte.
+    open_action = _get(root, "/OpenAction")
+    actions = [open_action] if (isinstance(open_action, dict)
+                                and _get(open_action, "/S") != "/GoTo") else []
     aa = _get(root, "/AA")
     if isinstance(aa, dict):
         actions.extend(aa[k] for k in aa)
@@ -189,33 +289,16 @@ def _structure(root: Any, data: bytes) -> List[Finding]:
     if any(_is_js(a) for a in actions):
         found.append(Finding("alerte", "javascript", "document"))
     # ponytail: actions des pages, annotations et champs non parcourues
-
-    fields = list(_get(_get(root, "/AcroForm"), "/Fields") or [])
-    for _ in range(_MAX_FIELDS):  # borne contre les arbres de champs cycliques
-        if not fields:
-            break
-        field = fields.pop().get_object()
-        fields.extend(_get(field, "/Kids") or [])
-        value = _get(field, "/V")
-        if _get(field, "/FT") != "/Sig" or not isinstance(value, dict):
-            continue
-        found.append(Finding("info", "signature", "document"))
-        byte_range = _get(value, "/ByteRange")
-        try:
-            covered = int(byte_range[2]) + int(byte_range[3]) == len(data)
-        except (TypeError, ValueError, IndexError):
-            covered = False
-        if not covered:
-            found.append(Finding("alerte", "signature_partielle", "document"))
-
     linearized = 1 if b"/Linearized" in data[:1024] else 0
     if data.count(b"%%EOF") - linearized > 1:
         found.append(Finding("attention", "pdf_modifie", "document"))
-    unique: List[Finding] = []
-    for f in found:
-        if f not in unique:
-            unique.append(f)
-    return unique
+    return found
+
+
+def _iso(when: Any) -> str:
+    """Date ISO 8601 à la seconde, fuseau conservé (Z pour UTC)."""
+    text = when.isoformat(timespec="seconds")
+    return text[:-6] + "Z" if text.endswith("+00:00") else text
 
 
 def _metadata(reader: Any) -> Dict[str, str]:
@@ -231,7 +314,7 @@ def _metadata(reader: Any) -> Dict[str, str]:
         except ValueError:  # date mal formée : ignorée
             continue
         if when is not None:
-            meta[key] = when.strftime("%Y-%m-%dT%H:%M:%S")
+            meta[key] = _iso(when)
     return meta
 
 
@@ -239,26 +322,42 @@ def extract_pdf(path: Path) -> Extracted:
     """Lit un PDF : un bloc par page, texte caché à part, métadonnées, constats d'inspection."""
     try:
         from pypdf import PdfReader
+        from pypdf.errors import DependencyError
     except ImportError as exc:
         raise MissingDependency("La bibliothèque pypdf est requise pour lire les PDF.") from exc
     data = Path(path).read_bytes()
     if b"%%EOF" not in data[-1024:]:
         raise Unreadable("Fichier PDF tronqué ou corrompu.")
     try:
-        reader = PdfReader(io.BytesIO(data))
+        try:
+            reader = PdfReader(io.BytesIO(data))
+        except DependencyError as exc:  # chiffrement AES sans bibliothèque de chiffrement
+            raise Unreadable(_ENCRYPTED) from exc
         if reader.is_encrypted:
-            raise Unreadable("Fichier PDF chiffré : retirer la protection avant l'analyse.")
+            raise Unreadable(_ENCRYPTED)
         blocks: List[Block] = []
         findings: List[Finding] = []
+        ocr = False
+        pages: Dict[int, int] = {}
         for n, page in enumerate(reader.pages, 1):
+            location = "page %d" % n
+            if page.indirect_reference is not None:
+                pages[page.indirect_reference.idnum] = n
             scan = _PageScan(page)
             page.extract_text(visitor_operand_before=scan.before,
                               visitor_operand_after=scan.after, visitor_text=scan.text)
-            page_blocks, page_findings = scan.blocks("page %d" % n)
-            blocks.extend(page_blocks)
-            findings.extend(page_findings)
-        findings.extend(_structure(reader.trailer["/Root"], data))
-        return Extracted(blocks, _metadata(reader), findings)
+            page_blocks, page_findings, page_ocr = scan.blocks(location)
+            notes, note_findings = _annotations(page, location)
+            blocks += page_blocks + notes
+            findings += page_findings + note_findings
+            ocr = ocr or page_ocr
+        root = reader.trailer["/Root"]
+        field_blocks, field_findings = _fields(root, data, pages)
+        blocks += field_blocks
+        for f in field_findings + _structure(root, data):  # constats du document : uniques
+            if f not in findings:
+                findings.append(f)
+        return Extracted(blocks, _metadata(reader), findings, ocr)
     except Unreadable:
         raise
     except Exception as exc:  # pypdf lève des types variés sur un fichier malformé
