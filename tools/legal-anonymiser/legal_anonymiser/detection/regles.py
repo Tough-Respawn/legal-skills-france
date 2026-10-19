@@ -15,7 +15,7 @@ SP = r"[ \u00a0\u202f]"
 W = r"[A-ZÀ-Ü][\w'-]*"
 NAME = W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + W + r"){0,3}"
 MONTHS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre"
-BIRTH = r"(?i:n[ée]e?) le (\d{1,2}(?:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS
+BIRTH = r"(?i:n[ée]e? le) (\d{1,2}(?i:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS   # capitales comprises
 NOT_AMOUNT = r"(?!\s?(?:€|euros?|EUR|%))"
 STREET_WORD = (r"(?i:rue|avenue|av\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|"
                r"passage|voie)(?=\W)")
@@ -67,8 +67,8 @@ RULES: List[Rule] = [
     _r("SIRET", r"(?<!\d)\d{3}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{5}(?!\d)" + NOT_AMOUNT,
        0, _typed("SIRET", _luhn_ok)),
     _r("SIREN", r"(?<!\d)\d{3}" + S + r"\d{3}" + S + r"\d{3}(?!\d)" + NOT_AMOUNT, 0, _typed("SIREN", _luhn_ok)),
-    _r("RCS", r"RCS " + NAME + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}"),
-    _r("CAPITAL", r"(?i:capital (?:social )?de) (\d[\d \u00a0\u202f.]* ?(?:€|euros?|EUR))", 1),
+    _r("RCS", r"RCS (?:(?i:de) |(?i:d)['’])?" + NAME + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}"),
+    _r("CAPITAL", r"(?i:capital (?:social )?de) (\d[\d \u00a0\u202f.]* ?(?:€|(?i:euros?|eur)\b))", 1),
     _r("EMAIL", r"[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,}"),
     _r("URL", r"https?://\S*[^\s.,;:)\]]"),
     _r("URL", r"(?<![/@\w.])www\.\S*[^\s.,;:)\]]"),
@@ -82,7 +82,7 @@ RULES: List[Rule] = [
     _r("ADRESSE", r"(?i:lieu-dit|résidence|bâtiment) (" + NAME + ")", 1),
     _r("COMMUNE", r"(?<!\d)\d{5} (" + NAME + ")", 1),
     _r("DATE_NAISSANCE", BIRTH, 1),
-    _r("LIEU", BIRTH + r" à (" + NAME + ")", 2),
+    _r("LIEU", BIRTH + r" (?i:à) (" + NAME + ")", 2),
     _r("IMMATRICULATION", r"\b[A-Z]{2}-\d{3}-[A-Z]{2}\b"),
     _r("IMMATRICULATION", r"\b\d{1,4} (?!(?:EUR|USD|UE|TTC|HT)\b)[A-Z]{2,3} \d{2,3}\b"),
     _r("PIECE_IDENTITE", r"(?i:passeport|CNI|carte (?:nationale )?d'identité|titre de séjour|permis(?: de conduire)?)"

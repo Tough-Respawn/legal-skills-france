@@ -2,19 +2,23 @@
 
 1. Chevauchements, bloc par bloc : la mention la plus longue l'emporte ; à égalité,
    regle > structure > ner > propagation. Un gagnant sans partie (nom de la NER) reprend le
-   type, le rôle et la partie d'une mention de comparution qu'il contient.
+   type, le rôle et la partie de la mention de comparution qu'il contient ; s'il en couvre deux,
+   il est écarté et les parties restent distinctes.
 2. Regroupement : une partie de la comparution (même `party`) forme une entité, chacun de ses
    représentants une autre (« née X » rejoint le représentant qui précède). Les identifiants
    (adresse, commune, e-mail…) des règles et de la structure sont groupés par forme normalisée ;
    une commune et un lieu de naissance de même nom font une seule entité COMMUNE.
    Les autres noms, du plus long au plus court, rejoignent l'entité unique qui porte leur forme
    (forme complète, ou nom seul pour une mention réduite au nom) ; portée par plusieurs entités
-   (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, elle crée une entité.
-   Un nom de la structure ne rejoint jamais un identifiant ; un nom de la NER, dont le type est
-   peu fiable, rejoint toute entité de même forme (son type cède alors).
+   (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, un nom en capitales
+   sur-capturé (« N'DIAYE EST ENGAGÉE ») est rogné à la plus longue forme connue qui l'ouvre et
+   rattaché sans en tirer de formes ; sinon il crée une entité. Un nom de la structure ne rejoint
+   qu'une entité de même type (« M. Dupont » jamais « SCI Dupont ») ; un nom de la NER, dont le
+   type est peu fiable, rejoint toute entité de même forme (son type cède alors).
 3. Propagation : chaque forme d'entité (propagation.forms) est cherchée dans tous les blocs, sans
-   casse ni accents, bornes de mot comprises, hors des étendues déjà prises (sauf un fragment de
-   la NER, qui cède à la forme entière qui le contient), la plus longue d'abord. Une forme d'un
+   casse ni accents, bornes de mot comprises (une élision ne borne pas : « d'Élodie »), hors des
+   étendues déjà prises, la plus longue d'abord ; un nom de la NER contenu dans l'occurrence ou
+   qui la chevauche lui cède la place (une entité ainsi vidée perd ses formes). Une forme d'un
    seul mot n'est prise que si l'occurrence porte une majuscule (« Claire », pas « claire »).
 4. Placeholders : `[<ROLE>_<n>]` si un rôle est défini, sinon `[<TYPE>_<n>]`, numérotés par
    étiquette dans l'ordre de première apparition ; les décisions ne changent jamais ces numéros.
@@ -33,7 +37,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 from . import texte
 from .detection.structure import load_vocab
 from .modele import Ambiguity, Block, Decisions, Entity, Mention
-from .propagation import Key, folded, forms, name_part, name_words, pattern, strip_civility
+from .propagation import Key, folded, forms, name_part, name_words, pattern, span, strip_civility
 
 PRIORITY = {"regle": 0, "structure": 1, "ner": 2, "propagation": 3}
 NAMED = ("PERSONNE", "SOCIETE")
@@ -57,8 +61,12 @@ def ambiguity_placeholder(a: Ambiguity) -> str:
 
 
 def _overlaps(mentions: Sequence[Mention]) -> List[Mention]:
-    """Mentions sans chevauchement, dans l'ordre du document."""
+    """Mentions sans chevauchement, dans l'ordre du document. Un nom sans partie qui couvre deux mentions
+    de comparution (« M. Jean Kerbrat et Mme Marie Kerbrat » lu d'un bloc par la NER) est écarté."""
     # ponytail: un perdant qui déborde du gagnant laisse son reste visible ; la seconde passe (tâche 10) le relit
+    parties = [m for m in mentions if m.party is not None]
+    mentions = [m for m in mentions if m.party is not None or m.kind not in NAMED or sum(
+        1 for p in parties if p.block == m.block and m.start <= p.start and p.end <= m.end) < 2]
     kept: Dict[int, List[Mention]] = {}
     for m in sorted(mentions, key=lambda m: (m.start - m.end, PRIORITY.get(m.source, 9), m.block, m.start)):
         lst = kept.setdefault(m.block, [])
@@ -92,12 +100,31 @@ class _Builder:
         return [k for k in self.taken.get(bi, ()) if k.start < e and s < k.end]
 
     def drop(self, k: Mention) -> None:
-        """Retire une mention posée (entité ou ambiguïté) ; une entité vidée n'est pas numérotée."""
+        """Retire une mention posée (entité ou ambiguïté) ; une entité vidée perd ses formes et n'est pas numérotée."""
         self.taken[k.block].remove(k)
-        for e in self.ents:
+        for i, e in enumerate(self.ents):
             if k in e.mentions:
                 e.mentions.remove(k)
+                if not e.mentions:
+                    for lst in self.owners.values():
+                        if i in lst:
+                            lst.remove(i)
         self.pending = [p for p in self.pending if p[0] != k]
+
+    def compatible(self, m: Mention, own: List[int]) -> List[int]:
+        """Entités que la mention peut rejoindre : même type, ou tout type pour la NER (type peu fiable)."""
+        return [i for i in own if m.source == "ner" or self.ents[i].kind == m.kind]
+
+    def prefix(self, m: Mention, name: str) -> Optional[Tuple[Mention, List[int]]]:
+        """Plus longue forme connue qui ouvre un nom en capitales sur-capturé (« N'DIAYE EST ENGAGÉE ») :
+        mention rognée à cette forme et entités qui la portent."""
+        text, pos = folded(name)
+        base = m.end - len(name)
+        for f in sorted((f for f in self.owners if text.startswith(f + " ")), key=len, reverse=True):
+            own = self.compatible(m, self.owners[f])
+            if own:
+                return replace(m, end=base + span(name, pos, 0, len(f))[1]), own
+        return None
 
     def new(self, kind: str, role: Optional[str] = None) -> int:
         self.ents.append(Entity(kind, role, "", "", []))
@@ -145,7 +172,15 @@ class _Builder:
             words = name_words(name)
             own = self.owners.get(texte.norm(name)) or (
                 self.owners.get(texte.norm(words[0]), []) if len(words) == 1 else [])   # « M. de La Fontaine »
-            own = [i for i in own if m.source == "ner" or (self.ents[i].kind in NAMED) == (m.kind in NAMED)]
+            own = self.compatible(m, own)
+            cut = self.prefix(m, name) if not own and name.isupper() and len(words) > 1 else None
+            if cut:   # rattachée sans en tirer de formes : « ENGAGÉE » ne devient pas un nom
+                self.taken[m.block].remove(m)
+                m, own = cut
+                self.take(m)
+                if len(own) == 1:
+                    self.ents[own[0]].mentions.append(m)
+                    continue
             if len(own) > 1:
                 self.pending.append((m, own))
             else:
@@ -160,13 +195,14 @@ class _Builder:
             single = " " not in form and _ALPHA_RX.fullmatch(form) is not None
             for bi, (text, pos) in enumerate(folds):
                 for hit in pattern(form).finditer(text) if form in text else ():
-                    s, e = pos[hit.start()], pos[hit.end() - 1] + 1
+                    s, e = span(self.blocks[bi].text, pos, hit.start(), hit.end())
+                    if not own:
+                        break   # propriétaire vidé par drop
                     if single and self.blocks[bi].text[s:e].islower():
                         continue
                     clash = self.clash(bi, s, e)
-                    if not all(k.source == "ner" and s <= k.start and k.end <= e and k.end - k.start < e - s
-                               for k in clash):
-                        continue   # déjà pris ; un fragment de la NER cède à la forme entière qui le contient
+                    if any(k.source != "ner" or (k.start <= s and e <= k.end) for k in clash):
+                        continue   # déjà pris ; un nom de la NER qui déborde ou est contenu cède à la forme connue
                     for k in clash:
                         self.drop(k)
                     first = self.ents[own[0]]
@@ -219,7 +255,7 @@ class _Builder:
             e, form = Entity("AUTRE", None, "", "", []), texte.norm(value)
             for bi, (text, pos) in enumerate(folds if form else ()):
                 for hit in pattern(form).finditer(text) if form in text else ():
-                    s, end = pos[hit.start()], pos[hit.end() - 1] + 1
+                    s, end = span(self.blocks[bi].text, pos, hit.start(), hit.end())
                     if not self.clash(bi, s, end):
                         m = Mention(bi, s, end, "AUTRE", "decision")
                         self.take(m)

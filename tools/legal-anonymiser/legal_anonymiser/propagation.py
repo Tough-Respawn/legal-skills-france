@@ -11,6 +11,7 @@ propagent pas : un « 12 » ou un capital répétés ailleurs ne sont pas des id
 from __future__ import annotations
 
 import re
+import unicodedata
 from functools import lru_cache
 from typing import List, Set, Tuple
 
@@ -47,8 +48,17 @@ def folded(text: str) -> Tuple[str, List[int]]:
 
 @lru_cache(maxsize=4096)
 def pattern(form: str) -> "re.Pattern[str]":
-    """Forme normalisée bornée : ni lettre, ni chiffre, ni apostrophe, ni trait d'union autour."""
-    return re.compile(r"(?<![\w'-])" + re.escape(form) + r"(?![\w'-])")
+    """Forme normalisée bornée : ni lettre, ni chiffre, ni trait d'union autour ; une apostrophe avant
+    ne borne pas (« d'Élodie », « qu'Élodie ») ; dans « N'Diaye », au pire, on masque trop."""
+    return re.compile(r"(?<![\w-])" + re.escape(form) + r"(?![\w'-])")
+
+
+def span(text: str, pos: List[int], start: int, end: int) -> Tuple[int, int]:
+    """Étendue d'origine des caractères normalisés [start, end), accents combinants finaux compris."""
+    s, e = pos[start], pos[end - 1] + 1
+    while e < len(text) and unicodedata.combining(text[e]):
+        e += 1
+    return s, e
 
 
 def strip_civility(text: str) -> str:

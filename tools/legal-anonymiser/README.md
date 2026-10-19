@@ -29,6 +29,8 @@ complété par les tâches suivantes.
 - **Règles** (`detection/regles.py`) : identifiants à forme fixe (IBAN, SIREN, SIRET, NIR,
   TVA, RCS, e-mail, téléphone, adresse, date et lieu de naissance, immatriculation, pièce
   d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
+  Naissance (« NÉE LE 2 JUIN 1990 À SAINT-ÉTIENNE »), capital (« 10 000 EUROS ») et RCS
+  (« RCS DE LYON … ») sont lus aussi en capitales.
 - **Structure** (`detection/structure.py`) : le bloc de comparution (« Entre les
   soussignés » jusqu'à « Il a été convenu », « Préambule » ou « Article 1 ») est découpé en
   parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » ou
@@ -41,13 +43,16 @@ complété par les tâches suivantes.
   « habitant » (arrêt sur « et » devant une civilité ou une forme sociale). Quand une forme
   sociale a un nom plausible de chaque côté (« LA SOCIÉTÉ SAS DUVALCOURT CONSEIL »,
   « DUVALCOURT CONSEIL SAS IMMATRICULÉE »), chaque côté est jugé seul : un nom placé avant sa
-  forme perd ses mots d'ouverture (« CONTRAT », « CONVENTION », « Gérant », articles, prépositions), ne commence
-  pas par un article ou une préposition devant un mot capitalisé, garde ses mots courants
+  forme perd ses mots d'ouverture (« CONTRAT », « CONVENTION », « Gérant », articles,
+  prépositions), ne commence pas par un article ou une préposition devant un mot capitalisé,
+  garde ses mots courants
   (« Société Générale SA », « L'Oréal SA ») mais n'est pas fait que de mots d'annonce
   (« LA SOCIÉTÉ SAS X ») ; « et », « & » lient les mots d'un nom (« Dupont et Fils SARL »).
-  « SA » en capitales devant un mot connu est le possessif, sauf si un marqueur de société suit
-  (virgule, « au capital », « immatriculée », RCS…), si ce mot est une préposition (« X SA ENTRE
-  LES SOUSSIGNÉS ») ou si « la », « entre », « et » précède comme mot entier (pas « MET SA »). Les
+  « SA » devant un mot en capitales est le possessif (« MET SA VOITURE », « EXERCER SA MISSION, »),
+  sauf si un marqueur de société suit dans les 80 caractères (« au capital », « immatriculée »,
+  RCS, SIREN, SIRET, « dont le siège », « représentée par », « ci-après », « société anonyme » ;
+  une virgule seule n'en est pas un), si « la », « entre », « et », « société » précède comme mot
+  entier (pas « MET SA »), ou si une préposition suit (« X SA ENTRE LES SOUSSIGNÉS »). Les
   titres (« M. le Maire », « Maître d'Œuvre ») ne sont pas pris pour des noms. Après une ligne
   qui commence par « Fait à », « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un
   lieu après une fin de phrase (« La Rochelle » admis, jamais un lieu fait seulement de mots
@@ -58,18 +63,24 @@ complété par les tâches suivantes.
 - **Reconnaissance des noms** (`detection/ner.py`) : modèle spaCy `fr_core_news_lg`, local,
   chargé une fois par processus sans ses composants inutiles (seuls `tok2vec` et `ner` restent).
   PER devient PERSONNE, ORG SOCIETE, LOC COMMUNE (un seul mot) ou LIEU. Une entité faite de mots
-  du vocabulaire (rôles, institutions) est ignorée ; articles, mots d'annonce et forme sociale
-  sont retirés de ses bords. Un bloc plus long que `nlp.max_length` est découpé aux fins de
-  paragraphe ou de phrase. Un bloc surtout en capitales est lu sur une copie à l'initiale
-  majuscule, et seules ses entités de 2 à 4 mots sont gardées. Modèle absent : `ModelMissing`.
+  du vocabulaire (rôles, institutions) ou qui contient une ponctuation de phrase est ignorée ;
+  articles, mots d'annonce et forme sociale sont retirés de ses bords. Un bloc plus long que
+  `nlp.max_length` est découpé aux fins de paragraphe ou de phrase. Un bloc surtout en capitales
+  est lu sur une copie à l'initiale majuscule, et seules ses entités de 2 à 4 mots sont gardées :
+  une commune d'un seul mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE …
+  À », « FAIT À », ou par propagation ; seule dans le texte libre, elle reste visible et la
+  seconde passe la signale. Modèle absent : `ModelMissing`.
 - **Entités et placeholders** (`entites.py`, `propagation.py`) : chevauchements résolus par la
   mention la plus longue (à égalité : règles, structure, NER, propagation). Une partie de la
   comparution forme une entité, chaque représentant une autre. Un nom ailleurs rejoint l'entité
-  unique qui porte sa forme ; deux entités qui la portent (homonymes, époux, « M. Kerbrat ») en
-  font une mention ambiguë, à arbitrer. Chaque nom est ensuite cherché partout, sans casse ni
-  accents : forme complète, nom seul, prénom seul (3 lettres ou plus, hors vocabulaire),
-  initiales (« J.-P. D. », « J. Dupont », « JP Dupont »), nom de société sans article ; un mot
-  seul n'est pris qu'avec une majuscule (« Claire », pas « claire »). Placeholders `[BAILLEUR_1]`,
+  unique de même type qui porte sa forme (une personne ne rejoint jamais une société) ; deux
+  entités qui la portent (homonymes, époux, « M. Kerbrat ») en font une mention ambiguë, à
+  arbitrer. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
+  longue forme connue qui l'ouvre. Chaque nom est ensuite cherché partout, sans casse ni
+  accents, aussi après une élision (« d'Élodie », « D'AWA ») : forme complète, nom seul, prénom
+  seul (3 lettres ou plus, hors vocabulaire), initiales (« J.-P. D. », « J. Dupont », « JP
+  Dupont »), nom de société sans article ; un mot seul n'est pris qu'avec une majuscule
+  (« Claire », pas « claire »). Placeholders `[BAILLEUR_1]`,
   `[REPRESENTANT_1]`… dès qu'un rôle est défini, sinon `[PERSONNE_1]`, `[ADRESSE_1]`… ; une
   ambiguïté `M1` devient `[AMBIGU_1]`. Les décisions (ambiguïté tranchée, entité démasquée,
   commune gardée, texte à masquer en plus) ne renumérotent jamais les placeholders.

@@ -5,13 +5,16 @@ ou LIEU ; MISC est ignoré. Le texte part bloc par bloc, découpé aux fins de p
 de phrase quand il dépasse `nlp.max_length`. Les étendues perdent la ponctuation qui les
 borde, les articles, mots d'annonce (« société ») et formes sociales placés en tête, et la
 forme sociale finale (elle reste visible, spec 6.4). Une entité faite seulement de mots du
-vocabulaire (rôles, institutions, intitulés) est ignorée : la sortie va droit au masquage.
+vocabulaire (rôles, institutions, intitulés), ou qui contient une ponctuation de phrase
+(« , », « « », « ; »…), est ignorée : la sortie va droit au masquage.
 
 Le modèle lit mal les capitales : un bloc dont 60 % des lettres au moins sont des capitales
 est lu sur une copie à l'initiale majuscule (même longueur, mêmes positions), et seules
 les entités de 2 à 4 mots porteurs y sont gardées : un mot seul y est souvent un mot courant
-(« CI-APRÈS », « DÉNOMMÉ »), au-delà de 4 c'est une clause entière. Les communes en capitales
-restent couvertes par les règles (code postal, « NÉ LE … À ») et la structure (« FAIT À »).
+(« CI-APRÈS », « DÉNOMMÉ »), au-delà de 4 c'est une clause entière. Une commune d'un seul mot
+en capitales n'est donc pas trouvée ici : elle l'est après un code postal, après « NÉ(E) LE …
+À » (règles), après « FAIT À » (structure), et ailleurs par propagation de ces mentions ; seule
+dans le texte libre, elle reste visible et la seconde passe la signale.
 """
 from __future__ import annotations
 
@@ -34,6 +37,7 @@ _KINDS = {"PER": "PERSONNE", "ORG": "SOCIETE", "LOC": "LIEU"}
 _CAPS_SHARE = 0.6
 _CAPS_MAX_WORDS = 4
 _FORM_RX = re.compile(FORMS)
+_PUNCT_RX = re.compile(r"[«»“”\"(),;:!?\n]")
 
 
 class ModelMissing(MissingDependency):
@@ -117,7 +121,7 @@ def _kind(label: str, name: str, vocab: Set[str], caps: bool) -> Optional[str]:
     kind = _KINDS.get(label)
     words = tokens(name)
     if (not kind or len(name) < 2 or not any(c.isalpha() for c in name) or texte.norm(name) in vocab
-            or not words or all(known(w, vocab) for w in words)
+            or not words or all(known(w, vocab) for w in words) or _PUNCT_RX.search(name)
             or (caps and not 2 <= len(words) <= _CAPS_MAX_WORDS)):
         return None
     if kind == "LIEU" and len(WORD_RX.findall(name)) == 1 and name[0].isupper():
