@@ -36,6 +36,22 @@ def _atomic_write_json(path: Path, data: dict) -> None:
         raise
 
 
+class RegistryCorrupted(Exception):
+    """Registre ou état illisible : le fichier est corrompu ou incomplet."""
+
+
+def _read_json(path: Path, label: str) -> dict:
+    try:
+        data = json.loads(path.read_text("utf-8"))
+    except ValueError:
+        raise RegistryCorrupted(
+            "Fichier du coffre corrompu : %s. Restaurez-le ou supprimez-le." % label
+        ) from None
+    if not isinstance(data, dict):
+        raise RegistryCorrupted("Fichier du coffre corrompu : %s." % label)
+    return data
+
+
 class Vault:
     """Coffre local : dossier racine, registre des originaux et des publiés."""
 
@@ -55,9 +71,12 @@ class Vault:
 
     def _load(self) -> dict:
         try:
-            return json.loads(self._registry_path.read_text("utf-8"))
+            reg = _read_json(self._registry_path, "coffre/registre.json")
         except FileNotFoundError:
             return {"version": 1, "originaux": {}, "publies": {}}
+        if not isinstance(reg.get("originaux"), dict) or not isinstance(reg.get("publies"), dict):
+            raise RegistryCorrupted("Fichier du coffre incomplet : coffre/registre.json.")
+        return reg
 
     def _save(self, reg: dict) -> None:
         self.ensure()
@@ -72,6 +91,8 @@ class Vault:
     def id_for_original(self, original: Path) -> str:
         """Identifiant neutre stable pour le chemin résolu de l'original."""
         resolved = Path(original).resolve()
+        # ponytail: charger/modifier/enregistrer sans verrou, CLI mono-utilisateur;
+        # verrou de fichier si plusieurs processus partagent un coffre.
         reg = self._load()
         entry = reg["originaux"].get(str(resolved))
         if entry:
@@ -98,7 +119,7 @@ class Vault:
 
     def read_state(self, cid: str) -> dict:
         try:
-            return json.loads((self.root / cid / "etat.json").read_text("utf-8"))
+            return _read_json(self.root / cid / "etat.json", "coffre/<id>/etat.json")
         except FileNotFoundError:
             return {}
 
