@@ -10,6 +10,7 @@ from ..modele import Block, Extracted, Finding
 from . import Unreadable
 
 _W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+_MC = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
 _O = "{urn:schemas-microsoft-com:office:office}"
 _CORE = {
     "{http://purl.org/dc/elements/1.1/}creator": "auteur",
@@ -20,9 +21,14 @@ _CORE = {
 _MACRO_TYPE = "application/vnd.ms-word.document.macroEnabled.main+xml"
 _EXTERNAL_TYPES = ("hyperlink", "image", "oleObject")
 _PHASE_SECTION = {"ins": "insertion", "del": "suppression"}
+_PHASE_OF = {_W + "ins": "ins", _W + "moveTo": "ins", _W + "del": "del", _W + "moveFrom": "del"}
+_TRANSPARENT = tuple(_W + t for t in ("hyperlink", "smartTag", "sdt", "sdtContent", "customXml",
+                                      "dir", "bdo"))
+_SKIPPED_NOTES = ("separator", "continuationSeparator")
+_MAX_PART = 64 * 1024 * 1024
 
 
-def _off(el: Optional[ET.Element]) -> bool:
+def _toggle_on(el: Optional[ET.Element]) -> bool:
     """Vrai si une bascule (w:vanish...) est présente et non désactivée."""
     return el is not None and el.get(_W + "val", "true").lower() not in ("0", "false", "off")
 
@@ -33,7 +39,7 @@ def _run_flags(run: ET.Element) -> List[Tuple[str, str]]:
     if pr is None:
         return []
     flags = []
-    if _off(pr.find(_W + "vanish")) or _off(pr.find(_W + "specVanish")):
+    if _toggle_on(pr.find(_W + "vanish")) or _toggle_on(pr.find(_W + "specVanish")):
         flags.append("texte_cache")
     color = pr.find(_W + "color")
     if color is not None and color.get(_W + "val", "").upper() == "FFFFFF":
@@ -53,7 +59,11 @@ def _run_text(run: ET.Element, marker: str) -> str:
             out.append("\t")
         elif el.tag in (_W + "br", _W + "cr"):
             out.append("\n")
-        elif el.tag in (_W + "drawing", _W + "pict"):
+        elif el.tag == _W + "noBreakHyphen":
+            out.append("-")
+        elif el.tag in (_W + "drawing", _W + "pict") or (
+                el.tag == _MC + "AlternateContent"
+                and any(d.tag in (_W + "drawing", _W + "pict") for d in el.iter())):
             out.append(marker)
     return "".join(out)
 
@@ -68,26 +78,23 @@ class _Reader:
         phases: Dict[str, List[str]] = {"ins": [], "del": []}
         seen_phase = set()
         hidden: List[Tuple[str, List[str]]] = []
+        has_field = []
 
         def walk(el: ET.Element, phase: Optional[str]) -> None:
             for child in el:
-                if child.tag == _W + "ins":
-                    walk(child, "ins")
-                elif child.tag == _W + "del":
-                    walk(child, "del")
+                if child.tag in _PHASE_OF:
+                    walk(child, _PHASE_OF[child.tag])
                 elif child.tag == _W + "fldSimple":
-                    self.findings.append(Finding("info", "champ_automatique", location))
+                    has_field.append(1)
                     walk(child, phase)
-                elif child.tag == _W + "instrText":
-                    self.findings.append(Finding("info", "champ_automatique", location))
                 elif child.tag == _W + "r":
                     run(child, phase)
-                elif child.tag in (_W + "hyperlink", _W + "smartTag", _W + "sdt", _W + "sdtContent"):
+                elif child.tag in _TRANSPARENT:
                     walk(child, phase)
 
         def run(r: ET.Element, phase: Optional[str]) -> None:
-            for instr in r.findall(_W + "instrText"):
-                self.findings.append(Finding("info", "champ_automatique", location))
+            if r.find(_W + "instrText") is not None:
+                has_field.append(1)
             text = _run_text(r, marker)
             flags = _run_flags(r)
             if flags:
@@ -102,10 +109,12 @@ class _Reader:
                 body.append(text)
 
         walk(p, None)
-        if "".join(body):
+        if has_field:
+            self.findings.append(Finding("info", "champ_automatique", location))
+        if "".join(body).strip():
             self.blocks.append(Block("".join(body), location, section))
         for phase in ("ins", "del"):
-            if "".join(phases[phase]):
+            if "".join(phases[phase]).strip():
                 self.blocks.append(Block("".join(phases[phase]), location, _PHASE_SECTION[phase]))
         for text, flags in hidden:
             self.blocks.append(Block(text, location, "cache"))
@@ -113,8 +122,17 @@ class _Reader:
                 self.findings.append(Finding("attention", code, location))
 
 
+def _read(z: zipfile.ZipFile, name: str) -> bytes:
+    # ponytail: plafond fixe par partie, contre les bombes de décompression
+    with z.open(name) as f:
+        data = f.read(_MAX_PART + 1)
+    if len(data) > _MAX_PART:
+        raise Unreadable("Partie du DOCX trop volumineuse.")
+    return data
+
+
 def _parse(z: zipfile.ZipFile, name: str) -> ET.Element:
-    data = z.read(name)
+    data = _read(z, name)
     if b"<!DOCTYPE" in data or b"<!ENTITY" in data:  # refuse les entités (bombe XML)
         raise ET.ParseError("DTD interdite")
     return ET.fromstring(data)
@@ -137,7 +155,7 @@ def _metadata(z: zipfile.ZipFile) -> Dict[str, str]:
 def _active_content(z: zipfile.ZipFile, doc: ET.Element) -> List[Finding]:
     names = z.namelist()
     found: List[Finding] = []
-    types = z.read("[Content_Types].xml").decode("utf-8", "replace") if "[Content_Types].xml" in names else ""
+    types = _read(z, "[Content_Types].xml").decode("utf-8", "replace") if "[Content_Types].xml" in names else ""
     if "word/vbaProject.bin" in names or _MACRO_TYPE in types:
         found.append(Finding("alerte", "macro", "document"))
     if (any(n.startswith("word/embeddings/") for n in names)
@@ -177,7 +195,17 @@ def extract_docx(path: Path) -> Extracted:
                     reader.findings.append(Finding("info", "commentaire", location))
                     if text.strip():
                         reader.blocks.append(Block(text, location, "commentaire"))
+            n = 0
+            for name in ("word/footnotes.xml", "word/endnotes.xml"):
+                if name not in z.namelist():
+                    continue
+                for note in _parse(z, name):
+                    if note.get(_W + "type") in _SKIPPED_NOTES:
+                        continue
+                    n += 1
+                    for p in note.iter(_W + "p"):
+                        reader.paragraph(p, "note %d" % n, "corps", "[IMAGE]")
             reader.findings.extend(_active_content(z, doc))
             return Extracted(reader.blocks, _metadata(z), reader.findings)
-    except (zipfile.BadZipFile, KeyError, ET.ParseError) as exc:
+    except (zipfile.BadZipFile, KeyError, ET.ParseError, RuntimeError, NotImplementedError) as exc:
         raise Unreadable("Fichier DOCX illisible ou corrompu (%s)." % type(exc).__name__) from exc
