@@ -200,3 +200,22 @@ visibles `localisation | rang` (la localisation peut contenir « | »). Un `#` e
 indenté, est un commentaire ; un BOM est toléré. Une ligne libre `masquer: texte` règle aussi, à la
 réécriture, toute alerte non traitée portant le même texte (elle repasse en `masquer`). Les décisions
 dont le texte a changé sont listées sous « Décisions périmées ».
+
+## Validation humaine et publication
+
+- **Validation** (`validation.py`) : le texte masqué et le rapport sont ouverts depuis le coffre avec
+  l'application par défaut du système (seul sous-processus avec l'OCR, jamais attendu, échec
+  ignoré), puis une fenêtre native pose la question « Relisez les fichiers ouverts. Publier ce
+  contrat masqué ? » : Publier, Ajuster ou Abandonner ; fermer la fenêtre vaut abandon, aucun bouton
+  n'a le focus au départ. Sans `tkinter` ou sans affichage, la question passe au clavier seulement si
+  l'entrée et la sortie standard sont des terminaux ; sinon la réponse est `impossible` et rien
+  n'est publié. Aucune option, variable d'environnement, fichier ni tube ne répond à la place de
+  l'utilisateur. Limite : un programme qui simule clavier ou souris sur la session de l'utilisateur,
+  ou un pseudo-terminal piloté par un autre programme, n'est pas détecté.
+- **Publication** (`publication.py`) : refusée si la première ligne n'est pas le marqueur
+  `statut=valide_humain` du contrat. Écrit `contrat-<id>.masque.md` de façon atomique (UTF-8, fins
+  de ligne `\n`), inscrit d'abord l'empreinte SHA-256 des octets écrits au registre avec la date du
+  marqueur, puis le chemin, l'empreinte et la date dans l'état du contrat.
+- **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
+  ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
+  tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.

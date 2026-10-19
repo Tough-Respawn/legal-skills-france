@@ -22,18 +22,22 @@ def _chmod(path: Path, mode: int) -> None:
         os.chmod(path, mode)
 
 
-def _atomic_write_json(path: Path, data: dict) -> None:
-    """Écrit `data` via un fichier temporaire voisin puis `os.replace`."""
+def atomic_write(path: Path, data: bytes) -> None:
+    """Écrit les octets `data` via un fichier temporaire voisin (droits 0600) puis `os.replace`."""
     fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as fh:
-            json.dump(data, fh, ensure_ascii=False, indent=2)
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(data)
         _chmod(Path(tmp), 0o600)
         os.replace(tmp, path)
     except BaseException:
         if os.path.exists(tmp):
             os.unlink(tmp)
         raise
+
+
+def _atomic_write_json(path: Path, data: dict) -> None:
+    atomic_write(path, json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8"))
 
 
 class RegistryCorrupted(Exception):
