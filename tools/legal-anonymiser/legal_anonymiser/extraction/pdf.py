@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from ..modele import Block, Extracted, Finding
-from . import MissingDependency, Unreadable
+from . import MissingDependency, Unreadable, ocr
 
 _IDENTITY = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
 _SHOW = (b"Tj", b"TJ", b"'", b'"')
@@ -219,7 +219,7 @@ class _PageScan:
             findings.append(Finding("info", "texte_ocr", location))
         # Une couche OCR présente tient lieu de texte : pas de seconde reconnaissance.
         if self.images and not ocr and (not blocks or (scans and visible_on_scan <= _SCAN_TEXT)):
-            findings.append(Finding("info", "page_sans_texte", location))  # OCR : tâche 5
+            findings.append(Finding("info", "page_sans_texte", location))  # consommé par extract_pdf
         return blocks, findings, ocr
 
 
@@ -353,7 +353,7 @@ def _metadata(reader: Any) -> Dict[str, str]:
     return meta
 
 
-def extract_pdf(path: Path) -> Extracted:
+def extract_pdf(path: Path, workdir: Path) -> Extracted:
     """Lit un PDF : un bloc par page, texte caché à part, métadonnées, constats d'inspection."""
     try:
         from pypdf import PdfReader
@@ -372,7 +372,7 @@ def extract_pdf(path: Path) -> Extracted:
             raise Unreadable(_ENCRYPTED)
         blocks: List[Block] = []
         findings: List[Finding] = []
-        ocr = False
+        has_ocr = False
         pages: Dict[int, int] = {}
         for n, page in enumerate(reader.pages, 1):
             location = "page %d" % n
@@ -382,18 +382,26 @@ def extract_pdf(path: Path) -> Extracted:
             page.extract_text(visitor_operand_before=scan.before,
                               visitor_operand_after=scan.after, visitor_text=scan.text)
             page_blocks, page_findings, page_ocr = scan.blocks(location)
+            if any(f.code == "page_sans_texte" for f in page_findings):
+                ocr.require()  # jamais de dégradation silencieuse sur une numérisation
+                text = ocr.page_text(page, workdir)
+                page_findings = [f for f in page_findings if f.code != "page_sans_texte"]
+                if text:
+                    page_blocks.append(Block(text, location, "corps"))
+                    page_findings.append(Finding("info", "texte_ocr", location, "ocr_local"))
+                    page_ocr = True
             notes, note_findings = _annotations(page, location)
             blocks += page_blocks + notes
             findings += page_findings + note_findings
-            ocr = ocr or page_ocr
+            has_ocr = has_ocr or page_ocr
         root = reader.trailer["/Root"]
         field_blocks, field_findings = _fields(root, data, pages)
         blocks += field_blocks
         for f in field_findings + _structure(root, data):  # constats du document : uniques
             if f not in findings:
                 findings.append(f)
-        return Extracted(blocks, _metadata(reader), findings, ocr)
-    except Unreadable:
+        return Extracted(blocks, _metadata(reader), findings, has_ocr)
+    except (Unreadable, MissingDependency):
         raise
     except Exception as exc:  # pypdf lève des types variés sur un fichier malformé
         raise Unreadable("Fichier PDF illisible ou corrompu (%s)." % type(exc).__name__) from exc

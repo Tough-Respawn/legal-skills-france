@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..modele import Extracted
+from ..modele import Block, Extracted, Finding
 
 
 class UnsupportedFormat(Exception):
@@ -25,11 +25,18 @@ def _docx(path: Path, workdir: Path) -> Extracted:
 
 def _pdf(path: Path, workdir: Path) -> Extracted:
     from . import pdf
-    return pdf.extract_pdf(path)
+    return pdf.extract_pdf(path, workdir)
 
 
-# La tâche 5 ajoute les images ici.
-_DISPATCH = {".docx": _docx, ".pdf": _pdf}
+def _image(path: Path, workdir: Path) -> Extracted:
+    from . import ocr
+    ocr.require()
+    text = ocr.image_to_text(path)
+    blocks = [Block(text, "image 1", "corps")] if text else []
+    return Extracted(blocks, {}, [Finding("info", "texte_ocr", "image 1", "ocr_local")], True)
+
+
+_DISPATCH = {".docx": _docx, ".pdf": _pdf, ".jpg": _image, ".jpeg": _image, ".png": _image}
 
 
 def extract(path: Path, workdir: Path) -> Extracted:
