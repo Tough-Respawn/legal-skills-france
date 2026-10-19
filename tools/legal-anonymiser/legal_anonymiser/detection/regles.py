@@ -15,7 +15,7 @@ SP = r"[ \u00a0\u202f]"
 W = r"[A-ZÀ-Ü][\w'-]*"
 NAME = W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + W + r"){0,3}"
 MONTHS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre"
-BIRTH = r"(?i:n[ée]e? le) (\d{1,2}(?i:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS   # capitales comprises
+BIRTH = r"(?i:n[ée]e? le)\s+(\d{1,2}(?i:er)?\s+(?i:%s)\s+\d{4}|\d{2}/\d{2}/\d{4})" % MONTHS   # capitales comprises ; \s : saut de ligne d'un PDF
 # Lieu de naissance : un mot, composé par trait d'union ou apostrophe (Aix-en-Provence, L'Isle-Adam), après
 # « Saint » ou un article au plus, suivi au plus de « sur|sous|lès|en » et d'un mot (Boulogne sur Mer) ;
 # « À LYON DE NATIONALITÉ FRANÇAISE » donne LYON.

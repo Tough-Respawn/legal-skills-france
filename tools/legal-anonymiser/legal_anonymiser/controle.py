@@ -40,8 +40,8 @@ LINKS = {"et", "l", "d", "l'", "d'"}   # sautés comme les particules entre une 
 GAP_RX = re.compile(r"[.,;:!?()«»\"“”\[\]\n\t]|" + SP + r"{2}")
 JOIN_RX = re.compile(SP + r"|" + SP + r"?['’-]" + SP + r"?")
 BEFORE_RX = re.compile(r"(?:" + JOIN_RX.pattern + r")$")
-DATE = (r"(?:\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}|\d{4}-\d{2}-\d{2}|\d{1,2}(?i:er)?" + SP + r"+(?i:" + MONTHS + r")" + SP
-        + r"+\d{4})")
+DATE = (r"(?:\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}|\d{4}-\d{2}-\d{2}|\d{1,2}(?i:er)?\s+(?i:" + MONTHS + r")\s+\d{4})")
+# \s : une date coupée par un saut de ligne dans un PDF (« le 17\nseptembre 1983 ») reste une date.
 DATE_RX = re.compile(r"(?<!\d)(?<!\d[./-])" + DATE + r"(?![./-]?\d)")   # pas dans « 06.12.34.56.78 »
 BIRTH_RX = re.compile(r"(?i:\bn(?:ée?s?|ees?)\b|\bdate" + SP + r"+de" + SP + r"+naissance\b)|\bNE(?=" + SP
                       + r"+(?:LE|À|A)\b)")   # « NE LE » en capitales sans accent ; « ne le résiliera » non

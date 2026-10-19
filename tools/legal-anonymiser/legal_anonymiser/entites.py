@@ -336,8 +336,11 @@ class _Builder:
         extra = []
         for value in sorted(decisions.mask_more):
             e, form = Entity("AUTRE", None, "", "", []), texte.norm(value)
+            # Décision explicite : le texte d'une alerte (« 2026-1187 » dans « DV-2026-1187 ») est masqué même
+            # collé à un tiret, sinon « masquer » resterait sans effet et l'alerte ouverte à chaque passage.
+            rx = re.compile(r"(?<!\w)" + re.escape(form) + r"(?!\w)")
             for bi, (text, pos) in enumerate(folds if form else ()):
-                for hit in pattern(form).finditer(text) if form in text else ():
+                for hit in rx.finditer(text) if form in text else ():
                     s, end = span(self.blocks[bi].text, pos, hit.start(), hit.end())
                     if not self.clash(bi, s, end):
                         m = Mention(bi, s, end, "AUTRE", "decision")
