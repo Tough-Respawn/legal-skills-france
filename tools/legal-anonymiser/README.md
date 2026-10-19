@@ -1,13 +1,86 @@
 # legal-anonymiser
 
-Pseudonymisation locale de contrats, sans réseau.
+Pseudonymisation locale de contrats, sans réseau. L'outil lit un contrat (DOCX, PDF, numérisation),
+écrit une version masquée en texte, une table de correspondance et un rapport d'inspection technique,
+le tout sur votre poste. Seul le fichier masqué, relu et validé par vous, est destiné à un modèle.
 
-## Ligne de commande
+## Ce que l'outil promet, et ce qu'il ne promet pas
 
-`python -m legal_anonymiser <commande>` ou, après installation, `legal-anonymiser <commande>`. Le
-coffre est `~/.legal-france/coffre/` (variable `LEGAL_FRANCE_COFFRE` pour le déplacer). La garde
-réseau (`nonet.install()`) est la première instruction de `main`, avant tout import de pypdf, Pillow ou
-spaCy.
+Les identifiants directs et indirects sont masqués : noms et prénoms (composés, initiales, noms
+d'usage), raisons sociales et noms commerciaux, adresses postales, e-mails, téléphones, IBAN et BIC,
+SIREN, SIRET, TVA, RCS, numéro de sécurité sociale, pièces d'identité, dates et lieux de naissance,
+immatriculations, URL propres aux parties, en-têtes et pieds de page, blocs de signature, numéros de
+contrat, de dossier ou de client, capital social, lieux-dits et bâtiments, et la commune (masquée par
+défaut, à garder sur décision explicite).
+
+Restent visibles parce que l'analyse juridique en dépend : dates (hors dates de naissance), durées,
+montants, pourcentages, forme sociale (SAS, SARL), intitulé du poste, convention collective, effectif,
+qualité de consommateur ou de professionnel. C'est un **risque résiduel**, compté dans le rapport et dans
+le fichier masqué sous « Risque résiduel » ; vous pouvez le réduire en masquant ces éléments vous-même
+(`masquer: texte` dans le fichier d'ajustements).
+
+Le masquage est automatique et **peut manquer un élément**. Une seconde passe relit le texte masqué et
+signale ce qui ressemble encore à un identifiant, puis vous relisez le texte avant publication. Rien ici
+ne promet une anonymisation complète : on parle de pseudonymisation, la table de correspondance existe
+sur votre disque et ne quitte jamais le coffre.
+
+## Avant un envoi à Claude.ai ou ChatGPT
+
+Dans Claude.ai ou ChatGPT, les skills ne peuvent pas lancer cet outil : il s'exécute **en amont, sur
+votre machine**. Traitez le contrat ici, relisez le fichier masqué, publiez-le, puis transmettez
+uniquement `contrat-<id>.masque.md` à votre assistant. Ne transmettez jamais l'original, le coffre ni le
+rapport local. Le rapport que renvoie l'assistant se réidentifie ensuite localement (`reidentifier`).
+
+## Installation
+
+Python 3.9 ou plus récent. L'outil tourne hors ligne ; seuls l'installation et le téléchargement du
+modèle demandent le réseau, une fois.
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate                      # Windows ; sous Linux et macOS : source .venv/bin/activate
+pip install ./tools/legal-anonymiser        # pypdf, Pillow et spaCy sont installés avec
+pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_lg-3.8.0/fr_core_news_lg-3.8.0-py3-none-any.whl
+legal-anonymiser --help
+```
+
+Le modèle de reconnaissance des noms (`fr_core_news_lg`, environ 550 Mo) est chargé localement à chaque
+passage et n'est jamais téléchargé à l'exécution. Sans lui, le passage continue sans reconnaissance des
+noms et le rapport porte le constat `ner_absente` : à éviter sur un vrai contrat.
+
+Les numérisations (PDF image, JPG, PNG) demandent **Tesseract** avec la langue française :
+
+- Windows : installateur de l'UB Mannheim (binaire attendu dans `C:\Program Files\Tesseract-OCR\`,
+  sinon variable `TESSERACT_CMD` vers `tesseract.exe`). Si `fra.traineddata` n'a pas pu être écrit dans
+  `C:\Program Files\Tesseract-OCR\tessdata` (droits), placez-le dans un dossier à vous et définissez
+  `TESSDATA_PREFIX` vers ce dossier, par exemple `C:\Users\<nom>\AppData\Local\tessdata`.
+- Debian et Ubuntu : `apt install tesseract-ocr tesseract-ocr-fra`.
+- macOS : `brew install tesseract tesseract-lang`.
+
+Sans Tesseract ou sans la langue `fra`, une numérisation est refusée avec le message d'installation
+(code 6) ; les DOCX et PDF avec couche texte ne demandent rien d'autre que Python.
+
+## Utilisation
+
+`legal-anonymiser <commande>` (ou `python -m legal_anonymiser <commande>`). Le coffre est
+`~/.legal-france/coffre/` (variable `LEGAL_FRANCE_COFFRE` pour le déplacer). La garde réseau
+(`nonet.install()`) est la première instruction de `main`, avant tout import de pypdf, Pillow ou spaCy.
+
+Parcours complet :
+
+1. `legal-anonymiser traiter` dans un terminal ouvert **dans le dossier où le fichier masqué doit être
+   publié** (le projet d'analyse). Sans chemin, un sélecteur de fichier s'ouvre : le chemin de l'original
+   n'apparaît alors ni dans la commande ni dans la console. Gardez l'original hors de ce dossier.
+2. S'il reste des points à arbitrer (code 3), ouvrez `coffre/<id>/ajustements.txt`, tranchez chaque
+   ligne `?`, puis `legal-anonymiser relancer <id>`. Répétez jusqu'à « 0 alerte(s), 0 ambiguïté(s) ».
+3. L'outil ouvre alors `masque.md` et `rapport.md` depuis le coffre et pose la question dans une fenêtre :
+   relisez le texte masqué, puis cliquez **Publier** (ou Ajuster, ou Abandonner). `legal-anonymiser
+   valider <id>` repose la question plus tard. Aucun script, variable ni option ne répond à votre place.
+4. Le fichier `contrat-<id>.masque.md` est écrit dans le dossier courant et son empreinte inscrite au
+   registre. `legal-anonymiser verifier contrat-<id>.masque.md` répond `publie` tant qu'il n'a pas été
+   modifié, `modifie` sinon, `inconnu` pour un fichier étranger.
+5. Après l'analyse par le modèle, `legal-anonymiser reidentifier <id> rapport.md` écrit le rapport avec
+   les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre.
 
 | Commande | Effet | Codes |
 |---|---|---|
@@ -17,13 +90,111 @@ spaCy.
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
 | `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 |
 
-Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
+Code 1 : `verifier` négatif. Code 2 : arguments invalides. Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
 `ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
 fragment de la ligne). La trace complète d'une erreur imprévue va dans `coffre/<id>/erreur.txt`
 (ou `coffre/erreurs/<horodatage>.txt` quand aucun contrat n'est en cours) ; la console ne reçoit que le
 message générique et le chemin neutre de la trace. Code 4 aussi sur Ctrl+C (« Interrompu »). Un original
 illisible (droits, verrou) donne le code 5 ; une extension inconnue est refusée avant tout enregistrement
 au coffre.
+
+## Fichier d'ajustements
+
+`coffre/<id>/ajustements.txt`, UTF-8, une décision par ligne, réécrit à chaque passage en conservant vos
+décisions. Exemple après un premier passage :
+
+```
+# legal-france ajustements v1, contrat c7f3a2
+# Alertes : remplacer ? par masquer ou garder.
+# Une alerte valeur_connue ne peut pas être gardée : utilisez masquer.
+A1 ? « Résidence Les Hauts » | paragraphe 11 | 1 | majuscule
+A2 ? « kerbrat » | paragraphe 19 | 1 | valeur_connue
+# Mentions ambiguës : remplacer ? par un des placeholders proposés, ou nouveau.
+M1 ? « M. Kerbrat » | paragraphe 19 | 1 | [LOCATAIRE_1] [LOCATAIRE_2]
+# Communes, masquées par défaut : garder si la commune est utile à l'analyse.
+C1 masquer « Orange »
+# Ajouts libres :
+masquer: Résidence Les Hauts
+demasquer: [SOCIETE_2]
+```
+
+- `A<n>` : alerte de la seconde passe (motif en fin de ligne : `majuscule`, `chiffres`, `arobase`, `url`,
+  `date_naissance`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
+  occurrence (clé `localisation | rang`), jamais une alerte `valeur_connue`, qui repasse à `?`.
+- `M<n>` : mention qui peut désigner plusieurs entités (homonymes, époux, « Orange » commune ou société).
+  Répondre par un des placeholders proposés, ou `nouveau` pour une entité distincte. Un placeholder
+  inexistant reste en attente.
+- `C<n>` : commune, `masquer` par défaut, `garder` si elle est utile à l'analyse (zone tendue, encadrement
+  des loyers) ; une commune gardée collée à une civilité reste signalée.
+- Lignes libres : `masquer: texte exact` masque un texte partout (réduit le risque résiduel : un montant,
+  une date), `demasquer: [PLACEHOLDER]` rend une entité visible. `demasquer` contourne la règle
+  `valeur_connue` : c'est votre décision, elle est visible dans le fichier.
+- Une ligne qui commence par `#` est un commentaire. Une ligne mal formée bloque le passage (code 7, seul
+  le numéro de ligne est affiché). Les décisions dont le texte a disparu sont listées sous « Décisions
+  périmées ».
+- Modifier `ajustements.txt` ou `masque.md` après le dernier passage invalide la validation : `valider`
+  refuse (code 3) tant que `relancer` n'a pas été relancé.
+
+## Limites
+
+- **Détection** : un nom en minuscules inconnu du modèle, un mot capitalisé seul en tête de phrase
+  (« Fabre signera »), des initiales seules (« J. D. ») ou un code postal seul ne sont pas signalés par
+  la seconde passe. Un contrat tout en capitales produit beaucoup d'alertes `majuscule`. Un nom ou un
+  terme défini coupé par un saut de ligne dans un PDF ou une numérisation peut n'être masqué qu'en
+  partie (le reste est alors signalé par la seconde passe) ; des initiales seules (« ED / JK / MK »
+  en pied de page) ne sont ni masquées ni signalées. Une alerte portant sur un fragment de mot
+  (« FR » dans « FR38 ») ne se masque pas par `masquer` sur sa ligne : écrire le mot entier en ligne
+  libre (`masquer: FR38`). La relecture humaine reste la dernière couche.
+- **Écarts assumés par rapport à la conception** (v1) : 1. sous Windows, les droits du coffre ne sont
+  pas vérifiés (pas de lecture d'ACL en bibliothèque standard, `icacls` serait un sous-processus) :
+  l'isolation repose sur le profil utilisateur ; 2. pas de table « zone tendue » : chaque commune est
+  masquée par défaut et proposée à l'arbitrage ; 3. texte hors page détecté pour le PDF seulement ;
+  4. « écart entre texte visible et texte extrait » couvert par les constats de texte caché (blanc,
+  minuscule, masqué, rendu invisible, sous image), sans comparaison par rendu graphique.
+- **Réseau** : le filet dans le processus (`nonet`) coupe les sockets Python ; il ne couvre ni le code
+  natif des dépendances ni le binaire OCR. Ce n'est pas une garantie, c'est une réduction du risque,
+  vérifiée en test par une trace système (`strace`) et non par construction. Voir l'isolement
+  optionnel ci-dessous.
+- **Validation** : un programme qui simule clavier ou souris sur votre session, ou un pseudo-terminal
+  piloté par un autre programme, n'est pas détecté ; l'outil ne peut pas distinguer un clic humain d'un
+  clic injecté. Un `tkinter` masqué par `PYTHONPATH` fait retomber sur le terminal interactif, jamais
+  sur une publication automatique.
+- **Formats** : PDF chiffré refusé ; annotations autres que `/Text` et `/FreeText` non extraites ;
+  JavaScript cherché dans le catalogue et les liens, pas dans les actions de pages ni de champs ;
+  rectangles couvrants et transparence ignorés. Détail dans « Formats lus ».
+- **Plateformes** : Windows et Linux exercés ; macOS non documenté en v1 (installation Tesseract via
+  Homebrew indiquée, isolement réseau système non identifié).
+
+## Isolement réseau au niveau du système (optionnel)
+
+Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif :
+
+- **Linux** : `unshare -rn legal-anonymiser traiter <fichier>` lance l'outil dans un espace réseau vide
+  (seule l'interface de bouclage existe, inactive). Vérifié le 2026-10-19 dans un conteneur
+  `python:3.12-slim` : même code de sortie et même `masque.md` qu'en passage normal.
+- **Windows** : règle de pare-feu sortante bloquant l'interpréteur Python du venv et `tesseract.exe`
+  (droits administrateur), par exemple
+  `netsh advfirewall firewall add rule name="legal-anonymiser" dir=out action=block program="<venv>\Scripts\python.exe"`
+  et la même règle pour `C:\Program Files\Tesseract-OCR\tesseract.exe`. Non exécuté sur ce poste
+  (droits administrateur non demandés) : à vérifier par qui l'applique.
+- **macOS** : non documenté en v1.
+
+## État de la validation (2026-10-19)
+
+Vérifié par exécution : suite de tests locale (367 tests, OCR et modèle réels) ; corpus synthétique de 26
+contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF texte et numérisation,
+plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté : 0
+fuite des noms, adresses, numéros, e-mails, IBAN, SIREN et dates de naissance lisibles, 175 noms sur 176
+détectés avant arbitrage, 30 constats techniques sur 30 présents dans le rapport, 0,8 alerte pour 100
+mots ; fuites restantes : les initiales seules d'un pied de page (« ED / JK / MK ») dans les PDF, et une
+fusion de deux signataires sous un placeholder quand l'OCR réduit les colonnes d'un bloc de signature à
+une espace. Trace système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+
+Non vérifié à ce jour : le clic réel « Publier » dans la fenêtre et la publication qui suit sur un poste
+Windows, le parcours complet depuis une session Claude Code. Les résultats détaillés restent locaux
+(`evals/`), hors du dépôt public.
+
+## Fonctionnement détaillé (état actuel)
 
 **Chaîne d'un passage** (`pipeline.run`) : extraction, inspection (pièges Unicode, NFC, texte adressé à
 une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le modèle est installé (sinon
@@ -106,7 +277,9 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
 
 - **Règles** (`detection/regles.py`) : identifiants à forme fixe (IBAN, SIREN, SIRET, NIR,
   TVA, RCS, e-mail, téléphone, adresse, date et lieu de naissance, immatriculation, pièce
-  d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
+  d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais. Entre deux
+  groupes d'un numéro ou d'une date de naissance, un saut de ligne vaut une espace (PDF replié, OCR :
+  « FR76 1450\n8000 … », « le 17\nseptembre 1983 »).
   Un numéro après « contrat », « dossier », « client »… contient au moins un chiffre
   (« CONTRAT DE LOCATION », « LE CLIENT PAIE » : rien) ; le nom après « lieu-dit »,
   « résidence », « bâtiment » s'arrête avant une forme sociale ou une préposition en capitales
@@ -161,7 +334,8 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
   DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). Une commune d'un seul
   mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par
   propagation ; seule dans le texte libre, elle reste visible et la seconde passe la signale. Une
-  entité qui court sur deux lignes en fait deux si chaque ligne porte au moins deux mots capitalisés
+  entité qui court sur deux lignes, ou sur deux colonnes (deux espaces ou plus, tabulation : les noms
+  d'un bloc de signature), en fait deux si chaque partie porte au moins deux mots capitalisés
   hors particules (« DE LA FONTAINE » à la ligne reste avec le nom qui précède). Modèle absent :
   `ModelMissing`.
 - **Mots-outils et verbes** (`detection/noms.py`) : `FUNCTION_WORDS` (est, et, de, la, par, pour,
@@ -254,20 +428,6 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     capitales, tout mot hors vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé
     sur un contrat tout en capitales, à mesurer sur le corpus.
 
-## Licences des dépendances
-
-Vérifiées à la source le 2026-10-19. Le projet ne redistribue aucune dépendance.
-
-| Bibliothèque | Licence | Source | Vérifiée le |
-|---|---|---|---|
-| pypdf | BSD 3-Clause | https://github.com/py-pdf/pypdf/blob/main/LICENSE | 2026-10-19 |
-| Pillow | MIT-CMU (HPND) | https://github.com/python-pillow/Pillow/blob/main/LICENSE | 2026-10-19 |
-| spaCy | MIT | https://github.com/explosion/spaCy/blob/master/LICENSE | 2026-10-19 |
-| fr_core_news_lg | LGPL-LR | https://github.com/explosion/spacy-models/releases/tag/fr_core_news_lg-3.8.0 | 2026-10-19 |
-| Tesseract | Apache 2.0 | https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE | 2026-10-19 |
-
-PyMuPDF est exclu (AGPL).
-
 ### Fichier d'ajustements (`ajustements.py`)
 
 Une décision par ligne (`A…` alerte, `M…` ambiguïté, `C…` commune), clé relue depuis les champs
@@ -277,7 +437,7 @@ peut pas être gardée (« utilisez masquer »). Une ligne libre `masquer: texte
 réécriture, toute alerte non traitée portant le même texte (elle repasse en `masquer`). Les décisions
 dont le texte a changé sont listées sous « Décisions périmées ».
 
-## Validation humaine et publication
+### Validation humaine et publication
 
 - **Validation** (`validation.py`) : le texte masqué et le rapport sont ouverts depuis le coffre avec
   l'application par défaut du système (seul sous-processus avec l'OCR, jamais attendu, échec
@@ -300,3 +460,19 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 - **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
   ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
   tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
+
+## Licences des dépendances
+
+Vérifiées à la source le 2026-10-19. Le projet ne redistribue aucune dépendance ; elles s'installent
+sur le poste de l'utilisateur. Cet outil est la seule exception à la règle « Python standard, sans
+dépendance » du dépôt ; les 8 skills fonctionnent sans lui et les paquets distribués ne l'embarquent pas.
+
+| Bibliothèque | Licence | Source | Vérifiée le |
+|---|---|---|---|
+| pypdf | BSD 3-Clause | https://github.com/py-pdf/pypdf/blob/main/LICENSE | 2026-10-19 |
+| Pillow | MIT-CMU (HPND) | https://github.com/python-pillow/Pillow/blob/main/LICENSE | 2026-10-19 |
+| spaCy | MIT | https://github.com/explosion/spaCy/blob/master/LICENSE | 2026-10-19 |
+| fr_core_news_lg | LGPL-LR | https://github.com/explosion/spacy-models/releases/tag/fr_core_news_lg-3.8.0 | 2026-10-19 |
+| Tesseract | Apache 2.0 | https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE | 2026-10-19 |
+
+PyMuPDF est exclu (AGPL).
