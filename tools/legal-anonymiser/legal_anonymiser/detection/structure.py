@@ -35,36 +35,40 @@ _STOPWORDS = {"de", "du", "des", "la", "le", "les", "l", "d", "a", "et", "en", "
 
 UP = "A-ZÀ-ÖØ-ÞŒ"
 LOW = "a-zß-öø-ÿœ"
+ALLCAPS = r"[" + UP + r"](?:[" + UP + r"]|['’-][" + UP + r"])+"
+FIRST = r"[" + UP + r"][" + LOW + r"]+(?:['’-][" + UP + r"]?[" + LOW + r"]+)*"
 CIVILITY = (r"(?:(?:M|MM|MME|MR|MLLE)\.|(?:Mr|Mme|Mmes|Mlle|Dr|Pr|MME|MR|MLLE|PR)\.?|Monsieur|Madame|"
             r"Mademoiselle|MONSIEUR|MADAME|MADEMOISELLE|Me|Maître|MAÎTRE|Docteur|Professeur"
-            r"|M(?=" + SP + r"+[" + UP + r"]{2}))")
-FUNC = r"(?:Et|ET|Ou|OU|À|AU|AUX|EN|PAR|POUR|SUR|DANS|AVEC|CHEZ)\b"
+            r"|M(?=" + SP + r"+" + ALLCAPS + SP + r"+" + ALLCAPS + r"))")   # M sans point : « M JEAN DUPONT »
+FUNC = (r"(?:Et|ET|Ou|OU|À|AU|AUX|EN|PAR|POUR|SUR|SOUS|DANS|AVEC|CHEZ|DEVANT|CONTRE|ENTRE|ENVERS|SELON|VERS"
+        r"|SANS|APRÈS|AVANT|DONT|QUI|QUE)\b")   # mots outils en capitales, jamais dans un nom
 CONTEXT = (r"(?i:née?s?|épouse|veuve|divorcée?|dite?|demeurant|domiciliée?s?|représentée?s?"
            r"|ci-après|ci-dessous)\b")
-# Mot capitalisé (Jean-Pierre, N'Diaye, DUPONT) qui n'est ni un mot outil, ni une civilité.
+# Mot capitalisé (Jean-Pierre, N'Diaye, DUPONT, LE) : ni mot outil, ni civilité, ni « LE » d'une date (LE 3 MARS).
 CAP = (r"(?!" + FUNC + r")(?!" + CONTEXT + r")(?!" + CIVILITY + "(?:" + SP + r"|$))"
-       r"[" + UP + r"][^\W\d_]*(?:['’-][^\W\d_]+)*")
+       r"(?!(?i:le|la|les|de|du|des)" + SP + r"+\d)[" + UP + r"][^\W\d_]*(?:['’-][^\W\d_]+)*")
 PARTICLES = r"(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter|le|la)"
 JOIN_P = SP + r"(?:" + PARTICLES + SP + r"){0,2}(?:[dl]['’])?"
-LEAD_P = r"(?:(?:" + PARTICLES + SP + r"+){1,2}(?:[dl]['’])?|[dl]['’])"
+# Particule en tête de nom (M. de Villiers, Mme d'Arcy) ; jamais « le », « la », « l' » seuls (M. le Maire).
+LEAD_P = (r"(?:(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter)" + SP + r"+(?:" + PARTICLES + SP
+          + r"+)?(?:[dl]['’])?|d['’])")
 JOIN_C = SP + r"(?:(?:de|du|des|la|le|les|et|&|au|aux|en|sur)" + SP + r")?(?:[dl]['’])?"
 FORMS = r"(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|SCP|SELARL|SELAS|SCM|GIE|SCEA|EARL|SCOP)"
 PERSON = CAP + r"(?:" + JOIN_P + CAP + r"){0,3}"
 CO_CAP = r"(?!" + FORMS + r"\b)" + CAP  # la forme sociale reste hors du nom
 COMPANY = CO_CAP + r"(?:" + JOIN_C + CO_CAP + r"){0,5}"
-ALLCAPS = r"[" + UP + r"](?:[" + UP + r"]|['’-][" + UP + r"])+"
-FIRST = r"[" + UP + r"][" + LOW + r"]+(?:['’-][" + UP + r"]?[" + LOW + r"]+)*"
 
-CIVIL_RX = re.compile(r"(?<![\w.])(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?" + CIVILITY + SP + r"+"
-                      r"(?P<lead>" + LEAD_P + r")?(?P<name>" + PERSON + ")")
+CIVIL_RX = re.compile(r"(?<![\w.])(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?(?P<civ>" + CIVILITY + ")"
+                      + SP + r"+(?P<lead>" + LEAD_P + r")?(?P<name>" + PERSON + ")")
 ALIAS_RX = re.compile(r"(?<![\w-])(?i:née|nee|épouse|epouse|veuve|divorcée|divorcee|dite?)" + SP
                       + r"+(?P<name>" + PERSON + ")")
-TRAIL_RX = re.compile(r"(?:^|" + SP + r"+)(?i:le|la|les|de|du|des|et|à|au|en)$")
+NUMBER_BEFORE_RX = re.compile(r"(?:\d|\b(?i:un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|vingt|cent))"
+                              + SP + r"*$")   # « 2 M DE HAUTEUR » : M est une unité
 CO_PRE_RX = re.compile(
     r"(?<!\w)(?:(?:[Ll]a|LA)" + SP + r"+(?:société|Société|SOCIÉTÉ)|[Ll]['’](?:association|Association|ASSOCIATION)"
     r"|Société|SOCIÉTÉ|Sté|Ets\.?|Établissements|Etablissements|Association|" + FORMS + r"\b)"
     + SP + r"+(" + COMPANY + ")")
-CO_POST_RX = re.compile(r"(?<![\w'’-])(" + COMPANY + ")" + SP + r"+" + FORMS + r"\b")
+CO_POST_RX = re.compile(r"(?<![\w'’-])(" + COMPANY + ")" + SP + r"+(?P<form>" + FORMS + r")\b")
 # Nom sans civilité : DUPONT Jean, Jean DUPONT ; seulement en contexte (comparution, signature, né le).
 BARE_RX = re.compile(
     r"(?<![\w'’-])(?:" + ALLCAPS + r"(?:" + SP + ALLCAPS + r")?(?:" + SP + FIRST + r"){1,2}"
@@ -95,20 +99,23 @@ ADDR_RX = re.compile(
     + r"+est(?:" + SP + r"+situé|" + SP + r"+sis)?(?:" + SP + r"+au|" + SP + r"+à)?|sise?(?:" + SP + r"+à|"
     + SP + r"+au)?|résidant|habitant)" + SP + r"+(?i:(?:ensemble|au|à|aux)" + SP + r"+)?")
 POSTAL_RX = re.compile(r"\d{5}" + SP + r"?" + PLACE)
-ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
+ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?:(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
                           r"|d['’](?:une|autre)" + SP + r"+part|de" + SP + r"+nationalité|agissant|en" + SP
-                          + r"+qualité)")
+                          + r"+qualité)|(?:Et|ET)\b)")
 ADDR_NEXT_RX = re.compile(r"," + SP + r"*[" + UP + r"0-9][^,;\n]*")
 _ADDR_REACH = 120
 
-START_RX = re.compile(
-    r"\s*(?:ENTRE\b|(?i:entre)(?:(?i:\s+les\s+soussign|\s+d['’](?:une|autre)\s+part|\s+la\s+société\b"
-    r"|\s+l['’]association\b)|\s*[:,]|\s*$|\s+(?=" + CIVILITY + SP + r")|\s+" + FORMS + r"\b))")
+START_RX = re.compile(r"\s*(?:ENTRE\b|(?i:entre)(?:(?i:\s+les\s+soussign|\s+d['’](?:une|autre)\s+part)"
+                      r"|\s*[:,]|\s*$))")
+# « Entre la société X », « Entre M. X » : ouvre seulement si un nom commence à cet endroit (_opens).
+START_NAME_RX = re.compile(r"\s*(?i:entre)\s+(?P<key>(?i:la\s+société|l['’]association)\b|(?=" + CIVILITY + SP
+                           + r")|" + FORMS + r"\b)")
 END_RX = re.compile(
     r"(?:^|(?<=[.:;]))\s*(?i:il\s+(?:a\s+été|est)\s+(?:préalablement\s+)?(?:convenu|arrêté|exposé)"
     r"|préambule|ceci\s+exposé|exposé\b|art(?:icle|\.)\s*(?:1(?!\d)|1er|premier|i\b))")
-# Marqueur de signature en début de ligne seulement (pas cité dans une clause).
-SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b|lu\s+et\s+approuvé|signatures?\b)")
+# Marqueur de signature en début de ligne, ou « Fait à » après une fin de phrase ; jamais cité dans une clause.
+SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b|lu\s+et\s+approuvé|signatures?\b)"
+                       r"|(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)\b")
 HEADING_RX = re.compile(r"\s*(?:ANNEXE|Annexe|ARTICLE|Article|TITRE|Titre|CHAPITRE|Chapitre)\b")
 FAIT_RX = re.compile(r"\b(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
@@ -193,16 +200,6 @@ def _trim(text: str, s: int, e: int, vocab: Set[str]) -> Span:
     return next(w.start() for w in words if not _known(w.group(), vocab)), e
 
 
-def _rtrim(text: str, s: int, e: int) -> int:
-    """Fin d'un nom sans les mots outils finaux d'un texte en capitales (MME CLAIRE MARTIN LE)."""
-    sub = text[s:e]
-    m = TRAIL_RX.search(sub)
-    while m:
-        sub = sub[:m.start()]
-        m = TRAIL_RX.search(sub)
-    return s + len(sub)
-
-
 def _cells(text: str, vocab: Set[str]) -> List[Tuple[bool, Optional[Span]]]:
     """Colonnes d'une ligne de signature : (légende ?, nom seul de la colonne)."""
     out = []
@@ -222,19 +219,25 @@ def _cells(text: str, vocab: Set[str]) -> List[Tuple[bool, Optional[Span]]]:
 def _names(text: str, vocab: Set[str], bare: bool, skip: List[Span]) -> List[Cand]:
     """Noms de personnes et de sociétés, sans chevauchement (le motif le plus à gauche puis le plus long)."""
     cands: List[Cand] = []
-    for rx, kind in ((CIVIL_RX, "PERSONNE"), (ALIAS_RX, "ALIAS")):
-        for m in rx.finditer(text):
-            e = _rtrim(text, m.start("name"), m.end("name"))
-            if e == m.start("name") or (kind == "PERSONNE" and m.group("lead")
-                                        and all(_known(w, vocab) for w in _tokens(m.group("name")))):
-                continue  # « M. le Maire », « NÉE LE 2 JUIN »
-            s = m.start() if kind == "PERSONNE" else m.start("name")
-            cands.append((s, e, m.start(), e, kind))
-    for rx in (CO_PRE_RX, CO_POST_RX):
-        for m in rx.finditer(text):
-            s, e = _trim(text, *m.span(1), vocab)
-            if s < e:
-                cands.append((s, e, m.start(), m.end(), "SOCIETE"))
+    for m in CIVIL_RX.finditer(text):
+        if m.group("lead") and all(_known(w, vocab) for w in _tokens(m.group("name"))):
+            continue  # « Maître d'Œuvre »
+        if m.group("civ") == "M" and NUMBER_BEFORE_RX.search(text, max(0, m.start() - 12), m.start()):
+            continue  # « 2 M DE HAUTEUR »
+        cands.append((m.start(), m.end(), m.start(), m.end(), "PERSONNE"))
+    for m in ALIAS_RX.finditer(text):
+        if not all(_known(w, vocab) for w in _tokens(m.group("name"))):   # pas « la dite Société »
+            cands.append((m.start("name"), m.end(), m.start(), m.end(), "ALIAS"))
+    pre: Set[int] = set()
+    for m in CO_PRE_RX.finditer(text):
+        s, e = _trim(text, *m.span(1), vocab)
+        if s < e:
+            cands.append((s, e, m.start(), m.end(), "SOCIETE"))
+            pre.add(m.start())
+    for m in CO_POST_RX.finditer(text):
+        s, e = _trim(text, *m.span(1), vocab)
+        if s < e and m.start("form") not in pre:   # « ASSIGNATION DE LA SARL X » : le nom suit la forme
+            cands.append((s, e, m.start(), m.end(), "SOCIETE"))
     for m in BARE_RX.finditer(text):
         if (bare or BORN_RX.match(text, m.end())) and not any(_known(w, vocab) for w in _tokens(m.group())):
             cands.append((m.start(), m.end(), m.start(), m.end(), "PERSONNE"))
@@ -260,6 +263,7 @@ class _Comparution:
         self.group: List[list] = []     # parties nommées depuis le dernier « Et » / « d'une part »
         self.rep_at: Optional[int] = None   # position absolue de « représenté par » ou du dernier représentant
         self.prefix: Optional[str] = None   # rôle annoncé avant le nom (« LE SALARIÉ : »)
+        self.last: Optional[list] = None    # dernière personne nommée, à qui se rattache « née MARTIN »
 
     def feed(self, bi: int, base: int, origin: int, text: str) -> None:
         """Lit un segment de comparution ; origin est sa position absolue dans le document."""
@@ -285,12 +289,16 @@ class _Comparution:
 
     def _name(self, bi: int, base: int, origin: int, cand: Cand) -> None:
         s, e, xs, _, kind = cand
-        last = self.group[-1] if self.group else None
-        if kind == "ALIAS":   # née MARTIN, épouse LEROY : même partie, même rôle
+        party = self.group[-1][5] if self.group else None
+        last = self.last
+        if kind == "ALIAS":   # née MARTIN, épouse LEROY : même personne, même partie, même rôle
             rec = [bi, base + s, base + e, "PERSONNE", last[4] if last else None, last[5] if last else None]
-            self.group.append(rec)
+            if last and last[4] == "REPRESENTANT":
+                self.rep_at = origin + e
+            else:
+                self.group.append(rec)
         elif self.rep_at is not None and origin + xs - self.rep_at <= _REP_REACH:
-            rec = [bi, base + s, base + e, kind, "REPRESENTANT", last[5] if last else None]
+            rec = [bi, base + s, base + e, kind, "REPRESENTANT", party]
             self.rep_at = origin + e   # un second représentant peut suivre (« et Mme Y »)
         else:
             rec = [bi, base + s, base + e, kind, self.prefix, self.parties]
@@ -298,6 +306,7 @@ class _Comparution:
             self.group.append(rec)
             self.rep_at = None
         self.records.append(rec)
+        self.last = rec
 
     def _role(self, bi: int, base: int, text: str, data: Tuple[int, int, int, int]) -> None:
         ts, te = data[2], data[3]
@@ -326,6 +335,14 @@ def _outside(bi: int, base: int, text: str, vocab: Set[str], sig: bool) -> List[
     return out
 
 
+def _opens(line: str, vocab: Set[str]) -> bool:
+    """Début de comparution : « Entre les soussignés », ou « Entre » suivi d'un vrai nom de partie."""
+    if START_RX.match(line):
+        return True
+    m = START_NAME_RX.match(line)
+    return bool(m) and any(c[2] == m.start("key") for c in _names(line, vocab, False, []))
+
+
 def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
     """Mentions de la couche structure (source « structure »), sans résoudre les chevauchements."""
     comp = _Comparution(vocab)
@@ -335,10 +352,10 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
     for bi, block in enumerate(blocks):
         for lm in re.finditer(r"[^\n]+", block.text):
             line, base, cut = lm.group(), lm.start(), 0
-            if not in_comp and START_RX.match(line):
+            if not in_comp and _opens(line, vocab):
                 in_comp, sig = True, False
                 comp.reset()
-            if in_comp and SIGNED_RX.match(line):
+            if in_comp and SIGNED_RX.search(line):
                 in_comp = False
             if in_comp:
                 end = END_RX.search(line)
@@ -350,7 +367,7 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
             if HEADING_RX.match(line):
                 sig = False
             cells = _cells(line, vocab)
-            if SIGNED_RX.match(line) or (cells and all(caption for caption, _ in cells)):
+            if SIGNED_RX.search(line) or (cells and all(caption for caption, _ in cells)):
                 sig = True
             out += _outside(bi, base + cut, line[cut:], vocab, sig)
         origin += len(block.text) + 1
