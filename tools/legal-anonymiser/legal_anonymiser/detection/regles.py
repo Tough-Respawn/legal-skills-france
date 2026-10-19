@@ -11,14 +11,20 @@ from typing import Callable, List, Optional, Tuple
 
 from ..modele import Block, Mention
 
+SP = r"[ \u00a0\u202f]"
 W = r"[A-ZÀ-Ü][\w'-]*"
 NAME = W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + W + r"){0,3}"
 MONTHS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre"
 BIRTH = r"(?i:n[ée]e?) le (\d{1,2}(?:er)? (?i:%s) \d{4}|\d{2}/\d{2}/\d{4})" % MONTHS
 NOT_AMOUNT = r"(?!\s?(?:€|euros?|EUR|%))"
-STREET = (r"(?<!\d)\d{1,4}(?: ?(?i:bis|ter|quater))?,? (?i:rue|avenue|av\.|boulevard|bd|place|chemin|"
-          r"allée|impasse|route|quai|cours|square|passage|voie)\b[^,\n;]{2,80}"
-          r"(?:,? ?\d{5} ?" + NAME + ")?")
+STREET_WORD = (r"(?i:rue|avenue|av\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|"
+               r"passage|voie)(?=\W)")
+# Queue de rue : 60 caractères max, arrêt avant , ; saut de ligne ou un mot de liaison.
+STREET_TAIL = (r"[^,\n;]{3}(?:(?!" + SP + r"(?:est|sera|sont|et|ou|pour|qui|dont|à|au|aux|en)\b)[^,\n;]){0,57}")
+POSTCODE = r"(?:,? ?\d{5} ?" + NAME + ")?"
+STREET = (r"(?<!\d)\d{1,4}(?: ?(?i:bis|ter|quater))?,? " + STREET_WORD + STREET_TAIL + POSTCODE)
+STREET_CTX = (r"(?i:\b(?:demeurant|domicilié(?:e)?|sis(?:e)?|situé(?:e)?|siège|adresse|habitant))[^\n.;]{0,25}?"
+              r"\b(" + STREET_WORD + STREET_TAIL + POSTCODE + ")")
 NUM_PREFIX = r"(?:(?:n°|numéro|no)\.? ?)?"
 TRIGGERS = r"(?i:contrat|dossier|client|r[ée]f[ée]rence|r[ée]f\.|police|compte|adh[ée]rent|lot|parcelle)"
 
@@ -30,12 +36,12 @@ def _luhn_ok(digits: str) -> bool:
 
 
 def _iban_ok(text: str) -> bool:
-    s = text.replace(" ", "").upper()
+    s = re.sub(SP, "", text).upper()
     return int("".join(str(int(c, 36)) for c in s[4:] + s[:4])) % 97 == 1
 
 
 def _nir_ok(text: str) -> bool:
-    s = text.replace(" ", "").upper().replace("2A", "19").replace("2B", "18")
+    s = re.sub(SP, "", text).upper().replace("2A", "19").replace("2B", "18")
     return len(s) == 15 and s.isdigit() and 97 - int(s[:13]) % 97 == int(s[13:])
 
 
@@ -50,29 +56,35 @@ def _r(kind: str, pattern: str, group: int = 0, typer: Optional[Callable[[str], 
     return (kind, re.compile(pattern), group, typer)
 
 
+S = SP + "?"
 RULES: List[Rule] = [
-    _r("IBAN", r"\bFR\d{2}(?: ?[A-Z0-9]{4}){5} ?[A-Z0-9]{3}\b", 0, _typed("IBAN", _iban_ok)),
+    _r("TVA", r"\bFR" + S + r"\d{2}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}\b"),
+    _r("IBAN", r"(?i:\bFR\d{2}(?:" + S + r"[A-Z0-9]{4}){5}" + S + r"[A-Z0-9]{3}\b)", 0, _typed("IBAN", _iban_ok)),
+    _r("IBAN", r"\b[A-Z]{2}\d{2}(?:" + S + r"[A-Z0-9]{4}){3,7}" + S + r"[A-Z0-9]{1,4}\b", 0, _typed("IBAN", _iban_ok)),
     _r("BIC", r"(?i:BIC|SWIFT)\W{0,10}([A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?)\b", 1),
-    _r("NIR", r"\b[12] ?\d{2} ?(?:0[1-9]|1[0-2]|2[0-9]|[3-9]\d) ?(?:\d{2}|2A|2B) ?\d{3} ?\d{3} ?\d{2}\b",
-       0, _typed("NIR", _nir_ok)),
-    _r("SIRET", r"(?<!\d)\d{3} ?\d{3} ?\d{3} ?\d{5}(?!\d)" + NOT_AMOUNT, 0, _typed("SIRET", _luhn_ok)),
-    _r("SIREN", r"(?<!\d)\d{3} ?\d{3} ?\d{3}(?!\d)" + NOT_AMOUNT, 0, _typed("SIREN", _luhn_ok)),
-    _r("TVA", r"\bFR ?\d{2} ?\d{3} ?\d{3} ?\d{3}\b"),
-    _r("RCS", r"RCS " + NAME + r" ?\d{3} ?\d{3} ?\d{3}"),
-    _r("CAPITAL", r"(?i:capital (?:social )?de) (\d[\d   .]* ?(?:€|euros?|EUR))", 1),
+    _r("NIR", r"\b[12]" + S + r"\d{2}" + S + r"(?:0[1-9]|1[0-2]|2[0-9]|[3-9]\d)" + S + r"(?:\d{2}|2A|2B)" + S
+       + r"\d{3}" + S + r"\d{3}" + S + r"\d{2}\b", 0, _typed("NIR", _nir_ok)),
+    _r("SIRET", r"(?<!\d)\d{3}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{5}(?!\d)" + NOT_AMOUNT,
+       0, _typed("SIRET", _luhn_ok)),
+    _r("SIREN", r"(?<!\d)\d{3}" + S + r"\d{3}" + S + r"\d{3}(?!\d)" + NOT_AMOUNT, 0, _typed("SIREN", _luhn_ok)),
+    _r("RCS", r"RCS " + NAME + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}"),
+    _r("CAPITAL", r"(?i:capital (?:social )?de) (\d[\d \u00a0\u202f.]* ?(?:€|euros?|EUR))", 1),
     _r("EMAIL", r"[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,}"),
     _r("URL", r"https?://\S*[^\s.,;:)\]]"),
     _r("URL", r"(?<![/@\w.])www\.\S*[^\s.,;:)\]]"),
-    _r("TELEPHONE", r"(?<![\w+])(?:\+33|0033) ?[1-9](?:[ .-]?\d{2}){4}(?!\d)"),
-    _r("TELEPHONE", r"(?<![\w+])0[1-9](?:[ .-]?\d{2}){4}(?!\d)"),
-    _r("TELEPHONE", r"(?<![\w+])\+\d{1,3}(?: ?\d){8,12}(?!\d)"),
+    _r("TELEPHONE", r"(?<![\w+])(?:\+33|0033)" + S + r"[1-9](?:[ \u00a0\u202f.-]?\d{2}){4}(?!\d)"),
+    _r("TELEPHONE", r"(?<![\w+])0[1-9](?:[ \u00a0\u202f.-]?\d{2}){4}(?!\d)"),
+    _r("TELEPHONE", r"(?<![\w+])\+\d{1,3}(?:" + S + r"\d){8,12}(?!\d)"),
     _r("ADRESSE", STREET),
+    _r("ADRESSE", STREET_CTX, 1),
+    _r("ADRESSE", r"\bBP" + S + r"\d{1,5}\b"),
+    _r("ADRESSE", r"\b(?i:appartement|appt\.?|bât(?:iment)?\.?|étage|esc(?:alier)?\.?)" + SP + r"(?=[A-Z]\b|\d)\w{1,6}"),
     _r("ADRESSE", r"(?i:lieu-dit|résidence|bâtiment) (" + NAME + ")", 1),
     _r("COMMUNE", r"(?<!\d)\d{5} (" + NAME + ")", 1),
     _r("DATE_NAISSANCE", BIRTH, 1),
     _r("LIEU", BIRTH + r" à (" + NAME + ")", 2),
     _r("IMMATRICULATION", r"\b[A-Z]{2}-\d{3}-[A-Z]{2}\b"),
-    _r("IMMATRICULATION", r"\b\d{1,4} [A-Z]{2,3} \d{2,3}\b"),
+    _r("IMMATRICULATION", r"\b\d{1,4} (?!(?:EUR|USD|UE|TTC|HT)\b)[A-Z]{2,3} \d{2,3}\b"),
     _r("PIECE_IDENTITE", r"(?i:passeport|CNI|carte (?:nationale )?d'identité|titre de séjour|permis(?: de conduire)?)"
        r" ?" + NUM_PREFIX + r"((?=[A-Z0-9]*\d)[A-Z0-9]{6,12})\b", 1),
     _r("NUMERO", r"(?i:cadastr[ée]e? section|section cadastrale) ([A-Z]{1,2}(?: ?" + NUM_PREFIX + r"\d+)?)", 1),
