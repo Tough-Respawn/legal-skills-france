@@ -17,8 +17,8 @@ dependencies = [
 [project.scripts]
 legal-anonymiser = "legal_anonymiser.cli:main"
 
-[tool.setuptools]
-packages = ["legal_anonymiser"]
+[tool.setuptools.packages.find]
+include = ["legal_anonymiser*"]
 
 [tool.setuptools.package-data]
 legal_anonymiser = ["data/*.txt"]
