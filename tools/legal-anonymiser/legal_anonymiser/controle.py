@@ -3,7 +3,7 @@
 Alertes A1, A2… dans l'ordre du document, positions sur le texte masqué (détail : README) :
 1. valeur_connue : valeur d'une entité (forme canonique, ses formes, texte des mentions si les blocs
    d'origine sont donnés), sans casse ni accents, minuscules comprises ; jamais exemptée par garder.
-   Un mot seul courant (« Juin ») n'alerte que collé à une civilité, un rôle ou une voie.
+   Un mot seul courant (« Juin ») n'alerte que collé à une civilité, un rôle, une voie ou un mot signalé.
 2. majuscule : mot capitalisé hors début de phrase, placeholder, ou mot courant non collé à une
    civilité, un rôle ou une voie ; 3. en ligne capitale, mot hors vocabulaire, mot-outil, verbe courant
    et mots vides de spaCy, ou collé à une civilité. Mots signalés consécutifs : une alerte.
@@ -35,14 +35,16 @@ STREET = frozenset(texte.norm(w) for w in
 ABBREV = frozenset("m mm mme mmes mlle mr dr pr me st ste art arts ref cf al no av bd ch chap p pp vol ets".split())
 ELISION_RX = re.compile(r"(?:[a-z]|qu|jusqu|lorsqu|puisqu|quoiqu)['’](?=[^\W\d_])")
 BULLET_RX = re.compile(r"[ \t]*(?:[-•*–—▪◦]|\d{1,3}[.)]|[a-z]\))")
-ARTICLE = {"le", "la", "les"}
+ARTICLE = {"le", "la", "les", "l", "l'"}
+LINKS = {"et", "l", "d", "l'", "d'"}   # sautés comme les particules entre une civilité et le nom
 GAP_RX = re.compile(r"[.,;:!?()«»\"“”\[\]\n\t]|" + SP + r"{2}")
 JOIN_RX = re.compile(SP + r"|" + SP + r"?['’-]" + SP + r"?")
+BEFORE_RX = re.compile(r"(?:" + JOIN_RX.pattern + r")$")
 DATE = (r"(?:\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}|\d{4}-\d{2}-\d{2}|\d{1,2}(?i:er)?" + SP + r"+(?i:" + MONTHS + r")" + SP
         + r"+\d{4})")
 DATE_RX = re.compile(r"(?<!\d)(?<!\d[./-])" + DATE + r"(?![./-]?\d)")   # pas dans « 06.12.34.56.78 »
-BIRTH_RX = re.compile(r"(?i:\bn(?:ée?s?|ees?)\b|\bne(?=" + SP + r"+(?:le|à|a)\b)|\bdate" + SP + r"+de" + SP
-                      + r"+naissance\b)")
+BIRTH_RX = re.compile(r"(?i:\bn(?:ée?s?|ees?)\b|\bdate" + SP + r"+de" + SP + r"+naissance\b)|\bNE(?=" + SP
+                      + r"+(?:LE|À|A)\b)")   # « NE LE » en capitales sans accent ; « ne le résiliera » non
 # Séparateurs admis : espace, point, barre, tiret (« 06.12.34.56.78 », « RG 23/01234 »), dates et références ôtées avant.
 DIGITS_RX = re.compile(r"(?<!\d)\d(?:(?:" + SP + r"|[./-])?\d){5,}(?:,\d{1,2})?(?!\d)")
 AMOUNT_RX = re.compile(r"[^\n\d]{0,3}?(?:€|(?i:euros?|eur)(?![^\W\d_])|%)")
@@ -139,7 +141,7 @@ def _marked(text: str, words: List[Word], i: int, roles: bool = True) -> bool:
     ponctuation ni colonnes entre). Après une civilité, l'écart se mesure depuis sa fin (« M. FRANCE »)."""
     for step in (-1, 1):
         j, skipped = i + step, []
-        while 0 <= j < len(words) and PARTICLE_RX.fullmatch(words[j][2]):
+        while 0 <= j < len(words) and (PARTICLE_RX.fullmatch(words[j][2]) or _link(words[j][2]) in LINKS):
             skipped.append(words[j][2])
             j += step
         if not 0 <= j < len(words):
@@ -149,7 +151,7 @@ def _marked(text: str, words: List[Word], i: int, roles: bool = True) -> bool:
         lo, hi = (civ.end() if civ else e, words[i][0]) if j < i else (words[i][1], s)
         if GAP_RX.search(text, lo, hi):
             continue   # « en Avril. M. Kerbrat », « Le Bailleur    Le Locataire »
-        if civ and not any(k in ARTICLE for k in skipped):   # « M. le Maire » est un titre
+        if civ and not any(_link(k) in ARTICLE for k in skipped):   # « M. le Maire », « M. LE MAIRE » : titre
             return True
         if roles and (role(w, set()) or texte.norm(w) in STREET):
             return True
@@ -170,6 +172,8 @@ def _capitals(text: str, words: List[Word], vocab: Set[str], commune: Callable[[
         if commune(s, e) and not civ:
             continue   # commune gardée, sauf « M. Valence »
         if lines.capitals(s):
+            if function_word(w):
+                continue   # « MONSIEUR LE MAIRE », « M. ET MME DURANT »
             if civ or (letters >= 3 and not _common(w, vocab)):
                 out.append((s, e, False))
             continue
@@ -187,15 +191,39 @@ def _capitals(text: str, words: List[Word], vocab: Set[str], commune: Callable[[
     return out
 
 
-def _runs(text: str, marked: List[Tuple[int, int, bool]]) -> List[Hit]:
-    """Mots signalés consécutifs fusionnés en une alerte ; une suite faite de mots faibles est écartée."""
+def _link(word: str) -> str:
+    return word.lower().replace("’", "'")
+
+
+def _touches(text: str, s: int, e: int, taken: Callable[[int, int], bool]) -> bool:
+    """Vrai si une autre alerte suit ou précède [s, e), séparée au plus par une espace, un trait d'union
+    ou une apostrophe."""
+    after = JOIN_RX.match(text, e)
+    before = BEFORE_RX.search(text, max(0, s - 3), s)
+    return bool(after and taken(after.end(), after.end() + 1)) or bool(before and taken(before.start() - 1,
+                                                                                        before.start()))
+
+
+def _runs(text: str, marked: List[Tuple[int, int, bool]], taken: Callable[[int, int], bool]) -> List[Hit]:
+    """Mots signalés consécutifs fusionnés en une alerte. Un mot déjà couvert par une autre alerte (valeur
+    connue, url…) en est retiré avant la fusion : ses voisins gardent leur alerte (« Paul [Kerbrat] ») ;
+    une suite de mots faibles n'est gardée que collée à une autre alerte."""
     runs: List[list] = []
     for s, e, weak in marked:
+        if taken(s, e):
+            continue
         if runs and JOIN_RX.fullmatch(text, runs[-1][1], s):
             runs[-1][1:] = [e, runs[-1][2] and weak]
         else:
             runs.append([s, e, weak])
-    return [(s, e, "majuscule") for s, e, weak in runs if not weak]
+    return [(s, e, "majuscule") for s, e, weak in runs if not weak or _touches(text, s, e, taken)]
+
+
+def _beside(text: str, words: List[Word], i: int, flagged: Set[int]) -> bool:
+    """Vrai si un mot voisin du mot i, séparé par une espace, un trait d'union ou une apostrophe, est signalé."""
+    return any(0 <= j < len(words) and words[j][0] in flagged
+               and JOIN_RX.fullmatch(text, *((words[j][1], words[i][0]) if j < i else (words[i][1], words[j][0])))
+               for j in (i - 1, i + 1))
 
 
 def _patterns(text: str) -> Iterator[Hit]:
@@ -267,10 +295,14 @@ def check(masked: List[Block], entities: List[Entity], decisions: Decisions, voc
         holder = _overlaps(m.span() for m in PLACEHOLDER_RX.finditer(text))
         words = _words(text, holder)
         at = {w[0]: i for i, w in enumerate(words)}
+        marked = _capitals(text, words, vocab, _overlaps(_find(text, folds, communes)))
+        flagged = {m[0] for m in marked}
         hits = [(s, e, "valeur_connue") for s, e in _find(text, folds, values) if not holder(s, e)]
-        hits += [(s, e, "valeur_connue") for s, e in _find(text, folds, common) if s in at and _marked(text, words, at[s])]
-        other = _runs(text, _capitals(text, words, vocab, _overlaps(_find(text, folds, communes))))
-        hits += [h for h in other + list(_patterns(text)) if not holder(h[0], h[1]) and not (
+        hits += [(s, e, "valeur_connue") for s, e in _find(text, folds, common)   # « M. JUIN », « Lucas Juin »
+                 if s in at and (_marked(text, words, at[s]) or _beside(text, words, at[s], flagged))]
+        hits += [h for h in _patterns(text) if not holder(h[0], h[1])]
+        hits += _runs(text, marked, _overlaps((h[0], h[1]) for h in hits))
+        hits = [h for h in hits if h[2] == "valeur_connue" or not (
             (block.location, texte.norm(text[h[0]:h[1]])) in kept and ranks.key(bi, h[0], h[1]) in decisions.keep)]
         out += [(bi,) + h for h in _dedupe(hits)]
     return [Alert("A%d" % n, bi, s, e, masked[bi].text[s:e], reason) for n, (bi, s, e, reason) in enumerate(out, 1)]

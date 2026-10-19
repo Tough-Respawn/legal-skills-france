@@ -138,25 +138,31 @@ complété par les tâches suivantes.
     les blocs d'origine sont passés à `check(..., original=blocs)`) encore visible, sans casse ni
     accents, minuscules comprises (« le dossier kerbrat ») ; jamais exemptée par une décision garder.
     Ignorées : valeurs de moins de 3 caractères, capital social. Une valeur d'un seul mot courant
-    (« Juin », « Poste ») n'alerte que collée à une civilité, un rôle ou une voie (« M. JUIN »).
+    (« Juin », « Poste ») n'alerte que collée à une civilité, un rôle, une voie (« M. JUIN ») ou à un
+    mot lui-même signalé (« Lucas Juin »).
   - `majuscule` : mot capitalisé hors début de phrase (début de bloc, après `. ! ? : ;` sauf
     abréviation « M. », « J. », « art. », après une puce), hors placeholder, sauf mot du vocabulaire
-    ou mot-outil non juxtaposé à une civilité qui le précède, un rôle ou un mot de voie (particules
-    sautées ; ponctuation, point compris, et colonnes coupent : « Mme France », « avenue de la
-    République » alertent ; « M. le Maire », « en Avril. M. Kerbrat » non pour le mot courant). En
+    ou mot-outil non juxtaposé à une civilité qui le précède, un rôle ou un mot de voie (particules,
+    « et », « l' », « d' » sautés ; ponctuation, point compris, et colonnes coupent : « Mme France », « avenue de la
+    République » alertent ; « M. le Maire », « MONSIEUR LE MAIRE », « en Avril. M. Kerbrat » non pour
+    le mot courant). En
     début de ligne sans ponctuation avant, et en tête de phrase pour un mot en capitales (« DUPONT a
     signé »), seul un mot courant est exempté. Ligne en capitales (60 % des lettres) : mot collé à
     une civilité (« M. FRANCE », « M. LI »), ou mot de 3 lettres ou plus qui n'est ni au vocabulaire,
-    ni mot-outil, ni verbe courant, ni mot vide de spaCy (facultatif). La civilité elle-même n'est
-    jamais signalée. Mots signalés consécutifs (espace, trait d'union, apostrophe) : une seule alerte
-    (« DUVALCOURT MORVAN IMMOBILIER », « M. Le Gall ») ; un mot exempté par sa seule place en tête de
-    phrase s'y joint (« Locataire : Paul Durand ») mais n'alerte jamais seul.
+    ni mot-outil, ni verbe courant, ni mot vide de spaCy (facultatif) ; un mot-outil n'y est jamais
+    signalé (« M. ET MME DURANT » : DURANT seul). La civilité elle-même n'est jamais signalée. Mots
+    signalés consécutifs (espace, trait d'union, apostrophe) : une seule alerte (« DUVALCOURT MORVAN
+    IMMOBILIER », « M. Le Gall ») ; un mot déjà couvert par une autre alerte (valeur connue, url…) en
+    est retiré avant la fusion, ses voisins gardent la leur (« remis à Paul Kerbrat » : « Paul »
+    majuscule, « Kerbrat » valeur connue). Un mot exempté par sa seule place en tête de phrase se joint
+    à l'alerte voisine (« Locataire : Paul Durand », « Paul Kerbrat signe ») mais n'alerte jamais seul.
   - `chiffres` : 6 chiffres ou plus, séparés au plus par une espace, un point, une barre ou un tiret
     (« 06.12.34.56.78 », « 23/01234 »), hors date, montant (€, euros, EUR ou % dans les 3
     caractères), référence d'article (« art. L. 1234-5 ») ou de texte (« loi n° 89-462 »).
-  - `arobase`, `url` ; `date_naissance` : date dans les 40 caractères après « né(e)(s) », « NE LE »
-    ou « NE À » (capitales sans accent) ou « date de naissance » (« née MARTIN le 2 juin 1965 »
-    compris ; la négation « ne pourra … avant le 1er juillet » non).
+  - `arobase`, `url` ; `date_naissance` : date dans les 40 caractères après « né(e)(s) »,
+    « date de naissance », ou « NE LE » / « NE À » écrits en capitales sans accent (« née MARTIN le
+    2 juin 1965 » compris ; la négation en minuscules, « ne pourra … » ou « ne le résiliera pas avant
+    le 1er juillet 2027 », non).
   - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
     (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte
     normalisé, rang)`, le rang étant compté sur **tous les blocs de même localisation** dans l'ordre
