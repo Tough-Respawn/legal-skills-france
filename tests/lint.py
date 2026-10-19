@@ -98,6 +98,15 @@ if mk and pl:
     pl_ver = pl.get("version")
     if mk_ver != pl_ver:
         FAIL.append("versions desynchronisees : marketplace=%s plugin=%s" % (mk_ver, pl_ver))
+# L'outil local suit la version du projet (regex, pas de tomllib : Python 3.9).
+try:
+    proj_ver = json.loads(read(os.path.join(ROOT, "project.json"))).get("version")
+    m = re.search(r'^version = "(.+)"$', read(os.path.join(ROOT, "tools", "legal-anonymiser", "pyproject.toml")), re.M)
+    tool_ver = m.group(1) if m else None
+    if tool_ver != proj_ver:
+        FAIL.append("version legal-anonymiser desynchronisee : pyproject=%s project.json=%s" % (tool_ver, proj_ver))
+except Exception as e:
+    FAIL.append("version legal-anonymiser illisible : %s" % e)
 print("3. manifests JSON + versions : ok")
 
 # 4. Mots-clés déclencheurs (issus de tests/triggering.md)
