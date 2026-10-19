@@ -8,7 +8,7 @@ from .texte import mixed_script, norm, strip_traps
 _AI_PATTERNS = [re.compile(p, re.IGNORECASE) for p in (
     r"ignore[rz]? (les |toutes les )?(instructions|consignes)",
     r"ignore (all |any )?(previous |prior |the above )?instructions",
-    r"(tu es|vous êtes|you are) (un |une |an? )?(ia|assistant|ai|llm|language model|modèle de langage)\b(?!\s+social)",
+    r"(tu es|vous êtes|you are) (un |une |an? )?(ia|assistant|ai|llm|language model|modèle de langage)\b",
     r"consid[eè]re[rz]? (que )?ce contrat (est |comme )?conforme",
     r"ne (signale|mentionne)[rz]? (rien|aucun)",
     r"system prompt",
