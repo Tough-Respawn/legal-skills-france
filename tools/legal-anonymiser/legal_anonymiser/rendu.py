@@ -49,6 +49,16 @@ def _table(head: Sequence[str], rows: Sequence[Sequence[object]]) -> List[str]:
     return out + ["| %s |" % " | ".join(_cell(c) for c in r) for r in rows]
 
 
+_LOC_ESC_RX = re.compile(r"[\\_*]")
+_LEAD_RX = re.compile(r"^(\s*)(#|<!--|\||>)")
+
+
+def _quote(text: str) -> List[str]:
+    """Texte du document en citation : aucune ligne ne peut former un titre, un marqueur ou une table."""
+    lines = text.splitlines() or [""]
+    return [("> " + _LEAD_RX.sub(r"\1\\\2", l)) if l else ">" for l in lines]
+
+
 def _findings(findings: Sequence[Finding]) -> List[str]:
     return _table(("Niveau", "Code", "Localisation", "Détail"), [(f.level, f.code, f.location, f.detail) for f in findings])
 
@@ -74,15 +84,21 @@ def masked_document(cid: str, masked: Sequence[Block], findings: Sequence[Findin
         for s in sections:
             for b in masked:
                 if b.section == s:
-                    out += ["_%s_" % b.location, "", (prefixes or {}).get(s, "") + b.text, ""]
+                    label = (prefixes or {}).get(s)
+                    out += ["_%s_" % _LOC_ESC_RX.sub(r"\\\g<0>", " ".join(b.location.split())), ""]
+                    out += [label, ""] if label else []
+                    out += _quote(b.text) + [""]
         return out[:-1]
 
-    parts = [["<!-- legal-france:masque v1 id=%s statut=valide_humain date=%s -->" % (cid, date)],
+    marker = "<!-- legal-france:masque v1 id=%s statut=valide_humain date=%s -->" % (cid, date)
+    if not (re.fullmatch(r"[0-9a-f]{6}", cid) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", date) and MARKER_RE.match(marker)):
+        raise ValueError("Marqueur invalide : identifiant (6 caractères hexadécimaux) ou date (AAAA-MM-JJ) incorrect.")
+    parts = [[marker],
              ["# Contrat masqué %s" % cid],
              _section("Texte", paras(["corps"])),
              _section("En-têtes et pieds de page", paras(["entete", "pied"])),
              _section("Révisions suivies", paras(["insertion", "suppression"],
-                                                 {"insertion": "Insertion : ", "suppression": "Suppression : "})),
+                                                 {"insertion": "Insertion :", "suppression": "Suppression :"})),
              _section("Commentaires", paras(["commentaire"])),
              _section("Texte caché détecté", ([HIDDEN_WARNING, ""] + paras(["cache"])) if paras(["cache"]) else []),
              _section("Constats techniques", _findings(findings) if findings else []),
