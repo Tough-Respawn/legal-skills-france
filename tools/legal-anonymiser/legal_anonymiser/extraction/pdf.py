@@ -17,8 +17,11 @@ _MIN_SIZE = 2.0             # points, après matrices
 _WHITE = 0.95               # composante à partir de laquelle la couleur passe pour blanche
 _SCAN_COVER = 0.9           # part de la page couverte par une image de numérisation
 _SCAN_TEXT = 200            # caractères visibles au plus sur une page numérisée
+_SAME_LINE = 1.0            # écart vertical (pt) sous lequel deux paquets sont sur la même ligne
 _OCR_FLAGS = {"texte_invisible", "texte_sous_image"}
 _MAX_FIELDS = 10000
+_MAX_CHAIN = 16             # profondeur d'une chaîne d'actions /Next
+_MAX_ACTIONS = 256          # actions examinées par chaîne (tableaux /Next compris)
 _ENCRYPTED = "Fichier PDF chiffré : retirer la protection avant l'analyse."
 
 
@@ -83,7 +86,7 @@ class _PageScan:
         self.ops: List[_Op] = []
         self.pending: List[_Op] = []
         self.segments: List[Tuple[str, List[_Op]]] = []
-        self.images: List[Tuple[float, float, float, float, float]] = []  # boîte, couverture
+        self.images: List[tuple] = []  # (x0, y0, x1, y1, couverture de la page, opaque)
         self.state = [0, False, 12.0]  # mode de rendu, remplissage blanc, corps de police
         self.saved: List[list] = []
         self.frames: List[tuple] = []
@@ -166,7 +169,7 @@ class _PageScan:
         px0, py0, px1, py1 = self.box
         page = max(0.0, px1 - px0) * max(0.0, py1 - py0)
         inter = (max(0.0, min(x1, px1) - max(x0, px0)) * max(0.0, min(y1, py1) - max(y0, py0)))
-        self.images.append((x0, y0, x1, y1, inter / page if page else 0.0))
+        self.images.append((x0, y0, x1, y1, inter / page if page else 0.0, opaque))
         if opaque:  # ponytail: origine du texte seulement, sans sa largeur
             for op in self.ops:
                 if x0 <= op.x <= x1 and y0 <= op.y <= y1:
@@ -174,11 +177,12 @@ class _PageScan:
 
     def blocks(self, location: str) -> Tuple[List[Block], List[Finding], bool]:
         """Bloc corps (couche OCR comprise), blocs cache par suite de codes, constats, OCR."""
-        scans = [im for im in self.images if im[4] >= _SCAN_COVER]
+        # Numérisation : image opaque sur 90 % de la page, jamais un filigrane transparent.
+        scans = [im[:4] for im in self.images if im[4] >= _SCAN_COVER and im[5]]
 
         def in_scan(ops: List[_Op]) -> bool:
             return bool(ops) and all(any(x0 <= o.x <= x1 and y0 <= o.y <= y1
-                                         for x0, y0, x1, y1, _ in scans) for o in ops)
+                                         for x0, y0, x1, y1 in scans) for o in ops)
 
         body: List[str] = []
         hidden: List[list] = []
@@ -194,17 +198,20 @@ class _PageScan:
                 if in_scan(ops):
                     visible_on_scan += len(text.strip())
             elif hidden and hidden[-1][0] == sorted(flags):
-                if not (hidden[-1][1][-1:].isspace() or text[:1].isspace()):
-                    hidden[-1][1] += "\n"  # lignes distinctes : ne pas recoller les valeurs
-                hidden[-1][1] += text
+                group = hidden[-1]  # [codes, texte, ordonnée du dernier opérateur]
+                if (abs(ops[0].y - group[2]) >= _SAME_LINE
+                        and not (group[1][-1:].isspace() or text[:1].isspace())):
+                    group[1] += "\n"  # lignes distinctes : ne pas recoller les valeurs
+                group[1] += text  # même ligne : changement de police au milieu d'un mot
+                group[2] = ops[-1].y
             else:
-                hidden.append([sorted(flags), text])
+                hidden.append([sorted(flags), text, ops[-1].y])
         blocks: List[Block] = []
         findings: List[Finding] = []
         corps = "".join(body).strip()
         if corps:
             blocks.append(Block(corps, location, "corps"))
-        for flags, text in hidden:
+        for flags, text, _ in hidden:
             if text.strip():
                 blocks.append(Block(text.strip(), location, "cache"))
                 findings.extend(Finding("attention", code, location) for code in flags)
@@ -217,20 +224,46 @@ class _PageScan:
 
 
 def _annotations(page: Any, location: str) -> Tuple[List[Block], List[Finding]]:
-    """Notes /Text et /FreeText : section commentaire."""
+    """Notes /Text et /FreeText : section commentaire ; liens : JavaScript dans leurs actions.
+
+    Un lien URI ou GoTo est ordinaire : seul le JavaScript de sa chaîne est signalé.
+    """
     blocks, findings = [], []
     for annot in _get(page, "/Annots") or []:
         annot = _resolve(annot)
-        contents = _get(annot, "/Contents")
-        if (_get(annot, "/Subtype") in ("/Text", "/FreeText") and isinstance(contents, str)
-                and contents.strip()):
+        subtype, contents = _get(annot, "/Subtype"), _get(annot, "/Contents")
+        if subtype in ("/Text", "/FreeText") and isinstance(contents, str) and contents.strip():
             blocks.append(Block(contents.strip(), location, "commentaire"))
             findings.append(Finding("info", "commentaire", location))
+        elif subtype == "/Link":
+            aa = _get(annot, "/AA")
+            actions = [_get(annot, "/A")] + [aa[k] for k in (aa if isinstance(aa, dict) else ())]
+            js = Finding("alerte", "javascript", location)
+            if js not in findings and any(_is_js(a) for x in actions for a in _chain(x)):
+                findings.append(js)
     return blocks, findings
 
 
 def _is_js(action: Any) -> bool:
     return isinstance(action, dict) and (_get(action, "/S") == "/JavaScript" or "/JS" in action)
+
+
+def _chain(action: Any) -> List[Any]:
+    """Une action et sa chaîne /Next (dictionnaire ou tableau), profondeur et taille bornées."""
+    found: List[Any] = []
+    todo = [(action, 0)] if isinstance(_resolve(action), dict) else []  # tableau : destination
+    for _ in range(_MAX_ACTIONS):
+        if not todo:
+            break
+        item, depth = todo.pop()
+        item = _resolve(item)
+        if isinstance(item, list):
+            todo.extend((x, depth) for x in item)
+        elif isinstance(item, dict) and depth < _MAX_CHAIN:
+            found.append(item)
+            if "/Next" in item:
+                todo.append((item["/Next"], depth + 1))
+    return found
 
 
 def _fields(root: Any, data: bytes, pages: Dict[int, int]) -> Tuple[List[Block], List[Finding]]:
@@ -278,18 +311,19 @@ def _structure(root: Any, data: bytes) -> List[Finding]:
         found.append(Finding("alerte", "javascript", "document"))
     if _get(names, "/EmbeddedFiles") is not None:
         found.append(Finding("attention", "fichier_joint", "document"))
-    # /OpenAction tableau ou /GoTo : simple vue initiale ; toute autre action compte.
-    open_action = _get(root, "/OpenAction")
-    actions = [open_action] if (isinstance(open_action, dict)
-                                and _get(open_action, "/S") != "/GoTo") else []
+    # /OpenAction tableau ou /GoTo seul : simple vue initiale ; toute autre chaîne compte.
+    opening = _chain(_get(root, "/OpenAction"))
+    triggered = len(opening) > 1 or any(_get(a, "/S") != "/GoTo" for a in opening)
     aa = _get(root, "/AA")
-    if isinstance(aa, dict):
-        actions.extend(aa[k] for k in aa)
-    if actions:
+    for key in aa if isinstance(aa, dict) else ():
+        chain = _chain(aa[key])
+        opening += chain
+        triggered = triggered or bool(chain)
+    if triggered:
         found.append(Finding("alerte", "action_ouverture", "document"))
-    if any(_is_js(a) for a in actions):
+    if any(_is_js(a) for a in opening):
         found.append(Finding("alerte", "javascript", "document"))
-    # ponytail: actions des pages, annotations et champs non parcourues
+    # ponytail: actions des pages et des champs non parcourues
     linearized = 1 if b"/Linearized" in data[:1024] else 0
     if data.count(b"%%EOF") - linearized > 1:
         found.append(Finding("attention", "pdf_modifie", "document"))
