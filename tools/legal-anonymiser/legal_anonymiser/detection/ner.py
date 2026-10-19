@@ -8,8 +8,10 @@ forme sociale finale (elle reste visible, spec 6.4). Une entité faite seulement
 vocabulaire (rôles, institutions, intitulés) est ignorée : la sortie va droit au masquage.
 Une entité qui contient une ponctuation de phrase (« , », « « », « ( »…) est réduite à sa plus
 longue partie propre ; un saut de ligne n'en est pas une (nom coupé en fin de ligne), sauf si chaque
-ligne porte deux mots capitalisés (deux noms). En capitales, l'entité s'arrête avant son premier
-verbe courant (noms.CAPS_VERBS : « AWA SIGNE LE CONTRAT » donne « AWA »). Les bords et l'intérieur
+ligne porte deux mots capitalisés hors particules (deux noms) ; deux entités que le modèle coupe à une
+particule (« Jean Dupont\\nDe », « La Fontaine ») sont recollées d'abord. En capitales, l'entité s'arrête avant
+son premier verbe courant (noms.verb_cut : « AWA SIGNE LE CONTRAT » donne « AWA », « SIGNE HANSEN »
+reste entier) ; un verbe en tête d'une société lui appartient (« VERSE SAS »). Les bords et l'intérieur
 se jugent sur une liste fixe de mots-outils (noms.FUNCTION_WORDS), jamais sur les mots vides de
 spaCy, qui contiennent de vrais noms (« LI HUI MIN »).
 
@@ -35,8 +37,8 @@ from typing import Iterator, List, Optional, Set, Tuple
 from .. import texte
 from ..extraction import MissingDependency
 from ..modele import Block, Mention
-from .noms import (FORMS, FUNCTION_WORDS, GENERIC, NAME_JOINERS, STOPWORDS, WORD_RX, before_verb, function_word,
-                   known, stem, tokens)
+from .noms import (FORMS, FUNCTION_WORDS, GENERIC, NAME_JOINERS, PARTICLE_RX, STOPWORDS, WORD_RX, function_word,
+                   known, stem, tokens, verb_cut)
 
 MODEL = "fr_core_news_lg"
 _EXCLUDE = ["tagger", "parser", "attribute_ruler", "lemmatizer", "morphologizer", "senter"]
@@ -103,17 +105,6 @@ def _chunks(text: str, size: int) -> Iterator[Tuple[int, str]]:
     yield start, text[start:]
 
 
-@lru_cache(maxsize=1)
-def stop_words() -> frozenset:
-    """Mots vides français de spaCy, en minuscules accentuées ; repli sur ceux de noms.py sans spaCy.
-    Jamais pour couper un nom : la liste contient de vrais noms (HUI, MIN, SON, VU…)."""
-    try:
-        from spacy.lang.fr.stop_words import STOP_WORDS
-    except ImportError:
-        return frozenset(STOPWORDS)
-    return frozenset(STOP_WORDS)
-
-
 def _edge(word: str, lead: bool) -> bool:
     """Mot à retirer au bord d'une entité : mot-outil, forme sociale, et en tête mot d'annonce."""
     w = stem(word)
@@ -143,14 +134,18 @@ def _clean(text: str, s: int, e: int) -> Tuple[int, int]:
 
 
 def _lines(text: str, s: int, e: int) -> List[Tuple[int, int]]:
-    """Une entité sur plusieurs lignes : un nom par ligne si chaque ligne porte au moins deux mots
-    capitalisés (« Jean Dupont », puis « Marie Durand » à la ligne), sinon un seul nom
-    (« Jean-Baptiste » en fin de ligne, « Lemaire » à la suivante)."""
-    parts = [(m.start(), m.end()) for m in _LINE_RX.finditer(text, s, e)]
-    if len(parts) > 1 and all(sum(w.group()[0].isupper() for w in WORD_RX.finditer(text, a, b)) >= 2
-                              for a, b in parts):
-        return [_trim(text, a, b) for a, b in parts]
-    return [(s, e)]
+    """Une entité sur plusieurs lignes : une ligne qui porte au moins deux mots capitalisés hors particules
+    est un nom entier (« Jean Dupont », puis « Marie Durand » à la ligne) ; une autre ligne se rattache à
+    la précédente (« Jean-Baptiste » puis « Lemaire », « JEAN DUPONT » puis « DE LA FONTAINE »)."""
+    out: List[List] = []   # [début, fin, nom entier ?]
+    for m in _LINE_RX.finditer(text, s, e):
+        full = sum(w.group()[0].isupper() and not PARTICLE_RX.fullmatch(w.group())
+                   for w in WORD_RX.finditer(text, m.start(), m.end())) >= 2
+        if out and not (full and out[-1][2]):
+            out[-1][1] = m.end()
+        else:
+            out.append([m.start(), m.end(), full])
+    return [_trim(text, a, b) for a, b, _ in out] if len(out) > 1 else [(s, e)]
 
 
 def _inner_stop(name: str) -> bool:
@@ -186,10 +181,25 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
         docs = list(nlp.pipe(job[3] for job in jobs))
     for (bi, base, caps, _), doc in zip(jobs, docs):
         text = blocks[bi].text
-        for ent in doc.ents:
-            s, e = _clean(text, base + ent.start_char, base + ent.end_char)
-            for s, e in _lines(text, s, before_verb(text, s, e)):
-                kind = _kind(ent.label_, text[s:e], vocab, caps) if e > s else None
+        for s0, e0, label in _joined(doc):
+            s, e = _clean(text, base + s0, base + e0)
+            s, e = verb_cut(text, s, e, lead=label != "ORG")   # « VERSE SAS » : un verbe ouvre une société
+            for s, e in _lines(text, s, e):
+                kind = _kind(label, text[s:e], vocab, caps) if e > s else None
                 if kind:
                     out.append(Mention(bi, s, e, kind, "ner"))
     return out
+
+
+def _joined(doc) -> List[Tuple[int, int, str]]:
+    """Entités du modèle (début, fin, étiquette) ; deux entités de même étiquette que seule une espace
+    sépare sont recollées quand une particule les joint (« Jean Dupont\\nDe » puis « La Fontaine »)."""
+    out: List[List] = []
+    for ent in doc.ents:
+        words = ent.text.split()
+        if (out and out[-1][2] == ent.label_ and not doc.text[out[-1][1]:ent.start_char].strip() and words
+                and (PARTICLE_RX.fullmatch(doc.text[out[-1][0]:out[-1][1]].split()[-1]) or PARTICLE_RX.fullmatch(words[0]))):
+            out[-1][1] = ent.end_char
+        else:
+            out.append([ent.start_char, ent.end_char, ent.label_])
+    return [(s, e, label) for s, e, label in out]

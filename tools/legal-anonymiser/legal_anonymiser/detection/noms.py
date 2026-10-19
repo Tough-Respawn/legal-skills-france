@@ -121,6 +121,8 @@ CELL_RX = re.compile(r"[^\t   ]+(?:[   ][^\t   ]+)*")  # colonnes : tab
 CAPTION_LEAD_RX = re.compile(r"\s*(?i:(?:pour\s+)?(?:le|la|les|l['’])\s*([^\W\d_]+))\s*[,:]?\s*")
 SIG_CAPTION_RX = re.compile(r"\s*(?i:signatures?(?:\s+des\s+parties)?|pour\s+[^.]{1,60})\s*:?\s*")
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*|&")
+CIV_RX = re.compile(r"(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?" + CIVILITY + SP + r"+")
+PARTICLE_RX = re.compile(r"(?i:" + PARTICLES + r")")
 
 Cand = Tuple[int, int, int, int, str]  # début, fin, étendue (début, fin) du motif, type (ALIAS = nom d'usage)
 Span = Tuple[int, int]
@@ -134,15 +136,27 @@ def caps_verb(word: str) -> bool:
     return word.replace("’", "'") in CAPS_VERBS
 
 
-def before_verb(text: str, s: int, e: int) -> int:
-    """Fin d'une étendue tout en capitales coupée avant son premier verbe courant (« AWA SIGNE LE CONTRAT »
-    donne « AWA ») ; s si elle commence par un verbe. « A. » est une initiale, pas le verbe."""
+def _verb_at(text: str, w: "re.Match[str]") -> bool:
+    """Verbe courant, sauf « A. » (initiale)."""
+    return caps_verb(w.group()) and not (len(w.group()) == 1 and text.startswith(".", w.end()))
+
+
+def verb_cut(text: str, s: int, e: int, lead: bool = True) -> Span:
+    """Étendue tout en capitales bornée par ses verbes courants. La fin s'arrête au premier verbe qui suit
+    au moins un mot de nom, deux si une civilité ouvre l'étendue (« AWA SIGNE LE CONTRAT » donne « AWA »,
+    « MADAME SIGNE HANSEN SONT PRÉSENTS » donne « MADAME SIGNE HANSEN », « MADAME CLAIRE DEMEURE EST
+    TÉMOIN » garde « MADAME CLAIRE DEMEURE ») ; un verbe en tête n'est retiré (lead) que s'il reste deux
+    mots au moins (« SIGNE HANSEN » reste entier). Une étendue qui n'est pas en capitales est rendue telle quelle."""
     if not text[s:e].isupper():
-        return e
-    for w in WORD_RX.finditer(text, s, e):
-        if caps_verb(w.group()) and not (len(w.group()) == 1 and text.startswith(".", w.end())):
-            return max(s, len(text[:w.start()].rstrip(" ,\u00a0\u202f\n")))
-    return e
+        return s, e
+    civ = CIV_RX.match(text, s, e)
+    words = list(WORD_RX.finditer(text, civ.end() if civ else s, e))
+    if lead and not civ and len(words) > 2 and _verb_at(text, words[0]):
+        words, s = words[1:], words[1].start()
+    for w in words[2 if civ else 1:]:
+        if _verb_at(text, w):
+            return s, max(s, len(text[:w.start()].rstrip(" ,\u00a0\u202f\n")))
+    return s, e
 
 
 def stem(word: str) -> str:

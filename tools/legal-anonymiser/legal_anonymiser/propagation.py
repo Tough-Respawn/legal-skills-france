@@ -16,15 +16,13 @@ from functools import lru_cache
 from typing import List, Set, Tuple
 
 from . import texte
-from .detection.noms import (CAPS_VERBS, CIVILITY, FUNCTION_WORDS, NAME_JOINERS, PARTICLES, STOPWORDS, caps_verb,
+from .detection.noms import (CAPS_VERBS, CIV_RX, FUNCTION_WORDS, NAME_JOINERS, PARTICLE_RX, STOPWORDS, caps_verb,
                              function_word, known)
 from .detection.regles import SP
 
 Key = Tuple[str, str, int]
 Span = Tuple[int, int]
-CIV_RX = re.compile(r"(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?" + CIVILITY + SP + r"+")
 ARTICLE_RX = re.compile(r"(?i:(?:le|la|les)" + SP + r"+|l['’])")
-PARTICLE_RX = re.compile(r"(?i:" + PARTICLES + r")")
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
 PROPAGATED = ("PERSONNE", "SOCIETE", "COMMUNE", "LIEU")
 BANNED = frozenset(texte.norm(w) for w in FUNCTION_WORDS | CAPS_VERBS)   # jamais une forme d'un mot

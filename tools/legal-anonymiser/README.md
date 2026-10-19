@@ -74,10 +74,13 @@ complété par les tâches suivantes.
   est lu sur une copie à l'initiale majuscule, et seules ses entités de 2 à 4 mots sont gardées,
   sans mot-outil à l'intérieur autre qu'une liaison de nom (« TÉMOIN EST PRÉSENT » écarté,
   « BOULOGNE SUR MER » gardé) ; une entité en capitales s'arrête avant son premier verbe courant
-  (« AWA DUPONT SIGNE » donne « AWA DUPONT »). Une commune d'un seul mot en capitales n'y est
-  trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par propagation ; seule dans le
-  texte libre, elle reste visible et la seconde passe la signale. Une entité qui court sur deux
-  lignes en fait deux si chaque ligne porte au moins deux mots capitalisés. Modèle absent :
+  (« AWA DUPONT SIGNE » donne « AWA DUPONT »), jamais avant son premier mot ni avant le second
+  après une civilité (« SIGNE HANSEN », « MADAME CLAIRE DEMEURE EST TÉMOIN » donne « MADAME CLAIRE
+  DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). Une commune d'un seul
+  mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par
+  propagation ; seule dans le texte libre, elle reste visible et la seconde passe la signale. Une
+  entité qui court sur deux lignes en fait deux si chaque ligne porte au moins deux mots capitalisés
+  hors particules (« DE LA FONTAINE » à la ligne reste avec le nom qui précède). Modèle absent :
   `ModelMissing`.
 - **Mots-outils et verbes** (`detection/noms.py`) : `FUNCTION_WORDS` (est, et, de, la, par, pour,
   avec, dans, qui, que, dont, au, ce, se, lui, leur, notre…) et `CAPS_VERBS` (SIGNE, ACCEPTE,
@@ -90,11 +93,15 @@ complété par les tâches suivantes.
   comparution forme une entité, chaque représentant une autre. Un nom ailleurs rejoint l'entité
   unique de même type qui porte sa forme (une personne ne rejoint jamais une société) ; deux
   entités qui la portent (homonymes, époux, « M. Kerbrat ») en font une mention ambiguë, à
-  arbitrer. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
+  arbitrer. La coupe avant un verbe courant ne vaut que pour une personne isolée (sans partie ni
+  rôle de comparution) : une partie, déjà bornée par la comparution (« MONSIEUR PAUL DONNE »,
+  « MADAME SIGNE HANSEN »), et une société (« GRAND EST BÂTIMENT », « VERSE ») gardent leur
+  étendue. Un nom en capitales sur-capturé (« MADAME N'DIAYE EST ENGAGÉE ») est rogné à la plus
   longue forme connue qui l'ouvre, si elle fait deux mots ou si un verbe courant, un mot-outil ou
-  un mot du vocabulaire la suit ; sinon (« MADAME AWA DUPONT », où seul « AWA » est connu) il
-  devient une nouvelle entité, dont les formes ne viennent que du début du nom (avant le premier
-  verbe, mot-outil ou mot connu). Un nom de la NER chevauché par une forme connue n'en garde le
+  un mot du vocabulaire la suit ; une particule après elle (« MONSIEUR JEAN LE GALL », « JEAN DE
+  LA FONTAINE », pour un Jean Kerbrat connu) dit que le nom continue ; sinon (« MADAME AWA
+  DUPONT », où seul « AWA » est connu) il devient une nouvelle entité, dont les formes ne viennent
+  que du début du nom (avant le premier verbe, mot-outil ou mot connu). Un nom de la NER chevauché par une forme connue n'en garde le
   reste que si celui-ci fait deux mots capitalisés hors vocabulaire, et l'entité recalcule ses
   formes. Chaque nom est ensuite cherché partout, sans casse ni
   accents, aussi après une élision (« d'Élodie », « D'AWA ») : forme complète, nom seul, prénom

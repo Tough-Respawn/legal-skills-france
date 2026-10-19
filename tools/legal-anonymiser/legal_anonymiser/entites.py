@@ -3,8 +3,8 @@
 1. Chevauchements, bloc par bloc : la mention la plus longue l'emporte ; à égalité,
    regle > structure > ner > propagation. Un gagnant sans partie (nom de la NER) reprend le
    type, le rôle et la partie de la mention de comparution qu'il contient ; s'il en couvre deux,
-   il est écarté et les parties restent distinctes. Avant tout, un nom en capitales de la structure
-   ou de la NER s'arrête avant son premier verbe courant (noms.CAPS_VERBS : « AWA SIGNE » → « AWA »).
+   il est écarté et les parties restent distinctes. Avant tout, une personne en capitales sans partie est
+   bornée par ses verbes courants (noms.verb_cut) ; une partie ou une société (« GRAND EST BÂTIMENT ») non.
 2. Regroupement : une partie de la comparution (même `party`) forme une entité, chacun de ses
    représentants une autre (« née X » rejoint le représentant qui précède). Les identifiants
    (adresse, commune, e-mail…) des règles et de la structure sont groupés par forme normalisée ;
@@ -15,6 +15,7 @@
    sur-capturé (« N'DIAYE LE LOGEMENT ») est rogné à la plus longue forme connue qui l'ouvre et
    rattaché sans en tirer de formes, si cette forme fait deux mots ou si le mot qui la suit est un
    verbe courant, un mot-outil (noms.FUNCTION_WORDS, liste fixe), un mot connu ou sans majuscule ;
+   une particule après la forme (« JEAN LE GALL », « JEAN DE LA FONTAINE ») dit que le nom continue :
    sinon il crée une entité (« MADAME AWA DUPONT »), dont seules les formes du début, avant le
    premier verbe, mot-outil hors liaison de nom ou mot connu, sont inscrites (propagation.head),
    jamais un verbe, un mot-outil ou un mot du vocabulaire seul. Un nom de la structure ne rejoint
@@ -42,7 +43,7 @@ from dataclasses import replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
 from . import texte
-from .detection.noms import before_verb, caps_verb, function_word, known
+from .detection.noms import PARTICLE_RX, caps_verb, function_word, known, verb_cut
 from .detection.structure import load_vocab
 from .modele import Ambiguity, Block, Decisions, Entity, Mention
 from .propagation import WORD_RX, Key, folded, forms, head, name_part, name_words, pattern, span, strip_civility
@@ -160,6 +161,8 @@ class _Builder:
             end = span(name, pos, 0, len(f))[1]
             nxt = WORD_RX.search(name, end)
             word = nxt.group() if nxt else ""
+            if PARTICLE_RX.fullmatch(word):
+                return None   # « JEAN LE GALL » n'est pas Jean Kerbrat : le nom continue
             if (" " in f or not word or caps_verb(word) or function_word(word) or known(word, self.vocab)
                     or word[0].islower()):
                 return replace(m, end=base + end), own, f
@@ -280,7 +283,7 @@ class _Builder:
         for m, own, form in sorted(self.pending, key=lambda p: (p[0].block, p[0].start)):
             live = [self.ents[i].placeholder for i in own if i in self.owners.get(form, ())]   # formes à jour
             target = live[0] if len(live) == 1 else decisions.resolve.get(
-                occurrence_key(self.blocks[m.block], m.start, m.end))
+                occurrence_key(self.blocks[m.block], m.start, m.end), None if live else NEW)   # sans candidat : nouvelle
             if target == NEW:
                 e = Entity(m.kind, None, "", "", [])
                 self.label(e, counters)
@@ -327,12 +330,17 @@ def _party(e: Entity) -> Optional[int]:
     return next((m.party for m in e.mentions if m.party is not None), None)
 
 
+def _verb_cut(text: str, m: Mention) -> Mention:
+    s, e = verb_cut(text, m.start, m.end)
+    return replace(m, start=s, end=e)
+
+
 def build(blocks: List[Block], mentions: List[Mention], decisions: Decisions) -> Tuple[List[Entity], List[Ambiguity]]:
     """Entités (placeholder, forme canonique, mentions) et ambiguïtés à arbitrer, dans l'ordre du document."""
     b = _Builder(blocks)
-    # En capitales, un nom de la structure ou de la NER s'arrête avant son premier verbe (« AWA SIGNE »).
-    mentions = [replace(m, end=before_verb(blocks[m.block].text, m.start, m.end))
-                if m.kind in NAMED and m.source in ("ner", "structure") else m for m in mentions]
+    # En capitales, une personne sans partie est bornée par ses verbes (« AWA SIGNE ») ; une partie ou une société non.
+    mentions = [_verb_cut(blocks[m.block].text, m) if m.kind == "PERSONNE" and m.party is None
+                and m.source in ("ner", "structure") else m for m in mentions]
     b.group(_overlaps([m for m in mentions if m.end > m.start]))
     b.propagate()
     ambs = b.decide(decisions, b.number())
