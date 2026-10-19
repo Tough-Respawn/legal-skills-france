@@ -15,9 +15,10 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Set
 
 from . import texte
+from .coffre import atomic_write
 from .entites import Ranks
 from .modele import Alert, Ambiguity, Block, Decisions, Entity
 
@@ -30,7 +31,12 @@ _FREE_RX = re.compile(r"^(masquer|demasquer):\s*(.+?)\s*$")
 
 
 class AdjustmentsError(Exception):
-    """Fichier illisible ou mal formé ; le message ne nomme que le chemin neutre."""
+    """Fichier illisible ou mal formé ; le message ne nomme que le chemin neutre et `line_no` (1 ou plus),
+    jamais un fragment de la ligne."""
+
+    def __init__(self, message: str, line_no: Optional[int] = None) -> None:
+        super().__init__(message)
+        self.line_no = line_no
 
 
 def _name(path: Path) -> str:
@@ -70,19 +76,22 @@ def _parse(line: str):
     return h.group(1), h.group(2), text, fields
 
 
-def _valid(kind: str, choice: str) -> bool:
-    return choice in ("masquer", "garder") if kind in "AC" else choice == NEW or bool(re.fullmatch(r"\[[^\]\s]+\]", choice))
+def _valid(kind: str, choice: str, known: Optional[Set[str]] = None) -> bool:
+    """`known` donné : un placeholder choisi pour une ambiguïté doit en faire partie (sinon il reste en attente)."""
+    if kind in "AC":
+        return choice in ("masquer", "garder")
+    return choice == NEW or bool(re.fullmatch(r"\[[^\]\s]+\]", choice)) and (known is None or choice in known)
 
 
 def read(path: Path) -> Decisions:
     d = Decisions()
-    for line in _lines(path):
+    for n, line in enumerate(_lines(path), 1):
         line = line.strip()
         if not line or line.startswith("#"):
             continue
         p = _parse(line)
         if p is None:
-            raise AdjustmentsError("Ligne mal formée dans %s : %s." % (_name(path), line.split(" ")[0][:20]))
+            raise AdjustmentsError("Ligne %d mal formée dans %s." % (n, _name(path)), n)
         kind, choice, text, fields = p
         if kind == "free":
             (d.mask_more if choice == "masquer" else d.unmask).add(text)
@@ -94,7 +103,7 @@ def read(path: Path) -> Decisions:
             try:
                 key = (fields[0], texte.norm(text), int(fields[1]))
             except (IndexError, ValueError):
-                raise AdjustmentsError("Clé illisible dans %s : %s." % (_name(path), line.split(" ")[0])) from None
+                raise AdjustmentsError("Clé illisible ligne %d dans %s." % (n, _name(path)), n) from None
             if kind == "M":
                 d.resolve[key] = choice
             elif choice == "garder":
@@ -104,12 +113,13 @@ def read(path: Path) -> Decisions:
     return d
 
 
-def pending(path: Path) -> int:
+def pending(path: Path, known: Optional[Set[str]] = None) -> int:
+    """Décisions encore en attente ; avec `known`, un placeholder inconnu compte aussi (« M1 [TYPO_9] »)."""
     n = 0
     for line in _lines(path):
         line = line.strip()
         p = None if line.startswith("#") else _parse(line)
-        n += bool(p) and p[0] != "free" and not _valid(p[0], p[1])
+        n += bool(p) and p[0] != "free" and not _valid(p[0], p[1], known)
     return n
 
 
@@ -145,4 +155,4 @@ def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity],
     stale = [k for k in sorted(previous.keep | set(previous.resolve)) if k not in seen]
     if stale:
         out += [STALE] + ["#   %s (%s, rang %d)" % (k[1], k[0], k[2]) for k in stale]
-    path.write_text("\n".join(out) + "\n", encoding="utf-8", newline="\n")
+    atomic_write(path, ("\n".join(out) + "\n").encode("utf-8"))

@@ -24,23 +24,27 @@ FILETYPES = [("Contrats", "*.docx *.pdf *.jpg *.jpeg *.png"), ("Word", "*.docx")
 _current = {"cid": None}   # contrat en cours, pour ranger la trace d'une erreur interne
 
 
+class _NoPicker(Exception):
+    """tkinter absent ou sans affichage : pas de sélecteur de fichier."""
+
+
 def _pick() -> Optional[str]:
-    """Sélecteur de fichier natif ; None sans tkinter ou si l'utilisateur annule."""
+    """Sélecteur de fichier natif ; None si l'utilisateur annule, `_NoPicker` sans tkinter ni affichage."""
     try:
         import tkinter
         from tkinter import filedialog
     except ImportError:
-        return None
+        raise _NoPicker() from None
     try:
         root = tkinter.Tk()
     except tkinter.TclError:
-        return None
+        raise _NoPicker() from None
     try:
         root.withdraw()
         root.attributes("-topmost", True)
         return filedialog.askopenfilename(parent=root, title="Contrat à masquer", filetypes=FILETYPES) or None
     except tkinter.TclError:
-        return None
+        raise _NoPicker() from None
     finally:
         root.destroy()
 
@@ -60,11 +64,28 @@ def _contract(vault: Vault, cid: str) -> bool:
 def _after_run(vault: Vault, cid: str, result) -> int:
     say("resume", cid=cid, entities=len(result.entities), alerts=len(result.alerts),
         ambiguities=len(result.ambiguities))
-    if result.pending:
+    if result.pending or result.alerts or result.ambiguities:
         say("pending", pending=result.pending, path=sortie.neutral(vault.root / cid / "ajustements.txt",
                                                                    Path.cwd(), vault), cid=cid)
         return 3
     return _validate(vault, cid)
+
+
+def _ready(vault: Vault, cid: str, state: dict) -> Optional[str]:
+    """Clé du message qui empêche la validation, ou None quand le dernier passage n'a rien laissé ouvert
+    et que `masque.md` et `ajustements.txt` sont ceux qu'il a écrits."""
+    from .pipeline import body_hash
+    folder = vault.root / cid
+    masque, adj = folder / "masque.md", folder / "ajustements.txt"
+    if not (masque.is_file() and adj.is_file()):
+        return "non_pret"
+    data = masque.read_bytes()
+    if (state.get("pending") != 0 or state.get("ouverts") != 0 or b"[AMBIGU_" in data):
+        return "non_pret"
+    if (body_hash(data) != state.get("sha_masque")
+            or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")):
+        return "modifie_depuis"
+    return None
 
 
 def _validate(vault: Vault, cid: str) -> int:
@@ -73,8 +94,9 @@ def _validate(vault: Vault, cid: str) -> int:
     masque, rapport, adj = folder / "masque.md", folder / "rapport.md", folder / "ajustements.txt"
     cwd = Path.cwd()
     state = vault.read_state(cid)
-    if state.get("pending", 1) or not masque.is_file():
-        say("pending", pending=state.get("pending", 1), path=sortie.neutral(adj, cwd, vault), cid=cid)
+    blocker = _ready(vault, cid, state)
+    if blocker:
+        say(blocker, cid=cid, path=sortie.neutral(adj, cwd, vault))
         return 3
     today = datetime.date.today().isoformat()
     first, rest = masque.read_text("utf-8").split("\n", 1)
@@ -94,7 +116,8 @@ def _validate(vault: Vault, cid: str) -> int:
         except OSError:
             say("publication_impossible")
             return 4
-        say("publie", path=sortie.neutral(target, cwd, vault))
+        say("publie", name=target.name)
+        say("rappel")
         return 0
     if answer == "ajuster":
         say("ajuster", path=sortie.neutral(adj, cwd, vault), cid=cid)
@@ -112,15 +135,25 @@ def _run(vault: Vault, original: Path, cid: str) -> int:
 
 
 def _traiter(args: argparse.Namespace) -> int:
+    from .extraction import supported
     vault = Vault()
     vault.ensure()
-    chosen = args.chemin or _pick()
+    chosen = args.chemin
+    if not chosen:
+        try:
+            chosen = _pick()
+        except _NoPicker:
+            say("selecteur_indisponible")
+            return 4
     if not chosen:
         say("aucun_fichier")
         return 4
     original = Path(chosen)
     if not original.is_file():
         say("introuvable")
+        return 5
+    if not supported(original):   # contrôlé avant tout enregistrement au coffre
+        say("illisible")
         return 5
     return _run(vault, original, vault.id_for_original(original))
 
@@ -208,14 +241,25 @@ def main(argv: Optional[List[str]] = None) -> int:
     _current["cid"] = None
     try:
         return args.func(args)
+    except KeyboardInterrupt:
+        say("interrompu")
+        return 4
     except (UnsupportedFormat, Unreadable):
         say("illisible")
         return 5
-    except MissingDependency as exc:   # ModelMissing compris ; le message ne contient aucun chemin
+    except MissingDependency as exc:   # ModelMissing compris ; messages fixes de nos modules, sans chemin
         say("dependance", hint=str(exc))
         return 6
-    except (RegistryCorrupted, AdjustmentsError) as exc:   # messages neutres par contrat
+    except RegistryCorrupted as exc:   # messages fixes de coffre.py : étiquette neutre du fichier, rien d'autre
         print(str(exc))
+        return 7
+    except AdjustmentsError as exc:   # jamais str(exc) : le numéro de ligne et le chemin neutre suffisent
+        vault = Vault()
+        path = sortie.neutral(vault.root / (_current["cid"] or "") / "ajustements.txt", Path.cwd(), vault)
+        if exc.line_no:
+            say("ajustements_ligne", line=exc.line_no, path=path)
+        else:
+            say("ajustements_illisible", path=path)
         return 7
     except Exception:
         vault = Vault()

@@ -39,6 +39,12 @@ def _image(path: Path, workdir: Path) -> Extracted:
 
 
 _DISPATCH = {".docx": _docx, ".pdf": _pdf, ".jpg": _image, ".jpeg": _image, ".png": _image}
+SUPPORTED = frozenset(_DISPATCH)
+
+
+def supported(path: Path) -> bool:
+    """Vrai si l'extension est prise en charge (contrôle avant tout enregistrement au coffre)."""
+    return Path(path).suffix.lower() in SUPPORTED
 
 
 def extract(path: Path, workdir: Path) -> Extracted:

@@ -18,9 +18,12 @@ spaCy.
 | `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 |
 
 Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
-`ajustements.txt` mal formé). La trace complète d'une erreur imprévue va dans `coffre/<id>/erreur.txt`
+`ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
+fragment de la ligne). La trace complète d'une erreur imprévue va dans `coffre/<id>/erreur.txt`
 (ou `coffre/erreurs/<horodatage>.txt` quand aucun contrat n'est en cours) ; la console ne reçoit que le
-message générique et le chemin neutre de la trace.
+message générique et le chemin neutre de la trace. Code 4 aussi sur Ctrl+C (« Interrompu »). Un original
+illisible (droits, verrou) donne le code 5 ; une extension inconnue est refusée avant tout enregistrement
+au coffre.
 
 **Chaîne d'un passage** (`pipeline.run`) : extraction, inspection (pièges Unicode, NFC, texte adressé à
 une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le modèle est installé (sinon
@@ -29,33 +32,47 @@ métadonnées, masquage, risque résiduel, seconde passe. Écrit dans `coffre/<i
 (version en préparation, marqueur `valide_humain` daté du jour), `rapport.md` (valeurs réelles, jamais
 publié), `ajustements.txt`, `correspondance.json` (placeholder vers valeur, ambiguïtés `[AMBIGU_n]`
 comprises) et `etat.json` (`destination` : dossier courant du premier `traiter`, où sera publié le
-fichier ; `pending` ; `date` ; `original_name_hidden`). Les décisions survivent à la réécriture du
-fichier d'ajustements : une alerte gardée reste écrite `A<n> garder`, une ambiguïté tranchée
-`M<n> [PLACEHOLDER]` (numérotée après les ambiguïtés ouvertes, sa clé ne change pas), une commune gardée
-`C<n> garder`. Seuls les points encore marqués `?` comptent comme en attente.
+fichier ; `pending` ; `ouverts` : alertes et ambiguïtés encore ouvertes ; `sha_masque` : empreinte du
+corps de `masque.md` après le marqueur ; `sha_ajustements` ; `date` ; `original_name_hidden`). `etat.json`
+est écrit en début de passage avec `pending` et `ouverts` à `null`, puis complété à la fin : un passage
+interrompu ne laisse jamais un état validable. Les décisions survivent à la réécriture du fichier
+d'ajustements : une alerte gardée reste écrite `A<n> garder`, une ambiguïté tranchée `M<n> [PLACEHOLDER]`
+(numérotée après les ambiguïtés ouvertes, sa clé ne change pas), une commune gardée `C<n> garder`. Une
+alerte `valeur_connue` n'est jamais exemptée : `garder` y est ignoré et la ligne repasse à `?`, seule
+`masquer` la règle. Un placeholder qui n'existe pas (`M1 [TYPO_9]`) reste en attente. Comptent comme en
+attente les lignes `?` et ces placeholders inconnus.
 
-**Validation** : `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et
-`rapport.md` sont ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier
-ce contrat masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est
-publié (« fichier modifié pendant la relecture, relancez », code 4) ; sinon il est publié dans la
-destination enregistrée (`contrat-<id>.masque.md`), un dossier inaccessible en écriture donne le code 4.
-`ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la fenêtre : code 4.
-`impossible` (ni fenêtre ni terminal, cas d'un outil piloté par un modèle) : « validation impossible ici :
-lancez vous-même `legal-anonymiser valider <id>` dans un terminal », code 4. Sans chemin, un sélecteur
-annulé ou un `tkinter` absent donne le code 4.
+**Validation** : refusée (code 3, « des points restent ouverts ») tant que `pending` ou `ouverts` n'est
+pas 0, si `etat.json` ne porte pas ces champs, ou si `masque.md` contient encore `[AMBIGU_` ; refusée
+aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de `masque.md`
+ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage : il faut `relancer`. Sinon
+`masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
+ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
+masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
+(« fichier modifié pendant la relecture, relancez », code 4) ; sinon il est publié dans la destination
+enregistrée (« Publié : contrat-<id>.masque.md », suivi du rappel « La validation porte sur le texte
+relu ; le risque résiduel listé reste visible pour le modèle. »), un dossier inaccessible en écriture
+donne le code 4. `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la
+fenêtre : code 4. `impossible` (ni fenêtre ni terminal, cas d'un outil piloté par un modèle) :
+« validation impossible ici : lancez vous-même `legal-anonymiser valider <id>` dans un terminal », code 4.
+Sans chemin : `tkinter` absent ou sans affichage donne « Sélecteur de fichier indisponible : lancez
+`legal-anonymiser traiter <chemin>` vous-même » (code 4), un sélecteur annulé « Aucun fichier choisi »
+(code 4).
 
 **Ce que la console affiche** (`sortie.py`, dictionnaire `MESSAGES`) : des comptes (entités, alertes,
 ambiguïtés, points en attente), l'identifiant neutre du contrat et des chemins neutres (`./…` sous le
 dossier courant, `coffre/<id>/…` sous le coffre, sinon `[chemin masqué]`). Jamais un texte du document,
-le nom du fichier original, un chemin absolu ni le message d'une exception imprévue ; les sorties,
-avertissements et journaux de pypdf et spaCy sont absorbés pendant l'extraction et le chargement du
-modèle (`sortie.quiet`). Le chemin choisi n'est jamais affiché ; si l'original est dans le dossier
+le nom du fichier original, un chemin absolu, un fragment d'une ligne d'`ajustements.txt` ni le message
+d'une exception imprévue ; seuls les messages fixes de nos propres modules (dépendance manquante,
+fichier du coffre corrompu) sont relayés tels quels. Tout le passage tourne sous `sortie.quiet` :
+sorties, avertissements et journaux de pypdf et spaCy sont absorbés. Le chemin choisi n'est jamais
+affiché ; si l'original est dans le dossier
 courant, un avertissement sans chemin le signale. `--help` et les erreurs d'arguments affichent
 `legal-anonymiser`, jamais le chemin du script.
 
-**Réidentification** (`reidentification.py`) : chaque `[PLACEHOLDER]` connu de `correspondance.json`
-est remplacé par sa valeur, les autres (`[INCONNU_1]`, `[IMAGE]`) restent tels quels ; le résultat,
-`coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
+**Réidentification** (`reidentification.py`) : seules les clés de `correspondance.json` sont
+substituées (texte exact, la plus longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel
+quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
 
 ## Formats lus (état actuel)
 
@@ -71,8 +88,8 @@ est remplacé par sa valeur, les autres (`[INCONNU_1]`, `[IMAGE]`) restent tels 
 - **Numérisations** : le texte invisible ou recouvert, posé sur une image opaque qui couvre
   au moins 90 % de la page, est lu comme une couche OCR (corps, constat `texte_ocr`) et tient
   lieu de texte. Une page avec image mais sans texte, ou une page couverte par une image
-  avec au plus 200 caractères visibles, est repérée pour l'OCR, qui n'est pas encore
-  branché.
+  avec au plus 200 caractères visibles, passe par l'OCR local (Tesseract, langue `fra`),
+  comme les images JPG et PNG données directement.
 - **Limites PDF** : rectangles couvrants et transparence de l'état graphique ignorés ;
   espaces de couleur Separation et Indexed lus comme du gris ; JavaScript cherché dans les
   actions du catalogue et des liens, chaînes `/Next` comprises, pas dans les actions des
