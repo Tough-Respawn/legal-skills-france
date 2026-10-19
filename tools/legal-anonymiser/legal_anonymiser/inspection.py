@@ -1,5 +1,6 @@
 """Inspection du format : pièges techniques indépendants du contenu juridique."""
 import re
+import unicodedata
 from typing import List, Optional, Sequence
 
 from .modele import Block, Entity, Extracted, Finding
@@ -30,6 +31,7 @@ def clean(extracted: Extracted) -> Extracted:
     findings = list(extracted.findings)
     for b in extracted.blocks:
         text, zw, bidi = strip_traps(b.text)
+        text = unicodedata.normalize("NFC", text)   # noms décomposés d'un PDF (e + accent) recomposés
         if zw or bidi:
             findings.append(Finding("alerte", "caracteres_invisibles", b.location,
                                     f"zero_width={zw} bidi={bidi}"))

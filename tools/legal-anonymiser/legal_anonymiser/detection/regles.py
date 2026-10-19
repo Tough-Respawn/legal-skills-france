@@ -31,6 +31,11 @@ STREET_CTX = (r"(?i:\b(?:demeurant|domicilié(?:e)?|sis(?:e)?|situé(?:e)?|sièg
               r"\b(" + STREET_WORD + STREET_TAIL + POSTCODE + ")")
 NUM_PREFIX = r"(?:(?:n°|numéro|no)\.? ?)?"
 TRIGGERS = r"(?i:contrat|dossier|client|r[ée]f[ée]rence|r[ée]f\.|police|compte|adh[ée]rent|lot|parcelle)"
+# Nom de bâtiment, résidence, lieu-dit : ni forme sociale ni préposition en capitales (« GRAND EST BÂTIMENT SAS »,
+# « BÂTIMENT POUR TROIS MOIS »).
+_NOT_IN_PLACE = (r"(?!(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|À|AU|AUX|EN|PAR|POUR|SUR|SOUS|DANS|AVEC|SANS|CHEZ|DEVANT"
+                 r"|CONTRE|ENTRE|ENVERS|SELON|VERS|APRÈS|AVANT|DONT|QUI|QUE|ET|OU)(?![\w'-]))")
+PLACE_NAME = _NOT_IN_PLACE + W + r"(?: (?:(?:sur|en|de|la|le|sous|lès) )?" + _NOT_IN_PLACE + W + r"){0,3}"
 
 
 def _luhn_ok(digits: str) -> bool:
@@ -83,7 +88,7 @@ RULES: List[Rule] = [
     _r("ADRESSE", STREET_CTX, 1),
     _r("ADRESSE", r"\bBP" + S + r"\d{1,5}\b"),
     _r("ADRESSE", r"\b(?i:appartement|appt\.?|bât(?:iment)?\.?|étage|esc(?:alier)?\.?)" + SP + r"(?=[A-Z]\b|\d)\w{1,6}"),
-    _r("ADRESSE", r"(?i:lieu-dit|résidence|bâtiment) (" + NAME + ")", 1),
+    _r("ADRESSE", r"(?i:lieu-dit|résidence|bâtiment) (" + PLACE_NAME + ")", 1),
     _r("COMMUNE", r"(?<!\d)\d{5} (" + NAME + ")", 1),
     _r("DATE_NAISSANCE", BIRTH, 1),
     _r("LIEU", BIRTH + r" (?i:à) (" + BIRTH_PLACE + ")", 2),
@@ -92,7 +97,8 @@ RULES: List[Rule] = [
     _r("PIECE_IDENTITE", r"(?i:passeport|CNI|carte (?:nationale )?d'identité|titre de séjour|permis(?: de conduire)?)"
        r" ?" + NUM_PREFIX + r"((?=[A-Z0-9]*\d)[A-Z0-9]{6,12})\b", 1),
     _r("NUMERO", r"(?i:cadastr[ée]e? section|section cadastrale) ([A-Z]{1,2}(?: ?" + NUM_PREFIX + r"\d+)?)", 1),
-    _r("NUMERO", r"\b" + TRIGGERS + " " + NUM_PREFIX + r"([A-Z0-9][A-Z0-9\-/_.]*[A-Z0-9])", 1),
+    # Un numéro contient au moins un chiffre : « CONTRAT DE LOCATION », « LE CLIENT PAIE » ne masquent rien.
+    _r("NUMERO", r"\b" + TRIGGERS + " " + NUM_PREFIX + r"((?=[A-Z0-9\-/_.]*\d)[A-Z0-9][A-Z0-9\-/_.]*[A-Z0-9])", 1),
 ]
 
 # Les règles à clé numérique ignorent les références d'articles (art. L. 1234-5).

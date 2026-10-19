@@ -23,12 +23,19 @@ complété par les tâches suivantes.
   espaces de couleur Separation et Indexed lus comme du gris ; JavaScript cherché dans les
   actions du catalogue et des liens, chaînes `/Next` comprises, pas dans les actions des
   pages ni des champs ; autres annotations (surlignage, etc.) non extraites.
+- **Inspection** (`inspection.py`) : caractères de largeur nulle et contrôles bidi retirés et
+  signalés, homoglyphes signalés, texte recomposé en NFC (un nom décomposé d'un PDF, e suivi de
+  l'accent, arrive composé aux détecteurs).
 
 ## Détection (état actuel)
 
 - **Règles** (`detection/regles.py`) : identifiants à forme fixe (IBAN, SIREN, SIRET, NIR,
   TVA, RCS, e-mail, téléphone, adresse, date et lieu de naissance, immatriculation, pièce
   d'identité, n° de contrat). La clé de contrôle type la mention, elle n'exempte jamais.
+  Un numéro après « contrat », « dossier », « client »… contient au moins un chiffre
+  (« CONTRAT DE LOCATION », « LE CLIENT PAIE » : rien) ; le nom après « lieu-dit »,
+  « résidence », « bâtiment » s'arrête avant une forme sociale ou une préposition en capitales
+  (« GRAND EST BÂTIMENT SAS », « BÂTIMENT POUR TROIS MOIS » : rien).
   Naissance (« NÉE LE 2 JUIN 1990 À SAINT-ÉTIENNE »), capital (« 10 000 EUROS ») et RCS
   (« RCS DE LYON … ») sont lus aussi en capitales ; le lieu de naissance est un seul nom, composé
   par trait d'union ou apostrophe, après « Saint » ou un article au plus, suivi au plus de « sur »,
