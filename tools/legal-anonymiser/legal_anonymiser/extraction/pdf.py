@@ -210,7 +210,8 @@ class _PageScan:
                 findings.extend(Finding("attention", code, location) for code in flags)
         if ocr:
             findings.append(Finding("info", "texte_ocr", location))
-        if self.images and (not blocks or (scans and visible_on_scan <= _SCAN_TEXT)):
+        # Une couche OCR présente tient lieu de texte : pas de seconde reconnaissance.
+        if self.images and not ocr and (not blocks or (scans and visible_on_scan <= _SCAN_TEXT)):
             findings.append(Finding("info", "page_sans_texte", location))  # OCR : tâche 5
         return blocks, findings, ocr
 
