@@ -390,6 +390,8 @@ def extract_pdf(path: Path, workdir: Path) -> Extracted:
                     page_blocks.append(Block(text, location, "corps"))
                     page_findings.append(Finding("info", "texte_ocr", location, "ocr_local"))
                     page_ocr = True
+                else:
+                    page_findings.append(Finding("attention", "ocr_vide", location))
             notes, note_findings = _annotations(page, location)
             blocks += page_blocks + notes
             findings += page_findings + note_findings

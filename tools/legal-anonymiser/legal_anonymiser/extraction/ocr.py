@@ -33,27 +33,36 @@ def available() -> bool:
         if binary:
             try:
                 out = subprocess.run([binary, "--list-langs"], capture_output=True, timeout=60)
-                ok = _LANG in out.stdout.decode("utf-8", "replace").split()
+                # selon les versions, la liste sort sur stdout ou sur stderr
+                text = (out.stdout + b"\n" + out.stderr).decode("utf-8", "replace")
+                ok = _LANG in text.split()
             except (OSError, subprocess.SubprocessError):
                 ok = False
         _cache["ok"] = ok
     return _cache["ok"]
 
 
-def require() -> None:
-    if not available():
+def require() -> str:
+    """Chemin du binaire, ou MissingDependency avec le message adapté à la cause."""
+    binary = _binary()
+    if binary is None:
         raise MissingDependency(_HINT)
+    if not available():
+        raise MissingDependency("La langue fra de Tesseract est introuvable : l'installer, "
+                                "puis définir TESSDATA_PREFIX vers son dossier si besoin.")
+    return binary
 
 
 def image_to_text(image: Path) -> str:
     """Texte reconnu dans une image ; la sortie d'erreur n'est jamais relayée."""
-    require()
+    binary = require()
     try:
-        done = subprocess.run([_binary(), str(image), "stdout", "-l", _LANG],
+        done = subprocess.run([binary, str(image), "stdout", "-l", _LANG],
                               capture_output=True, check=True, timeout=_TIMEOUT)
     except (OSError, subprocess.SubprocessError) as exc:
         raise Unreadable("La reconnaissance de texte a échoué.") from exc
     return done.stdout.decode("utf-8", "replace").strip()
+
 
 
 def page_text(page: Any, workdir: Path) -> str:
@@ -62,17 +71,18 @@ def page_text(page: Any, workdir: Path) -> str:
     tmp.mkdir(parents=True, exist_ok=True)
     folder = Path(tempfile.mkdtemp(dir=str(tmp)))
     try:
-        parts = []
-        for i, img in enumerate(page.images):
-            try:
+        targets = []
+        try:
+            for i, img in enumerate(page.images):
                 pil = img.image
                 if pil.mode not in ("L", "RGB"):
                     pil = pil.convert("RGB")
                 target = folder / ("%d.png" % i)
                 pil.save(str(target))
-            except Exception as exc:  # image non décodable (Pillow, filtres rares)
-                raise Unreadable("Image du PDF illisible.") from exc
-            parts.append(image_to_text(target))
+                targets.append(target)
+        except Exception as exc:  # JPX, CCITT, filtres rares : message générique
+            raise Unreadable("Image du PDF illisible.") from exc
+        parts = [image_to_text(t) for t in targets]
         return "\n".join(p for p in parts if p)
     finally:
         shutil.rmtree(str(folder), ignore_errors=True)

@@ -32,8 +32,10 @@ def _image(path: Path, workdir: Path) -> Extracted:
     from . import ocr
     ocr.require()
     text = ocr.image_to_text(path)
-    blocks = [Block(text, "image 1", "corps")] if text else []
-    return Extracted(blocks, {}, [Finding("info", "texte_ocr", "image 1", "ocr_local")], True)
+    if not text:
+        return Extracted([], {}, [Finding("attention", "ocr_vide", "image 1")], True)
+    return Extracted([Block(text, "image 1", "corps")], {},
+                     [Finding("info", "texte_ocr", "image 1", "ocr_local")], True)
 
 
 _DISPATCH = {".docx": _docx, ".pdf": _pdf, ".jpg": _image, ".jpeg": _image, ".png": _image}
