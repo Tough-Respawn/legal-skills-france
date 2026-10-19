@@ -13,6 +13,7 @@ le possessif (« EXERCER SA MISSION »), pas une forme.
 from __future__ import annotations
 
 import re
+from itertools import dropwhile
 from typing import List, Optional, Set, Tuple
 
 from .. import texte
@@ -36,7 +37,6 @@ CIVILITY = (r"(?:(?:M|MM|MME|MR|MLLE)\.|(?:Mr|Mme|Mmes|Mlle|Dr|Pr|MME|MR|MLLE|PR
             r"Mademoiselle|MONSIEUR|MADAME|MADEMOISELLE|Me|Maître|MAÎTRE|Docteur|Professeur"
             r"|M(?=" + SP + r"+" + ALLCAPS + SP + r"+" + ALLCAPS + r"))")   # M sans point : « M JEAN DUPONT »
 FORMS = r"(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|SCP|SELARL|SELAS|SCM|GIE|SCEA|EARL|SCOP)"
-ART_WORDS = r"(?i:le|la|les|un|une|de|du|des|à|au|aux|l['’]|d['’])"
 # Prépositions en capitales : hors d'un nom seulement devant un mot en capitales (« AVANT LE », pas « M. AVANT né »).
 PREP_CORE = r"(?:À|AU|AUX|EN|PAR|POUR|SUR|DANS|AVEC|CHEZ|DEVANT|CONTRE|ENTRE|ENVERS|SELON|VERS|DONT|QUI|QUE)"
 PREP = r"(?:" + PREP_CORE + r"|SOUS|SANS|APRÈS|AVANT)" + SP + r"+[" + UP + "]"
@@ -63,8 +63,18 @@ COMPANY = CO_CAP + r"(?:" + JOIN_C + CO_CAP + r"){0,5}"
 # Nom placé avant sa forme (« SANS SOUCI SAS », « DUPONT ET FILS SARL ») : jamais ouvert par un article ou une
 # préposition devant un mot capitalisé (« LA SOCIÉTÉ SAS X », « Pour SCI X », « CONSENTI PAR X SAS ») ; les
 # articles restent admis au milieu (« LES HAUTS DE VALMORIN SCI ») ; « SANS », « SOUS » peuvent l'ouvrir.
-FUNC_START = (r"(?:(?i:le|la|les|un|une|de|du|des|a|à|au|aux|en|par|pour|sur|dans|avec|chez|devant|contre|entre"
-              r"|envers|selon|vers|dont|qui|que|et|ou)" + SP + r"+|[dlDL]['’])[" + UP + "]")
+FUNC_START = (r"(?i:le|la|les|un|une|de|du|des|a|à|au|aux|en|par|pour|sur|dans|avec|chez|devant|contre|entre"
+              r"|envers|selon|vers|dont|qui|que|et|ou)" + SP + r"+[" + UP + "]")   # « L'Oréal SA » reste admis
+# Mots d'ouverture retirés en tête d'un nom placé avant sa forme (« CONTRAT X SAS », « Gérant SARL X ») ;
+# un reste fait seulement de mots d'annonce (« LA SOCIÉTÉ SAS X ») n'est pas un nom.
+LEAD_STRIP = {"entre", "contrat", "pour", "gerant", "president", "directeur", "la", "le", "les", "l", "de", "du",
+              "des", "a", "par", "contre"}
+GENERIC = {"societe", "association", "entreprise", "groupe", "cabinet", "ets", "etablissements"}
+# « SA » en capitales : forme sociale si un marqueur de société suit dans les 80 caractères ou si « la société »,
+# « la », « entre », « et » précède ; sinon possessif devant un mot connu en capitales (« EXERCER SA MISSION »).
+SA_MARK_RX = re.compile(r"(?i:,|au" + SP + r"+capital|immatricul|rcs|siren|siret|dont" + SP + r"+le" + SP
+                        + r"+si[èe]ge|repr[ée]sent[ée]e?" + SP + r"+par|ci-apr[èe]s)")
+SA_LEAD_RX = re.compile(r"(?i:la" + SP + r"+soci[ée]t[ée]|la|entre|et)" + SP + r"+$")
 CO_CAP_ANY = r"(?!" + FORMS + r"\b)" + CAP_ANY
 CO_START = r"(?!" + FUNC_START + r")" + CO_CAP_ANY
 CO_IN = r"(?!" + PREP_CORE + SP + r"+[" + UP + r"])" + CO_CAP_ANY
@@ -131,18 +141,33 @@ def role(term: str, vocab: Set[str]) -> Optional[str]:
 
 
 def company(text: str, s: int, e: int, vocab: Set[str], loose: bool, before: bool = False) -> Optional[Span]:
-    """Nom de société dans (s, e), ou None s'il n'a que des mots vides ou connus. Après une forme sociale
-    (loose), le nom reste entier (« SARL Expert Conseil ») ; sinon les mots connus en tête sont retirés
-    (« CONTRAT DUVALCOURT CONSEIL SAS », « Société Civile Immobilière X ») et un nom tout connu est
-    rejeté (« LA SOCIÉTÉ », « Gérant »). Un nom placé avant sa forme (before) doit la toucher."""
+    """Nom de société dans (s, e), ou None. Après une forme sociale (loose), le nom reste entier
+    (« SARL Expert Conseil »). Avant sa forme (before), il doit la toucher, perd ses mots d'ouverture
+    (« CONTRAT DUVALCOURT CONSEIL SAS ») et n'est pas fait que de mots d'annonce (« LA SOCIÉTÉ SAS X ») ;
+    les mots courants y restent admis (« Société Générale SA »). Après un mot d'annonce (« Société X »),
+    les mots connus en tête sont retirés et un nom tout connu est rejeté (« la dite Société »)."""
     words = list(WORD_RX.finditer(text, s, e))
     real = [w for w in words if stem(w.group()) not in STOPWORDS]
+    if before:
+        if not real or real[-1].end() != e:
+            return None   # « DUPONT ET FILS ET LA » : un article sépare le nom de la forme
+        kept = list(dropwhile(lambda w: stem(w.group()) in LEAD_STRIP, real))
+        if not kept or all(stem(w.group()) in GENERIC for w in kept):
+            return None
+        return kept[0].start(), e
     if not real or (not loose and all(known(w.group(), vocab) for w in real)):
         return None
-    if before and real[-1].end() != e:
-        return None   # « DUPONT ET FILS ET LA » : un article sépare le nom de la forme
     start = words[0].start() if loose else next(w.start() for w in words if not known(w.group(), vocab))
     return start, real[-1].end()
+
+
+def _possessive(text: str, m: "re.Match[str]", vocab: Set[str]) -> bool:
+    """Vrai si la forme du candidat est un « SA » possessif (« EXERCER SA MISSION »), pas une société."""
+    fs, fe = m.span("form")
+    nxt = WORD_RX.search(text, fe)
+    if m.group("form") != "SA" or not nxt or not nxt.group().isupper() or not known(nxt.group(), vocab):
+        return False
+    return not SA_MARK_RX.search(text, fe, fe + 80) and not SA_LEAD_RX.search(text, 0, fs)
 
 
 def _clear(text: str, s: int, e: int, people: List[Span]) -> Span:
@@ -186,17 +211,14 @@ def names(text: str, vocab: Set[str], bare: bool, skip: List[Span]) -> List[Cand
         if not all(known(w, vocab) for w in tokens(m.group("name"))):   # pas « la dite Société »
             cands.append((m.start("name"), m.end(), m.start(), m.end(), "ALIAS"))
     people = [(c[0], c[1]) for c in cands]
-    possessive = set()   # positions d'un « SA » possessif
     for m in CO_PRE_RX.finditer(text):
-        first = WORD_RX.match(text, m.start("co")).group()
-        if m.group("form") == "SA" and first.isupper() and known(first, vocab):
-            possessive.add(m.start("form"))   # « EXERCER SA MISSION »
+        if m.group("form") and _possessive(text, m, vocab):
             continue
         span = company(text, *_clear(text, *m.span("co"), people), vocab, m.group("form") is not None)
         if span:
             cands.append(span + (m.start(), m.end(), "SOCIETE"))
     for m in CO_POST_RX.finditer(text):
-        if m.start("form") in possessive:
+        if _possessive(text, m, vocab):
             continue
         span = company(text, *_clear(text, *m.span("co"), people), vocab, False, before=True)
         if span:

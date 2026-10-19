@@ -23,8 +23,8 @@ from typing import List, Optional, Set, Tuple
 
 from .. import texte
 from ..modele import Block, Mention
-from .noms import (ART_WORDS, CIVILITY, COMPANY, FORMS, ROLE_WORDS, UP, WORD_RX, Cand, Span,  # noqa: F401
-                   cells, known, names, role, stem)
+from .noms import (CIVILITY, COMPANY, FORMS, ROLE_WORDS, UP, Cand, Span,  # noqa: F401
+                   cells, known, names, role, tokens)
 from .regles import NAME as PLACE, SP
 
 ART = r"(?:(?:le|la|les|un|une|Le|La|Les|Un|Une)" + SP + r"+|[lL]['’])"
@@ -51,8 +51,8 @@ POSTAL_RX = re.compile(r"\d{5}" + SP + r"?" + PLACE)
 # jamais dans « RUE PIERRE ET MARIE CURIE ».
 ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
                           r"|d['’](?:une|autre)" + SP + r"+part|de" + SP + r"+nationalité|agissant|en" + SP
-                          + r"+qualité)|," + SP + r"*(?:Et|ET)\b|" + SP + r"+(?:Et|ET|et)" + SP + r"+(?="
-                          + CIVILITY + "|" + FORMS + r"\b)")
+                          + r"+qualité)|," + SP + r"*(?:Et|ET)\b|" + SP + r"+(?:Et|ET|et)" + SP + r"+(?=(?:"
+                          + CIVILITY + "|" + FORMS + r")(?:" + SP + r"|$))")   # pas « Terre et Mer »
 ADDR_NEXT_RX = re.compile(r"," + SP + r"*[" + UP + r"0-9][^,;\n]*")
 _ADDR_REACH = 120
 
@@ -64,14 +64,12 @@ ARTICLE_GAP_RX = re.compile(r"(?i:(?:la|le|les)" + SP + r"+|l['’])?")
 END_RX = re.compile(
     r"(?:^|(?<=[.:;]))\s*(?i:il\s+(?:a\s+été|est)\s+(?:préalablement\s+)?(?:convenu|arrêté|exposé)"
     r"|préambule|ceci\s+exposé|exposé\b|art(?:icle|\.)\s*(?:1(?!\d)|1er|premier|i\b))")
-# Marqueur de signature en début de ligne (« Fait à la demande » exclu), jamais cité dans une clause
-# (« lu et approuvé » entre guillemets) ; « Fait à <Lieu> » après une fin de phrase passe par _signed.
-SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b(?!" + SP + r"+" + ART_WORDS + r"\b)"
-                       r"|lu\s+et\s+approuvé|signatures?\b)")
+# Marqueur de signature en début de ligne, jamais cité dans une clause (« lu et approuvé » entre
+# guillemets) ; le lieu de « Fait à » est contrôlé par _place (« Fait à la demande du Bailleur » exclu).
+SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b(?P<place>[^,;.\n]*)|lu\s+et\s+approuvé|signatures?\b)")
 FAIT_MID_RX = re.compile(r"(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
 HEADING_RX = re.compile(r"\s*(?:ANNEXE|Annexe|ARTICLE|Article|TITRE|Titre|CHAPITRE|Chapitre)\b")
 FAIT_RX = re.compile(r"\b(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
-_PLACE_STOP = {"le", "la", "les", "un", "une", "de", "du", "des", "a", "au", "aux", "en", "par", "pour", "sur"}
 
 
 def load_vocab() -> Set[str]:
@@ -80,16 +78,20 @@ def load_vocab() -> Set[str]:
     return {texte.norm(line) for line in raw.splitlines() if line.strip() and not line.lstrip().startswith("#")}
 
 
-def _place(name: str, vocab: Set[str]) -> bool:
-    """Lieu plausible après « Fait à » : ni article ni préposition en tête (« LA DEMANDE DU BAILLEUR »),
-    pas seulement des mots connus (« TITRE »)."""
-    words = WORD_RX.findall(name)
-    return bool(words) and stem(words[0]) not in _PLACE_STOP and not all(known(w, vocab) for w in words)
+def _place(name: str, vocab: Set[str], blank: bool = False) -> bool:
+    """Lieu plausible après « Fait à » : un article en tête est admis (« La Rochelle », « L'Isle-Adam »),
+    mais pas un lieu fait seulement de mots connus (« LA DEMANDE DU BAILLEUR », « TITRE GRATUIT »).
+    blank : un lieu sans mot (« Fait à ........ ») compte comme un lieu."""
+    words = tokens(name)
+    return blank if not words else not all(known(w, vocab) for w in words)
 
 
 def _signed(text: str, vocab: Set[str]) -> bool:
     """Vrai si une ligne ouvre la zone de signature (début de ligne, ou « Fait à <Lieu> » après une phrase)."""
-    return bool(SIGNED_RX.search(text)) or any(_place(m.group(1), vocab) for m in FAIT_MID_RX.finditer(text))
+    for m in SIGNED_RX.finditer(text):
+        if m.group("place") is None or _place(m.group("place"), vocab, blank=True):
+            return True
+    return any(_place(m.group(1), vocab) for m in FAIT_MID_RX.finditer(text))
 
 
 def _roles(text: str) -> List[Tuple[int, int, int, int]]:
