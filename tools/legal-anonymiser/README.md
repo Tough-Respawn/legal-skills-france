@@ -192,3 +192,11 @@ Vérifiées à la source le 2026-10-19. Le projet ne redistribue aucune dépenda
 | Tesseract | Apache 2.0 | https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE | 2026-10-19 |
 
 PyMuPDF est exclu (AGPL).
+
+### Fichier d'ajustements (`ajustements.py`)
+
+Une décision par ligne (`A…` alerte, `M…` ambiguïté, `C…` commune), clé relue depuis les champs
+visibles `localisation | rang` (la localisation peut contenir « | »). Un `#` en début de ligne, même
+indenté, est un commentaire ; un BOM est toléré. Une ligne libre `masquer: texte` règle aussi, à la
+réécriture, toute alerte non traitée portant le même texte (elle repasse en `masquer`). Les décisions
+dont le texte a changé sont listées sous « Décisions périmées ».

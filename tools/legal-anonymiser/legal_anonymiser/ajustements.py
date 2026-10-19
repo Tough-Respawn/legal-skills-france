@@ -25,6 +25,7 @@ NEW = "nouveau"
 STALE = "# Décisions périmées (texte modifié) :"
 _HEAD_RX = re.compile(r"^([AMC])\d+ (\S+) ")
 _QUOTE_RX = re.compile(r"«((?:[^«»]|««|»»)*)»")
+_CTRL_RX = re.compile("[\x00-\x1f\x7f-\x9f  ]")
 _FREE_RX = re.compile(r"^(masquer|demasquer):\s*(.+?)\s*$")
 
 
@@ -36,13 +37,18 @@ def _name(path: Path) -> str:
     return "coffre/%s/ajustements.txt" % path.parent.name
 
 
+def _flat(s: str) -> str:
+    """Texte sur une seule ligne : contrôles et séparateurs de ligne remplacés par une espace."""
+    return _CTRL_RX.sub(" ", s)
+
+
 def _quote(s: str) -> str:
-    return "« %s »" % s.replace("«", "««").replace("»", "»»")
+    return "« %s »" % _flat(s).replace("«", "««").replace("»", "»»")
 
 
 def _lines(path: Path) -> List[str]:
     try:
-        return path.read_text(encoding="utf-8").splitlines()
+        return path.read_text(encoding="utf-8-sig").splitlines()
     except (OSError, UnicodeDecodeError):
         raise AdjustmentsError("Fichier d'ajustements illisible : %s." % _name(path)) from None
 
@@ -56,7 +62,9 @@ def _parse(line: str):
     if not (h and q):
         return None
     text = q.group(1).strip().replace("««", "«").replace("»»", "»")
-    return h.group(1), h.group(2), text, [x.strip() for x in line[q.end():].split(" | ")[1:]]
+    rest = line[q.end():]   # " | localisation | rang | motif" ; la localisation peut contenir " | "
+    fields = rest[3:].rsplit(" | ", 2) if rest.startswith(" | ") else []
+    return h.group(1), h.group(2), text, [x.strip() for x in fields]
 
 
 def _valid(kind: str, choice: str) -> bool:
@@ -66,9 +74,10 @@ def _valid(kind: str, choice: str) -> bool:
 def read(path: Path) -> Decisions:
     d = Decisions()
     for line in _lines(path):
-        if not line.strip() or line.startswith("#"):
+        line = line.strip()
+        if not line or line.startswith("#"):
             continue
-        p = _parse(line.strip())
+        p = _parse(line)
         if p is None:
             raise AdjustmentsError("Ligne mal formée dans %s : %s." % (_name(path), line.split(" ")[0][:20]))
         kind, choice, text, fields = p
@@ -95,7 +104,8 @@ def read(path: Path) -> Decisions:
 def pending(path: Path) -> int:
     n = 0
     for line in _lines(path):
-        p = None if line.startswith("#") else _parse(line.strip())
+        line = line.strip()
+        p = None if line.startswith("#") else _parse(line)
         n += bool(p) and p[0] != "free" and not _valid(p[0], p[1])
     return n
 
@@ -103,6 +113,8 @@ def pending(path: Path) -> int:
 def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity], communes: Sequence[Entity],
           previous: Decisions, *, cid: str, blocks: Optional[Sequence[Block]] = None,
           masked: Optional[Sequence[Block]] = None) -> None:
+    if (ambiguities and blocks is None) or (alerts and masked is None):
+        raise AdjustmentsError("Réécriture impossible : texte d'origine ou texte masqué manquant (%s)." % _name(path))
     out = ["# legal-france ajustements v1, contrat %s" % cid,
            "# Alertes : remplacer ? par masquer ou garder."]
     seen, ranks = set(), Ranks(masked) if alerts else None
@@ -110,7 +122,7 @@ def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity],
         k = ranks.key(a.block, a.start, a.end)
         seen.add(k)
         choice = "garder" if k in previous.keep else "masquer" if a.text in previous.mask_more else "?"
-        out.append("%s %s %s | %s | %d | %s" % (a.id, choice, _quote(a.text), k[0], k[2], a.reason))
+        out.append("%s %s %s | %s | %d | %s" % (a.id, choice, _quote(a.text), k[0], k[2], _flat(a.reason).replace(" | ", " / ")))
     out.append("# Mentions ambiguës : remplacer ? par un des placeholders proposés, ou nouveau.")
     ranks = Ranks(blocks) if ambiguities else None
     for m in ambiguities:
