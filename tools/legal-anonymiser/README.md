@@ -34,17 +34,22 @@ complété par les tâches suivantes.
   parties numérotées ; chaque partie reçoit le rôle défini par « ci-après » ou
   « ci-dessous » (rôle connu, féminin ou pluriel compris, ou mot du vocabulaire) ou annoncé
   par « LE SALARIÉ : », ses représentants (« représenté(e) par », plusieurs possibles) et ses
-  noms de naissance ou d'usage (« née MARTIN », « épouse LEROY »). Partout : civilité suivie
-  d'un nom (civilité incluse, particules et capitales comprises), société désignée par sa
-  forme (la forme sociale reste visible), adresse après « demeurant », « domicilié », « dont
-  le siège est », « sis », « résidant », « habitant ». Les titres (« M. le Maire », « Maître
-  d'Œuvre ») ne sont pas pris pour des noms. Après une ligne qui commence par « Fait à »,
-  « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un lieu après une fin de
-  phrase, ou une
-  ligne de légendes (« Le Locataire  Le Bailleur ») : noms des blocs de signature, colonnes
-  comprises, commune de « Fait à »,
-  et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un rôle connu ni au
-  vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
+  noms de naissance ou d'usage (« née MARTIN », « épouse LEROY »). Partout (candidats de
+  noms dans `detection/noms.py`) : civilité suivie d'un nom (civilité incluse, particules et
+  capitales comprises), société désignée par sa forme (la forme sociale reste visible), adresse
+  après « demeurant », « domicilié », « dont le siège est », « sis », « résidant »,
+  « habitant » (arrêt sur « et » devant une civilité ou une forme sociale). Quand une forme
+  sociale a un nom plausible de chaque côté (« LA SOCIÉTÉ SAS DUVALCOURT CONSEIL »,
+  « DUVALCOURT CONSEIL SAS IMMATRICULÉE »), chaque côté est jugé seul : un candidat fait
+  seulement de mots du vocabulaire est rejeté, un nom placé avant sa forme ne commence pas par
+  un article ou une préposition devant un mot capitalisé, et « et », « & » lient les mots d'un
+  nom (« Dupont et Fils SARL »). « SA » devant un mot connu en capitales est le possessif. Les
+  titres (« M. le Maire », « Maître d'Œuvre ») ne sont pas pris pour des noms. Après une ligne
+  qui commence par « Fait à », « Lu et approuvé » ou « Signature », un « Fait à » suivi d'un
+  lieu après une fin de phrase (jamais « Fait à la demande du Bailleur »), ou une ligne de
+  légendes (« Le Locataire  Le Bailleur ») : noms des blocs de signature, colonnes comprises,
+  commune de « Fait à », et `[IMAGE]` devient `[SIGNATURE]`. Un terme défini qui n'est ni un
+  rôle connu ni au vocabulaire (« ci-après Duvalcourt Conseil ») est masqué comme un nom.
 - **Vocabulaire** (`data/vocabulaire.txt`) : environ 400 formes juridiques et courantes
   (mois, jours, intitulés, rôles, codes, institutions, formes sociales), sans prénom, sans
   nom d'entreprise réelle, sans nom de ville sauf France.

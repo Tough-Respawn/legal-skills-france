@@ -4,10 +4,11 @@ Le bloc de comparution (« Entre les soussignés » jusqu'à « Il a été conve
 est lu ligne à ligne et découpé en parties : chaque nom de partie reçoit un
 index `party`, le rôle défini par « ci-après » (ou annoncé par « LE SALARIÉ : »),
 ses représentants et ses noms de naissance ou d'usage. Partout : civilité suivie
-d'un nom, société désignée par sa forme, adresse après « demeurant », « dont le
-siège est »… Après « Fait à », « Lu et approuvé » ou « Signature » en début de
-ligne, ou « Fait à <Lieu> » (lieu capitalisé) après une fin de phrase : noms des
-blocs de signature (colonnes comprises) et commune de « Fait à ». Les
+d'un nom, société désignée par sa forme (noms.py), adresse après « demeurant »,
+« dont le siège est »… Après « Fait à », « Lu et approuvé » ou « Signature » en
+début de ligne, ou « Fait à <Lieu> » après une fin de phrase (lieu qui ne commence
+ni par un article ni par une préposition et n'est pas fait que de mots connus) :
+noms des blocs de signature (colonnes comprises) et commune de « Fait à ». Les
 chevauchements avec les règles (regles.py) ne sont pas résolus ici.
 
 La civilité est incluse dans la mention ; la forme sociale (SAS, SCI…) en est
@@ -22,69 +23,9 @@ from typing import List, Optional, Set, Tuple
 
 from .. import texte
 from ..modele import Block, Mention
+from .noms import (ART_WORDS, CIVILITY, COMPANY, FORMS, ROLE_WORDS, UP, WORD_RX, Cand, Span,  # noqa: F401
+                   cells, known, names, role, stem)
 from .regles import NAME as PLACE, SP
-
-ROLE_WORDS = frozenset({
-    "BAILLEUR", "LOCATAIRE", "EMPLOYEUR", "SALARIE", "PRESTATAIRE", "CLIENT", "VENDEUR",
-    "ACHETEUR", "CAUTION", "MANDANT", "MANDATAIRE", "PRETEUR", "EMPRUNTEUR", "REPRESENTANT",
-    "ACQUEREUR", "CEDANT", "CESSIONNAIRE", "GARANT", "COLOCATAIRE", "PRENEUR",
-})
-# Féminins et pluriels ramenés au masculin singulier (sur la forme texte.norm).
-_SUFFIXES = (("eresse", "eur"), ("euse", "eur"), ("trice", "teur"), ("es", ""), ("e", ""), ("s", ""))
-_COLLECTIVE = {"PARTIE", "PARTIES"}  # « ci-après ensemble les Parties » : pas un rôle
-_STOPWORDS = {"de", "du", "des", "la", "le", "les", "l", "d", "a", "et", "en", "au", "aux", "un", "une"}
-
-UP = "A-ZÀ-ÖØ-ÞŒ"
-LOW = "a-zß-öø-ÿœ"
-ALLCAPS = r"[" + UP + r"](?:[" + UP + r"]|['’-][" + UP + r"])+"
-FIRST = r"[" + UP + r"][" + LOW + r"]+(?:['’-][" + UP + r"]?[" + LOW + r"]+)*"
-CIVILITY = (r"(?:(?:M|MM|MME|MR|MLLE)\.|(?:Mr|Mme|Mmes|Mlle|Dr|Pr|MME|MR|MLLE|PR)\.?|Monsieur|Madame|"
-            r"Mademoiselle|MONSIEUR|MADAME|MADEMOISELLE|Me|Maître|MAÎTRE|Docteur|Professeur"
-            r"|M(?=" + SP + r"+" + ALLCAPS + SP + r"+" + ALLCAPS + r"))")   # M sans point : « M JEAN DUPONT »
-FORMS = r"(?:SAS|SASU|SARL|EURL|SA|SCI|SNC|SCP|SELARL|SELAS|SCM|GIE|SCEA|EARL|SCOP)"
-# Prépositions en capitales : hors d'un nom seulement quand un autre mot les suit (« AVANT LE », pas « M. AVANT »).
-PREP = (r"(?:À|AU|AUX|EN|PAR|POUR|SUR|SOUS|DANS|AVEC|CHEZ|DEVANT|CONTRE|ENTRE|ENVERS|SELON|VERS|SANS|APRÈS|AVANT"
-        r"|DONT|QUI|QUE)" + SP + r"+(?!" + FORMS + r"\b)[^\W\d_]")
-CONTEXT = (r"(?i:née?s?|épouse|veuve|divorcée?|dite?|demeurant|domiciliée?s?|représentée?s?"
-           r"|ci-après|ci-dessous)\b")
-# Mot capitalisé (Jean-Pierre, N'Diaye, DUPONT, LE) : ni « Et », ni civilité, ni « LE » d'une date (LE 3 MARS).
-CAP_ANY = (r"(?!(?:Et|ET|Ou|OU)\b)(?!" + CONTEXT + r")(?!" + CIVILITY + "(?:" + SP + r"|$))"
-           r"(?!(?i:le|la|les|de|du|des)" + SP + r"+\d)[" + UP + r"][^\W\d_]*(?:['’-][^\W\d_]+)*")
-CAP = r"(?!" + PREP + r")" + CAP_ANY
-PARTICLES = r"(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter|le|la)"
-JOIN_P = SP + r"(?:" + PARTICLES + SP + r"){0,2}(?:[dl]['’])?"
-# Particule en tête de nom (M. de Villiers, Mme d'Arcy) ; jamais « le », « la », « l' » seuls (M. le Maire).
-LEAD_P = (r"(?:(?:de|du|des|da|dos|di|del|el|al|ben|bin|van|von|der|den|ter)" + SP + r"+(?:" + PARTICLES + SP
-          + r"+)?(?:[dl]['’])?|d['’])")
-JOIN_C = SP + r"(?:(?:de|du|des|la|le|les|et|&|au|aux|en|sur)" + SP + r")?(?:[dl]['’])?"
-PERSON = CAP + r"(?:" + JOIN_P + CAP + r"){0,3}"
-CO_CAP = r"(?!" + FORMS + r"\b)" + CAP  # la forme sociale reste hors du nom
-COMPANY = CO_CAP + r"(?:" + JOIN_C + CO_CAP + r"){0,5}"
-# Nom placé avant sa forme sociale (« SANS SOUCI SAS ») : la forme borne le nom, les prépositions y sont admises.
-CO_CAP_ANY = r"(?!" + FORMS + r"\b)" + CAP_ANY
-COMPANY_BEFORE_FORM = CO_CAP_ANY + r"(?:" + JOIN_C + CO_CAP_ANY + r"){0,5}"
-_BEFORE_FORM = {"la", "le", "les", "de", "du", "des", "l", "a", "par", "contre", "entre"}  # « DE LA SARL X »
-
-CIVIL_RX = re.compile(r"(?<![\w.])(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?(?P<civ>" + CIVILITY + ")"
-                      + SP + r"+(?P<lead>" + LEAD_P + r")?(?P<name>" + PERSON + ")")
-ALIAS_RX = re.compile(r"(?<![\w-])(?i:née|nee|épouse|epouse|veuve|divorcée|divorcee|dite?)" + SP
-                      + r"+(?P<name>" + PERSON + ")")
-NUMBER_BEFORE_RX = re.compile(r"(?:\d|\b(?i:un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|vingt|cent))"
-                              + SP + r"*$")   # « 2 M DE HAUTEUR » : M est une unité
-CO_PRE_RX = re.compile(
-    r"(?<!\w)(?:(?:[Ll]a|LA)" + SP + r"+(?:société|Société|SOCIÉTÉ)|[Ll]['’](?:association|Association|ASSOCIATION)"
-    r"|Société|SOCIÉTÉ|Sté|Ets\.?|Établissements|Etablissements|Association|(?P<form>" + FORMS + r")\b)"
-    + SP + r"+(?P<co>" + COMPANY + ")")
-CO_POST_RX = re.compile(r"(?<![\w'’-])(?P<co>" + COMPANY_BEFORE_FORM + ")" + SP + r"+(?P<form>" + FORMS + r")\b")
-# Nom sans civilité : DUPONT Jean, Jean DUPONT ; seulement en contexte (comparution, signature, né le).
-BARE_RX = re.compile(
-    r"(?<![\w'’-])(?:" + ALLCAPS + r"(?:" + SP + ALLCAPS + r")?(?:" + SP + FIRST + r"){1,2}"
-    r"|" + FIRST + r"(?:" + SP + FIRST + r")?(?:" + SP + ALLCAPS + r"){1,2})(?![\w'’-])")
-BORN_RX = re.compile(r"\s*,?\s*n[ée]e?" + SP + r"+le\b")
-LINE_NAME_RX = re.compile(SP + r"*(" + CAP + r"(?:" + JOIN_P + CAP + r"){1,3})" + SP + r"*(?:[,(–-].*)?$")
-CELL_RX = re.compile(r"[^\t \u00a0\u202f]+(?:[ \u00a0\u202f][^\t \u00a0\u202f]+)*")  # colonnes : tabulation ou 2 espaces
-CAPTION_LEAD_RX = re.compile(r"\s*(?i:(?:pour\s+)?(?:le|la|les|l['’])\s*([^\W\d_]+))\s*[,:]?\s*")
-SIG_CAPTION_RX = re.compile(r"\s*(?i:signatures?(?:\s+des\s+parties)?|pour\s+[^.]{1,60})\s*:?\s*")
 
 ART = r"(?:(?:le|la|les|un|une|Le|La|Les|Un|Une)" + SP + r"+|[lL]['’])"
 ROLE_RX = re.compile(
@@ -106,29 +47,31 @@ ADDR_RX = re.compile(
     + r"+est(?:" + SP + r"+situé|" + SP + r"+sis)?(?:" + SP + r"+au|" + SP + r"+à)?|sise?(?:" + SP + r"+à|"
     + SP + r"+au)?|résidant|habitant)" + SP + r"+(?i:(?:ensemble|au|à|aux)" + SP + r"+)?")
 POSTAL_RX = re.compile(r"\d{5}" + SP + r"?" + PLACE)
+# Arrêt sur « , Et Mme Y », ou « ET » devant une civilité ou une forme sociale même sans virgule ;
+# jamais dans « RUE PIERRE ET MARIE CURIE ».
 ADDR_STOP_RX = re.compile(r"[;\n]|,?" + SP + r"*\b(?i:née?s?\b|représenté|ci-après|ci-dessous|immatricul"
                           r"|d['’](?:une|autre)" + SP + r"+part|de" + SP + r"+nationalité|agissant|en" + SP
-                          + r"+qualité)|," + SP + r"*(?:Et|ET)\b")   # « , Et Mme Y » ; pas « RUE PIERRE ET MARIE CURIE »
+                          + r"+qualité)|," + SP + r"*(?:Et|ET)\b|" + SP + r"+(?:Et|ET|et)" + SP + r"+(?="
+                          + CIVILITY + "|" + FORMS + r"\b)")
 ADDR_NEXT_RX = re.compile(r"," + SP + r"*[" + UP + r"0-9][^,;\n]*")
 _ADDR_REACH = 120
 
-START_RX = re.compile(r"\s*(?i:entre)(?:(?i:\s+les\s+soussign|\s+d['’](?:une|autre)\s+part)|\s*[:,]|\s*$)")
+START_RX = re.compile(r"\s*(?i:entre)(?:(?i:\s+les\s+(?:parties\s+)?soussign|\s+d['’](?:une|autre)\s+part)"
+                      r"|\s*[:,]|\s*$)")
 # « Entre la société X », « ENTRE LA SARL X », « Entre M. X » : ouvre seulement si un nom suit (_opens).
 START_NAME_RX = re.compile(r"\s*(?i:entre)" + SP + r"+")
 ARTICLE_GAP_RX = re.compile(r"(?i:(?:la|le|les)" + SP + r"+|l['’])?")
 END_RX = re.compile(
     r"(?:^|(?<=[.:;]))\s*(?i:il\s+(?:a\s+été|est)\s+(?:préalablement\s+)?(?:convenu|arrêté|exposé)"
     r"|préambule|ceci\s+exposé|exposé\b|art(?:icle|\.)\s*(?:1(?!\d)|1er|premier|i\b))")
-# Marqueur de signature en début de ligne, ou « Fait à <Lieu> » après une fin de phrase ; jamais cité dans
-# une clause (« lu et approuvé » entre guillemets, « Fait à la demande du Bailleur »).
-SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b|lu\s+et\s+approuvé|signatures?\b)"
-                       r"|(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+[" + UP + r"]")
+# Marqueur de signature en début de ligne (« Fait à la demande » exclu), jamais cité dans une clause
+# (« lu et approuvé » entre guillemets) ; « Fait à <Lieu> » après une fin de phrase passe par _signed.
+SIGNED_RX = re.compile(r"(?m)^[\W_]*(?i:fait" + SP + r"+à\b(?!" + SP + r"+" + ART_WORDS + r"\b)"
+                       r"|lu\s+et\s+approuvé|signatures?\b)")
+FAIT_MID_RX = re.compile(r"(?<=[.!?])" + SP + r"*(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
 HEADING_RX = re.compile(r"\s*(?:ANNEXE|Annexe|ARTICLE|Article|TITRE|Titre|CHAPITRE|Chapitre)\b")
 FAIT_RX = re.compile(r"\b(?:Fait|FAIT)" + SP + r"+(?:à|À)" + SP + r"+(" + PLACE + ")")
-WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
-
-Cand = Tuple[int, int, int, int, str]  # début, fin, étendue (début, fin) du motif, type (ALIAS = nom d'usage)
-Span = Tuple[int, int]
+_PLACE_STOP = {"le", "la", "les", "un", "une", "de", "du", "des", "a", "au", "aux", "en", "par", "pour", "sur"}
 
 
 def load_vocab() -> Set[str]:
@@ -137,33 +80,16 @@ def load_vocab() -> Set[str]:
     return {texte.norm(line) for line in raw.splitlines() if line.strip() and not line.lstrip().startswith("#")}
 
 
-def _forms(word: str) -> List[str]:
-    """Forme normalisée et ses variantes au masculin singulier (vendeuse, garants…)."""
-    n = texte.norm(word)
-    return [n] + [n[:-len(a)] + b for a, b in _SUFFIXES if n.endswith(a) and len(n) > len(a) + 2]
+def _place(name: str, vocab: Set[str]) -> bool:
+    """Lieu plausible après « Fait à » : ni article ni préposition en tête (« LA DEMANDE DU BAILLEUR »),
+    pas seulement des mots connus (« TITRE »)."""
+    words = WORD_RX.findall(name)
+    return bool(words) and stem(words[0]) not in _PLACE_STOP and not all(known(w, vocab) for w in words)
 
 
-def _known(word: str, vocab: Set[str]) -> bool:
-    return any(f in vocab or f.upper() in ROLE_WORDS for f in _forms(word))
-
-
-def _tokens(s: str) -> List[str]:
-    """Mots porteurs de sens : élisions retirées (d'Effet), mots vides écartés."""
-    words = (re.sub(r"^[dlDL]'", "", texte.norm(w)) for w in WORD_RX.findall(s))
-    return [w for w in words if w and w not in _STOPWORDS]
-
-
-def _role(term: str, vocab: Set[str]) -> Optional[str]:
-    """Rôle canonique d'un terme défini ; "" s'il est à ignorer ; None s'il ressemble à un nom propre."""
-    words = _tokens(term)
-    if len(words) == 1:
-        for f in _forms(words[0]):
-            if f.upper() in ROLE_WORDS:
-                return f.upper()
-    if not words or not all(_known(w, vocab) for w in words):
-        return None
-    key = re.sub(r"[^A-Z0-9]+", "_", texte.norm(term).upper()).strip("_")
-    return "" if key in _COLLECTIVE else key
+def _signed(text: str, vocab: Set[str]) -> bool:
+    """Vrai si une ligne ouvre la zone de signature (début de ligne, ou « Fait à <Lieu> » après une phrase)."""
+    return bool(SIGNED_RX.search(text)) or any(_place(m.group(1), vocab) for m in FAIT_MID_RX.finditer(text))
 
 
 def _roles(text: str) -> List[Tuple[int, int, int, int]]:
@@ -199,69 +125,6 @@ def _addresses(text: str) -> List[Span]:
     return out
 
 
-def _trim(text: str, s: int, e: int, vocab: Set[str], form: bool) -> Span:
-    """Nom de société, vide s'il n'a que des articles. Avec une forme (« SARL Expert Conseil ») il reste
-    entier ; sans forme, les mots connus en tête sont retirés et un nom tout connu est rejeté."""
-    words = list(WORD_RX.finditer(text, s, e))
-    real = [w for w in words if texte.norm(w.group()) not in _STOPWORDS]
-    if not real or (not form and all(_known(w.group(), vocab) for w in real)):
-        return e, e
-    return (s, e) if form else (next(w.start() for w in words if not _known(w.group(), vocab)), e)
-
-
-def _cells(text: str, vocab: Set[str]) -> List[Tuple[bool, Optional[Span]]]:
-    """Colonnes d'une ligne de signature : (légende ?, nom seul de la colonne)."""
-    out = []
-    for c in CELL_RX.finditer(text):
-        s, cell = c.start(), c.group()
-        lead = CAPTION_LEAD_RX.match(cell)
-        role_lead = bool(lead) and bool(_role(lead.group(1), set()))
-        if role_lead:
-            s += lead.end()
-        m = LINE_NAME_RX.match(text, s, c.end())
-        name = m.span(1) if m and not any(_known(w, vocab) for w in _tokens(m.group(1))) else None
-        caption = bool(SIG_CAPTION_RX.fullmatch(cell)) or (role_lead and (s == c.end() or name is not None))
-        out.append((caption, name))
-    return out
-
-
-def _names(text: str, vocab: Set[str], bare: bool, skip: List[Span]) -> List[Cand]:
-    """Noms de personnes et de sociétés, sans chevauchement (le motif le plus à gauche puis le plus long)."""
-    cands: List[Cand] = []
-    for m in CIVIL_RX.finditer(text):
-        if m.group("lead") and all(_known(w, vocab) for w in _tokens(m.group("name"))):
-            continue  # « Maître d'Œuvre »
-        if m.group("civ") == "M" and NUMBER_BEFORE_RX.search(text, max(0, m.start() - 12), m.start()):
-            continue  # « 2 M DE HAUTEUR »
-        cands.append((m.start(), m.end(), m.start(), m.end(), "PERSONNE"))
-    for m in ALIAS_RX.finditer(text):
-        if not all(_known(w, vocab) for w in _tokens(m.group("name"))):   # pas « la dite Société »
-            cands.append((m.start("name"), m.end(), m.start(), m.end(), "ALIAS"))
-    pre = {}   # début de « SARL X » -> rang du candidat
-    for m in CO_PRE_RX.finditer(text):
-        s, e = _trim(text, *m.span("co"), vocab, m.group("form") is not None)
-        if s < e:
-            pre[m.start()] = len(cands)
-            cands.append((s, e, m.start(), m.end(), "SOCIETE"))
-    dropped = set()
-    for m in CO_POST_RX.finditer(text):
-        s, e = _trim(text, *m.span("co"), vocab, True)
-        if s < e and texte.norm(WORD_RX.findall(m.group("co"))[-1]) not in _BEFORE_FORM:
-            cands.append((s, e, m.start(), m.end(), "SOCIETE"))   # « X SAS IMMATRICULÉE » : le nom précède
-            dropped.add(pre.get(m.start("form")))                 # la forme ; « DE LA SARL X » : il la suit
-    cands = [c for i, c in enumerate(cands) if i not in dropped]
-    for m in BARE_RX.finditer(text):
-        if (bare or BORN_RX.match(text, m.end())) and not any(_known(w, vocab) for w in _tokens(m.group())):
-            cands.append((m.start(), m.end(), m.start(), m.end(), "PERSONNE"))
-    if bare:
-        cands += [span + span + ("PERSONNE",) for _, span in _cells(text, vocab) if span]
-    out: List[Cand] = []
-    for c in sorted(cands, key=lambda c: (c[2], c[2] - c[3])):
-        if (not out or c[2] >= out[-1][3]) and not any(a < c[3] and c[2] < b for a, b in skip):
-            out.append(c)
-    return out
-
-
 class _Comparution:
     """État du bloc de comparution : parties numérotées, groupe courant, représentant attendu."""
 
@@ -282,7 +145,7 @@ class _Comparution:
         roles, addresses = _roles(text), _addresses(text)
         self.records += [[bi, base + s, base + e, "ADRESSE", None, None] for s, e in addresses]
         skip = [(r[0], r[1]) for r in roles] + addresses
-        events = [(c[2], "name", c) for c in _names(text, self.vocab, True, skip)]
+        events = [(c[2], "name", c) for c in names(text, self.vocab, True, skip)]
         events += [(m.start(), "sep", None) for m in SEP_RX.finditer(text)]
         events += [(m.end(), "rep", None) for m in REP_RX.finditer(text)]
         events += [(r[0], "role", r) for r in roles]
@@ -293,7 +156,7 @@ class _Comparution:
             elif what == "rep":
                 self.rep_at = origin + pos
             elif what == "prefix":
-                self.prefix = _role(data, set()) or None
+                self.prefix = role(data, set()) or None
             elif what == "name":
                 self._name(bi, base, origin, data)
             else:
@@ -322,15 +185,15 @@ class _Comparution:
 
     def _role(self, bi: int, base: int, text: str, data: Tuple[int, int, int, int]) -> None:
         ts, te = data[2], data[3]
-        role = _role(text[ts:te], self.vocab)
-        if role is None:   # terme défini à allure de nom propre : entité à masquer (6.6)
+        found = role(text[ts:te], self.vocab)
+        if found is None:   # terme défini à allure de nom propre : entité à masquer (6.6)
             last = self.group[-1] if self.group else None
             self.records.append([bi, base + ts, base + te, last[3] if last else "SOCIETE",
                                  None, last[5] if last else None])
-        elif role:
+        elif found:
             for rec in self.group:
                 if rec[4] is None:
-                    rec[4] = role
+                    rec[4] = found
         self.rep_at = None
 
 
@@ -339,11 +202,12 @@ def _outside(bi: int, base: int, text: str, vocab: Set[str], sig: bool) -> List[
     roles, addresses = _roles(text), _addresses(text)
     skip = [(r[0], r[1]) for r in roles] + addresses
     out = [Mention(bi, base + s, base + e, "PERSONNE" if kind == "ALIAS" else kind, "structure")
-           for s, e, _, _, kind in _names(text, vocab, sig, skip)]
+           for s, e, _, _, kind in names(text, vocab, sig, skip)]
     out += [Mention(bi, base + s, base + e, "ADRESSE", "structure") for s, e in addresses]
     out += [Mention(bi, base + ts, base + te, "SOCIETE", "structure")
-            for _, _, ts, te in roles if _role(text[ts:te], vocab) is None]
-    out += [Mention(bi, base + m.start(1), base + m.end(1), "COMMUNE", "structure") for m in FAIT_RX.finditer(text)]
+            for _, _, ts, te in roles if role(text[ts:te], vocab) is None]
+    out += [Mention(bi, base + m.start(1), base + m.end(1), "COMMUNE", "structure")
+            for m in FAIT_RX.finditer(text) if _place(m.group(1), vocab)]
     return out
 
 
@@ -353,7 +217,7 @@ def _opens(line: str, vocab: Set[str]) -> bool:
     if START_RX.match(line):
         return True
     m = START_NAME_RX.match(line)
-    first = next((c for c in _names(line, vocab, False, []) if c[2] >= m.end()), None) if m else None
+    first = next((c for c in names(line, vocab, False, []) if c[2] >= m.end()), None) if m else None
     return bool(first) and bool(ARTICLE_GAP_RX.fullmatch(line, m.end(), first[2]))
 
 
@@ -369,7 +233,7 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
             if not in_comp and _opens(line, vocab):
                 in_comp, sig = True, False
                 comp.reset()
-            if in_comp and SIGNED_RX.search(line):
+            if in_comp and _signed(line, vocab):
                 in_comp = False
             if in_comp:
                 end = END_RX.search(line)
@@ -380,8 +244,8 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
                 continue
             if HEADING_RX.match(line):
                 sig = False
-            cells = _cells(line, vocab)
-            if SIGNED_RX.search(line) or (cells and all(caption for caption, _ in cells)):
+            columns = cells(line, vocab)
+            if _signed(line, vocab) or (columns and all(caption for caption, _ in columns)):
                 sig = True
             out += _outside(bi, base + cut, line[cut:], vocab, sig)
         origin += len(block.text) + 1
@@ -391,10 +255,10 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
 
 def relabel_signature_images(blocks: List[Block]) -> List[Block]:
     """[IMAGE] devient [SIGNATURE] à partir du premier bloc dont une ligne commence par « Fait à »,
-    « Lu et approuvé » ou « Signature(s) », ou qui contient « Fait à <Lieu> » (lieu capitalisé)
-    après une fin de phrase."""
+    « Lu et approuvé » ou « Signature(s) », ou qui contient « Fait à <Lieu> » après une fin de phrase."""
+    vocab = load_vocab()
     out, signed = [], False
     for b in blocks:
-        signed = signed or bool(SIGNED_RX.search(b.text))
+        signed = signed or _signed(b.text, vocab)
         out.append(replace(b, text=b.text.replace("[IMAGE]", "[SIGNATURE]")) if signed else b)
     return out

@@ -79,7 +79,9 @@ Indemnités
 Préavis
 Période
 Essai
+Fonction
 Fonctions
+Qualité
 Poste
 Lieu
 Horaires
