@@ -67,8 +67,12 @@ d'une exception imprévue ; seuls les messages fixes de nos propres modules (dé
 fichier du coffre corrompu) sont relayés tels quels. Tout le passage tourne sous `sortie.quiet` :
 sorties, avertissements et journaux de pypdf et spaCy sont absorbés. Le chemin choisi n'est jamais
 affiché ; si l'original est dans le dossier
-courant, un avertissement sans chemin le signale. `--help` et les erreurs d'arguments affichent
-`legal-anonymiser`, jamais le chemin du script.
+courant, un avertissement sans chemin le signale. `--help` affiche `legal-anonymiser`, jamais le chemin
+du script ; une erreur d'arguments (commande inconnue, argument en trop ou manquant) n'affiche que
+« Arguments invalides : voir `legal-anonymiser --help`. » (code 2), jamais l'argument fautif, qui peut
+être un chemin. Quand plus rien n'est à arbitrer mais que des alertes ou ambiguïtés restent ouvertes
+(`pending` 0, `ouverts` > 0), le message dit « <n> alerte(s) ou ambiguïté(s) restent ouvertes : voir
+coffre/<id>/ajustements.txt » (code 3), jamais « 0 point(s) à arbitrer ».
 
 **Réidentification** (`reidentification.py`) : seules les clés de `correspondance.json` sont
 substituées (texte exact, la plus longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel
@@ -268,7 +272,8 @@ PyMuPDF est exclu (AGPL).
 
 Une décision par ligne (`A…` alerte, `M…` ambiguïté, `C…` commune), clé relue depuis les champs
 visibles `localisation | rang` (la localisation peut contenir « | »). Un `#` en début de ligne, même
-indenté, est un commentaire ; un BOM est toléré. Une ligne libre `masquer: texte` règle aussi, à la
+indenté, est un commentaire ; un BOM est toléré. L'en-tête rappelle qu'une alerte `valeur_connue` ne
+peut pas être gardée (« utilisez masquer »). Une ligne libre `masquer: texte` règle aussi, à la
 réécriture, toute alerte non traitée portant le même texte (elle repasse en `masquer`). Les décisions
 dont le texte a changé sont listées sous « Décisions périmées ».
 

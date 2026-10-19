@@ -64,9 +64,12 @@ def _contract(vault: Vault, cid: str) -> bool:
 def _after_run(vault: Vault, cid: str, result) -> int:
     say("resume", cid=cid, entities=len(result.entities), alerts=len(result.alerts),
         ambiguities=len(result.ambiguities))
-    if result.pending or result.alerts or result.ambiguities:
-        say("pending", pending=result.pending, path=sortie.neutral(vault.root / cid / "ajustements.txt",
-                                                                   Path.cwd(), vault), cid=cid)
+    path = sortie.neutral(vault.root / cid / "ajustements.txt", Path.cwd(), vault)
+    if result.pending:
+        say("pending", pending=result.pending, path=path, cid=cid)
+        return 3
+    if result.alerts or result.ambiguities:   # décisions prises mais points encore ouverts (masquer sans effet, etc.)
+        say("ouverts", ouverts=len(result.alerts) + len(result.ambiguities), path=path, cid=cid)
         return 3
     return _validate(vault, cid)
 
@@ -199,8 +202,15 @@ def _reidentifier(args: argparse.Namespace) -> int:
     return 0
 
 
+class _Parser(argparse.ArgumentParser):
+    """Une erreur d'arguments n'est jamais relayée (argparse y cite l'argument fautif, chemin compris)."""
+
+    def error(self, message: str) -> None:   # type: ignore[override]
+        self.exit(2, sortie.MESSAGES["arguments"] + "\n")
+
+
 def _parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="legal-anonymiser", description="Pseudonymisation locale de contrats, sans réseau.")
+    p = _Parser(prog="legal-anonymiser", description="Pseudonymisation locale de contrats, sans réseau.")
     sub = p.add_subparsers(dest="commande", required=True)
     s = sub.add_parser("traiter", help="masquer un contrat (sélecteur de fichier sans chemin)")
     s.add_argument("chemin", nargs="?")

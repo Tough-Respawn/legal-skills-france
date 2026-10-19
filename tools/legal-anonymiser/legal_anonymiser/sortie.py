@@ -21,6 +21,9 @@ MESSAGES = {
     "original_inside": "Attention : le fichier original est dans le dossier courant ; "
                        "ne le partagez pas avec le fichier masqué.",
     "pending": "{pending} point(s) à arbitrer dans {path}, puis lancez : legal-anonymiser relancer {cid}",
+    "ouverts": "{ouverts} alerte(s) ou ambiguïté(s) restent ouvertes : voir {path}, "
+               "puis lancez : legal-anonymiser relancer {cid}",
+    "arguments": "Arguments invalides : voir `legal-anonymiser --help`.",
     "non_pret": "Contrat {cid} : des points restent ouverts ; traitez {path}, puis lancez : "
                 "legal-anonymiser relancer {cid}",
     "modifie_depuis": "Contrat {cid} : fichiers du coffre modifiés depuis le dernier passage ; "
