@@ -38,6 +38,8 @@ MESSAGES = {
     "modifie_pendant_relecture": "Contrat {cid} : fichiers modifiés pendant la relecture, rien n'a été publié ; "
                                  "relancez : legal-anonymiser relancer {cid}",
     "publication_impossible": "Publication impossible : le dossier de destination n'est pas accessible en écriture.",
+    "publication_refusee": "Publication refusée : le texte masqué ou sa table ne correspondent plus au dernier "
+                           "passage, rien n'a été publié ; relancez : legal-anonymiser relancer {cid}",
     "aucun_fichier": "Aucun fichier choisi : rien n'a été traité.",
     "selecteur_indisponible": "Sélecteur de fichier indisponible : lancez `legal-anonymiser traiter <chemin>` vous-même.",
     "introuvable": "Fichier introuvable ou illisible.",

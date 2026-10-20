@@ -128,6 +128,9 @@ def _validate(vault: Vault, cid: str) -> int:
         except OSError:
             say("publication_impossible")
             return 4
+        except ValueError:   # marqueur ou table figée incohérents : jamais le message, il peut citer un chemin
+            say("publication_refusee", cid=cid)
+            return 4
         say("publie", name=target.name)
         say("rappel")
         return 0

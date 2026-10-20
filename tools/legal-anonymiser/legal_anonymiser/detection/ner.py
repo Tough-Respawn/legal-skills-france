@@ -13,8 +13,9 @@ particule (« Jean Dupont\\nDe », « La Fontaine ») sont recollées d'abord. E
 son premier verbe courant (noms.verb_cut : « AWA SIGNE LE CONTRAT » donne « AWA », « SIGNE HANSEN »
 reste entier) ; un verbe en tête d'une société lui appartient (« VERSE SAS »). Toute entité s'arrête aussi
 avant son premier mot de clause (noms.lower_cut : minuscule après un mot capitalisé, hors particule, liaison
-ou composé particule-Nom, que ne suit pas un mot capitalisé hors vocabulaire) : « Logement sans l'accord »
-donne « Logement », écarté comme mot du vocabulaire ; « Mohamed el-Amrani », « Maria do Carmo » restent entiers. Les bords et l'intérieur
+ou composé particule-Nom ; dans un nom de personne, seulement un mot-outil ou un verbe courant) : « Logement
+sans l'accord » donne « Logement », écarté comme mot du vocabulaire ; « Mohamed el-Amrani », « Maria do
+Carmo », « Nguyen thi Mai » restent entiers. Les bords et l'intérieur
 se jugent sur une liste fixe de mots-outils (noms.FUNCTION_WORDS), jamais sur les mots vides de
 spaCy, qui contiennent de vrais noms (« LI HUI MIN »).
 
@@ -152,12 +153,12 @@ def _lines(text: str, s: int, e: int) -> List[Tuple[int, int]]:
     return [_trim(text, a, b) for a, b, _ in out] if len(out) > 1 else [(s, e)]
 
 
-def _lower_cut(text: str, s: int, e: int, vocab: Set[str]) -> Tuple[int, int]:
+def _lower_cut(text: str, s: int, e: int) -> Tuple[int, int]:
     """L'entité s'arrête avant son premier mot de clause (noms.lower_cut) : « Logement sans l'accord » donne
     « Logement » (écarté ensuite par _kind, mot du vocabulaire), « Paul Kerbrat né le » « Paul Kerbrat » ;
-    « Jean de La Fontaine », « Mohamed el-Amrani », « Maria do Carmo », « rue Victor Hugo » restent entiers."""
+    « Jean de La Fontaine », « Mohamed el-Amrani », « Nguyen thi Mai », « rue Victor Hugo » restent entiers."""
     words = list(WORD_RX.finditer(text, s, e))
-    i = lower_cut([w.group() for w in words], vocab)
+    i = lower_cut([w.group() for w in words])
     return (s, e) if i is None else _trim(text, s, words[i].start())
 
 
@@ -198,7 +199,7 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
         for s0, e0, label in _joined(doc):
             s, e = _clean(text, base + s0, base + e0)
             s, e = verb_cut(text, s, e, lead=label != "ORG")   # « VERSE SAS » : un verbe ouvre une société
-            s, e = _lower_cut(text, s, e, vocab)
+            s, e = _lower_cut(text, s, e)
             for s, e in _lines(text, s, e):
                 kind = _kind(label, text[s:e], vocab, caps) if e > s else None
                 if kind:

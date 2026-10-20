@@ -34,12 +34,14 @@ Quatre défauts de la v4.5.0 relevés par un audit indépendant le 2026-10-20.
 - Anonymiseur, validation (F3) : un `ajustements.txt`, un `correspondance.json`
   ou un `etat.json` modifié pendant la fenêtre de confirmation bloque la
   publication (code 3, « fichiers modifiés pendant la relecture », rien
-  n'est publié).
+  n'est publié) ; un refus de la publication elle-même donne un message
+  neutre et le code 4, jamais une erreur interne.
 - Anonymiseur, détection (F4) : une entité de la reconnaissance des noms
   s'arrête avant son premier mot de clause en minuscules ; « Logement sans
   l'accord » n'est plus masqué comme une société dans la clause de
   sous-location. Les noms à particule restent entiers (« Mohamed el-Amrani »,
-  « Maria do Carmo », « Ahmed ibn Saïd »). Nouvelle alerte `sur_masquage` :
+  « Maria do Carmo », « Ahmed ibn Saïd », « Nguyen thi Mai ») : dans un nom de
+  personne, seul un mot-outil ou un verbe coupe. Nouvelle alerte `sur_masquage` :
   un nom masqué dont la valeur déborde sur le texte du contrat est signalé
   avant publication (`demasquer:` ou `garder`).
 

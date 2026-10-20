@@ -360,7 +360,7 @@ publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publi�
 
 ## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 455 tests, 0 échec,
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 456 tests, 0 échec,
 4 ignorés faute de liens symboliques ou de modes POSIX sous Windows, après les correctifs de l'audit et
 de la revue de la branche) ;
 corpus synthétique de 26 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF
@@ -453,7 +453,9 @@ relecture, rien n'a été publié ; relancez : legal-anonymiser relancer <id> »
 constat F3) ; sinon il est publié dans la destination
 enregistrée (« Publié : contrat-<id>.masque.md », suivi du rappel « La validation porte sur le texte
 relu ; le risque résiduel listé reste visible pour le modèle. »), un dossier inaccessible en écriture
-donne le code 4. `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la
+donne le code 4, un refus de la publication elle-même (marqueur ou table figée incohérents) « Publication
+refusée : le texte masqué ou sa table ne correspondent plus au dernier passage, rien n'a été publié ;
+relancez : legal-anonymiser relancer <id> » (code 4, sans trace ni message d'exception). `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la
 fenêtre : code 4. `impossible` (ni fenêtre ni terminal, cas d'un outil piloté par un modèle) :
 « validation impossible ici : lancez vous-même `legal-anonymiser valider <id>` dans un terminal », code 4.
 Sans chemin : `tkinter` absent ou sans affichage donne « Sélecteur de fichier indisponible : lancez
@@ -572,14 +574,17 @@ après l'autre, gardent chacune leur table).
   après une civilité (« SIGNE HANSEN », « MADAME CLAIRE DEMEURE EST TÉMOIN » donne « MADAME CLAIRE
   DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). En toute casse, une entité
   s'arrête avant son premier mot de clause : un mot en minuscules placé après un mot capitalisé, qui
-  n'est ni une particule (de, du, la, da, van, von, el, al, do, das, della, ibn, bin, ben, abu, ould,
-  mac, zu, y, e…), ni une liaison de nom (et, sur, sous, en, au…), ni un composé particule-Nom
-  (« el-Amrani », « al-Hassan », « d'Arcy »), et que ne suit pas un mot capitalisé hors vocabulaire
-  (« Nguyen thi Lan » reste entier). « Logement sans l'accord » devient « Logement », puis est écarté
-  comme mot du vocabulaire (audit v4.5.0, constat F4) ; « Jean de La Fontaine », « Mohamed el-Amrani »,
-  « Maria do Carmo », « Lucia della Rovere », « Ahmed ibn Saïd », « Les Hauts de Valmorin », « rue Victor
-  Hugo » restent entiers (la première version de la coupe laissait leur nom de famille visible, revue de
-  la branche, constat C2). Une commune d'un seul
+  n'est ni une particule (de, du, la, da, van, von, el, al, do, das, della, ibn, bin, binti, bte, ben,
+  abu, ould, mac, zu, thi, las, los, y, e…), ni une liaison de nom (et, sur, sous, en, au…), ni un
+  composé particule-Nom (« el-Amrani », « al-Hassan », « d'Arcy »). Dans un nom de personne (après une
+  civilité, ou entre deux mots capitalisés), seul un mot-outil (sans, pour, par, avec, dans, qui…) ou un
+  verbe courant coupe, quel que soit le mot capitalisé qui suit, même un mot du vocabulaire comme un mois
+  (« Nguyen thi Mai », « Tran thi Avril », « Jean Dupont dit Martin » restent entiers). « Logement sans
+  l'accord » devient « Logement », puis est écarté comme mot du vocabulaire (audit v4.5.0, constat F4) ;
+  « Jean de La Fontaine », « Mohamed el-Amrani », « Maria do Carmo », « Lucia della Rovere », « Ahmed ibn
+  Saïd », « María de las Mercedes », « Les Hauts de Valmorin », « rue Victor Hugo » restent entiers (les
+  versions précédentes de la coupe laissaient visible un nom de famille ou un prénom : revue de la
+  branche, constat C2, puis re-revue, constat N1). Une commune d'un seul
   mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par
   propagation ; seule dans le texte libre, elle reste visible et la seconde passe la signale. Une
   entité qui court sur deux lignes, ou sur deux colonnes (deux espaces ou plus, tabulation : les noms
