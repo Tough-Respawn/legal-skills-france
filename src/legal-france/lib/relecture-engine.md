@@ -198,13 +198,13 @@ unchanged.
 
 For a masked contract, the **first line of the report is the exact copy of
 the first line of `contrat-<id>.masque.md`** (its marker
-`<!-- legal-france:masque v1 id=<id> statut=valide_humain date=... corps=... -->`),
+`<!-- legal-france:masque v1 id=<id> statut=valide_humain date=... corps=... passage=... -->`),
 character for character, nothing before it. It ties the report to the
 published version: `legal-anonymiser reidentifier` refuses a report without
 it. A raw contract has no marker: start directly with the title.
 
 ```markdown
-<!-- legal-france:masque v1 id=<id> statut=valide_humain date=<date> corps=<corps> -->
+<!-- legal-france:masque v1 id=<id> statut=valide_humain date=<date> corps=<corps> passage=<passage> -->
 # Relecture du contrat <id>
 
 ## 1. Ce qui a été transmis
@@ -260,8 +260,10 @@ legal-anonymiser reidentifier <id> rapport-relecture-<id>.md
 It writes `coffre/<id>/rapport-final.md` with the real values of the
 published version named by that first line, and opens it locally. Never read
 that file. If the tool answers « aucune publication ne correspond à ce
-rapport », the first line is missing or altered: restore it from
-`contrat-<id>.masque.md`, never change a placeholder. A raw contract has no
+rapport », the first line is missing or altered: restore it from the first
+line of the masked file actually analysed (a later publication of the same
+contract may have replaced `contrat-<id>.masque.md` since), never change a
+placeholder. A raw contract has no
 `<id>`: no reidentification.
 
 ---

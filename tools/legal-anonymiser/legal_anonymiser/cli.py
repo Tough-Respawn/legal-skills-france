@@ -89,6 +89,7 @@ def _ready(vault: Vault, cid: str, state: dict) -> Optional[str]:
         return "non_pret"
     marker = MARKER_RE.match(data.split(b"\n", 1)[0].decode("utf-8", "replace"))
     if (body_hash(data) != state.get("sha_masque") or not marker or marker.group("corps") != body_hash(data)[:16]
+            or not marker.group("passage")
             or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")):
         return "modifie_depuis"   # un `masque.md` de la v4.5.0 (sans `corps=`) demande aussi un `relancer`
     return None

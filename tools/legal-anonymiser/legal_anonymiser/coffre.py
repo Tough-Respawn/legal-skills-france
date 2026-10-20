@@ -109,11 +109,19 @@ class Vault:
         self._save(reg)
         return cid
 
-    def register_published(self, sha256: str, cid: str, date: str, corps: Optional[str] = None) -> None:
-        """`corps` : empreinte du corps publié, clé de sa table figée ; les entrées sans `corps` (v4.5.0) restent lues."""
+    def register_published(self, sha256: str, cid: str, date: str, corps: Optional[str] = None,
+                           passage: Optional[str] = None) -> None:
+        """`corps` : empreinte du corps publié ; `passage` : clé de sa table figée. Les entrées sans ces champs
+        (v4.5.0) restent lues."""
         reg = self._load()
-        reg["publies"][sha256] = dict({"id": cid, "date": date}, **({"corps": corps} if corps else {}))
+        extra = {k: v for k, v in (("corps", corps), ("passage", passage)) if v}
+        reg["publies"][sha256] = dict({"id": cid, "date": date}, **extra)
         self._save(reg)
+
+    def was_published(self, cid: str, corps: str, passage: str) -> bool:
+        """Vrai si une publication de ce contrat porte ce corps et ce passage."""
+        return any(e.get("id") == cid and e.get("corps") == corps and e.get("passage") == passage
+                   for e in self._load()["publies"].values())
 
     def lookup_published(self, sha256: str) -> Optional[str]:
         entry = self._load()["publies"].get(sha256)

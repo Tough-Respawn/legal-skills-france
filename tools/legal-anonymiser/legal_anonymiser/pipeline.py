@@ -1,9 +1,10 @@
 """Chaîne complète d'un contrat : extraction, inspection, détection, entités, masquage, seconde passe.
 
 Écrit dans `coffre/<id>/` : `masque.md` (version en préparation, marqueur `valide_humain` daté du jour, avec
-l'empreinte `corps=` de son corps), `rapport.md` (valeurs réelles, jamais publié), `ajustements.txt` (décisions
-relues à chaque passage), `correspondance.json` (table de travail, placeholder vers valeur ; la publication en
-fige une copie par version, seule lue par la réidentification) et `etat.json`. `etat.json` est
+l'empreinte `corps=` de son corps et l'identifiant aléatoire `passage=` de ce passage), `rapport.md` (valeurs
+réelles, jamais publié), `ajustements.txt` (décisions relues à chaque passage), `correspondance.json` (table de
+travail, placeholder vers valeur ; la publication en fige une copie par passage, seule lue par la
+réidentification) et `etat.json`. `etat.json` est
 écrit d'abord avec `pending` et `ouverts` à `null` (un passage interrompu ne laisse jamais un état validable),
 puis complété à la fin : `pending` (lignes `?` ou placeholder inconnu), `ouverts` (alertes et ambiguïtés
 encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur) et `sha_ajustements`. Tout le passage
@@ -14,6 +15,7 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import secrets
 import tempfile
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -95,7 +97,8 @@ def _run(original: Path, vault: Vault, cid: str) -> Result:
                                      for i, m in enumerate(sorted(resolved, key=lambda m: (m.block, m.start)), 1)]
 
     date = datetime.date.today().isoformat()
-    masque = rendu.masked_document(cid, masked, findings, residual, date).encode("utf-8")
+    passage = secrets.token_hex(8)   # un par passage : clé de la table figée si ce texte est publié
+    masque = rendu.masked_document(cid, masked, findings, residual, date, passage).encode("utf-8")
     atomic_write(folder / "masque.md", masque)
     atomic_write(folder / "rapport.md",
                  rendu.local_report(cid, extracted, entities, ambiguities, alerts, residual).encode("utf-8"))

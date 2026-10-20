@@ -83,9 +83,9 @@ Parcours complet :
 5. Après l'analyse par le modèle, `legal-anonymiser reidentifier <id> rapport.md` écrit le rapport avec
    les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre. La
    **première ligne du rapport doit être la copie exacte de celle du fichier publié** (marqueur
-   `<!-- legal-france:masque v1 id=… statut=valide_humain date=… corps=… -->`) : elle désigne la table de
-   correspondance figée à cette publication. Sans elle, ou pour une version jamais publiée, rien n'est
-   réidentifié (code 7).
+   `<!-- legal-france:masque v1 id=… statut=valide_humain date=… corps=… passage=… -->`) : elle désigne la
+   table de correspondance figée à cette publication. Sans elle, ou pour une version jamais publiée, rien
+   n'est réidentifié (code 7).
 
 | Commande | Effet | Codes |
 |---|---|---|
@@ -417,7 +417,8 @@ une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le m
 le passage continue sans elle, constat `ner_absente`), entités avec les décisions relues, constats de
 métadonnées, masquage, risque résiduel, seconde passe. Écrit dans `coffre/<id>/` : `masque.md`
 (version en préparation, marqueur `valide_humain` daté du jour, avec `corps=` : 16 premiers caractères
-de l'empreinte SHA-256 de tout ce qui suit le marqueur), `rapport.md` (valeurs réelles, jamais
+de l'empreinte SHA-256 de tout ce qui suit le marqueur, et `passage=` : 16 caractères hexadécimaux tirés
+au hasard à chaque passage, clé de la table figée si ce texte est publié), `rapport.md` (valeurs réelles, jamais
 publié), `ajustements.txt`, `correspondance.json` (table de travail, placeholder vers valeur, ambiguïtés
 `[AMBIGU_n]` comprises, réécrite à chaque passage ; la publication en fige une copie) et `etat.json`
 (`destination` : dossier courant du premier `traiter`, où sera publié le
@@ -435,7 +436,8 @@ attente les lignes `?` et ces placeholders inconnus.
 pas 0, si `etat.json` ne porte pas ces champs, ou si `masque.md` contient encore `[AMBIGU_` ; refusée
 aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de `masque.md`
 ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage, ou que le marqueur de
-`masque.md` n'a pas le `corps=` de son corps (fichier écrit par la v4.5.0) : il faut `relancer`. Sinon
+`masque.md` n'a pas le `corps=` de son corps ou pas de `passage=` (fichier écrit par la v4.5.0) : il faut
+`relancer`. Sinon
 `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
 ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
 masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
@@ -470,14 +472,16 @@ du script ; une erreur d'arguments (commande inconnue, argument en trop ou manqu
 coffre/<id>/ajustements.txt » (code 3), jamais « 0 point(s) à arbitrer ».
 
 **Réidentification** (`reidentification.py`) : la première ligne du rapport doit être le marqueur du
-fichier publié (même `id`, champ `corps=`) ; elle désigne `coffre/<id>/publications/<corps>.json`, la
-table figée à cette publication. Seules les clés de cette table sont substituées (texte exact, la plus
-longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel quel ; le résultat,
-`coffre/<id>/rapport-final.md`, ne quitte pas le coffre. Ligne absente ou modifiée, autre contrat,
-version jamais publiée, marqueur de la v4.5.0 sans `corps=` : refus, « aucune publication ne correspond à
-ce rapport » (code 7), rien n'est écrit. La table de travail n'est jamais lue : retraiter l'original
-modifié sans publier ne change pas les valeurs d'un rapport écrit sur une publication antérieure (audit
-v4.5.0, constat F2).
+fichier publié (même `id`, champs `corps=` et `passage=`, couple inscrit au registre par une
+publication) ; elle désigne `coffre/<id>/publications/<passage>.json`, la table figée à cette
+publication. Seules les clés de cette table sont substituées (texte exact, la plus longue d'abord), tout
+le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel quel ; le résultat, `coffre/<id>/rapport-final.md`, ne
+quitte pas le coffre. Ligne absente ou modifiée, autre contrat, version jamais publiée, marqueur sans
+`corps=` ou `passage=` : refus, « aucune publication ne correspond à ce rapport » (code 7), rien n'est
+écrit. La table de travail n'est jamais lue : retraiter l'original modifié, avec ou sans nouvelle
+publication, ne change pas les valeurs d'un rapport écrit sur une publication antérieure (audit v4.5.0,
+constat F2 ; revue de la branche, constat I1 : deux versions au corps masqué identique, publiées l'une
+après l'autre, gardent chacune leur table).
 
 ## Formats lus (état actuel)
 
@@ -706,14 +710,14 @@ dont le texte a changé sont listées sous « Décisions périmées ».
   programme, n'est pas détecté.
 - **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
   neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
-  `statut=valide_humain` de ce contrat, ou si son champ `corps=` manque ou ne correspond pas au corps
-  du texte. Fige d'abord la table de travail en `coffre/<id>/publications/<corps>.json`, inscrit
-  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur et `corps`, puis écrit
+  `statut=valide_humain` de ce contrat, si son champ `corps=` manque ou ne correspond pas au corps du
+  texte, s'il n'a pas de `passage=`, ou si la table figée de ce passage existe déjà avec un autre
+  contenu. Fige d'abord la table de travail en `coffre/<id>/publications/<passage>.json` (écrite une
+  seule fois : republier le même passage la laisse intacte), inscrit l'empreinte SHA-256 des octets
+  écrits au registre avec la date du marqueur, `corps` et `passage`, puis écrit
   `contrat-<id>.masque.md` de façon atomique, en UTF-8, octet pour octet sans conversion des fins de
   ligne (le rendu produit des `\n`), et enfin le chemin, l'empreinte et la date dans l'état du contrat.
-  Les entrées du registre écrites par la v4.5.0 (sans `corps`) restent lues par `verifier`. Deux
-  publications au corps identique (seules des valeurs masquées ont changé) partagent une table : la
-  dernière publiée.
+  Les entrées du registre écrites par la v4.5.0 (sans `corps` ni `passage`) restent lues par `verifier`.
 - **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
   ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
   tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
