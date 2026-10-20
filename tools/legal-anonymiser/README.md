@@ -214,9 +214,11 @@ seulement `PreToolUse:Read hook error: legal-france : original protégé, accès
 par code 2, Claude Code préfixe le message de la ligne de commande du hook, donc du chemin absolu de
 l'interpréteur et du coffre.
 
-Toute exception interne (JSON invalide sur l'entrée, registre corrompu, argument manquant, sortie
-standard inutilisable) vaut refus par le dernier recours : code 2 et « verrou en erreur » sur
-l'erreur standard. Dans ce cas seulement, le modèle voit la ligne de commande du hook. Le hook est
+Toute exception interne (JSON invalide sur l'entrée, registre corrompu, argument manquant) vaut
+refus par la même décision JSON, avec la raison générique « verrou en erreur, accès refusé par
+précaution ». Dernier recours, si la décision elle-même ne peut pas être écrite (sortie standard
+inutilisable) : code 2 et le même message sur l'erreur standard ; dans ce cas seulement, le modèle
+voit la ligne de commande du hook. Le hook est
 déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante, dépasse son
 délai ou répond un JSON illisible bloque aussi l'appel au lieu de le laisser passer, ce qui exige
 Claude Code 2.1.295 ou plus. Les hooks des fichiers de réglages s'appliquent aussi aux appels
@@ -298,9 +300,10 @@ Verrou Claude Code en session réelle, vérifié le 2026-10-20 entre 08:01 et 08
 temporaires) : refus constatés dans le transcript pour `Read` d'un original PDF, `cat` et `Get-Content`
 du registre, `Grep` depuis le dossier personnel, `Read` par un sous-agent, registre corrompu (message
 générique) et interpréteur introuvable (`onFailure: "block"`). Après passage à la décision JSON et à
-`-P` (08:14 UTC), `Read` de l'original et `Grep` depuis le dossier personnel refusés à nouveau, le
-texte vu par le modèle ne contenant ni chemin ni ligne de commande ; les autres cas n'ont pas été
-rejoués avec cette version. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
+`-P` (08:14 UTC), puis du dernier recours à la décision JSON (08:19 UTC), tous les cas rejoués
+sauf l'interpréteur introuvable : `Read` de l'original, `Grep` depuis le dossier personnel, `cat` et
+`Get-Content` du registre, `Read` par un sous-agent et registre corrompu sont refusés, et le texte vu
+par le modèle ne contient ni chemin ni ligne de commande. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
 
 Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
 humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt

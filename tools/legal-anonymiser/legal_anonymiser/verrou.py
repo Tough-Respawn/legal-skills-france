@@ -3,8 +3,9 @@
 Lancé par Claude Code (`python -P -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
 l'entrée standard. Refus = code 0 et décision JSON `deny` sur la sortie standard : Claude Code montre
 alors la raison seule (avec le code 2, il la préfixe de la ligne de commande du hook, chemins absolus
-compris, constaté le 2026-10-20). Sortie vide et code 0 = laissé passer. Toute exception, écriture de
-la décision comprise, vaut refus par le code 2 et un message générique sur l'erreur standard. Aucun
+compris, constaté le 2026-10-20). Sortie vide et code 0 = laissé passer. Toute exception vaut refus,
+par la même décision JSON avec un message générique ; le code 2 (message générique sur l'erreur
+standard) ne sert que si la décision elle-même ne peut pas être écrite. Aucun
 contenu de fichier n'est lu, seuls des chemins sont comparés, résolus et normalisés. Les messages ne
 contiennent jamais un chemin absolu ni un nom de fichier.
 Bibliothèque standard uniquement : ce module ne dépend d'aucun autre module du paquet.
@@ -128,18 +129,27 @@ def _write(stream, text: str) -> None:
         stream.flush()
 
 
+class _Parser(argparse.ArgumentParser):
+    def error(self, message: str) -> None:   # type: ignore[override]
+        raise ValueError("arguments")   # rien sur l'erreur standard : le refus passe par la décision JSON
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     try:
-        parser = argparse.ArgumentParser(prog="legal_anonymiser.verrou", add_help=False)
+        parser = _Parser(prog="legal_anonymiser.verrou", add_help=False)
         parser.add_argument("--coffre", required=True)
         args = parser.parse_args(argv)
         message = decide(json.load(sys.stdin), args.coffre)
-        if message is not None:   # json.dumps échappe en ASCII : lisible quel que soit le codage
-            _write(sys.stdout, json.dumps({"hookSpecificOutput": {
-                "hookEventName": "PreToolUse", "permissionDecision": "deny",
-                "permissionDecisionReason": message}}) + "\n")
-        return 0
     except BaseException:   # SystemExit d'argparse compris : jamais de laisser-passer
+        message = GENERIC
+    if message is None:
+        return 0
+    try:   # une seule écriture : jamais deux objets JSON ; json.dumps échappe en ASCII
+        _write(sys.stdout, json.dumps({"hookSpecificOutput": {
+            "hookEventName": "PreToolUse", "permissionDecision": "deny",
+            "permissionDecisionReason": message}}) + "\n")
+        return 0
+    except BaseException:   # sortie standard inutilisable : refus par le code 2
         try:
             _write(sys.stderr, GENERIC + "\n")
         except BaseException:

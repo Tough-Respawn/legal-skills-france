@@ -30,7 +30,8 @@ to [Semantic Versioning](https://semver.org/).
   `Grep` et `Glob` lancés depuis un dossier qui les contient (dossier
   personnel compris), `Bash` et `PowerShell` dont la commande cite le coffre,
   un original ou son nom ; refus par décision JSON `deny` (le modèle ne voit
-  ni chemin ni ligne de commande), toute erreur interne vaut refus (code 2).
+  ni chemin ni ligne de commande), erreur interne comprise (raison
+  générique) ; code 2 seulement si la décision ne peut pas être écrite.
   Commandes `install-hook` et `uninstall-hook` (`~/.claude/settings.json` par
   défaut, `--settings` sinon) : refus sous Claude Code 2.1.295 (code 6) ou sur
   des réglages non JSON (code 7), sauvegarde `settings.json.legal-france.bak`,
