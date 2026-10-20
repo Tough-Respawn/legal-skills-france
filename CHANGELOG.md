@@ -45,6 +45,15 @@ to [Semantic Versioning](https://semver.org/).
   fondement, sourcé avec date `vérifié le AAAA-MM-JJ` ou `NON VÉRIFIÉ`,
   renvois de `lib/relecture-engine.md` existants).
 
+### Fixed
+
+- Commandes Claude Code : chemins `lib/...` et `skills/...` préfixés par
+  `${CLAUDE_PLUGIN_ROOT}/`. Sans base, le modèle cherchait les fichiers sur
+  le disque, une fois jusqu'à parcourir le contrat masqué avant la garde.
+- Relecture : aucune recherche (Glob, Grep, Select-String) sur le fichier ou
+  son dossier avant `verifier` ; sections d'inspection absentes du fichier
+  masqué signalées « inspection non disponible », sans inférence.
+
 ---
 
 ## [4.4.0] - 2026-10-05
