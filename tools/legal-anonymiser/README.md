@@ -209,7 +209,14 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
   personnel, ses formes `~/…`, `$HOME/…`, `%USERPROFILE%\…`, `$env:USERPROFILE\…` ; et toujours
   `$LEGAL_FRANCE_COFFRE`, `%LEGAL_FRANCE_COFFRE%`, `$env:LEGAL_FRANCE_COFFRE`), le chemin d'un
   original ou son nom de fichier ; les chemins absolus Windows présents dans la commande sont
-  résolus avant comparaison (jonction, nom court).
+  résolus avant comparaison (jonction, nom court). Chaque jeton de la commande (mots séparés par
+  blancs, guillemets et `;|&<>()=,`, plus le contenu entier de chaque chaîne entre guillemets ; un
+  jeton à joker réduit à sa partie littérale, comme pour `Glob`) est aussi résolu depuis le dossier de
+  la session (`cwd` de l'événement) : refusé s'il est sous le coffre (`cat coffre/registre.json` ou
+  `Get-Content coffre/*/correspondance.json` depuis le parent du coffre, `cd coffre; type
+  registre.json`) ou s'il est un original. Une commande lancée depuis un dossier du coffre est refusée
+  entière. Une commande de 5 000 jetons est jugée en moins d'une seconde (mesuré le 2026-10-20 sous
+  Windows), loin du délai de 10 s.
 
 Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
 (2.1.303) ouvrira lui-même après le hook : espaces et BOM retirés aux extrémités, `~` et `~/` seuls
@@ -231,8 +238,10 @@ Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modifi
   `Read` reste permis ;
 - `Bash` et `PowerShell` dont la commande contient `uninstall-hook`, `legal_anonymiser.verrou`,
   `legal_anonymiser/`, `.claude/settings`, `sitecustomize`, `usercustomize`, `site-packages` ou le
-  chemin absolu du paquet. `python -m legal_anonymiser traiter` et `legal-anonymiser verifier`
-  restent permis.
+  chemin absolu du paquet, ou dont un jeton, résolu depuis le dossier de la session, désigne un fichier
+  du paquet ou un `settings*.json` d'un dossier `.claude` (`echo {} > settings.json` lancé dans
+  `.claude`). `python -m legal_anonymiser traiter`, `legal-anonymiser verifier` et le Python du venv
+  lancé par son chemin restent permis.
 
 Conséquences : `uninstall-hook` se lance par l'utilisateur, dans son propre terminal, jamais par le
 modèle ; les réglages de Claude Code ne se modifient plus depuis une session (le faire à la main, ou
