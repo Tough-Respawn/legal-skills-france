@@ -70,8 +70,15 @@ Afficher la progression seulement si l'interface et le format le permettent ;
 préserver une sortie JSON unique lorsqu'elle est demandée.
 
 Une demande de rédaction sélectionne `lib/redacteur-engine.md` et le modèle
-pertinent dans son catalogue. Une recherche de décisions sélectionne le format
-Recherche de jurisprudence de `skills/legal-france/methodology.md`. Ces demandes
+pertinent dans son catalogue. Une demande de relecture ou d'analyse d'un
+contrat fourni sélectionne `lib/relecture-engine.md`, dont la garde d'entrée
+précède toute lecture du fichier. Tout contrat fourni sous forme de fichier
+passe d'abord par la garde d'entrée de `lib/relecture-engine.md` (section 2),
+même quand la question n'est pas une relecture : aucune lecture avant que
+`legal-anonymiser verifier` réponde `publie`, ou avant le consentement
+explicite de l'utilisateur après l'avertissement. Une recherche de décisions
+sélectionne le format Recherche de jurisprudence de
+`skills/legal-france/methodology.md`. Ces demandes
 explicites priment sur le format par défaut du profil, sans exiger de commande
 slash. Conserver la qualification, les règles des cas complexes, la lecture
 des décisions citées et l'avertissement juridique obligatoire.
@@ -180,7 +187,7 @@ If no available official source (web or explicitly chosen API) allows the applic
 When official and embedded references differ, determine which version governs the facts and procedure before changing the conclusion. Check effective dates and transitional provisions; if the relevant date is missing, ask or state separate hypotheses. Explain any material divergence and cite the version selected with its period of application.
 
 **Step 3 : Analyze user-provided documents**
-If the user has provided a contract, court decision, or any legal document, use the available file-reading capability to parse it. Do not assume content : read the actual text.
+If the user has provided a contract, court decision, or any legal document, use the available file-reading capability to parse it. Do not assume content : read the actual text. A contract supplied as a file first goes through the entry guard of `lib/relecture-engine.md` (section 2), even when the question is not a review: no reading before `legal-anonymiser verifier` answers `publie`, or before the user's explicit consent after the warning.
 
 **Step 4 : Cross-reference all findings**
 Reconcile references and documents. Distinguish reported, corroborated, disputed and unknown facts; identify material gaps in evidence. Record the applicable version and the source/date of verification. Do not replace an applicable historical rule merely because it has since been amended.
@@ -278,7 +285,8 @@ The following slash commands are available. Template selection follows the Respo
 | `/droit-administratif <question>` | Administrative | Public administration, administrative courts |
 | `/droit-numerique <question>` | Digital | GDPR/RGPD, CNIL, data protection, e-commerce |
 | `/droit-europeen <question>` | EU | Treaties, directives, regulations, CJEU |
+| `/relire <fichier>` | Cross-cutting | Contract review of a masked file : follows `lib/relecture-engine.md` |
 
-**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
+**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. `/relire` always produces the eight-part review report of `lib/relecture-engine.md`. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
 
 ---

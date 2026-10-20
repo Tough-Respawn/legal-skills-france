@@ -8,7 +8,7 @@ Invoke the `legal-france` meta skill to research case law.
 
 ## Workflow
 1. If Judilibre was explicitly chosen, read the usage section of
-   `lib/judilibre-client.md` and call `skills/legal-france/scripts/legal_api.py`
+   `${CLAUDE_PLUGIN_ROOT}/lib/judilibre-client.md` and call `${CLAUDE_PLUGIN_ROOT}/skills/legal-france/scripts/legal_api.py`
    with --use-api and the supplied query or decision ID. Use the absolute script
    path from the loaded plugin. Do not search the web first or read credentials.
 2. Otherwise, search and read official web sources. Credentials alone never
