@@ -24,6 +24,31 @@ to [Semantic Versioning](https://semver.org/).
   `valider`, `verifier`, `reidentifier`. Seule exception à la règle « Python
   standard » du dépôt (pypdf, Pillow, spaCy, Tesseract installés par
   l'utilisateur) ; les 8 skills et les trois archives restent sans dépendance.
+- Anonymiseur, verrou Claude Code : hook `PreToolUse` en Python standard
+  (`python -m legal_anonymiser.verrou --coffre <racine>`) qui refuse `Read`,
+  `Edit`, `Write`, `NotebookEdit` sur un original inscrit ou le coffre,
+  `Grep` et `Glob` lancés depuis un dossier qui les contient (dossier
+  personnel compris), `Bash` et `PowerShell` dont la commande cite le coffre,
+  un original ou son nom ; chemins pris sous la forme que Claude Code ouvrira
+  (`~`, `/c/...`, `\\?\`), motif `Glob` absolu coupé au dernier séparateur
+  avant un joker, entrée lue en UTF-8 (chemins accentués) ; refus par
+  décision JSON `deny` (le modèle ne voit ni chemin ni ligne de commande),
+  erreur interne comprise (raison générique) ; code 2 seulement si la
+  décision ne peut pas être écrite. Auto-protection : paquet, dossiers de
+  l'interpréteur (venv, Python de base, site-packages de l'utilisateur),
+  réglages `.claude/settings*.json`, commandes `uninstall-hook`. Commandes `install-hook` et `uninstall-hook`
+  (`~/.claude/settings.json` par défaut, `--settings` sinon) : refus avec une
+  version de Claude Code antérieure à 2.1.295 (code 6) ou sur des réglages
+  non JSON (code 7), sauvegarde `settings.json.legal-france.bak`, écriture
+  atomique (cible d'un lien symbolique), BOM accepté, une seule entrée, seul
+  notre hook retiré, `"onFailure": "block"`, interpréteur lancé avec `-P` en
+  Python 3.11 ou plus. Limites documentées : script, motif générique ou
+  variables dans `Bash` ou `PowerShell`, outils MCP, réglages non JSON
+  ignorés sans avertissement par Claude Code.
+- Anonymiseur, dialogue de validation natif : `TaskDialogIndirect` sous
+  Windows, `osascript` sous macOS, puis `tkinter`, puis terminal ;
+  « Abandonner » par défaut, fermeture = abandon ; une erreur d'`osascript`
+  autre que l'annulation passe au repli suivant.
 - Quatre grilles de relecture d'ordre public dans les références des
   domaines : bail d'habitation (civil), contrat de travail (travail),
   contrat de consommation et contrat entre professionnels (affaires).

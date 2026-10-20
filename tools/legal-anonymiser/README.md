@@ -90,6 +90,8 @@ Parcours complet :
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
 | `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
+| `install-hook [--settings CHEMIN]` | ajoute le verrou Claude Code aux réglages (défaut `~/.claude/settings.json`), voir « Verrou Claude Code » | 0 (installé, ou déjà à jour), 6 (Claude Code absent ou antérieur à 2.1.295), 7 (réglages non JSON, rien écrit) |
+| `uninstall-hook [--settings CHEMIN]` | retire exactement cette entrée | 0 (retiré, ou rien à retirer), 7 |
 
 Code 1 : `verifier` négatif. Code 2 : arguments invalides. Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
 `ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
@@ -181,6 +183,146 @@ Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif 
   (droits administrateur non demandés) : à vérifier par qui l'applique.
 - **macOS** : non documenté en v1.
 
+## Verrou Claude Code
+
+Protection supplémentaire, propre à Claude Code : un hook `PreToolUse` (`legal_anonymiser/verrou.py`,
+bibliothèque standard, `python -P -m legal_anonymiser.verrou --coffre <racine>`) reçoit chaque appel
+d'outil en JSON sur l'entrée standard. Pour refuser, il écrit sur la sortie standard la décision JSON
+`{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
+"permissionDecisionReason": "<message>"}}` et sort avec le code 0 ; pour laisser passer, il ne
+répond rien (code 0). Il ne lit jamais le contenu d'un fichier : il compare des chemins résolus
+(liens, jonctions, noms courts 8.3 via `GetLongPathNameW`, casse indifférente sous Windows et macOS).
+
+Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
+
+- `Read`, `Edit`, `Write`, `NotebookEdit` sur un original ou sur tout chemin sous le coffre
+  (`file_path` ou `notebook_path`, relatif au `cwd` de la session s'il n'est pas absolu) ;
+- `Grep` et `Glob` dont la racine (`path`, sinon le dossier courant ; pour `Glob`, aussi la partie
+  littérale du motif jusqu'au dernier séparateur avant le premier `*`, `?`, `[` ou `{`) est le
+  coffre ou est dedans (« coffre protégé »), ou est un parent du coffre ou d'un original : une
+  recherche lancée depuis le dossier personnel ou la racine du disque, ou un motif comme
+  `~/Doc*/**/*.docx`, est refusée avec la raison (« un original protégé ou le coffre se trouve dans
+  ce dossier ou en dessous : lancez la recherche dans un sous-dossier qui ne les contient pas ») ;
+- `Bash` et `PowerShell` dont la commande contient, casse et séparateurs `\` ou `/` indifférents,
+  le chemin du coffre (absolu, `/c/Users/…` de Git Bash, `~/.legal-france`, `%USERPROFILE%`,
+  `$HOME`, `$env:USERPROFILE`, ou simplement `.legal-france` ; pour un coffre déplacé sous le dossier
+  personnel, ses formes `~/…`, `$HOME/…`, `%USERPROFILE%\…`, `$env:USERPROFILE\…` ; et toujours
+  `$LEGAL_FRANCE_COFFRE`, `%LEGAL_FRANCE_COFFRE%`, `$env:LEGAL_FRANCE_COFFRE`), le chemin d'un
+  original ou son nom de fichier ; les chemins absolus Windows présents dans la commande sont
+  résolus avant comparaison (jonction, nom court).
+
+Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
+(2.1.303) ouvrira lui-même après le hook : espaces et BOM retirés aux extrémités, `~` et `~/` seuls
+développés (`~\…` ou `~nom/…` restent relatifs au dossier de la session, comme dans Claude Code), sous
+Windows `/c/…` (Git Bash) converti en `C:\…`, sinon chemin relatif au dossier de la session. Les
+préfixes `\\?\` et `\\.\` sont retirés (`\\?\UNC\serveur` devient `\\serveur`) : ils désignent le
+même fichier.
+L'entrée standard est lue en octets et décodée en UTF-8, quelle que soit la page de code du poste
+(Claude Code ne fixe pas `PYTHONIOENCODING` pour les hooks) : un chemin accentué est comparé tel quel.
+
+Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modification refusée » :
+
+- `Edit`, `Write`, `NotebookEdit` sur un fichier du paquet `legal_anonymiser` installé (pour une
+  installation éditable, le dossier du dépôt), sur tout fichier des dossiers de l'interpréteur qui
+  lance le verrou (`sys.prefix`, `sys.base_prefix`, `sys.exec_prefix`, site-packages de
+  l'utilisateur : venv, bibliothèque standard, `.pth`, chercheur de l'installation éditable, tout ce
+  que Python charge au démarrage), et sur tout `settings*.json` d'un dossier `.claude`
+  (`~/.claude/settings.json`, `~/.claude/settings.local.json`, `.claude/settings.json` d'un projet) ;
+  `Read` reste permis ;
+- `Bash` et `PowerShell` dont la commande contient `uninstall-hook`, `legal_anonymiser.verrou`,
+  `legal_anonymiser/`, `.claude/settings`, `sitecustomize`, `usercustomize`, `site-packages` ou le
+  chemin absolu du paquet. `python -m legal_anonymiser traiter` et `legal-anonymiser verifier`
+  restent permis.
+
+Conséquences : `uninstall-hook` se lance par l'utilisateur, dans son propre terminal, jamais par le
+modèle ; les réglages de Claude Code ne se modifient plus depuis une session (le faire à la main, ou
+retirer le verrou le temps du changement) ; développer l'outil lui-même avec Claude Code demande de
+retirer le verrou d'abord. Sur un poste de développement, préférer une installation limitée au
+dossier des contrats (`legal-anonymiser install-hook --settings <dossier des contrats>/.claude/settings.json`),
+ou retirer le verrou pendant le travail sur l'outil : les sessions ouvertes hors de ce dossier ne sont
+alors pas protégées.
+
+Les messages ne contiennent jamais un chemin ni un nom de fichier. Sur un refus, le modèle voit
+seulement `PreToolUse:Read hook error: legal-france : original protégé, accès refusé...`
+(Claude Code 2.1.303, constaté le 2026-10-20). Pourquoi le JSON plutôt que le code 2 : sur un refus
+par code 2, Claude Code préfixe le message de la ligne de commande du hook, donc du chemin absolu de
+l'interpréteur et du coffre.
+
+Toute exception interne (JSON invalide sur l'entrée, registre corrompu, argument manquant) vaut
+refus par la même décision JSON, avec la raison générique « verrou en erreur, accès refusé par
+précaution ». Dernier recours, si la décision elle-même ne peut pas être écrite (sortie standard
+inutilisable) : code 2 et le même message sur l'erreur standard ; dans ce cas seulement, le modèle
+voit la ligne de commande du hook. Le hook est
+déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante, dépasse son
+délai ou répond un JSON illisible bloque aussi l'appel au lieu de le laisser passer, ce qui exige
+Claude Code 2.1.295 ou plus. Les hooks des fichiers de réglages s'appliquent aussi aux appels
+d'outils des sous-agents. Format du hook, décision `deny`, code 2 et `onFailure` confirmés sur
+https://code.claude.com/docs/en/hooks, lue le 2026-10-20.
+
+### Installation du verrou
+
+```bash
+legal-anonymiser install-hook                 # écrit dans ~/.claude/settings.json
+legal-anonymiser install-hook --settings CHEMIN
+legal-anonymiser uninstall-hook               # retire exactement cette entrée
+```
+
+- Lancer `install-hook` avec l'interpréteur de l'environnement où l'outil est installé : l'entrée
+  enregistre son chemin absolu (`sys.executable`) et la racine résolue du coffre (variable
+  `LEGAL_FRANCE_COFFRE` comprise). Après un déplacement du coffre ou du venv, ou un changement de
+  version de Python, relancer `install-hook` : l'entrée est remplacée (arguments compris), jamais
+  doublée.
+- L'entrée ajoutée sous `hooks.PreToolUse` : matcher
+  `Read|Edit|Write|NotebookEdit|Grep|Glob|Bash|PowerShell`, hook `{"type": "command", "command":
+  <python>, "args": ["-P", "-m", "legal_anonymiser.verrou", "--coffre", <racine>], "onFailure":
+  "block", "timeout": 10}` (forme exec, sans shell). Elle est reconnue par `legal_anonymiser.verrou`
+  dans `args`.
+- `-P` (Python 3.11 ou plus) empêche le dossier de la session d'entrer dans le chemin d'import : un
+  `json.py`, un `argparse.py` ou un dossier `legal_anonymiser/` présent dans le projet ne remplace pas
+  le verrou (vérifié en test : sans `-P`, un tel fichier fait sortir le hook en code 0, donc laisser
+  passer). En Python 3.9 et 3.10, `-P` n'existe pas et n'est pas écrit : un module du projet nommé
+  comme un module de la bibliothèque standard, ou comme le paquet, peut détourner le verrou. Utiliser
+  Python 3.11 ou plus pour l'environnement de l'outil.
+- `install-hook` écrit toujours un JSON valide.
+- Refus d'installer, sans rien écrire : `claude --version` introuvable ou antérieur à 2.1.295 (code 6) ;
+  réglages qui ne sont pas un objet JSON valide, commentaires compris (code 7).
+- Avant chaque écriture, l'ancien fichier est copié en `settings.json.legal-france.bak` à côté ;
+  l'écriture est atomique (fichier temporaire puis remplacement). Le fichier est rechargé et réécrit
+  en JSON indenté de 2 : les autres clés et les autres hooks sont conservés, la mise en forme
+  d'origine ne l'est pas. Relancer sans rien à changer n'écrit rien. Un BOM UTF-8 en tête est
+  accepté. Si `settings.json` est un lien symbolique, c'est sa cible qui est réécrite (et sauvegardée
+  à côté d'elle), le lien reste en place.
+- `uninstall-hook` retire seulement l'objet hook du verrou ; un hook à vous placé dans la même entrée
+  est conservé, l'entrée n'est supprimée que si elle devient vide.
+- Redémarrer les sessions Claude Code ouvertes après l'installation.
+
+**Limites** (conception, section 8) :
+
+- un script lancé par `Bash` ou `PowerShell` (Python, `node`, PowerShell) qui lit l'original sans
+  citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), un chemin
+  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`) ne sont pas
+  reconnus ;
+- les outils MCP, les autres harnais et toute session sans le hook ne sont pas couverts ;
+- un fichier de réglages (`--settings` ou `settings.json`) qui n'est pas du JSON valide est ignoré
+  par Claude Code sans avertissement : le verrou disparaît avec lui. Constaté avec `--settings` le
+  2026-10-20 (appel `Read` passé, rien sur la sortie d'erreur) ; pour `~/.claude/settings.json`, non
+  vérifié, à supposer identique. Après toute modification manuelle des réglages, vérifier qu'ils
+  restent du JSON valide ;
+- `Read` refuse déjà de lui-même un `.docx` (fichier binaire) et suggère au modèle un script : c'est
+  précisément le contournement que le verrou ne voit pas ;
+- l'auto-protection repose sur des chemins et des mots dans les commandes : un script qui écrit dans
+  les réglages ou dans le paquet sans les nommer n'est pas vu (même limite que ci-dessus) ; pour
+  `Bash` et `PowerShell`, les dossiers de l'interpréteur ne sont reconnus que par `site-packages`,
+  `sitecustomize` ou `usercustomize`, pas par leur chemin absolu (sinon lancer le Python du venv par
+  son chemin serait refusé) ;
+- le dépassement du délai de 10 s n'a pas été provoqué en session réelle : le blocage dans ce cas
+  vient de la documentation de Claude Code, pas d'une observation ;
+- un contrat jamais passé dans l'outil n'est pas inscrit au registre, donc pas protégé : la garde
+  d'entrée du skill (`verifier`) s'en charge.
+
+Les protections principales restent : le modèle ne connaît pas le chemin de l'original, rien de non
+publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publié.
+
 ## État de la validation (2026-10-20)
 
 Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
@@ -198,8 +340,26 @@ Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter
 `relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
 partie dans le fichier publié.
 
-Non vérifié à ce jour : le parcours complet depuis une session Claude Code (transcript compris), la
-règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
+Verrou Claude Code en session réelle, vérifié le 2026-10-20 entre 08:01 et 08:07 UTC (Claude Code
+2.1.303, `claude -p --settings` avec l'entrée écrite par `install-hook`, coffre et originaux factices
+temporaires) : refus constatés dans le transcript pour `Read` d'un original PDF, `cat` et `Get-Content`
+du registre, `Grep` depuis le dossier personnel, `Read` par un sous-agent, registre corrompu (message
+générique) et interpréteur introuvable (`onFailure: "block"`). Après passage à la décision JSON et à
+`-P` (08:14 UTC), puis du dernier recours à la décision JSON (08:19 UTC), tous les cas rejoués
+sauf l'interpréteur introuvable : `Read` de l'original, `Grep` depuis le dossier personnel, `cat` et
+`Get-Content` du registre, `Read` par un sous-agent et registre corrompu sont refusés, et le texte vu
+par le modèle ne contient ni chemin ni ligne de commande. Après la normalisation des chemins et
+l'auto-protection (08:44 à 08:48 UTC, coffre temporaire sous le dossier personnel) : `Grep` sur
+`~/.legal-france-test/coffre`, `Read` d'un original accentué, deux `Glob` absolus à joker (`pro*`,
+`{projet,x}`), `Edit` et `Write` de l'original, `Write` dans le coffre par `~`, `Write` de
+`.claude/settings.local.json`, `Edit` de `verrou.py`, `NotebookEdit` d'un notebook du paquet et
+`uninstall-hook` par `Bash` sont refusés par le verrou, sans chemin dans le texte vu par le modèle.
+Un `NotebookEdit` sur un original non lu est arrêté avant le hook par Claude Code (« File has not
+been read yet ») ; lien symbolique non créable sur ce poste (droit absent) ; délai dépassé non
+provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
+
+Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
+humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
 public.
 
 ## Fonctionnement détaillé (état actuel)
@@ -455,16 +615,17 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 
 - **Validation** (`validation.py`) : le texte masqué et le rapport sont ouverts depuis le coffre avec
   l'application par défaut du système (seul sous-processus avec l'OCR, jamais attendu, échec
-  ignoré), puis une fenêtre native pose la question « Relisez les fichiers ouverts. Publier ce
+  ignoré), puis une boîte de dialogue pose la question « Relisez les fichiers ouverts. Publier ce
   contrat masqué ? » (la CLI y ajoute l'identifiant neutre) : Publier, Ajuster ou Abandonner ; fermer
-  la fenêtre vaut abandon. Seul un clic publie : aucun bouton n'a le focus au départ, « Publier » est
-  hors de l'ordre de tabulation, Entrée ne déclenche aucun bouton, et la commande Tk `send` (X11) est
-  retirée. Sans `tkinter` ou sans affichage, la question passe au clavier seulement si l'entrée et la
-  sortie standard sont des terminaux, et il faut taper le mot entier (`publier`, casse indifférente ;
-  ni chiffre ni initiale) ; sinon la réponse est `impossible` et rien n'est publié. Aucune option,
-  variable d'environnement, fichier ni tube ne répond à la place de l'utilisateur. Limite : un
-  programme qui simule clavier ou souris sur la session de l'utilisateur, ou un pseudo-terminal piloté
-  par un autre programme, n'est pas détecté.
+  la fenêtre vaut abandon. Ordre d'essai : dialogue du système (voir « Dialogue de validation »),
+  puis `tkinter`, puis le clavier seulement si l'entrée et la sortie standard sont des terminaux, et
+  il faut taper le mot entier (`publier`, casse indifférente ; ni chiffre ni initiale) ; sinon la
+  réponse est `impossible` et rien n'est publié. Dans la fenêtre `tkinter`, seul un clic publie :
+  aucun bouton n'a le focus au départ, « Publier » est hors de l'ordre de tabulation, Entrée ne
+  déclenche aucun bouton, et la commande Tk `send` (X11) est retirée. Aucune option, variable
+  d'environnement, fichier ni tube ne répond à la place de l'utilisateur. Limite : un programme qui
+  simule clavier ou souris sur la session de l'utilisateur, ou un pseudo-terminal piloté par un autre
+  programme, n'est pas détecté.
 - **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
   neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
   `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,
@@ -474,6 +635,31 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 - **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
   ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
   tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
+
+### Dialogue de validation
+
+Ordre d'essai : dialogue natif du système ci-dessous ; s'il est indisponible, fenêtre `tkinter` ;
+sans affichage, clavier si l'entrée et la sortie standard sont des terminaux ; sinon `impossible`
+(rien n'est publié). Mêmes garanties à chaque étape : aucune option de pré-acceptation, « Publier »
+jamais bouton par défaut, fermer la fenêtre vaut abandon (nuance clavier sous Windows ci-dessous).
+
+- **Windows** : `TaskDialogIndirect` des contrôles communs v6 (`comctl32`, via `ctypes`, sans
+  dépendance) : titre `legal-france`, question en texte principal, trois boutons « Publier »,
+  « Ajuster », « Abandonner ». « Abandonner » est le bouton par défaut (à l'ouverture, Entrée ou
+  Échap abandonnent), la croix de fermeture vaut abandon. Contrairement à la fenêtre `tkinter`, les
+  trois boutons sont dans l'ordre de tabulation : Tab jusqu'à « Publier » puis Entrée ou Espace
+  publie. C'est voulu : un choix délibéré au clavier, par une personne devant l'écran, vaut un clic
+  (aucun appui unique ne publie). Si les contrôles communs v6 ne sont pas chargés, l'outil active le
+  manifeste de `shell32` (contexte d'activation, appel réel vérifié en test sans fenêtre) ; si
+  `TaskDialogIndirect` reste introuvable ou renvoie une erreur, repli sur `tkinter` sans plantage.
+- **macOS** : `osascript -e 'display dialog …'`, la question passée en argument (aucun shell), bouton
+  par défaut et bouton d'annulation « Abandonner ». Seul ce bouton (ou Échap, erreur -128) donne
+  « abandonner » ; `osascript` absent ou toute autre erreur (session sans interface) : repli sur
+  `tkinter`, puis terminal, puis `impossible`.
+- **Linux et autres** : `tkinter` directement.
+- La signature de `validation.confirm` et ses garanties sont inchangées ; les tests ne passent que par
+  des appels système remplacés, jamais par une vraie fenêtre. Le clic humain sur la fenêtre native n'a
+  pas encore été exécuté (voir « État de la validation »).
 
 ## Licences des dépendances
 

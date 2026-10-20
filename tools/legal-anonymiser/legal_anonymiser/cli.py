@@ -1,4 +1,4 @@
-"""Ligne de commande : traiter, relancer, valider, verifier, reidentifier.
+"""Ligne de commande : traiter, relancer, valider, verifier, reidentifier, install-hook, uninstall-hook.
 
 Codes de sortie : 0 publié (ou vérification `publie`), 1 vérification négative, 3 arbitrage en attente,
 4 non publié, 5 format ou fichier illisible, 6 dépendance manquante, 7 erreur interne (trace dans le coffre).
@@ -204,6 +204,36 @@ def _reidentifier(args: argparse.Namespace) -> int:
     return 0
 
 
+def _settings_path(given: Optional[str]) -> Path:
+    return Path(given) if given else Path.home() / ".claude" / "settings.json"
+
+
+def _install_hook(args: argparse.Namespace) -> int:
+    from . import installation
+    version = installation.claude_version()
+    try:
+        result = installation.install(_settings_path(args.settings), Vault().root, version)
+    except installation.VersionTooOld:
+        say("verrou_version", version=version or "aucune")
+        return 6
+    except installation.SettingsInvalid:
+        say("verrou_reglages_invalides")
+        return 7
+    say("verrou_installe" if result == "installé" else "verrou_deja")
+    return 0
+
+
+def _uninstall_hook(args: argparse.Namespace) -> int:
+    from . import installation
+    try:
+        result = installation.uninstall(_settings_path(args.settings))
+    except installation.SettingsInvalid:
+        say("verrou_reglages_invalides")
+        return 7
+    say("verrou_retire" if result == "retiré" else "verrou_absent")
+    return 0
+
+
 class _Parser(argparse.ArgumentParser):
     """Une erreur d'arguments n'est jamais relayée (argparse y cite l'argument fautif, chemin compris)."""
 
@@ -230,6 +260,11 @@ def _parser() -> argparse.ArgumentParser:
     s.add_argument("id")
     s.add_argument("rapport")
     s.set_defaults(func=_reidentifier)
+    for name, func, help_ in (("install-hook", _install_hook, "verrou Claude Code dans ~/.claude/settings.json"),
+                              ("uninstall-hook", _uninstall_hook, "retirer le verrou Claude Code")):
+        s = sub.add_parser(name, help=help_)
+        s.add_argument("--settings", help="fichier de réglages (défaut : ~/.claude/settings.json)")
+        s.set_defaults(func=func)
     return p
 
 
