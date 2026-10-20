@@ -6,16 +6,32 @@ import re
 from pathlib import Path
 
 from .coffre import Vault, atomic_write
+from .rendu import MARKER_RE
+
+
+class SansPublication(Exception):
+    """Rapport dont la première ligne n'est pas le marqueur d'une version publiée de ce contrat."""
 
 
 def run(vault: Vault, cid: str, report: Path) -> Path:
-    """Remplace chaque placeholder connu de `correspondance.json` (les siens seulement, le plus long d'abord) ;
-    tout autre texte, `[INCONNU_1]` ou `[IMAGE]` compris, reste tel quel.
+    """Remplace chaque placeholder de la table figée à la publication (les siens seulement, le plus long
+    d'abord) ; tout autre texte, `[INCONNU_1]` ou `[IMAGE]` compris, reste tel quel.
+
+    La première ligne du rapport doit être celle du fichier publié (marqueur de ce contrat avec `corps=`) :
+    elle désigne `coffre/<id>/publications/<corps>.json`. Ligne absente, autre contrat, version jamais
+    publiée ou marqueur sans `corps` : `SansPublication`, rien n'est écrit. La table de travail
+    (`correspondance.json`, réécrite à chaque passage) n'est jamais lue.
 
     Écrit `coffre/<id>/rapport-final.md`. Rapport ou table illisible : `OSError` (ou `UnicodeDecodeError`).
     """
-    table = json.loads((vault.root / cid / "correspondance.json").read_text("utf-8"))
     text = Path(report).read_text("utf-8")
+    m = MARKER_RE.match(text.split("\n", 1)[0].rstrip("\r").lstrip("﻿"))
+    if not (m and m.group("id") == cid and m.group("corps")):
+        raise SansPublication()
+    snapshot = vault.root / cid / "publications" / ("%s.json" % m.group("corps"))
+    if not snapshot.is_file():
+        raise SansPublication()
+    table = json.loads(snapshot.read_text("utf-8"))
     out = text
     if table:
         rx = re.compile("|".join(re.escape(k) for k in sorted(table, key=len, reverse=True)))

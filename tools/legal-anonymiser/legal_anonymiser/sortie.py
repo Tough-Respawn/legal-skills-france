@@ -46,7 +46,9 @@ MESSAGES = {
     "ajustements_ligne": "Ligne {line} mal formée dans {path} : corrigez-la puis relancez.",
     "id_invalide": "Identifiant de contrat invalide : 6 caractères hexadécimaux attendus.",
     "inconnu": "Contrat {cid} inconnu du coffre.",
-    "sans_correspondance": "Contrat {cid} sans table de correspondance : traitez-le d'abord.",
+    "reidentification_sans_publication": "Contrat {cid} : aucune publication ne correspond à ce rapport ; sa "
+                                         "première ligne doit être celle du fichier publié contrat-{cid}.masque.md. "
+                                         "Rien n'a été réidentifié.",
     "rapport_illisible": "Rapport illisible : vérifiez le chemin et l'encodage (UTF-8).",
     "reidentifie": "Rapport réidentifié : {path}",
     "erreur_interne": "Erreur interne : détails dans {path}",

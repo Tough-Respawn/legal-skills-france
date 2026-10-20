@@ -81,7 +81,11 @@ Parcours complet :
    registre. `legal-anonymiser verifier contrat-<id>.masque.md` répond `publie` tant qu'il n'a pas été
    modifié, `modifie` sinon, `inconnu` pour un fichier étranger.
 5. Après l'analyse par le modèle, `legal-anonymiser reidentifier <id> rapport.md` écrit le rapport avec
-   les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre.
+   les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre. La
+   **première ligne du rapport doit être la copie exacte de celle du fichier publié** (marqueur
+   `<!-- legal-france:masque v1 id=… statut=valide_humain date=… corps=… -->`) : elle désigne la table de
+   correspondance figée à cette publication. Sans elle, ou pour une version jamais publiée, rien n'est
+   réidentifié (code 7).
 
 | Commande | Effet | Codes |
 |---|---|---|
@@ -89,7 +93,7 @@ Parcours complet :
 | `relancer ID` | relit `ajustements.txt`, relance le masquage, puis comme `traiter` | idem (4 si l'identifiant est invalide ou inconnu) |
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
-| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
+| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, aucune publication ne correspond à la première ligne du rapport, rapport illisible ; sans trace écrite) |
 | `install-hook [--settings CHEMIN]` | ajoute le verrou Claude Code aux réglages (défaut `~/.claude/settings.json`), voir « Verrou Claude Code » | 0 (installé, ou déjà à jour), 6 (Claude Code absent ou antérieur à 2.1.295), 7 (réglages non JSON, rien écrit) |
 | `uninstall-hook [--settings CHEMIN]` | retire exactement cette entrée | 0 (retiré, ou rien à retirer), 7 |
 
@@ -377,9 +381,11 @@ public.
 une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le modèle est installé (sinon
 le passage continue sans elle, constat `ner_absente`), entités avec les décisions relues, constats de
 métadonnées, masquage, risque résiduel, seconde passe. Écrit dans `coffre/<id>/` : `masque.md`
-(version en préparation, marqueur `valide_humain` daté du jour), `rapport.md` (valeurs réelles, jamais
-publié), `ajustements.txt`, `correspondance.json` (placeholder vers valeur, ambiguïtés `[AMBIGU_n]`
-comprises) et `etat.json` (`destination` : dossier courant du premier `traiter`, où sera publié le
+(version en préparation, marqueur `valide_humain` daté du jour, avec `corps=` : 16 premiers caractères
+de l'empreinte SHA-256 de tout ce qui suit le marqueur), `rapport.md` (valeurs réelles, jamais
+publié), `ajustements.txt`, `correspondance.json` (table de travail, placeholder vers valeur, ambiguïtés
+`[AMBIGU_n]` comprises, réécrite à chaque passage ; la publication en fige une copie) et `etat.json`
+(`destination` : dossier courant du premier `traiter`, où sera publié le
 fichier ; `pending` ; `ouverts` : alertes et ambiguïtés encore ouvertes ; `sha_masque` : empreinte du
 corps de `masque.md` après le marqueur ; `sha_ajustements` ; `date` ; `original_name_hidden`). `etat.json`
 est écrit en début de passage avec `pending` et `ouverts` à `null`, puis complété à la fin : un passage
@@ -393,7 +399,8 @@ attente les lignes `?` et ces placeholders inconnus.
 **Validation** : refusée (code 3, « des points restent ouverts ») tant que `pending` ou `ouverts` n'est
 pas 0, si `etat.json` ne porte pas ces champs, ou si `masque.md` contient encore `[AMBIGU_` ; refusée
 aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de `masque.md`
-ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage : il faut `relancer`. Sinon
+ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage, ou que le marqueur de
+`masque.md` n'a pas le `corps=` de son corps (fichier écrit par la v4.5.0) : il faut `relancer`. Sinon
 `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
 ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
 masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
@@ -423,9 +430,15 @@ du script ; une erreur d'arguments (commande inconnue, argument en trop ou manqu
 (`pending` 0, `ouverts` > 0), le message dit « <n> alerte(s) ou ambiguïté(s) restent ouvertes : voir
 coffre/<id>/ajustements.txt » (code 3), jamais « 0 point(s) à arbitrer ».
 
-**Réidentification** (`reidentification.py`) : seules les clés de `correspondance.json` sont
-substituées (texte exact, la plus longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel
-quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
+**Réidentification** (`reidentification.py`) : la première ligne du rapport doit être le marqueur du
+fichier publié (même `id`, champ `corps=`) ; elle désigne `coffre/<id>/publications/<corps>.json`, la
+table figée à cette publication. Seules les clés de cette table sont substituées (texte exact, la plus
+longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel quel ; le résultat,
+`coffre/<id>/rapport-final.md`, ne quitte pas le coffre. Ligne absente ou modifiée, autre contrat,
+version jamais publiée, marqueur de la v4.5.0 sans `corps=` : refus, « aucune publication ne correspond à
+ce rapport » (code 7), rien n'est écrit. La table de travail n'est jamais lue : retraiter l'original
+modifié sans publier ne change pas les valeurs d'un rapport écrit sur une publication antérieure (audit
+v4.5.0, constat F2).
 
 ## Formats lus (état actuel)
 
@@ -637,10 +650,14 @@ dont le texte a changé sont listées sous « Décisions périmées ».
   programme, n'est pas détecté.
 - **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
   neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
-  `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,
-  octet pour octet sans conversion des fins de ligne (le rendu produit des `\n`), inscrit d'abord
-  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur, puis le chemin,
-  l'empreinte et la date dans l'état du contrat.
+  `statut=valide_humain` de ce contrat, ou si son champ `corps=` manque ou ne correspond pas au corps
+  du texte. Fige d'abord la table de travail en `coffre/<id>/publications/<corps>.json`, inscrit
+  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur et `corps`, puis écrit
+  `contrat-<id>.masque.md` de façon atomique, en UTF-8, octet pour octet sans conversion des fins de
+  ligne (le rendu produit des `\n`), et enfin le chemin, l'empreinte et la date dans l'état du contrat.
+  Les entrées du registre écrites par la v4.5.0 (sans `corps`) restent lues par `verifier`. Deux
+  publications au corps identique (seules des valeurs masquées ont changé) partagent une table : la
+  dernière publiée.
 - **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
   ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
   tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.

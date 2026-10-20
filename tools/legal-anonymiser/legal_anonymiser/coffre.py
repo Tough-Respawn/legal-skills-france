@@ -109,9 +109,10 @@ class Vault:
         self._save(reg)
         return cid
 
-    def register_published(self, sha256: str, cid: str, date: str) -> None:
+    def register_published(self, sha256: str, cid: str, date: str, corps: Optional[str] = None) -> None:
+        """`corps` : empreinte du corps publié, clé de sa table figée ; les entrées sans `corps` (v4.5.0) restent lues."""
         reg = self._load()
-        reg["publies"][sha256] = {"id": cid, "date": date}
+        reg["publies"][sha256] = dict({"id": cid, "date": date}, **({"corps": corps} if corps else {}))
         self._save(reg)
 
     def lookup_published(self, sha256: str) -> Optional[str]:

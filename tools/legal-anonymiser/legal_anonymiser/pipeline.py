@@ -1,8 +1,9 @@
 """Chaîne complète d'un contrat : extraction, inspection, détection, entités, masquage, seconde passe.
 
-Écrit dans `coffre/<id>/` : `masque.md` (version en préparation, marqueur `valide_humain` daté du jour),
-`rapport.md` (valeurs réelles, jamais publié), `ajustements.txt` (décisions relues à chaque passage),
-`correspondance.json` (placeholder vers valeur, pour la réidentification) et `etat.json`. `etat.json` est
+Écrit dans `coffre/<id>/` : `masque.md` (version en préparation, marqueur `valide_humain` daté du jour, avec
+l'empreinte `corps=` de son corps), `rapport.md` (valeurs réelles, jamais publié), `ajustements.txt` (décisions
+relues à chaque passage), `correspondance.json` (table de travail, placeholder vers valeur ; la publication en
+fige une copie par version, seule lue par la réidentification) et `etat.json`. `etat.json` est
 écrit d'abord avec `pending` et `ouverts` à `null` (un passage interrompu ne laisse jamais un état validable),
 puis complété à la fin : `pending` (lignes `?` ou placeholder inconnu), `ouverts` (alertes et ambiguïtés
 encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur) et `sha_ajustements`. Tout le passage
@@ -37,9 +38,7 @@ class Result:
     pending: int
 
 
-def body_hash(data: bytes) -> str:
-    """Empreinte du corps de `masque.md`, marqueur (première ligne, redaté à la validation) exclu."""
-    return hashlib.sha256(data.split(b"\n", 1)[1] if b"\n" in data else b"").hexdigest()
+body_hash = rendu.body_hash   # empreinte du corps de `masque.md`, marqueur exclu
 
 
 def run(original: Path, vault: Vault, cid: str) -> Result:
