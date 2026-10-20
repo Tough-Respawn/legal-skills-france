@@ -181,20 +181,25 @@ Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif 
   (droits administrateur non demandés) : à vérifier par qui l'applique.
 - **macOS** : non documenté en v1.
 
-## État de la validation (2026-10-19)
+## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale (367 tests, OCR et modèle réels) ; corpus synthétique de 26
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF texte et numérisation,
-plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté : 0
-fuite des noms, adresses, numéros, e-mails, IBAN, SIREN et dates de naissance lisibles, 175 noms sur 176
-détectés avant arbitrage, 30 constats techniques sur 30 présents dans le rapport, 0,8 alerte pour 100
-mots ; fuites restantes : les initiales seules d'un pied de page (« ED / JK / MK ») dans les PDF, et une
-fusion de deux signataires sous un placeholder quand l'OCR réduit les colonnes d'un bloc de signature à
-une espace. Trace système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté
+(mesure du 2026-10-20) : 0 fuite des noms, initiales, adresses, numéros, e-mails, IBAN, SIREN et dates
+de naissance lisibles après arbitrage, 175 noms sur 176 détectés avant arbitrage, 30 constats techniques
+sur 30 présents dans le rapport, 1,0 alerte pour 100 mots, 0 fusion de deux parties sous un placeholder,
+0 partie éclatée sur plusieurs placeholders ; 23 placeholders de nom qui débordent sur du texte courant
+(« Logement sans l'accord » pris pour une société par le modèle, 19 fois ; masqué à tort, pas une
+fuite). Trace système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
 
-Non vérifié à ce jour : le clic réel « Publier » dans la fenêtre et la publication qui suit sur un poste
-Windows, le parcours complet depuis une session Claude Code. Les résultats détaillés restent locaux
-(`evals/`), hors du dépôt public.
+Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
+`relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
+partie dans le fichier publié.
+
+Non vérifié à ce jour : le parcours complet depuis une session Claude Code (transcript compris), la
+règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
+public.
 
 ## Fonctionnement détaillé (état actuel)
 

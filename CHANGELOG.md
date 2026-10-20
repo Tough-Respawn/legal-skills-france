@@ -25,6 +25,20 @@ to [Semantic Versioning](https://semver.org/).
   standard » du dépôt (pypdf, Pillow, spaCy, Tesseract installés par
   l'utilisateur) ; les 8 skills et les trois archives restent sans dépendance.
 
+### Fixed
+
+- Anonymiseur, relecture finale de branche (2026-10-20) : sortie Tesseract
+  normalisée en LF à la source (plus de `\r` dans la détection) ; une forme
+  connue en tête d'un nom est rognée quelle que soit la casse (une ligne de
+  signature lue par l'OCR ne fusionne plus deux parties, un nom recollé à la
+  ligne suivante garde son placeholder) ; une colonne de montants
+  (`850\n120\n970`) n'est plus masquée comme numéro ; la seconde passe signale
+  les initiales isolées (`initiales` : « ED », « J.K. ») ; le modèle spaCy
+  absent est annoncé sur la console ; `bind`/`listen`/`accept` coupés par le
+  filet réseau ; le coffre n'est créé qu'après un fichier choisi. Docs : le
+  clic humain « Publier » a été exécuté le 2026-10-19 à 23:28 (README,
+  `CLAUDE.md`, résultats).
+
 ---
 
 ## [4.4.0] - 2026-10-05
