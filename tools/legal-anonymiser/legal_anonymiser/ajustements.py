@@ -130,7 +130,8 @@ def write(path: Path, alerts: Sequence[Alert], ambiguities: Sequence[Ambiguity],
         raise AdjustmentsError("Réécriture impossible : texte d'origine ou texte masqué manquant (%s)." % _name(path))
     out = ["# legal-france ajustements v1, contrat %s" % cid,
            "# Alertes : remplacer ? par masquer ou garder.",
-           "# Une alerte valeur_connue ne peut pas être gardée : utilisez masquer."]
+           "# Une alerte valeur_connue ne peut pas être gardée : utilisez masquer.",
+           "# Une alerte sur_masquage : garder le masquage, ou demasquer: [PLACEHOLDER] pour rendre le texte."]
     seen, ranks = set(), Ranks(masked) if alerts else None
     for a in alerts:
         k = ranks.key(a.block, a.start, a.end)

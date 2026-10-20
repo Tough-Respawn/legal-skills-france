@@ -123,6 +123,15 @@ SIG_CAPTION_RX = re.compile(r"\s*(?i:signatures?(?:\s+des\s+parties)?|pour\s+[^.
 WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*|&")
 CIV_RX = re.compile(r"(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?" + CIVILITY + SP + r"+")
 PARTICLE_RX = re.compile(r"(?i:" + PARTICLES + r")")
+_LINKS = NAME_JOINERS | {"au", "aux"}   # liaisons d'un nom de société (JOIN_C)
+
+
+def lower_word(word: str) -> bool:
+    """Mot en minuscules, élision « l' », « d' » retirée, qui n'est ni une particule ni une liaison de nom :
+    « sans », « l'accord », « né » oui ; « de », « et », « sur », « d'Arcy » non."""
+    w = word.replace("’", "'")
+    return (re.sub(r"^[dl]'", "", w, flags=re.I)[:1].islower() and not PARTICLE_RX.fullmatch(w)
+            and w.lower() not in _LINKS)
 
 Cand = Tuple[int, int, int, int, str]  # début, fin, étendue (début, fin) du motif, type (ALIAS = nom d'usage)
 Span = Tuple[int, int]
