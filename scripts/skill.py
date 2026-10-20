@@ -113,7 +113,7 @@ def source_files():
                 raise ValueError(f"Lien dans les sources : {path}")
             if path.is_file() and path.suffix == ".md":
                 files[path.relative_to(SOURCE).as_posix()] = path.read_bytes()
-    for name in ("redacteur-engine.md", "legifrance-client.md", "judilibre-client.md"):
+    for name in ("redacteur-engine.md", "relecture-engine.md", "legifrance-client.md", "judilibre-client.md"):
         path = SOURCE / "lib" / name
         files[f"lib/{name}"] = path.read_bytes()
     script = "skills/legal-france/scripts/legal_api.py"

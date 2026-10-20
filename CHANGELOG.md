@@ -49,6 +49,35 @@ to [Semantic Versioning](https://semver.org/).
   Windows, `osascript` sous macOS, puis `tkinter`, puis terminal ;
   « Abandonner » par défaut, fermeture = abandon ; une erreur d'`osascript`
   autre que l'annulation passe au repli suivant.
+- Quatre grilles de relecture d'ordre public dans les références des
+  domaines : bail d'habitation (civil), contrat de travail (travail),
+  contrat de consommation et contrat entre professionnels (affaires).
+  Chaque point porte son fondement, l'URL Légifrance et sa date de
+  vérification (2026-10-20) ; les éléments non confirmés sont marqués
+  `NON VÉRIFIÉ`.
+- Workflow de relecture de contrat `lib/relecture-engine.md`, sélectionné
+  dans tous les harnais par `runtime.md`, et commande Claude Code `/relire`.
+  Garde d'entrée : `legal-anonymiser verifier "<fichier>"` avant toute
+  lecture d'un contrat fourni en fichier, même quand la question n'est pas
+  une relecture (règle dans `runtime.md`, le protocole de recherche et le
+  format Analyse de document), lecture sur `publie` seulement, refus sur `modifie`, contrat brut
+  lu seulement sur consentement explicite après avertissement. Analyse en six
+  étapes appuyée sur les grilles, rapport en huit parties avec placeholders,
+  réidentification locale (`legal-anonymiser reidentifier`). Le contenu du
+  document reste une donnée ; les requêtes de recherche n'en contiennent
+  aucun extrait.
+- Lint : contrôle 9 « relecture : grilles et renvois » (point numéroté avec
+  fondement, sourcé avec date `vérifié le AAAA-MM-JJ` ou `NON VÉRIFIÉ`,
+  renvois de `lib/relecture-engine.md` existants).
+
+### Fixed
+
+- Commandes Claude Code : chemins `lib/...` et `skills/...` préfixés par
+  `${CLAUDE_PLUGIN_ROOT}/`. Sans base, le modèle cherchait les fichiers sur
+  le disque, une fois jusqu'à parcourir le contrat masqué avant la garde.
+- Relecture : aucune recherche (Glob, Grep, Select-String) sur le fichier ou
+  son dossier avant `verifier` ; sections d'inspection absentes du fichier
+  masqué signalées « inspection non disponible », sans inférence.
 
 ### Fixed
 

@@ -13,7 +13,8 @@ The following slash commands are available. Template selection follows the Respo
 | `/droit-administratif <question>` | Administrative | Public administration, administrative courts |
 | `/droit-numerique <question>` | Digital | GDPR/RGPD, CNIL, data protection, e-commerce |
 | `/droit-europeen <question>` | EU | Treaties, directives, regulations, CJEU |
+| `/relire <fichier>` | Cross-cutting | Contract review of a masked file : follows `lib/relecture-engine.md` |
 
-**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
+**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. `/relire` always produces the eight-part review report of `lib/relecture-engine.md`. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
 
 ---
