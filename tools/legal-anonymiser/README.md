@@ -90,6 +90,8 @@ Parcours complet :
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
 | `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
+| `install-hook [--settings CHEMIN]` | ajoute le verrou Claude Code aux réglages (défaut `~/.claude/settings.json`), voir « Verrou Claude Code » | 0 (installé, ou déjà à jour), 6 (Claude Code absent ou antérieur à 2.1.295), 7 (réglages non JSON, rien écrit) |
+| `uninstall-hook [--settings CHEMIN]` | retire exactement cette entrée | 0 (retiré, ou rien à retirer), 7 |
 
 Code 1 : `verifier` négatif. Code 2 : arguments invalides. Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
 `ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
@@ -202,19 +204,56 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
   de fichier ; les chemins absolus Windows présents dans la commande sont résolus avant comparaison
   (jonction, nom court).
 
-Le message renvoyé dit seulement « original protégé » ou « coffre protégé », jamais un chemin ni un
-nom. Toute exception interne (JSON invalide, registre corrompu, argument manquant) vaut refus. Le hook
-est déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante ou dépasse
-son délai bloque aussi l'appel au lieu de le laisser passer, ce qui exige Claude Code 2.1.295 ou plus.
+Le message du hook dit seulement « original protégé », « coffre protégé » ou « verrou en erreur »,
+jamais un chemin ni un nom. Mais Claude Code (2.1.303, observé le 2026-10-20) le préfixe, dans ce que
+voit le modèle, par la ligne de commande du hook : chemin absolu de l'interpréteur et du coffre
+(`PreToolUse:Read hook error: [<python> -m legal_anonymiser.verrou --coffre <racine>]: ...`). Toute
+exception interne (JSON invalide, registre corrompu, argument manquant) vaut refus. Le hook est
+déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante ou dépasse son
+délai bloque aussi l'appel au lieu de le laisser passer, ce qui exige Claude Code 2.1.295 ou plus.
 Les hooks des fichiers de réglages s'appliquent aussi aux appels d'outils des sous-agents. Format du
 hook, champs d'entrée, code 2 et `onFailure` confirmés sur https://code.claude.com/docs/en/hooks, lue
 le 2026-10-20.
 
-**Limites** (conception, section 8) : un script lancé par `Bash` ou `PowerShell` qui lit l'original
-sans citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), les
-outils MCP et les autres harnais ne sont pas couverts. Un contrat jamais passé dans l'outil n'est pas
-inscrit au registre, donc pas protégé : la garde d'entrée du skill (`verifier`) s'en charge. Les
-protections principales restent : le modèle ne connaît pas le chemin de l'original, rien de non
+### Installation du verrou
+
+```bash
+legal-anonymiser install-hook                 # écrit dans ~/.claude/settings.json
+legal-anonymiser install-hook --settings CHEMIN
+legal-anonymiser uninstall-hook               # retire exactement cette entrée
+```
+
+- Lancer `install-hook` avec l'interpréteur de l'environnement où l'outil est installé : l'entrée
+  enregistre son chemin absolu (`sys.executable`) et la racine résolue du coffre (variable
+  `LEGAL_FRANCE_COFFRE` comprise). Après un déplacement du coffre ou du venv, relancer
+  `install-hook` : l'entrée est remplacée, jamais doublée.
+- L'entrée ajoutée sous `hooks.PreToolUse` : matcher
+  `Read|Edit|Write|NotebookEdit|Grep|Glob|Bash|PowerShell`, hook `{"type": "command", "command":
+  <python>, "args": ["-m", "legal_anonymiser.verrou", "--coffre", <racine>], "onFailure": "block",
+  "timeout": 10}` (forme exec, sans shell). Elle est reconnue par `legal_anonymiser.verrou` dans `args`.
+- Refus d'installer, sans rien écrire : `claude --version` introuvable ou antérieur à 2.1.295 (code 6) ;
+  réglages qui ne sont pas un objet JSON valide, commentaires compris (code 7).
+- Avant chaque écriture, l'ancien fichier est copié en `settings.json.legal-france.bak` à côté ;
+  l'écriture est atomique (fichier temporaire puis remplacement). Le fichier est rechargé et réécrit
+  en JSON indenté de 2 : les autres clés et les autres hooks sont conservés, la mise en forme
+  d'origine ne l'est pas. Relancer sans rien à changer n'écrit rien.
+- Redémarrer les sessions Claude Code ouvertes après l'installation.
+
+**Limites** (conception, section 8) :
+
+- un script lancé par `Bash` ou `PowerShell` (Python, `node`, PowerShell) qui lit l'original sans
+  citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), un chemin
+  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`) ne sont pas
+  reconnus ;
+- les outils MCP, les autres harnais et toute session sans le hook ne sont pas couverts ;
+- un fichier de réglages qui n'est pas du JSON valide est ignoré par Claude Code sans avertissement
+  (observé avec `--settings` le 2026-10-20) : le verrou disparaît avec lui ;
+- `Read` refuse déjà de lui-même un `.docx` (fichier binaire) et suggère au modèle un script : c'est
+  précisément le contournement que le verrou ne voit pas ;
+- un contrat jamais passé dans l'outil n'est pas inscrit au registre, donc pas protégé : la garde
+  d'entrée du skill (`verifier`) s'en charge.
+
+Les protections principales restent : le modèle ne connaît pas le chemin de l'original, rien de non
 publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publié.
 
 ## État de la validation (2026-10-20)
@@ -234,8 +273,15 @@ Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter
 `relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
 partie dans le fichier publié.
 
-Non vérifié à ce jour : le parcours complet depuis une session Claude Code (transcript compris), la
-règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
+Verrou Claude Code en session réelle, vérifié le 2026-10-20 entre 08:01 et 08:07 UTC (Claude Code
+2.1.303, `claude -p --settings` avec l'entrée écrite par `install-hook`, coffre et originaux factices
+temporaires) : refus constatés dans le transcript pour `Read` d'un original PDF, `cat` et `Get-Content`
+du registre, `Grep` depuis le dossier personnel, `Read` par un sous-agent, registre corrompu (message
+générique) et interpréteur introuvable (`onFailure: "block"`). `install-hook` n'a pas été lancé sur
+un vrai `~/.claude/settings.json`.
+
+Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
+humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
 public.
 
 ## Fonctionnement détaillé (état actuel)
@@ -502,8 +548,22 @@ dont le texte a changé sont listées sous « Décisions périmées ».
   d'environnement, fichier ni tube ne répond à la place de l'utilisateur. Limite : un programme qui
   simule clavier ou souris sur la session de l'utilisateur, ou un pseudo-terminal piloté par un autre
   programme, n'est pas détecté.
+- **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
+  neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
+  `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,
+  octet pour octet sans conversion des fins de ligne (le rendu produit des `\n`), inscrit d'abord
+  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur, puis le chemin,
+  l'empreinte et la date dans l'état du contrat.
+- **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
+  ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
+  tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
 
 ### Dialogue de validation
+
+Ordre d'essai : dialogue natif du système ci-dessous ; s'il est indisponible, fenêtre `tkinter` ;
+sans affichage, clavier si l'entrée et la sortie standard sont des terminaux ; sinon `impossible`
+(rien n'est publié). Mêmes garanties à chaque étape : aucune option de pré-acceptation, « Publier »
+jamais bouton par défaut, fermer la fenêtre vaut abandon.
 
 - **Windows** : `TaskDialogIndirect` des contrôles communs v6 (`comctl32`, via `ctypes`, sans
   dépendance) : titre `legal-france`, question en texte principal, trois boutons « Publier »,
@@ -517,15 +577,6 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 - La signature de `validation.confirm` et ses garanties sont inchangées ; les tests ne passent que par
   des appels système remplacés, jamais par une vraie fenêtre. Le clic humain sur la fenêtre native n'a
   pas encore été exécuté (voir « État de la validation »).
-- **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
-  neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
-  `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,
-  octet pour octet sans conversion des fins de ligne (le rendu produit des `\n`), inscrit d'abord
-  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur, puis le chemin,
-  l'empreinte et la date dans l'état du contrat.
-- **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
-  ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
-  tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
 
 ## Licences des dépendances
 

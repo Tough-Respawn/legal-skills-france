@@ -24,6 +24,22 @@ to [Semantic Versioning](https://semver.org/).
   `valider`, `verifier`, `reidentifier`. Seule exception à la règle « Python
   standard » du dépôt (pypdf, Pillow, spaCy, Tesseract installés par
   l'utilisateur) ; les 8 skills et les trois archives restent sans dépendance.
+- Anonymiseur, verrou Claude Code : hook `PreToolUse` en Python standard
+  (`python -m legal_anonymiser.verrou --coffre <racine>`) qui refuse `Read`,
+  `Edit`, `Write`, `NotebookEdit` sur un original inscrit ou le coffre,
+  `Grep` et `Glob` lancés depuis un dossier qui les contient (dossier
+  personnel compris), `Bash` et `PowerShell` dont la commande cite le coffre,
+  un original ou son nom ; toute erreur interne vaut refus. Commandes
+  `install-hook` et `uninstall-hook` (`~/.claude/settings.json` par défaut,
+  `--settings` sinon) : refus sous Claude Code 2.1.295 (code 6) ou sur des
+  réglages non JSON (code 7), sauvegarde `settings.json.legal-france.bak`,
+  écriture atomique, une seule entrée, `"onFailure": "block"`. Limites
+  documentées : script, motif générique ou variables dans `Bash` ou
+  `PowerShell`, outils MCP ; Claude Code montre au modèle la ligne de commande
+  du hook (chemin du coffre compris) avec le refus.
+- Anonymiseur, dialogue de validation natif : `TaskDialogIndirect` sous
+  Windows, `osascript` sous macOS, puis `tkinter`, puis terminal ;
+  « Abandonner » par défaut, fermeture = abandon.
 
 ### Fixed
 
