@@ -11,8 +11,9 @@
    une commune et un lieu de naissance de même nom font une seule entité COMMUNE.
    Les autres noms, du plus long au plus court, rejoignent l'entité unique qui porte leur forme
    (forme complète, ou nom seul pour une mention réduite au nom) ; portée par plusieurs entités
-   (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, un nom en capitales
-   sur-capturé (« N'DIAYE LE LOGEMENT ») est rogné à la plus longue forme connue qui l'ouvre et
+   (homonymes, époux), la forme rend la mention ambiguë ; portée par aucune, un nom sur-capturé, quelle
+   que soit sa casse (« N'DIAYE LE LOGEMENT », « Paul Kerbrat Awa N'Diaye » d'une signature lue par l'OCR,
+   « Marie Kerbrat\\nParaphes » recollé par la NER), est rogné à la plus longue forme connue qui l'ouvre et
    rattaché sans en tirer de formes, si cette forme fait deux mots ou si le mot qui la suit est un
    verbe courant, un mot-outil (noms.FUNCTION_WORDS, liste fixe), un mot connu, sans majuscule ou une
    particule (« AWA N'DIAYE LA SOMME »), sauf après le seul prénom du propriétaire (« JEAN LE GALL ») ;
@@ -253,7 +254,9 @@ class _Builder:
             if not self.owners.get(form) and len(words) == 1:
                 form = texte.norm(words[0])   # « M. de La Fontaine »
             own = self.compatible(m, self.owners.get(form, []))
-            cut = self.prefix(m, name) if not own and name.isupper() and len(words) > 1 else None
+            # Toute casse : « Paul Kerbrat Awa N'Diaye » (OCR, colonnes réduites à une espace) et
+            # « Marie Kerbrat\nParaphes » (NER) sont rognés à la forme connue, le reste revient à la propagation.
+            cut = self.prefix(m, name) if not own and len(words) > 1 else None
             if cut:   # rattachée sans en tirer de formes : « LOGEMENT » ne devient pas un nom
                 self.taken[m.block].remove(m)
                 m, own, form = cut
