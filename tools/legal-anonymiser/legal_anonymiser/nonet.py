@@ -18,6 +18,9 @@ class _OfflineSocket(socket.socket):
     connect = _blocked
     connect_ex = _blocked
     sendto = _blocked
+    bind = _blocked      # pas de serveur local non plus
+    listen = _blocked
+    accept = _blocked
 
 
 def install() -> None:

@@ -18,6 +18,7 @@ from .coffre import Vault
 HIDDEN = "[chemin masqué]"
 MESSAGES = {
     "resume": "Contrat {cid} : {entities} entité(s) masquée(s), {alerts} alerte(s), {ambiguities} ambiguïté(s).",
+    "ner_absente": "Modèle de reconnaissance des noms absent : détection réduite, relisez avec attention.",
     "original_inside": "Attention : le fichier original est dans le dossier courant ; "
                        "ne le partagez pas avec le fichier masqué.",
     "pending": "{pending} point(s) à arbitrer dans {path}, puis lancez : legal-anonymiser relancer {cid}",

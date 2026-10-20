@@ -70,7 +70,7 @@ def _run(original: Path, vault: Vault, cid: str) -> Result:
     if ner.model_installed():
         mentions += ner.find(blocks, vocab)
     else:
-        findings.append(Finding("attention", "ner_absente", "document"))
+        findings.append(Finding("attention", "ner_absente", "document"))   # relayé à la console par cli._after_run
     entities, ambiguities = build(blocks, mentions, decisions)
     extracted = Extracted(blocks, extracted.metadata, findings, extracted.ocr)
     findings += inspection.metadata_findings(extracted, entities)

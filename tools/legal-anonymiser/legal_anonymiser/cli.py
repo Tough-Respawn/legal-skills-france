@@ -64,6 +64,8 @@ def _contract(vault: Vault, cid: str) -> bool:
 def _after_run(vault: Vault, cid: str, result) -> int:
     say("resume", cid=cid, entities=len(result.entities), alerts=len(result.alerts),
         ambiguities=len(result.ambiguities))
+    if result.extracted and any(f.code == "ner_absente" for f in result.extracted.findings):
+        say("ner_absente")   # le passage continue sans NER : à dire ici, pas seulement dans masque.md
     path = sortie.neutral(vault.root / cid / "ajustements.txt", Path.cwd(), vault)
     if result.pending:
         say("pending", pending=result.pending, path=path, cid=cid)
@@ -140,7 +142,6 @@ def _run(vault: Vault, original: Path, cid: str) -> int:
 def _traiter(args: argparse.Namespace) -> int:
     from .extraction import supported
     vault = Vault()
-    vault.ensure()
     chosen = args.chemin
     if not chosen:
         try:
@@ -158,6 +159,7 @@ def _traiter(args: argparse.Namespace) -> int:
     if not supported(original):   # contrôlé avant tout enregistrement au coffre
         say("illisible")
         return 5
+    vault.ensure()   # après le sélecteur et les contrôles : un choix annulé ne crée pas le coffre
     return _run(vault, original, vault.id_for_original(original))
 
 

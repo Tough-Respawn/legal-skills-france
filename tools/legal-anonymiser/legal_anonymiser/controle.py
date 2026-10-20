@@ -8,7 +8,9 @@ Alertes A1, A2… dans l'ordre du document, positions sur le texte masqué (dét
    civilité, un rôle ou une voie ; 3. en ligne capitale, mot hors vocabulaire, mot-outil, verbe courant
    et mots vides de spaCy, ou collé à une civilité. Mots signalés consécutifs : une alerte.
 4. chiffres (6 ou plus, hors date, montant, référence), 5. arobase, url, 6. date_naissance.
-Une décision garder (entites.Ranks.key sur le texte masqué) exempte une occurrence des motifs 2 à 6 ;
+7. initiales : jeton isolé de 2 ou 3 capitales (« ED », « JK ») ou lettres pointées (« J.K. », « J. D. »),
+   hors vocabulaire, rôle, mot-outil, forme sociale ou abréviation ; un mot déjà signalé majuscule garde ce motif.
+Une décision garder (entites.Ranks.key sur le texte masqué) exempte une occurrence des motifs 2 à 7 ;
 une commune gardée aussi, sauf après une civilité. Une étendue, une alerte : valeur_connue d'abord.
 """
 from __future__ import annotations
@@ -19,7 +21,7 @@ from functools import lru_cache
 from typing import Callable, FrozenSet, Iterable, Iterator, List, Optional, Set, Tuple
 
 from . import texte
-from .detection.noms import CIVILITY, PARTICLE_RX, caps_verb, function_word, known, role, stem
+from .detection.noms import CIVILITY, FORMS, PARTICLE_RX, UP, caps_verb, function_word, known, role, stem
 from .detection.regles import MONTHS, SP
 from .entites import Ranks
 from .modele import Alert, Block, Decisions, Entity
@@ -27,7 +29,10 @@ from .propagation import WORD_RX, forms, pattern, span
 
 Hit = Tuple[int, int, str]    # début, fin, motif (dans un bloc)
 Word = Tuple[int, int, str]   # début, fin, mot
-ORDER = {"valeur_connue": 0, "date_naissance": 1, "arobase": 2, "url": 2, "chiffres": 3, "majuscule": 4}
+ORDER = {"valeur_connue": 0, "date_naissance": 1, "arobase": 2, "url": 2, "chiffres": 3, "majuscule": 4, "initiales": 5}
+# Initiales seules : 2 à 3 capitales, ou lettres pointées (« J.K. », « J. D. », « J.-P. ») ; « J. Dupont » non.
+INITIALS_RX = re.compile(r"(?<![\w'’.-])(?:[%s]{2,3}|[%s]\.(?:[ -]?[%s]\.?)+)(?![\w'’-])" % (UP, UP, UP))
+FORM_RX = re.compile(FORMS)
 CIV_WORD_RX = re.compile(r"(?:" + CIVILITY + r")(?![\w'’])")
 PLACEHOLDER_RX = re.compile(r"\[(?:[A-Z]+(?:_[A-Z]+)*_\d+|IMAGE|SIGNATURE|LOGO)\]")
 STREET = frozenset(texte.norm(w) for w in
@@ -244,6 +249,14 @@ def _patterns(text: str) -> Iterator[Hit]:
             yield d.start(), d.end(), "date_naissance"
 
 
+def _initials(text: str, vocab: Set[str]) -> Iterator[Hit]:
+    """Motif 7 : initiales seules, sauf vocabulaire, rôle, mot-outil, forme sociale ou abréviation (« SA », « Ets »)."""
+    for m in INITIALS_RX.finditer(text):
+        letters = re.sub(r"[^\w]", "", m.group())
+        if not (_common(letters, vocab) or texte.norm(letters) in ABBREV or FORM_RX.fullmatch(letters)):
+            yield m.start(), m.end(), "initiales"
+
+
 def _values(entities: List[Entity], original: Optional[List[Block]], vocab: Set[str]) -> Tuple[List[str], List[str]]:
     """Valeurs connues (la plus longue d'abord), et valeurs d'un seul mot courant à part."""
     out: Set[str] = set()
@@ -302,6 +315,7 @@ def check(masked: List[Block], entities: List[Entity], decisions: Decisions, voc
                  if s in at and (_marked(text, words, at[s]) or _beside(text, words, at[s], flagged))]
         hits += [h for h in _patterns(text) if not holder(h[0], h[1])]
         hits += _runs(text, marked, _overlaps((h[0], h[1]) for h in hits))
+        hits += [h for h in _initials(text, vocab) if not holder(h[0], h[1])]   # après les runs : majuscule prime
         hits = [h for h in hits if h[2] == "valeur_connue" or not (
             (block.location, texte.norm(text[h[0]:h[1]])) in kept and ranks.key(bi, h[0], h[1]) in decisions.keep)]
         out += [(bi,) + h for h in _dedupe(hits)]
