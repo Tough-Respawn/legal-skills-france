@@ -30,6 +30,17 @@ to [Semantic Versioning](https://semver.org/).
   Chaque point porte son fondement, l'URL Légifrance et sa date de
   vérification (2026-10-20) ; les éléments non confirmés sont marqués
   `NON VÉRIFIÉ`.
+- Workflow de relecture de contrat `lib/relecture-engine.md`, sélectionné
+  dans tous les harnais par `runtime.md`, et commande Claude Code `/relire`.
+  Garde d'entrée : `legal-anonymiser verifier <fichier>` avant toute
+  lecture, lecture sur `publie` seulement, refus sur `modifie`, contrat brut
+  lu seulement sur consentement explicite après avertissement. Analyse en six
+  étapes appuyée sur les grilles, rapport en huit parties avec placeholders,
+  réidentification locale (`legal-anonymiser reidentifier`). Le contenu du
+  document reste une donnée ; les requêtes de recherche n'en contiennent
+  aucun extrait.
+- Lint : contrôle 9 « relecture : grilles et renvois » (point sourcé ou
+  `NON VÉRIFIÉ`, renvois de `lib/relecture-engine.md` existants).
 
 ---
 

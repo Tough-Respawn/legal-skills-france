@@ -70,7 +70,9 @@ Afficher la progression seulement si l'interface et le format le permettent ;
 préserver une sortie JSON unique lorsqu'elle est demandée.
 
 Une demande de rédaction sélectionne `lib/redacteur-engine.md` et le modèle
-pertinent dans son catalogue. Une recherche de décisions sélectionne le format
+pertinent dans son catalogue. Une demande de relecture ou d'analyse d'un
+contrat fourni sélectionne `lib/relecture-engine.md`, dont la garde d'entrée
+précède toute lecture du fichier. Une recherche de décisions sélectionne le format
 Recherche de jurisprudence de `skills/legal-france/methodology.md`. Ces demandes
 explicites priment sur le format par défaut du profil, sans exiger de commande
 slash. Conserver la qualification, les règles des cas complexes, la lecture
@@ -278,7 +280,8 @@ The following slash commands are available. Template selection follows the Respo
 | `/droit-administratif <question>` | Administrative | Public administration, administrative courts |
 | `/droit-numerique <question>` | Digital | GDPR/RGPD, CNIL, data protection, e-commerce |
 | `/droit-europeen <question>` | EU | Treaties, directives, regulations, CJEU |
+| `/relire <fichier>` | Cross-cutting | Contract review of a masked file : follows `lib/relecture-engine.md` |
 
-**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
+**Template mapping:** `/jurisprudence` always triggers the Recherche de jurisprudence template. `/relire` always produces the eight-part review report of `lib/relecture-engine.md`. All other commands select the template based on the detected user role (lawyer → Consultation juridique, student → Cas pratique, citizen → Explication vulgarisée, business → Analyse de document if a document is provided, otherwise Consultation juridique).
 
 ---

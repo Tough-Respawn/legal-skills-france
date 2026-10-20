@@ -15,6 +15,9 @@ Contrôles :
   6. Inventaire /rediger (lib/redacteur-engine.md) <-> fichiers templates réels
   7. Contrat de template : qualification, champs et conditions
   8. Accès à la qualification commune depuis chaque skill
+  9. Relecture : grilles présentes, points sourcés (URL officielle et
+     « vérifié le ») ou marqués NON VÉRIFIÉ, renvois de
+     lib/relecture-engine.md existants
 
 Complément manuel : `claude plugin validate plugins/legal-france`
 (la racine du marketplace échoue sur Claude Code 2.1.104 à cause des clés
@@ -233,6 +236,38 @@ for p in sorted(glob.glob(os.path.join(PLUGIN, "skills", "*", "SKILL.md"))):
     if qualification not in read(p):
         FAIL.append("qualification commune non chargée par %s" % rel(p))
 print("8. accès à la qualification : vérifié")
+
+# 9. Relecture : chaque point de grille est sourcé ou marqué NON VÉRIFIÉ ; les renvois existent.
+GRIDS = [
+    "skills/legal-france-civil/references/grille-bail-habitation.md",
+    "skills/legal-france-travail/references/grille-contrat-travail.md",
+    "skills/legal-france-affaires/references/grille-consommation.md",
+    "skills/legal-france-affaires/references/grille-contrat-professionnels.md",
+]
+OFFICIAL = ("https://www.legifrance.gouv.fr/", "https://www.courdecassation.fr/")
+points = 0
+for grid in GRIDS:
+    path = os.path.join(PLUGIN, grid.replace("/", os.sep))
+    if not os.path.isfile(path):
+        FAIL.append("grille de relecture absente : %s" % grid)
+        continue
+    chunks = re.split(r"^### (?=\d+\.)", read(path), flags=re.M)[1:]
+    if not chunks:
+        FAIL.append("grille sans point de contrôle : %s" % grid)
+    for chunk in chunks:
+        points += 1
+        sourced = any(url in chunk for url in OFFICIAL) and "vérifié le 20" in chunk
+        if not sourced and "NON VÉRIFIÉ" not in chunk:
+            FAIL.append("point non sourcé dans %s : %s" % (grid, chunk.splitlines()[0][:60]))
+relecture = read(os.path.join(PLUGIN, "lib", "relecture-engine.md"))
+cited = set(re.findall(r"`((?:skills|lib)/[^`\s]+)`", relecture))
+for grid in GRIDS:
+    if grid not in cited:
+        FAIL.append("grille non citée par lib/relecture-engine.md : %s" % grid)
+for path in sorted(cited):
+    if not os.path.isfile(os.path.join(PLUGIN, path.replace("/", os.sep))):
+        FAIL.append("renvoi absent dans lib/relecture-engine.md : %s" % path)
+print("9. relecture : %d grilles, %d points, %d renvois" % (len(GRIDS), points, len(cited)))
 
 print()
 if FAIL:

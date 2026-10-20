@@ -70,7 +70,9 @@ Afficher la progression seulement si l'interface et le format le permettent ;
 préserver une sortie JSON unique lorsqu'elle est demandée.
 
 Une demande de rédaction sélectionne `lib/redacteur-engine.md` et le modèle
-pertinent dans son catalogue. Une recherche de décisions sélectionne le format
+pertinent dans son catalogue. Une demande de relecture ou d'analyse d'un
+contrat fourni sélectionne `lib/relecture-engine.md`, dont la garde d'entrée
+précède toute lecture du fichier. Une recherche de décisions sélectionne le format
 Recherche de jurisprudence de `skills/legal-france/methodology.md`. Ces demandes
 explicites priment sur le format par défaut du profil, sans exiger de commande
 slash. Conserver la qualification, les règles des cas complexes, la lecture

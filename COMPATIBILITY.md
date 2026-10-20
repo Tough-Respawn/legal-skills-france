@@ -236,7 +236,7 @@ Sélectionner le skill depuis le menu de l'application ou demander :
 
 Le skill `legal-france` traite les demandes générales, transversales et les
 recherches de jurisprudence ; les sept autres couvrent les domaines nommés.
-Les dix commandes slash restent propres au plugin Claude. Leurs tâches
+Les onze commandes slash restent propres au plugin Claude. Leurs tâches
 restent accessibles en langage naturel dans les skills portables.
 
 ```bash

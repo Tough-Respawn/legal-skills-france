@@ -138,6 +138,7 @@ pas ajoutés aux menus des autres applications.
 | `/droit-numerique <question>` | RGPD, CNIL, protection des données | GDPR, CNIL, data protection |
 | `/droit-europeen <question>` | Traités, directives, règlements, CJUE | Treaties, directives, regulations, CJEU |
 | `/rediger <type>` | Générer un modèle de document juridique (10 modèles disponibles) | Generate a legal document template (10 templates available) |
+| `/relire <fichier>` | Relire un contrat masqué : clauses illicites, abusives ou risquées, cohérence, anomalies techniques | Review a masked contract: illicit, abusive or risky clauses, coherence, technical anomalies |
 
 ---
 
@@ -457,7 +458,7 @@ de date Judilibre et les limites de débit restent à vérifier.
 python tests/lint.py
 ```
 
-8 contrôles : frontmatters YAML, longueur des descriptions de skills (≤ 1 536 caractères, règle historique du dépôt), manifests JSON + versions synchronisées, mots-clés déclencheurs, motifs interdits (citations corrigées), inventaire `/rediger` ↔ fichiers templates, contrat de template (quatre sections, champs et conditions déclarés), accès à la qualification commune depuis les huit skills. Cette limite historique ne valide pas la conformité au plafond Agent Skills de 1 024 caractères.
+9 contrôles : frontmatters YAML, longueur des descriptions de skills (≤ 1 536 caractères, règle historique du dépôt), manifests JSON + versions synchronisées, mots-clés déclencheurs, motifs interdits (citations corrigées), inventaire `/rediger` ↔ fichiers templates, contrat de template (quatre sections, champs et conditions déclarés), accès à la qualification commune depuis les huit skills, grilles de relecture (chaque point sourcé avec URL officielle et date de vérification, ou marqué `NON VÉRIFIÉ`, et renvois de `lib/relecture-engine.md` existants). Cette limite historique ne valide pas la conformité au plafond Agent Skills de 1 024 caractères.
 
 **2. Validation du manifest / Manifest validation**
 
@@ -501,6 +502,11 @@ Voir [COMPATIBILITY.md](COMPATIBILITY.md) pour les limites par application.
 
 > **FR :** `tools/legal-anonymiser/` masque, **sur votre poste et sans réseau**, les identifiants d'un contrat (noms, adresses, numéros, e-mails, IBAN, SIREN, dates de naissance, commune) et signale les anomalies techniques du fichier (texte caché, révisions, macros, JavaScript, signature partielle). Vous relisez le texte masqué, le publiez d'un clic, puis ne transmettez au modèle que `contrat-<id>.masque.md`. Le rapport renvoyé se réidentifie localement. Installation, parcours, format du fichier d'ajustements et limites : [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md). L'outil s'exécute en amont, y compris pour Claude.ai et ChatGPT, qui ne peuvent pas le lancer. Le masquage est automatique et peut manquer un élément : la relecture avant publication fait partie du parcours.
 > **EN:** `tools/legal-anonymiser/` pseudonymises a contract **locally, with no network access**, flags technical anomalies in the file, and lets you review and publish the masked text yourself; only the published `contrat-<id>.masque.md` is meant to be shared with a model. It runs upstream of Claude.ai and ChatGPT, which cannot run it. Automatic masking can miss an item: the review step is part of the workflow. See [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md).
+
+## Relire un contrat / Review a contract
+
+> **FR :** Dans Claude Code : `/relire contrat-<id>.masque.md`. Dans les autres harnais : demander la relecture du contrat au skill. Avant toute lecture, le skill lance `legal-anonymiser verifier <fichier>` et ne lit que si la réponse est `publie` ; un fichier `modifie` est refusé ; un contrat brut ou un outil absent donne un avertissement, et le contrat n'est lu qu'avec votre accord explicite. Dans Claude.ai ou ChatGPT, le fichier envoyé est déjà parti : le skill le dit, puis analyse. La relecture qualifie le contrat (type, parties, date de conclusion donc version des textes), le confronte à l'une des quatre grilles d'ordre public sourcées (bail d'habitation, contrat de travail, consommation, contrat entre professionnels ; droit commun avec une fiabilité moindre pour les autres types), puis rend un rapport en huit parties avec les placeholders : clauses, mentions absentes, cohérence, anomalies techniques, points non vérifiés. Le rapport `rapport-relecture-<id>.md` se réidentifie localement avec `legal-anonymiser reidentifier <id> rapport-relecture-<id>.md`. Outil : [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md).
+> **EN:** In Claude Code: `/relire contrat-<id>.masque.md`; elsewhere, ask the skill to review the contract. The skill runs `legal-anonymiser verifier <file>` before reading and reads only a `publie` file; a `modifie` file is refused, and a raw contract is read only after a warning and your explicit consent. The review uses four sourced public-order grids (residential lease, employment, consumer, business-to-business; general contract law, with lower reliability, for other types) and returns an eight-part report that keeps the placeholders, to be reidentified locally. See [tools/legal-anonymiser/README.md](tools/legal-anonymiser/README.md).
 
 ---
 
