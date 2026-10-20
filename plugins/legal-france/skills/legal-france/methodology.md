@@ -246,7 +246,7 @@ Depuis l'arrêt [date], on observe une tendance vers...
 ## Template 5 : Analyse de document (Document Analysis)
 
 **Trigger conditions:**
-- User provides a contract, terms of service, employment agreement, privacy policy, or other legal document
+- User provides a contract, terms of service, employment agreement, privacy policy, or other legal document (pour un contrat : `lib/relecture-engine.md`)
 - User provides a document via any command and role is `business` or request nature involves a document
 - User asks to "review", "check", "analyze" a document they have provided
 - User role is `business` and submits a document

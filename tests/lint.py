@@ -15,9 +15,9 @@ Contrôles :
   6. Inventaire /rediger (lib/redacteur-engine.md) <-> fichiers templates réels
   7. Contrat de template : qualification, champs et conditions
   8. Accès à la qualification commune depuis chaque skill
-  9. Relecture : grilles présentes, points sourcés (URL officielle et
-     « vérifié le ») ou marqués NON VÉRIFIÉ, renvois de
-     lib/relecture-engine.md existants
+  9. Relecture : grilles présentes, chaque point numéroté avec un
+     « - Fondement : », sourcé (URL officielle et « vérifié le AAAA-MM-JJ »)
+     ou marqué NON VÉRIFIÉ, renvois de lib/relecture-engine.md existants
 
 Complément manuel : `claude plugin validate plugins/legal-france`
 (la racine du marketplace échoue sur Claude Code 2.1.104 à cause des clés
@@ -251,14 +251,21 @@ for grid in GRIDS:
     if not os.path.isfile(path):
         FAIL.append("grille de relecture absente : %s" % grid)
         continue
-    chunks = re.split(r"^### (?=\d+\.)", read(path), flags=re.M)[1:]
+    text = read(path)
+    # Un ### non numéroté échapperait au découpage par point : refusé.
+    for heading in re.findall(r"^###(?! \d+\.).*$", text, re.M):
+        FAIL.append("titre ### non numéroté dans %s : %s" % (grid, heading[:60]))
+    chunks = re.split(r"^### (?=\d+\.)", text, flags=re.M)[1:]
     if not chunks:
         FAIL.append("grille sans point de contrôle : %s" % grid)
     for chunk in chunks:
         points += 1
-        sourced = any(url in chunk for url in OFFICIAL) and "vérifié le 20" in chunk
+        title = chunk.splitlines()[0][:60]
+        if not re.search(r"^- Fondement :", chunk, re.M):
+            FAIL.append("point sans fondement dans %s : %s" % (grid, title))
+        sourced = any(url in chunk for url in OFFICIAL) and re.search(r"vérifié le \d{4}-\d{2}-\d{2}", chunk)
         if not sourced and "NON VÉRIFIÉ" not in chunk:
-            FAIL.append("point non sourcé dans %s : %s" % (grid, chunk.splitlines()[0][:60]))
+            FAIL.append("point non sourcé dans %s : %s" % (grid, title))
 relecture = read(os.path.join(PLUGIN, "lib", "relecture-engine.md"))
 cited = set(re.findall(r"`((?:skills|lib)/[^`\s]+)`", relecture))
 for grid in GRIDS:

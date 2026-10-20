@@ -107,7 +107,7 @@ If no available official source (web or explicitly chosen API) allows the applic
 When official and embedded references differ, determine which version governs the facts and procedure before changing the conclusion. Check effective dates and transitional provisions; if the relevant date is missing, ask or state separate hypotheses. Explain any material divergence and cite the version selected with its period of application.
 
 **Step 3 : Analyze user-provided documents**
-If the user has provided a contract, court decision, or any legal document, use the available file-reading capability to parse it. Do not assume content : read the actual text.
+If the user has provided a contract, court decision, or any legal document, use the available file-reading capability to parse it. Do not assume content : read the actual text. A contract supplied as a file first goes through the entry guard of `lib/relecture-engine.md` (section 2), even when the question is not a review: no reading before `legal-anonymiser verifier` answers `publie`, or before the user's explicit consent after the warning.
 
 **Step 4 : Cross-reference all findings**
 Reconcile references and documents. Distinguish reported, corroborated, disputed and unknown facts; identify material gaps in evidence. Record the applicable version and the source/date of verification. Do not replace an applicable historical rule merely because it has since been amended.

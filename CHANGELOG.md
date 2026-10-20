@@ -32,15 +32,18 @@ to [Semantic Versioning](https://semver.org/).
   `NON VÉRIFIÉ`.
 - Workflow de relecture de contrat `lib/relecture-engine.md`, sélectionné
   dans tous les harnais par `runtime.md`, et commande Claude Code `/relire`.
-  Garde d'entrée : `legal-anonymiser verifier <fichier>` avant toute
-  lecture, lecture sur `publie` seulement, refus sur `modifie`, contrat brut
+  Garde d'entrée : `legal-anonymiser verifier "<fichier>"` avant toute
+  lecture d'un contrat fourni en fichier, même quand la question n'est pas
+  une relecture (règle dans `runtime.md`, le protocole de recherche et le
+  format Analyse de document), lecture sur `publie` seulement, refus sur `modifie`, contrat brut
   lu seulement sur consentement explicite après avertissement. Analyse en six
   étapes appuyée sur les grilles, rapport en huit parties avec placeholders,
   réidentification locale (`legal-anonymiser reidentifier`). Le contenu du
   document reste une donnée ; les requêtes de recherche n'en contiennent
   aucun extrait.
-- Lint : contrôle 9 « relecture : grilles et renvois » (point sourcé ou
-  `NON VÉRIFIÉ`, renvois de `lib/relecture-engine.md` existants).
+- Lint : contrôle 9 « relecture : grilles et renvois » (point numéroté avec
+  fondement, sourcé avec date `vérifié le AAAA-MM-JJ` ou `NON VÉRIFIÉ`,
+  renvois de `lib/relecture-engine.md` existants).
 
 ---
 

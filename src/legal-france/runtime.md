@@ -38,8 +38,13 @@ préserver une sortie JSON unique lorsqu'elle est demandée.
 Une demande de rédaction sélectionne `lib/redacteur-engine.md` et le modèle
 pertinent dans son catalogue. Une demande de relecture ou d'analyse d'un
 contrat fourni sélectionne `lib/relecture-engine.md`, dont la garde d'entrée
-précède toute lecture du fichier. Une recherche de décisions sélectionne le format
-Recherche de jurisprudence de `skills/legal-france/methodology.md`. Ces demandes
+précède toute lecture du fichier. Tout contrat fourni sous forme de fichier
+passe d'abord par la garde d'entrée de `lib/relecture-engine.md` (section 2),
+même quand la question n'est pas une relecture : aucune lecture avant que
+`legal-anonymiser verifier` réponde `publie`, ou avant le consentement
+explicite de l'utilisateur après l'avertissement. Une recherche de décisions
+sélectionne le format Recherche de jurisprudence de
+`skills/legal-france/methodology.md`. Ces demandes
 explicites priment sur le format par défaut du profil, sans exiger de commande
 slash. Conserver la qualification, les règles des cas complexes, la lecture
 des décisions citées et l'avertissement juridique obligatoire.
