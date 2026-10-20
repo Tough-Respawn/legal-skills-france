@@ -46,7 +46,8 @@ legal-anonymiser --help
 
 Le modèle de reconnaissance des noms (`fr_core_news_lg`, environ 550 Mo) est chargé localement à chaque
 passage et n'est jamais téléchargé à l'exécution. Sans lui, le passage continue sans reconnaissance des
-noms et le rapport porte le constat `ner_absente` : à éviter sur un vrai contrat.
+noms, la console affiche « Modèle de reconnaissance des noms absent : détection réduite, relisez avec
+attention. » et le rapport porte le constat `ner_absente` : à éviter sur un vrai contrat.
 
 Les numérisations (PDF image, JPG, PNG) demandent **Tesseract** avec la langue française :
 
@@ -88,7 +89,7 @@ Parcours complet :
 | `relancer ID` | relit `ajustements.txt`, relance le masquage, puis comme `traiter` | idem (4 si l'identifiant est invalide ou inconnu) |
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
-| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 |
+| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
 
 Code 1 : `verifier` négatif. Code 2 : arguments invalides. Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
 `ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
@@ -119,7 +120,7 @@ demasquer: [SOCIETE_2]
 ```
 
 - `A<n>` : alerte de la seconde passe (motif en fin de ligne : `majuscule`, `chiffres`, `arobase`, `url`,
-  `date_naissance`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
+  `date_naissance`, `initiales`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
   occurrence (clé `localisation | rang`), jamais une alerte `valeur_connue`, qui repasse à `?`.
 - `M<n>` : mention qui peut désigner plusieurs entités (homonymes, époux, « Orange » commune ou société).
   Répondre par un des placeholders proposés, ou `nouveau` pour une entité distincte. Un placeholder
@@ -138,11 +139,12 @@ demasquer: [SOCIETE_2]
 ## Limites
 
 - **Détection** : un nom en minuscules inconnu du modèle, un mot capitalisé seul en tête de phrase
-  (« Fabre signera »), des initiales seules (« J. D. ») ou un code postal seul ne sont pas signalés par
-  la seconde passe. Un contrat tout en capitales produit beaucoup d'alertes `majuscule`. Un nom ou un
-  terme défini coupé par un saut de ligne dans un PDF ou une numérisation peut n'être masqué qu'en
-  partie (le reste est alors signalé par la seconde passe) ; des initiales seules (« ED / JK / MK »
-  en pied de page) ne sont ni masquées ni signalées. Une alerte portant sur un fragment de mot
+  (« Fabre signera ») ou un code postal seul ne sont pas signalés par la seconde passe. Des initiales
+  seules (« ED / JK / MK » en pied de page, « J.K. ») sont signalées (`initiales`), jamais masquées
+  d'office : un sigle hors vocabulaire (« CDD », « RIB ») l'est aussi, à `garder`. Un contrat tout en
+  capitales produit beaucoup d'alertes `majuscule`. Un nom ou un terme défini coupé par un saut de
+  ligne dans un PDF ou une numérisation peut n'être masqué qu'en partie (le reste est alors signalé
+  par la seconde passe). Une alerte portant sur un fragment de mot
   (« FR » dans « FR38 ») ne se masque pas par `masquer` sur sa ligne : écrire le mot entier en ligne
   libre (`masquer: FR38`). La relecture humaine reste la dernière couche.
 - **Écarts assumés par rapport à la conception** (v1) : 1. sous Windows, les droits du coffre ne sont
@@ -179,20 +181,26 @@ Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif 
   (droits administrateur non demandés) : à vérifier par qui l'applique.
 - **macOS** : non documenté en v1.
 
-## État de la validation (2026-10-19)
+## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale (367 tests, OCR et modèle réels) ; corpus synthétique de 26
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF texte et numérisation,
-plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté : 0
-fuite des noms, adresses, numéros, e-mails, IBAN, SIREN et dates de naissance lisibles, 175 noms sur 176
-détectés avant arbitrage, 30 constats techniques sur 30 présents dans le rapport, 0,8 alerte pour 100
-mots ; fuites restantes : les initiales seules d'un pied de page (« ED / JK / MK ») dans les PDF, et une
-fusion de deux signataires sous un placeholder quand l'OCR réduit les colonnes d'un bloc de signature à
-une espace. Trace système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté
+(mesure du 2026-10-20) : 0 fuite des noms, initiales, adresses, numéros, e-mails, IBAN, SIREN et dates
+de naissance lisibles après arbitrage, 175 noms sur 176 détectés avant arbitrage, 30 constats techniques
+sur 30 présents dans le rapport, 1,0 alerte pour 100 mots, 0 fusion de deux parties sous un placeholder,
+0 partie éclatée sur plusieurs placeholders ; 20 placeholders de nom qui débordent sur du texte courant
+(« Logement sans l'accord » pris pour une société par le modèle, 17 fois ; un titre de contrat pris pour
+une personne, 2 fois ; « TVA intracommunautaire », 1 fois : masqués à tort, pas une fuite). Trace
+système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
 
-Non vérifié à ce jour : le clic réel « Publier » dans la fenêtre et la publication qui suit sur un poste
-Windows, le parcours complet depuis une session Claude Code. Les résultats détaillés restent locaux
-(`evals/`), hors du dépôt public.
+Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
+`relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
+partie dans le fichier publié.
+
+Non vérifié à ce jour : le parcours complet depuis une session Claude Code (transcript compris), la
+règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
+public.
 
 ## Fonctionnement détaillé (état actuel)
 
@@ -236,7 +244,8 @@ dossier courant, `coffre/<id>/…` sous le coffre, sinon `[chemin masqué]`). Ja
 le nom du fichier original, un chemin absolu, un fragment d'une ligne d'`ajustements.txt` ni le message
 d'une exception imprévue ; seuls les messages fixes de nos propres modules (dépendance manquante,
 fichier du coffre corrompu) sont relayés tels quels. Tout le passage tourne sous `sortie.quiet` :
-sorties, avertissements et journaux de pypdf et spaCy sont absorbés. Le chemin choisi n'est jamais
+sorties, avertissements et journaux Python de pypdf et spaCy sont absorbés (une écriture en code natif
+sur les descripteurs 1 et 2, thinc ou libtiff via Pillow, passerait ; aucune constatée). Le chemin choisi n'est jamais
 affiché ; si l'original est dans le dossier
 courant, un avertissement sans chemin le signale. `--help` affiche `legal-anonymiser`, jamais le chemin
 du script ; une erreur d'arguments (commande inconnue, argument en trop ou manquant) n'affiche que
@@ -412,6 +421,11 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     « date de naissance », ou « NE LE » / « NE À » écrits en capitales sans accent (« née MARTIN le
     2 juin 1965 » compris ; la négation en minuscules, « ne pourra … » ou « ne le résiliera pas avant
     le 1er juillet 2027 », non).
+  - `initiales` : jeton isolé de 2 ou 3 capitales (« ED », « JK ») ou lettres pointées (« J.K. »,
+    « J. D. », « J.-P. »), hors vocabulaire, rôle, mot-outil, forme sociale (« SA », « SCI ») et
+    abréviation (« Ets », « NO ») ; « J. Dupont » n'en est pas une. Un jeton déjà signalé `majuscule`
+    (« JK » en milieu de phrase, « LI HUI MIN » en une alerte) garde ce motif : `initiales` ne s'ajoute
+    que là où rien d'autre n'alerte (tête de phrase après « Paraphes : », ligne en capitales).
   - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
     (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte
     normalisé, rang)`, le rang étant compté sur **tous les blocs de même localisation** dans l'ordre
@@ -424,7 +438,7 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     un bloc de 200 000 caractères est relu en moins d'une seconde.
   - Limites connues : un mot capitalisé seul en début de phrase ou après « : » (« Témoin : Fabre. »,
     « Fabre signera ») n'est signalé que s'il est une valeur connue ou en capitales ; un nom en
-    minuscules inconnu, des initiales (« J. D. »), un code postal seul ne sont pas signalés. En
+    minuscules inconnu, un code postal seul ne sont pas signalés. En
     capitales, tout mot hors vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé
     sur un contrat tout en capitales, à mesurer sur le corpus.
 
