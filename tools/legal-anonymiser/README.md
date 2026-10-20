@@ -455,16 +455,32 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 
 - **Validation** (`validation.py`) : le texte masqué et le rapport sont ouverts depuis le coffre avec
   l'application par défaut du système (seul sous-processus avec l'OCR, jamais attendu, échec
-  ignoré), puis une fenêtre native pose la question « Relisez les fichiers ouverts. Publier ce
+  ignoré), puis une boîte de dialogue pose la question « Relisez les fichiers ouverts. Publier ce
   contrat masqué ? » (la CLI y ajoute l'identifiant neutre) : Publier, Ajuster ou Abandonner ; fermer
-  la fenêtre vaut abandon. Seul un clic publie : aucun bouton n'a le focus au départ, « Publier » est
-  hors de l'ordre de tabulation, Entrée ne déclenche aucun bouton, et la commande Tk `send` (X11) est
-  retirée. Sans `tkinter` ou sans affichage, la question passe au clavier seulement si l'entrée et la
-  sortie standard sont des terminaux, et il faut taper le mot entier (`publier`, casse indifférente ;
-  ni chiffre ni initiale) ; sinon la réponse est `impossible` et rien n'est publié. Aucune option,
-  variable d'environnement, fichier ni tube ne répond à la place de l'utilisateur. Limite : un
-  programme qui simule clavier ou souris sur la session de l'utilisateur, ou un pseudo-terminal piloté
-  par un autre programme, n'est pas détecté.
+  la fenêtre vaut abandon. Ordre d'essai : dialogue du système (voir « Dialogue de validation »),
+  puis `tkinter`, puis le clavier seulement si l'entrée et la sortie standard sont des terminaux, et
+  il faut taper le mot entier (`publier`, casse indifférente ; ni chiffre ni initiale) ; sinon la
+  réponse est `impossible` et rien n'est publié. Dans la fenêtre `tkinter`, seul un clic publie :
+  aucun bouton n'a le focus au départ, « Publier » est hors de l'ordre de tabulation, Entrée ne
+  déclenche aucun bouton, et la commande Tk `send` (X11) est retirée. Aucune option, variable
+  d'environnement, fichier ni tube ne répond à la place de l'utilisateur. Limite : un programme qui
+  simule clavier ou souris sur la session de l'utilisateur, ou un pseudo-terminal piloté par un autre
+  programme, n'est pas détecté.
+
+### Dialogue de validation
+
+- **Windows** : `TaskDialogIndirect` des contrôles communs v6 (`comctl32`, via `ctypes`, sans
+  dépendance) : titre `legal-france`, question en texte principal, trois boutons « Publier »,
+  « Ajuster », « Abandonner ». « Abandonner » est le bouton par défaut (Entrée ou Échap abandonnent),
+  la croix de fermeture vaut abandon. Si les contrôles communs v6 ne sont pas chargés, l'outil active
+  le manifeste de `shell32` (contexte d'activation) ; si `TaskDialogIndirect` reste introuvable ou
+  renvoie une erreur, repli sur `tkinter` sans plantage.
+- **macOS** : `osascript -e 'display dialog …'`, la question passée en argument (aucun shell), bouton
+  par défaut et bouton d'annulation « Abandonner » ; `osascript` absent : repli sur `tkinter`.
+- **Linux et autres** : `tkinter` directement.
+- La signature de `validation.confirm` et ses garanties sont inchangées ; les tests ne passent que par
+  des appels système remplacés, jamais par une vraie fenêtre. Le clic humain sur la fenêtre native n'a
+  pas encore été exécuté (voir « État de la validation »).
 - **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
   neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
   `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,

@@ -1,21 +1,146 @@
 """Validation humaine : ouverture locale des fichiers relus, puis question posée à l'utilisateur.
 
-Le modèle ne peut pas répondre à sa place : la réponse vient d'une boîte de dialogue native
-(`tkinter`) ou, à défaut, d'un terminal interactif. Jamais d'une variable d'environnement, d'un
-argument, d'un fichier ni d'un tube. Aucune sortie console ici en dehors de la question elle-même.
+Le modèle ne peut pas répondre à sa place : la réponse vient d'une boîte de dialogue du système
+(`TaskDialogIndirect` sous Windows, `osascript` sous macOS), sinon de `tkinter`, sinon d'un terminal
+interactif. Jamais d'une variable d'environnement, d'un argument, d'un fichier ni d'un tube. Aucune
+sortie console ici en dehors de la question elle-même.
 """
 from __future__ import annotations
 
+import ctypes
+import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Callable, List, Sequence
+from typing import Callable, List, Optional, Sequence
 
 QUESTION = "Relisez les fichiers ouverts. Publier ce contrat masqué ?"
 CHOICES = ("publier", "ajuster", "abandonner")
 IMPOSSIBLE = "impossible"
 _ABANDON = "abandonner"
+TITLE = "legal-france"
+
+# Constantes commctrl.h : identifiants de boutons (jamais IDOK=1, qu'Entrée pourrait viser), croix active.
+TDF_ALLOW_DIALOG_CANCELLATION = 0x0008
+IDCANCEL = 2
+_BUTTON_IDS = {"publier": 101, "ajuster": 102, "abandonner": 103}
+_PCWSTR = ctypes.c_wchar_p
+_HANDLE = ctypes.c_void_p
+
+
+class TASKDIALOG_BUTTON(ctypes.Structure):
+    _pack_ = 1
+    _fields_ = [("nButtonID", ctypes.c_int), ("pszButtonText", _PCWSTR)]
+
+
+class TASKDIALOGCONFIG(ctypes.Structure):
+    _pack_ = 1   # commctrl.h entoure ces structures de pshpack1.h
+    _fields_ = [
+        ("cbSize", ctypes.c_uint), ("hwndParent", _HANDLE), ("hInstance", _HANDLE),
+        ("dwFlags", ctypes.c_int), ("dwCommonButtons", ctypes.c_int), ("pszWindowTitle", _PCWSTR),
+        ("pszMainIcon", _HANDLE), ("pszMainInstruction", _PCWSTR), ("pszContent", _PCWSTR),
+        ("cButtons", ctypes.c_uint), ("pButtons", ctypes.POINTER(TASKDIALOG_BUTTON)),
+        ("nDefaultButton", ctypes.c_int), ("cRadioButtons", ctypes.c_uint),
+        ("pRadioButtons", ctypes.POINTER(TASKDIALOG_BUTTON)), ("nDefaultRadioButton", ctypes.c_int),
+        ("pszVerificationText", _PCWSTR), ("pszExpandedInformation", _PCWSTR),
+        ("pszExpandedControlText", _PCWSTR), ("pszCollapsedControlText", _PCWSTR),
+        ("pszFooterIcon", _HANDLE), ("pszFooter", _PCWSTR), ("pfCallback", ctypes.c_void_p),
+        ("lpCallbackData", ctypes.c_ssize_t), ("cxWidth", ctypes.c_uint),
+    ]
+
+
+class _ACTCTXW(ctypes.Structure):
+    _fields_ = [
+        ("cbSize", ctypes.c_uint), ("dwFlags", ctypes.c_uint), ("lpSource", _PCWSTR),
+        ("wProcessorArchitecture", ctypes.c_ushort), ("wLangId", ctypes.c_ushort),
+        ("lpAssemblyDirectory", _PCWSTR), ("lpResourceName", _HANDLE), ("lpApplicationName", _PCWSTR),
+        ("hModule", _HANDLE),
+    ]
+
+
+def _activate_comctl6() -> bool:
+    """Active le manifeste des contrôles communs v6 embarqué dans shell32 (ressource 124), pour le fil courant."""
+    try:
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        ctx = _ACTCTXW()
+        ctx.cbSize = ctypes.sizeof(ctx)
+        ctx.dwFlags = 0x0008   # ACTCTX_FLAG_RESOURCE_NAME_VALID
+        ctx.lpSource = os.path.join(os.environ.get("SystemRoot", r"C:\Windows"), "System32", "shell32.dll")
+        ctx.lpResourceName = 124   # MAKEINTRESOURCE(124) : manifeste des contrôles communs v6
+        kernel32.CreateActCtxW.restype = _HANDLE
+        handle = kernel32.CreateActCtxW(ctypes.byref(ctx))
+        if handle in (None, _HANDLE(-1).value):
+            return False
+        cookie = ctypes.c_size_t()
+        # ponytail: contexte laissé actif jusqu'à la fin du processus (une seule question par passage).
+        return bool(kernel32.ActivateActCtx(handle, ctypes.byref(cookie)))
+    except (AttributeError, OSError, ValueError):
+        return False
+
+
+def _taskdialog() -> Optional[Callable]:
+    """`TaskDialogIndirect` des contrôles communs v6, ou None quand ils sont indisponibles."""
+    for attempt in (0, 1):
+        try:
+            fn = ctypes.WinDLL("comctl32").TaskDialogIndirect
+        except (AttributeError, OSError):
+            if attempt or not _activate_comctl6():
+                return None
+            continue
+        fn.restype = ctypes.c_long
+        return fn
+    return None
+
+
+def _windows_dialog(question: str, choices: Sequence[str]) -> Optional[str]:
+    """Boîte de dialogue Windows native : trois boutons, « Abandonner » par défaut, croix = abandon."""
+    fn = _taskdialog()
+    if fn is None:
+        return None
+    labels = [c.capitalize() for c in choices]   # gardés vivants jusqu'au retour de l'appel
+    buttons = (TASKDIALOG_BUTTON * len(choices))(
+        *[TASKDIALOG_BUTTON(_BUTTON_IDS[c], label) for c, label in zip(choices, labels)])
+    cfg = TASKDIALOGCONFIG()
+    cfg.cbSize = ctypes.sizeof(cfg)
+    cfg.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION
+    cfg.pszWindowTitle = TITLE
+    cfg.pszMainInstruction = question
+    cfg.cButtons = len(choices)
+    cfg.pButtons = buttons
+    cfg.nDefaultButton = _BUTTON_IDS[_ABANDON]
+    pressed = ctypes.c_int(0)
+    if fn(ctypes.byref(cfg), ctypes.byref(pressed), None, None) != 0:
+        return None
+    by_id = {v: k for k, v in _BUTTON_IDS.items()}
+    answer = by_id.get(pressed.value, _ABANDON)
+    return answer if answer in choices else _ABANDON
+
+
+def _mac_dialog(question: str, choices: Sequence[str]) -> Optional[str]:
+    """`display dialog` via `osascript -e`, texte passé en argument (aucun shell), « Abandonner » par défaut."""
+    labels = {c.capitalize(): c for c in choices}
+    script = ('display dialog %s with title %s buttons {%s} default button "Abandonner" cancel button "Abandonner"'
+              % (json.dumps(question, ensure_ascii=False), json.dumps(TITLE),
+                 ", ".join(json.dumps(l) for l in reversed(list(labels)))))
+    try:
+        out = subprocess.run(["osascript", "-e", script], stdin=subprocess.DEVNULL, capture_output=True,
+                             text=True, encoding="utf-8")
+    except (OSError, ValueError):
+        return None
+    if out.returncode != 0:   # bouton d'annulation ou fenêtre fermée : -128 « User canceled »
+        return _ABANDON
+    m = re.search(r"button returned:(\S+)", out.stdout or "")
+    return labels.get(m.group(1), _ABANDON) if m else _ABANDON
+
+
+def _native(question: str, choices: Sequence[str]) -> Optional[str]:
+    if sys.platform == "win32":
+        return _windows_dialog(question, choices)
+    if sys.platform == "darwin":
+        return _mac_dialog(question, choices)
+    return None
 
 
 def default_open(path: Path) -> None:
@@ -100,10 +225,16 @@ def _terminal(question: str, choices: Sequence[str]) -> str:
 
 
 def default_ask(question: str, choices: Sequence[str]) -> str:
-    """Boîte de dialogue `tkinter` ; sans elle, saisie clavier si stdin et stdout sont des terminaux.
+    """Dialogue natif du système, sinon `tkinter`, sinon saisie clavier si stdin et stdout sont des terminaux.
 
     Sinon `impossible` : lancé par un outil du modèle sans dialogue ni terminal, rien n'est publié.
     """
+    try:
+        answer = _native(question, choices)
+    except Exception:
+        answer = None
+    if answer is not None:
+        return answer
     try:
         import tkinter
     except ImportError:
