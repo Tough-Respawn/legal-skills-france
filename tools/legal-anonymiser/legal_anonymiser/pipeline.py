@@ -7,7 +7,8 @@ travail, placeholder vers valeur ; la publication en fige une copie par passage,
 réidentification) et `etat.json`. `etat.json` est
 écrit d'abord avec `pending` et `ouverts` à `null` (un passage interrompu ne laisse jamais un état validable),
 puis complété à la fin : `pending` (lignes `?` ou placeholder inconnu), `ouverts` (alertes et ambiguïtés
-encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur) et `sha_ajustements`. Tout le passage
+encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur), `sha_ajustements` et
+`sha_correspondance` (vérifiés par cli._ready avant et après la fenêtre de confirmation). Tout le passage
 tourne sous `sortie.quiet()` : rien n'est affiché ici.
 """
 from __future__ import annotations
@@ -108,11 +109,13 @@ def _run(original: Path, vault: Vault, cid: str) -> Result:
     table = {e.placeholder: e.canonical for e in entities}
     table.update((ambiguity_placeholder(a), blocks[a.mention.block].text[a.mention.start:a.mention.end])
                  for a in ambiguities)
-    atomic_write(folder / "correspondance.json", json.dumps(table, ensure_ascii=False, indent=2).encode("utf-8"))
+    table_bytes = json.dumps(table, ensure_ascii=False, indent=2).encode("utf-8")
+    atomic_write(folder / "correspondance.json", table_bytes)
     pending = ajustements.pending(adj, {e.placeholder for e in entities})
     state = vault.read_state(cid)
     state.update({"pending": pending, "ouverts": len(alerts) + len(ambiguities), "date": date,
                   "sha_masque": body_hash(masque),
-                  "sha_ajustements": hashlib.sha256(adj.read_bytes()).hexdigest()})
+                  "sha_ajustements": hashlib.sha256(adj.read_bytes()).hexdigest(),
+                  "sha_correspondance": hashlib.sha256(table_bytes).hexdigest()})
     vault.write_state(cid, state)
     return Result(extracted, entities, ambiguities, alerts, masked, pending)

@@ -423,7 +423,8 @@ publié), `ajustements.txt`, `correspondance.json` (table de travail, placeholde
 `[AMBIGU_n]` comprises, réécrite à chaque passage ; la publication en fige une copie) et `etat.json`
 (`destination` : dossier courant du premier `traiter`, où sera publié le
 fichier ; `pending` ; `ouverts` : alertes et ambiguïtés encore ouvertes ; `sha_masque` : empreinte du
-corps de `masque.md` après le marqueur ; `sha_ajustements` ; `date` ; `original_name_hidden`). `etat.json`
+corps de `masque.md` après le marqueur ; `sha_ajustements` ; `sha_correspondance` ; `date` ;
+`original_name_hidden`). `etat.json`
 est écrit en début de passage avec `pending` et `ouverts` à `null`, puis complété à la fin : un passage
 interrompu ne laisse jamais un état validable. Les décisions survivent à la réécriture du fichier
 d'ajustements : une alerte gardée reste écrite `A<n> garder`, une ambiguïté tranchée `M<n> [PLACEHOLDER]`
@@ -434,16 +435,16 @@ attente les lignes `?` et ces placeholders inconnus.
 
 **Validation** : refusée (code 3, « des points restent ouverts ») tant que `pending` ou `ouverts` n'est
 pas 0, si `etat.json` ne porte pas ces champs, ou si `masque.md` contient encore `[AMBIGU_` ; refusée
-aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de `masque.md`
-ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage, ou que le marqueur de
-`masque.md` n'a pas le `corps=` de son corps ou pas de `passage=` (fichier écrit par la v4.5.0) : il faut
-`relancer`. Sinon
+aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de
+`masque.md`, `ajustements.txt` ou `correspondance.json` ne correspond plus aux empreintes du dernier
+passage, ou que le marqueur de `masque.md` n'a pas le `corps=` de son corps ou pas de `passage=`
+(fichier écrit par la v4.5.0) : il faut `relancer`. Sinon
 `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
 ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
 masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
 (« fichier modifié pendant la relecture, relancez », code 4) ; les contrôles d'avant la fenêtre sont
-ensuite refaits (empreintes de `masque.md` et `ajustements.txt`, `pending` et `ouverts` d'`etat.json`) :
-un ajustement ou un état modifié pendant la fenêtre donne « Contrat <id> : fichiers modifiés pendant la
+ensuite refaits (empreintes de `masque.md`, `ajustements.txt` et `correspondance.json`, `pending` et
+`ouverts` d'`etat.json`) : un ajustement, une table ou un état modifié pendant la fenêtre donne « Contrat <id> : fichiers modifiés pendant la
 relecture, rien n'a été publié ; relancez : legal-anonymiser relancer <id> » (code 3, audit v4.5.0,
 constat F3) ; sinon il est publié dans la destination
 enregistrée (« Publié : contrat-<id>.masque.md », suivi du rappel « La validation porte sur le texte

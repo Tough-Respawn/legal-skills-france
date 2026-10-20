@@ -78,11 +78,12 @@ def _after_run(vault: Vault, cid: str, result) -> int:
 
 def _ready(vault: Vault, cid: str, state: dict) -> Optional[str]:
     """Clé du message qui empêche la validation, ou None quand le dernier passage n'a rien laissé ouvert
-    et que `masque.md` (marqueur `corps=` compris) et `ajustements.txt` sont ceux qu'il a écrits."""
+    et que `masque.md` (marqueur `corps=` et `passage=` compris), `ajustements.txt` et `correspondance.json`
+    sont ceux qu'il a écrits."""
     from .rendu import MARKER_RE, body_hash
     folder = vault.root / cid
-    masque, adj = folder / "masque.md", folder / "ajustements.txt"
-    if not (masque.is_file() and adj.is_file()):
+    masque, adj, table = folder / "masque.md", folder / "ajustements.txt", folder / "correspondance.json"
+    if not (masque.is_file() and adj.is_file() and table.is_file()):
         return "non_pret"
     data = masque.read_bytes()
     if (state.get("pending") != 0 or state.get("ouverts") != 0 or b"[AMBIGU_" in data):
@@ -90,7 +91,8 @@ def _ready(vault: Vault, cid: str, state: dict) -> Optional[str]:
     marker = MARKER_RE.match(data.split(b"\n", 1)[0].decode("utf-8", "replace"))
     if (body_hash(data) != state.get("sha_masque") or not marker or marker.group("corps") != body_hash(data)[:16]
             or not marker.group("passage")
-            or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")):
+            or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")
+            or hashlib.sha256(table.read_bytes()).hexdigest() != state.get("sha_correspondance")):
         return "modifie_depuis"   # un `masque.md` de la v4.5.0 (sans `corps=`) demande aussi un `relancer`
     return None
 
