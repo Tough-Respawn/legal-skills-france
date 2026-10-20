@@ -8,6 +8,8 @@ to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.5.1] - 2026-10-20
+
 ### Fixed
 
 Quatre défauts de la v4.5.0 relevés par un audit indépendant le 2026-10-20.

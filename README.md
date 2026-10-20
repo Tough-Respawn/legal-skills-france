@@ -3,7 +3,7 @@
 > **FR :** Assistant juridique français, 8 skills modulaires et 10 modèles de documents. Installation personnelle pour plusieurs harnais, avec le plugin Claude Code conservé. Recherche web prioritaire ; API Légifrance (textes datés) et Judilibre (jurisprudence judiciaire) facultatives.
 > **EN:** French law assistant with 8 modular skills and 10 legal document templates. User-level installation for multiple agent applications, alongside the existing Claude Code plugin. Web search by default; optional Légifrance and Judilibre APIs.
 
-**Version : [v4.5.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.5.0).**
+**Version : [v4.5.1](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.5.1).**
 Installation pour DeepSeek Harness et Qwen Code, qui partagent la copie
 `.agents/skills` des autres harnais. Import sans installation dans Claude.ai
 et ChatGPT, et archives construites automatiquement à chaque version.
@@ -433,6 +433,7 @@ de date Judilibre et les limites de débit restent à vérifier.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **[v4.5.1](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.5.1)** | Octobre 2026 | Correctifs de l'audit de la v4.5.0 : verrou (chemins relatifs, syntaxe PowerShell), réidentification liée à la version publiée, ajustements modifiés pendant la confirmation, sur-masquage de clauses et noms à particule |
 | **[v4.5.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.5.0)** | Octobre 2026 | Relecture de contrat `/relire` sur fichier masqué, quatre grilles d'ordre public sourcées, anonymiseur local `legal-anonymiser` (coffre, validation humaine, publication vérifiable) et verrou Claude Code |
 | **[v4.4.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.4.0)** | Octobre 2026 | Cibles d'installation DeepSeek Harness et Qwen Code, dédupliquées dans `.agents/skills` ; source Gemini CLI corrigée |
 | **[v4.3.0](https://github.com/Tough-Respawn/legal-skills-france/releases/tag/v4.3.0)** | Septembre 2026 | Plugin ChatGPT importable (skill unique, logo LSF), guide grand public |
