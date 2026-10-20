@@ -1,9 +1,12 @@
 """Verrou Claude Code : hook `PreToolUse` qui refuse l'accès aux originaux inscrits et au coffre.
 
-Lancé par Claude Code (`python -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
-l'entrée standard. Code 2 et message sur l'erreur standard = appel refusé, 0 = laissé passer. Aucun
-contenu de fichier n'est lu, seuls des chemins sont comparés, résolus et normalisés. Toute exception
-vaut refus. Les messages ne contiennent jamais un chemin absolu ni un nom de fichier.
+Lancé par Claude Code (`python -P -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
+l'entrée standard. Refus = code 0 et décision JSON `deny` sur la sortie standard : Claude Code montre
+alors la raison seule (avec le code 2, il la préfixe de la ligne de commande du hook, chemins absolus
+compris, constaté le 2026-10-20). Sortie vide et code 0 = laissé passer. Toute exception, écriture de
+la décision comprise, vaut refus par le code 2 et un message générique sur l'erreur standard. Aucun
+contenu de fichier n'est lu, seuls des chemins sont comparés, résolus et normalisés. Les messages ne
+contiennent jamais un chemin absolu ni un nom de fichier.
 Bibliothèque standard uniquement : ce module ne dépend d'aucun autre module du paquet.
 """
 from __future__ import annotations
@@ -21,6 +24,8 @@ SHELL_TOOLS = ("Bash", "PowerShell")
 ORIGINAL = ("legal-france : original protégé, accès refusé. Travaillez uniquement sur le fichier publié "
             "contrat-<id>.masque.md.")
 COFFRE = "legal-france : coffre protégé, accès refusé. Le coffre n'est jamais lu par le modèle."
+SEARCH = ("legal-france : recherche refusée, un original protégé ou le coffre se trouve dans ce dossier ou en "
+          "dessous : lancez la recherche dans un sous-dossier qui ne les contient pas.")
 GENERIC = "legal-france : verrou en erreur, accès refusé par précaution."
 _WIN_PATH_RX = re.compile(r"[A-Za-z]:[\\/][^\s\"'<>|;&`]*")
 _WILDCARD_RX = re.compile(r"[*?\[]")
@@ -106,11 +111,21 @@ def decide(event: dict, coffre) -> Optional[str]:
         if os.path.isabs(prefix):
             roots.append(_norm(prefix))
         for base in roots:
-            if _within(base, root) or _within(root, base):
+            if _within(base, root):
                 return COFFRE
-            if any(_within(o, base) for o, _ in originals):
-                return ORIGINAL
+            if _within(root, base) or any(_within(o, base) for o, _ in originals):
+                return SEARCH
     return None
+
+
+def _write(stream, text: str) -> None:
+    raw = getattr(stream, "buffer", None)   # UTF-8 quel que soit le codage de la console Windows
+    if raw is not None:
+        raw.write(text.encode("utf-8"))
+        raw.flush()
+    else:
+        stream.write(text)
+        stream.flush()
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -119,17 +134,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         parser.add_argument("--coffre", required=True)
         args = parser.parse_args(argv)
         message = decide(json.load(sys.stdin), args.coffre)
-    except BaseException:   # SystemExit d'argparse compris : jamais de laisser-passer
-        message = GENERIC
-    if message is None:
+        if message is not None:   # json.dumps échappe en ASCII : lisible quel que soit le codage
+            _write(sys.stdout, json.dumps({"hookSpecificOutput": {
+                "hookEventName": "PreToolUse", "permissionDecision": "deny",
+                "permissionDecisionReason": message}}) + "\n")
         return 0
-    raw = getattr(sys.stderr, "buffer", None)   # UTF-8 quel que soit le codage de la console Windows
-    if raw is not None:
-        raw.write((message + "\n").encode("utf-8"))
-        raw.flush()
-    else:
-        sys.stderr.write(message + "\n")
-    return 2
+    except BaseException:   # SystemExit d'argparse compris : jamais de laisser-passer
+        try:
+            _write(sys.stderr, GENERIC + "\n")
+        except BaseException:
+            pass
+        return 2
 
 
 if __name__ == "__main__":

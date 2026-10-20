@@ -23,6 +23,9 @@ MIN_VERSION = (2, 1, 295)   # `onFailure: "block"`, https://code.claude.com/docs
 MARK = "legal_anonymiser.verrou"
 MATCHER = "Read|Edit|Write|NotebookEdit|Grep|Glob|Bash|PowerShell"
 BACKUP_SUFFIX = ".legal-france.bak"
+# `-P` (Python 3.11+) : le dossier de la session n'entre pas dans `sys.path`, un `json.py` du projet ne
+# remplace pas le verrou. En 3.9 et 3.10, pas d'équivalent qui garde une installation `pip install --user`.
+ISOLATE = ["-P"] if sys.version_info >= (3, 11) else []
 _VERSION_RX = re.compile(r"(\d+)\.(\d+)\.(\d+)")
 
 
@@ -79,7 +82,7 @@ def _save(settings: Path, data: dict) -> None:
 def _entry(coffre: Path) -> dict:
     return {"matcher": MATCHER, "hooks": [{
         "type": "command", "command": sys.executable,
-        "args": ["-m", MARK, "--coffre", str(Path(coffre).resolve())],
+        "args": ISOLATE + ["-m", MARK, "--coffre", str(Path(coffre).resolve())],
         "onFailure": "block", "timeout": 10,
     }]}
 

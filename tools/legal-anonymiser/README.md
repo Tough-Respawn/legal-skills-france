@@ -186,34 +186,42 @@ Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif 
 ## Verrou Claude Code
 
 Protection supplémentaire, propre à Claude Code : un hook `PreToolUse` (`legal_anonymiser/verrou.py`,
-bibliothèque standard, `python -m legal_anonymiser.verrou --coffre <racine>`) reçoit chaque appel
-d'outil en JSON sur l'entrée standard et répond par le code 2 (appel refusé, message visible par le
-modèle) ou 0. Il ne lit jamais le contenu d'un fichier : il compare des chemins résolus (liens,
-jonctions, noms courts 8.3 via `GetLongPathNameW`, casse indifférente sous Windows et macOS).
+bibliothèque standard, `python -P -m legal_anonymiser.verrou --coffre <racine>`) reçoit chaque appel
+d'outil en JSON sur l'entrée standard. Pour refuser, il écrit sur la sortie standard la décision JSON
+`{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
+"permissionDecisionReason": "<message>"}}` et sort avec le code 0 ; pour laisser passer, il ne
+répond rien (code 0). Il ne lit jamais le contenu d'un fichier : il compare des chemins résolus
+(liens, jonctions, noms courts 8.3 via `GetLongPathNameW`, casse indifférente sous Windows et macOS).
 
 Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
 
 - `Read`, `Edit`, `Write`, `NotebookEdit` sur un original ou sur tout chemin sous le coffre
   (`file_path` ou `notebook_path`, relatif au `cwd` de la session s'il n'est pas absolu) ;
 - `Grep` et `Glob` dont la racine (`path`, sinon le dossier courant ; un motif absolu aussi) est le
-  coffre, est dedans, ou est un parent du coffre ou d'un original : une recherche lancée depuis le
-  dossier personnel ou la racine du disque est refusée ;
+  coffre ou est dedans (« coffre protégé »), ou est un parent du coffre ou d'un original : une
+  recherche lancée depuis le dossier personnel ou la racine du disque est refusée avec la raison
+  (« un original protégé ou le coffre se trouve dans ce dossier ou en dessous : lancez la recherche
+  dans un sous-dossier qui ne les contient pas ») ;
 - `Bash` et `PowerShell` dont la commande contient, casse et séparateurs `\` ou `/` indifférents,
   le chemin du coffre (absolu, `/c/Users/…` de Git Bash, `~/.legal-france`, `%USERPROFILE%`,
   `$HOME`, `$env:USERPROFILE`, ou simplement `.legal-france`), le chemin d'un original ou son nom
   de fichier ; les chemins absolus Windows présents dans la commande sont résolus avant comparaison
   (jonction, nom court).
 
-Le message du hook dit seulement « original protégé », « coffre protégé » ou « verrou en erreur »,
-jamais un chemin ni un nom. Mais Claude Code (2.1.303, observé le 2026-10-20) le préfixe, dans ce que
-voit le modèle, par la ligne de commande du hook : chemin absolu de l'interpréteur et du coffre
-(`PreToolUse:Read hook error: [<python> -m legal_anonymiser.verrou --coffre <racine>]: ...`). Toute
-exception interne (JSON invalide, registre corrompu, argument manquant) vaut refus. Le hook est
-déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante ou dépasse son
-délai bloque aussi l'appel au lieu de le laisser passer, ce qui exige Claude Code 2.1.295 ou plus.
-Les hooks des fichiers de réglages s'appliquent aussi aux appels d'outils des sous-agents. Format du
-hook, champs d'entrée, code 2 et `onFailure` confirmés sur https://code.claude.com/docs/en/hooks, lue
-le 2026-10-20.
+Les messages ne contiennent jamais un chemin ni un nom de fichier. Sur un refus, le modèle voit
+seulement `PreToolUse:Read hook error: legal-france : original protégé, accès refusé...`
+(Claude Code 2.1.303, constaté le 2026-10-20). Pourquoi le JSON plutôt que le code 2 : sur un refus
+par code 2, Claude Code préfixe le message de la ligne de commande du hook, donc du chemin absolu de
+l'interpréteur et du coffre.
+
+Toute exception interne (JSON invalide sur l'entrée, registre corrompu, argument manquant, sortie
+standard inutilisable) vaut refus par le dernier recours : code 2 et « verrou en erreur » sur
+l'erreur standard. Dans ce cas seulement, le modèle voit la ligne de commande du hook. Le hook est
+déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante, dépasse son
+délai ou répond un JSON illisible bloque aussi l'appel au lieu de le laisser passer, ce qui exige
+Claude Code 2.1.295 ou plus. Les hooks des fichiers de réglages s'appliquent aussi aux appels
+d'outils des sous-agents. Format du hook, décision `deny`, code 2 et `onFailure` confirmés sur
+https://code.claude.com/docs/en/hooks, lue le 2026-10-20.
 
 ### Installation du verrou
 
@@ -225,12 +233,21 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
 
 - Lancer `install-hook` avec l'interpréteur de l'environnement où l'outil est installé : l'entrée
   enregistre son chemin absolu (`sys.executable`) et la racine résolue du coffre (variable
-  `LEGAL_FRANCE_COFFRE` comprise). Après un déplacement du coffre ou du venv, relancer
-  `install-hook` : l'entrée est remplacée, jamais doublée.
+  `LEGAL_FRANCE_COFFRE` comprise). Après un déplacement du coffre ou du venv, ou un changement de
+  version de Python, relancer `install-hook` : l'entrée est remplacée (arguments compris), jamais
+  doublée.
 - L'entrée ajoutée sous `hooks.PreToolUse` : matcher
   `Read|Edit|Write|NotebookEdit|Grep|Glob|Bash|PowerShell`, hook `{"type": "command", "command":
-  <python>, "args": ["-m", "legal_anonymiser.verrou", "--coffre", <racine>], "onFailure": "block",
-  "timeout": 10}` (forme exec, sans shell). Elle est reconnue par `legal_anonymiser.verrou` dans `args`.
+  <python>, "args": ["-P", "-m", "legal_anonymiser.verrou", "--coffre", <racine>], "onFailure":
+  "block", "timeout": 10}` (forme exec, sans shell). Elle est reconnue par `legal_anonymiser.verrou`
+  dans `args`.
+- `-P` (Python 3.11 ou plus) empêche le dossier de la session d'entrer dans le chemin d'import : un
+  `json.py`, un `argparse.py` ou un dossier `legal_anonymiser/` présent dans le projet ne remplace pas
+  le verrou (vérifié en test : sans `-P`, un tel fichier fait sortir le hook en code 0, donc laisser
+  passer). En Python 3.9 et 3.10, `-P` n'existe pas et n'est pas écrit : un module du projet nommé
+  comme un module de la bibliothèque standard, ou comme le paquet, peut détourner le verrou. Utiliser
+  Python 3.11 ou plus pour l'environnement de l'outil.
+- `install-hook` écrit toujours un JSON valide.
 - Refus d'installer, sans rien écrire : `claude --version` introuvable ou antérieur à 2.1.295 (code 6) ;
   réglages qui ne sont pas un objet JSON valide, commentaires compris (code 7).
 - Avant chaque écriture, l'ancien fichier est copié en `settings.json.legal-france.bak` à côté ;
@@ -246,8 +263,11 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
   reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`) ne sont pas
   reconnus ;
 - les outils MCP, les autres harnais et toute session sans le hook ne sont pas couverts ;
-- un fichier de réglages qui n'est pas du JSON valide est ignoré par Claude Code sans avertissement
-  (observé avec `--settings` le 2026-10-20) : le verrou disparaît avec lui ;
+- un fichier de réglages (`--settings` ou `settings.json`) qui n'est pas du JSON valide est ignoré
+  par Claude Code sans avertissement : le verrou disparaît avec lui. Constaté avec `--settings` le
+  2026-10-20 (appel `Read` passé, rien sur la sortie d'erreur) ; pour `~/.claude/settings.json`, non
+  vérifié, à supposer identique. Après toute modification manuelle des réglages, vérifier qu'ils
+  restent du JSON valide ;
 - `Read` refuse déjà de lui-même un `.docx` (fichier binaire) et suggère au modèle un script : c'est
   précisément le contournement que le verrou ne voit pas ;
 - un contrat jamais passé dans l'outil n'est pas inscrit au registre, donc pas protégé : la garde
@@ -277,8 +297,10 @@ Verrou Claude Code en session réelle, vérifié le 2026-10-20 entre 08:01 et 08
 2.1.303, `claude -p --settings` avec l'entrée écrite par `install-hook`, coffre et originaux factices
 temporaires) : refus constatés dans le transcript pour `Read` d'un original PDF, `cat` et `Get-Content`
 du registre, `Grep` depuis le dossier personnel, `Read` par un sous-agent, registre corrompu (message
-générique) et interpréteur introuvable (`onFailure: "block"`). `install-hook` n'a pas été lancé sur
-un vrai `~/.claude/settings.json`.
+générique) et interpréteur introuvable (`onFailure: "block"`). Après passage à la décision JSON et à
+`-P` (08:14 UTC), `Read` de l'original et `Grep` depuis le dossier personnel refusés à nouveau, le
+texte vu par le modèle ne contenant ni chemin ni ligne de commande ; les autres cas n'ont pas été
+rejoués avec cette version. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
 
 Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
 humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
