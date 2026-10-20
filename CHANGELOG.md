@@ -35,9 +35,11 @@ to [Semantic Versioning](https://semver.org/).
   (`850\n120\n970`) n'est plus masquée comme numéro ; la seconde passe signale
   les initiales isolées (`initiales` : « ED », « J.K. ») ; le modèle spaCy
   absent est annoncé sur la console ; `bind`/`listen`/`accept` coupés par le
-  filet réseau ; le coffre n'est créé qu'après un fichier choisi. Docs : le
-  clic humain « Publier » a été exécuté le 2026-10-19 à 23:28 (README,
-  `CLAUDE.md`, résultats).
+  filet réseau ; le coffre n'est créé qu'après un fichier choisi. Round 2 :
+  en casse mixte, un tiers dont le nom suit un prénom connu (« Paul Avril »)
+  n'est plus coupé ; un IBAN ou SIREN valide sur plusieurs lignes reste
+  masqué. Docs : le clic humain « Publier » a été exécuté le 2026-10-19 à
+  23:28 (README, `CLAUDE.md`, résultats).
 
 ---
 

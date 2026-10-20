@@ -189,9 +189,10 @@ plus un fichier piégé par constat technique) traité par la ligne de commande 
 (mesure du 2026-10-20) : 0 fuite des noms, initiales, adresses, numéros, e-mails, IBAN, SIREN et dates
 de naissance lisibles après arbitrage, 175 noms sur 176 détectés avant arbitrage, 30 constats techniques
 sur 30 présents dans le rapport, 1,0 alerte pour 100 mots, 0 fusion de deux parties sous un placeholder,
-0 partie éclatée sur plusieurs placeholders ; 23 placeholders de nom qui débordent sur du texte courant
-(« Logement sans l'accord » pris pour une société par le modèle, 19 fois ; masqué à tort, pas une
-fuite). Trace système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+0 partie éclatée sur plusieurs placeholders ; 20 placeholders de nom qui débordent sur du texte courant
+(« Logement sans l'accord » pris pour une société par le modèle, 17 fois ; un titre de contrat pris pour
+une personne, 2 fois ; « TVA intracommunautaire », 1 fois : masqués à tort, pas une fuite). Trace
+système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
 
 Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
 `relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
