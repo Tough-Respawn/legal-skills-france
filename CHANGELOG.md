@@ -24,6 +24,12 @@ to [Semantic Versioning](https://semver.org/).
   `valider`, `verifier`, `reidentifier`. Seule exception à la règle « Python
   standard » du dépôt (pypdf, Pillow, spaCy, Tesseract installés par
   l'utilisateur) ; les 8 skills et les trois archives restent sans dépendance.
+- Quatre grilles de relecture d'ordre public dans les références des
+  domaines : bail d'habitation (civil), contrat de travail (travail),
+  contrat de consommation et contrat entre professionnels (affaires).
+  Chaque point porte son fondement, l'URL Légifrance et sa date de
+  vérification (2026-10-20) ; les éléments non confirmés sont marqués
+  `NON VÉRIFIÉ`.
 
 ---
 
