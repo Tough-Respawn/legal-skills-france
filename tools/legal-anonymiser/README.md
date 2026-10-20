@@ -360,8 +360,9 @@ publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publi�
 
 ## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 449 tests, 0 échec,
-4 ignorés faute de liens symboliques ou de modes POSIX sous Windows, après les correctifs de l'audit) ;
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 455 tests, 0 échec,
+4 ignorés faute de liens symboliques ou de modes POSIX sous Windows, après les correctifs de l'audit et
+de la revue de la branche) ;
 corpus synthétique de 26 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF
 texte et numérisation, plus un fichier piégé par constat technique) traité par la ligne de commande.
 **Mesure après arbitrage scripté sur 26 contrats fictifs ; ce n'est pas une garantie générale** :
@@ -369,15 +370,18 @@ l'arbitrage scripté masque chaque alerte, garde le masquage sur chaque alerte `
 les ambiguïtés d'après la vérité terrain ; aucune validation humaine n'est simulée, rien n'est publié.
 Mesure du 2026-10-20 après les correctifs : 0 fuite des noms, initiales, adresses, numéros, e-mails,
 IBAN, SIREN et dates de naissance lisibles après cet arbitrage, 175 noms sur 176 détectés avant
-arbitrage, 30 constats techniques sur 30 présents dans le rapport, 1,1 alerte pour 100 mots (dont 9
-`sur_masquage` sur le corpus), 0 fusion de deux parties sous un placeholder, 1 partie éclatée sur deux
-placeholders (le vendeur d'un DOCX : « Morvan Habitat » de l'en-tête lu comme une personne, masqué, pas
-une fuite). Sur-masquages : la v4.5.0 en comptait 23 entrées, dont 20 réelles (« Logement sans l'accord »
-pris pour une société, 17 fois ; un titre de contrat pris pour une personne, 2 fois ; « TVA
-intracommunautaire », 1 fois) ; après les correctifs, 5 entrées, dont 2 réelles (le titre de contrat,
-2 fois) et 3 vrais noms coupés par une ligne ; l'alerte `sur_masquage` signale ces 5 et 4 autres
+arbitrage, 30 constats techniques sur 30 présents dans le rapport, 1,1 alerte pour 100 mots (157, dont 7
+`sur_masquage`), 0 fusion de deux parties sous un placeholder, 1 partie éclatée sur deux placeholders (le
+vendeur d'un DOCX : « Morvan Habitat » de l'en-tête lu comme une personne, masqué, pas une fuite).
+Sur-masquages : la v4.5.0 en comptait 23 entrées, dont 20 réelles (« Logement sans l'accord » pris pour
+une société, 17 fois ; un titre de contrat pris pour une personne, 2 fois ; « TVA intracommunautaire »,
+1 fois) ; après les correctifs, 6 entrées, dont 3 réelles (le titre de contrat, 2 fois ; « TVA
+intracommunautaire », 1 fois) et 3 vrais noms coupés par une ligne. Les 7 alertes `sur_masquage` portent
+exactement sur les 7 sur-masquages réels : ces 3 et 4 que le critère de la mesure ne compte pas
 (« tacite » de « tacite reconduction » pris pour une personne, 3 fois ; « RCS de La Roche-sur-Yon »,
-1 fois), masqués à tort, pas une fuite, à `demasquer:` à la relecture. Trace système `strace` dans un
+1 fois) ; aucune sur un vrai nom. Masqués à tort, pas une fuite, à `demasquer:` à la relecture. Le corpus
+ne contient aucun nom à particule étrangère (« el-Amrani », « do Carmo ») : ceux-là sont vérifiés par
+les tests seulement. Trace système `strace` dans un
 conteneur Linux : aucune connexion, `unshare -rn` identique (mesure du 2026-10-19, non refaite).
 
 Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
