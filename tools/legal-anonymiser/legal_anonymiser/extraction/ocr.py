@@ -61,7 +61,8 @@ def image_to_text(image: Path) -> str:
                               capture_output=True, check=True, timeout=_TIMEOUT)
     except (OSError, subprocess.SubprocessError) as exc:
         raise Unreadable("La reconnaissance de texte a échoué.") from exc
-    return done.stdout.decode("utf-8", "replace").strip()
+    # Tesseract Windows écrit \r\n : normalisé ici, à la source, pour que la détection ne voie que \n.
+    return done.stdout.decode("utf-8", "replace").replace("\r\n", "\n").replace("\r", "\n").strip()
 
 
 
