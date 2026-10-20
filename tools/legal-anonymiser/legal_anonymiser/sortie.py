@@ -50,6 +50,17 @@ MESSAGES = {
     "rapport_illisible": "Rapport illisible : vérifiez le chemin et l'encodage (UTF-8).",
     "reidentifie": "Rapport réidentifié : {path}",
     "erreur_interne": "Erreur interne : détails dans {path}",
+    "verrou_installe": "Verrou Claude Code installé dans les réglages (version précédente du fichier, s'il existait, "
+                       "sauvegardée en `settings.json.legal-france.bak` à côté). Redémarrez les sessions Claude Code "
+                       "ouvertes.",
+    "verrou_deja": "Verrou Claude Code déjà installé, à jour : réglages inchangés.",
+    "verrou_retire": "Verrou Claude Code retiré des réglages (version précédente sauvegardée en "
+                     "`settings.json.legal-france.bak` à côté).",
+    "verrou_absent": "Aucun verrou Claude Code dans les réglages : rien à retirer, rien n'a été écrit.",
+    "verrou_version": "Claude Code 2.1.295 ou plus récent est requis pour `onFailure: block` (version trouvée : "
+                      "{version}). Verrou non installé.",
+    "verrou_reglages_invalides": "Le fichier de réglages de Claude Code n'est pas un objet JSON valide (commentaires "
+                                 "compris) : rien n'a été écrit. Corrigez-le, puis relancez.",
 }
 
 
