@@ -137,6 +137,10 @@ def _tokens(command: str, base: str) -> Set[str]:
     chemin dont le premier élément existe sous `base` peut traverser un lien : lui seul est résolu, les autres
     sont normalisés sans appel système (une commande de 5 000 jetons tient dans le délai du hook)."""
     words = re.split(r"[\s\"'`;|&<>()=,]+", command) + [a or b for a, b in re.findall(r"\"([^\"]*)\"|'([^']*)'", command)]
+    # Espace échappée, gardée dans le jeton : `mon\ coffre` (Bash), « mon` coffre » (PowerShell).
+    words += [re.sub(r"\\ |` ", " ", w) for w in re.findall(r"(?:\\ |` |[^\s\"'`;|&<>()=,])+", command)]
+    # Après un `:` : paramètre PowerShell `-Path:coffre`, chemin de fournisseur `FileSystem::coffre`.
+    words += [p for w in words if ":" in w for p in re.split(r":+", w)[1:]]
     out, exists = set(), {}
     for word in set(words):
         m = _GLOB_RX.search(word)
@@ -146,7 +150,11 @@ def _tokens(command: str, base: str) -> Set[str]:
             p = _expand(word, "")
             if not p:
                 continue
-            first = re.split(r"[\\/]", p, 1)[0]
+            first = re.split(r"[\\/]", os.path.normpath(p), 1)[0]   # `nope\..\lien` : `lien`
+            # Forme UNC (`//hôte/x` d'une URL coupée au `:`), `https:` ou `-Path:x` : ni accès réseau ni `realpath`.
+            if re.match(r"[\\/]{2}", p) or (":" in first and not re.fullmatch(r"[A-Za-z]:", first)):
+                out.add(_lexical(os.path.join(base, p)))
+                continue
             if not (os.path.isabs(p) or ":" in first or first in ("", ".", "..")):
                 if first not in exists:
                     exists[first] = os.path.lexists(os.path.join(base, first))

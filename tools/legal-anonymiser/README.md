@@ -222,13 +222,24 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
   `$LEGAL_FRANCE_COFFRE`, `%LEGAL_FRANCE_COFFRE%`, `$env:LEGAL_FRANCE_COFFRE`), le chemin d'un
   original ou son nom de fichier ; les chemins absolus Windows présents dans la commande sont
   résolus avant comparaison (jonction, nom court). Chaque jeton de la commande (mots séparés par
-  blancs, guillemets et `;|&<>()=,`, plus le contenu entier de chaque chaîne entre guillemets ; un
-  jeton à joker réduit à sa partie littérale, comme pour `Glob`) est aussi résolu depuis le dossier de
-  la session (`cwd` de l'événement) : refusé s'il est sous le coffre (`cat coffre/registre.json` ou
+  blancs, guillemets et `;|&<>()=,`, plus le contenu entier de chaque chaîne entre guillemets, plus
+  chaque mot où une espace échappée ne sépare pas : `mon\ coffre` en Bash, « mon` coffre » en
+  PowerShell, plus chaque partie après un `:` : `-Path:coffre`, `-LiteralPath:coffre`,
+  `FileSystem::coffre`, `Microsoft.PowerShell.Core\FileSystem::coffre` ; un jeton à joker réduit à sa
+  partie littérale, comme pour `Glob`) est aussi résolu depuis le dossier de la session (`cwd` de
+  l'événement) : refusé s'il est sous le coffre (`cat coffre/registre.json` ou
   `Get-Content coffre/*/correspondance.json` depuis le parent du coffre, `cd coffre; type
-  registre.json`) ou s'il est un original. Une commande lancée depuis un dossier du coffre est refusée
-  entière. Une commande de 5 000 jetons est jugée en moins d'une seconde (mesuré le 2026-10-20 sous
-  Windows), loin du délai de 10 s.
+  registre.json`, `nope\..\lien\registre.json` par une jonction) ou s'il est un original. Une commande
+  lancée depuis un dossier du coffre est refusée entière. Une forme UNC ou un premier élément qui porte
+  `:` sans être un lecteur (`https://…`) est comparé sans appel système (jamais d'accès réseau). Délai :
+  5 000 jetons de fichiers inexistants sont jugés en moins d'une seconde, 5 000 jetons mêlant chemins
+  inexistants et URL en 1,2 s (mesures du 2026-10-20 sous Windows) ; un jeton qui désigne un fichier
+  existant passe par la résolution complète : 3 000 fichiers existants cités en 5,3 s (7,7 s pendant
+  que la suite de tests tournait) ; au-delà de 4 000 environ, le délai de 10 s peut être dépassé et
+  l'appel est refusé (`onFailure: "block"`), jamais laissé passer.
+  Refus attendus, à connaître : depuis le parent du coffre, tout mot égal au nom du dossier du coffre
+  (`echo coffre`, `git commit -m "maj du coffre"`) ; `python -m legal_anonymiser …` lancé depuis
+  `tools/legal-anonymiser` (jeton = dossier du paquet, « verrou protégé »).
 
 Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
 (2.1.303) ouvrira lui-même après le hook : espaces et BOM retirés aux extrémités, `~` et `~/` seuls
@@ -321,8 +332,10 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
 
 - un script lancé par `Bash` ou `PowerShell` (Python, `node`, PowerShell) qui lit l'original sans
   citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), un chemin
-  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`) ne sont pas
-  reconnus ;
+  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`, `cat
+  co''ffre/…`, `cat c\offre/…`, « Get-Content c`offre/… ») ne sont pas reconnus ; une lecture récursive
+  lancée depuis un ancêtre du coffre (`grep -r motif .`, `Get-ChildItem -Recurse -File | Get-Content`)
+  n'est pas refusée par `Bash` ni `PowerShell`, alors que l'outil `Grep` refuse le même cas ;
 - les outils MCP, les autres harnais et toute session sans le hook ne sont pas couverts ;
 - un fichier de réglages (`--settings` ou `settings.json`) qui n'est pas du JSON valide est ignoré
   par Claude Code sans avertissement : le verrou disparaît avec lui. Constaté avec `--settings` le
