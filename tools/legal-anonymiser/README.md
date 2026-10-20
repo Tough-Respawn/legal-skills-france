@@ -181,6 +181,42 @@ Pour une garantie qui couvre aussi les processus enfants (OCR) et le code natif 
   (droits administrateur non demandés) : à vérifier par qui l'applique.
 - **macOS** : non documenté en v1.
 
+## Verrou Claude Code
+
+Protection supplémentaire, propre à Claude Code : un hook `PreToolUse` (`legal_anonymiser/verrou.py`,
+bibliothèque standard, `python -m legal_anonymiser.verrou --coffre <racine>`) reçoit chaque appel
+d'outil en JSON sur l'entrée standard et répond par le code 2 (appel refusé, message visible par le
+modèle) ou 0. Il ne lit jamais le contenu d'un fichier : il compare des chemins résolus (liens,
+jonctions, noms courts 8.3 via `GetLongPathNameW`, casse indifférente sous Windows et macOS).
+
+Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
+
+- `Read`, `Edit`, `Write`, `NotebookEdit` sur un original ou sur tout chemin sous le coffre
+  (`file_path` ou `notebook_path`, relatif au `cwd` de la session s'il n'est pas absolu) ;
+- `Grep` et `Glob` dont la racine (`path`, sinon le dossier courant ; un motif absolu aussi) est le
+  coffre, est dedans, ou est un parent du coffre ou d'un original : une recherche lancée depuis le
+  dossier personnel ou la racine du disque est refusée ;
+- `Bash` et `PowerShell` dont la commande contient, casse et séparateurs `\` ou `/` indifférents,
+  le chemin du coffre (absolu, `/c/Users/…` de Git Bash, `~/.legal-france`, `%USERPROFILE%`,
+  `$HOME`, `$env:USERPROFILE`, ou simplement `.legal-france`), le chemin d'un original ou son nom
+  de fichier ; les chemins absolus Windows présents dans la commande sont résolus avant comparaison
+  (jonction, nom court).
+
+Le message renvoyé dit seulement « original protégé » ou « coffre protégé », jamais un chemin ni un
+nom. Toute exception interne (JSON invalide, registre corrompu, argument manquant) vaut refus. Le hook
+est déclaré avec `"onFailure": "block"` (délai 10 s) : un hook qui ne démarre pas, plante ou dépasse
+son délai bloque aussi l'appel au lieu de le laisser passer, ce qui exige Claude Code 2.1.295 ou plus.
+Les hooks des fichiers de réglages s'appliquent aussi aux appels d'outils des sous-agents. Format du
+hook, champs d'entrée, code 2 et `onFailure` confirmés sur https://code.claude.com/docs/en/hooks, lue
+le 2026-10-20.
+
+**Limites** (conception, section 8) : un script lancé par `Bash` ou `PowerShell` qui lit l'original
+sans citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), les
+outils MCP et les autres harnais ne sont pas couverts. Un contrat jamais passé dans l'outil n'est pas
+inscrit au registre, donc pas protégé : la garde d'entrée du skill (`verifier`) s'en charge. Les
+protections principales restent : le modèle ne connaît pas le chemin de l'original, rien de non
+publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publié.
+
 ## État de la validation (2026-10-20)
 
 Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
