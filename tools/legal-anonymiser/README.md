@@ -119,7 +119,7 @@ demasquer: [SOCIETE_2]
 ```
 
 - `A<n>` : alerte de la seconde passe (motif en fin de ligne : `majuscule`, `chiffres`, `arobase`, `url`,
-  `date_naissance`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
+  `date_naissance`, `initiales`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
   occurrence (clé `localisation | rang`), jamais une alerte `valeur_connue`, qui repasse à `?`.
 - `M<n>` : mention qui peut désigner plusieurs entités (homonymes, époux, « Orange » commune ou société).
   Répondre par un des placeholders proposés, ou `nouveau` pour une entité distincte. Un placeholder
@@ -138,11 +138,12 @@ demasquer: [SOCIETE_2]
 ## Limites
 
 - **Détection** : un nom en minuscules inconnu du modèle, un mot capitalisé seul en tête de phrase
-  (« Fabre signera »), des initiales seules (« J. D. ») ou un code postal seul ne sont pas signalés par
-  la seconde passe. Un contrat tout en capitales produit beaucoup d'alertes `majuscule`. Un nom ou un
-  terme défini coupé par un saut de ligne dans un PDF ou une numérisation peut n'être masqué qu'en
-  partie (le reste est alors signalé par la seconde passe) ; des initiales seules (« ED / JK / MK »
-  en pied de page) ne sont ni masquées ni signalées. Une alerte portant sur un fragment de mot
+  (« Fabre signera ») ou un code postal seul ne sont pas signalés par la seconde passe. Des initiales
+  seules (« ED / JK / MK » en pied de page, « J.K. ») sont signalées (`initiales`), jamais masquées
+  d'office : un sigle hors vocabulaire (« CDD », « RIB ») l'est aussi, à `garder`. Un contrat tout en
+  capitales produit beaucoup d'alertes `majuscule`. Un nom ou un terme défini coupé par un saut de
+  ligne dans un PDF ou une numérisation peut n'être masqué qu'en partie (le reste est alors signalé
+  par la seconde passe). Une alerte portant sur un fragment de mot
   (« FR » dans « FR38 ») ne se masque pas par `masquer` sur sa ligne : écrire le mot entier en ligne
   libre (`masquer: FR38`). La relecture humaine reste la dernière couche.
 - **Écarts assumés par rapport à la conception** (v1) : 1. sous Windows, les droits du coffre ne sont
@@ -412,6 +413,11 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     « date de naissance », ou « NE LE » / « NE À » écrits en capitales sans accent (« née MARTIN le
     2 juin 1965 » compris ; la négation en minuscules, « ne pourra … » ou « ne le résiliera pas avant
     le 1er juillet 2027 », non).
+  - `initiales` : jeton isolé de 2 ou 3 capitales (« ED », « JK ») ou lettres pointées (« J.K. »,
+    « J. D. », « J.-P. »), hors vocabulaire, rôle, mot-outil, forme sociale (« SA », « SCI ») et
+    abréviation (« Ets », « NO ») ; « J. Dupont » n'en est pas une. Un jeton déjà signalé `majuscule`
+    (« JK » en milieu de phrase, « LI HUI MIN » en une alerte) garde ce motif : `initiales` ne s'ajoute
+    que là où rien d'autre n'alerte (tête de phrase après « Paraphes : », ligne en capitales).
   - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
     (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte
     normalisé, rang)`, le rang étant compté sur **tous les blocs de même localisation** dans l'ordre
@@ -424,7 +430,7 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     un bloc de 200 000 caractères est relu en moins d'une seconde.
   - Limites connues : un mot capitalisé seul en début de phrase ou après « : » (« Témoin : Fabre. »,
     « Fabre signera ») n'est signalé que s'il est une valeur connue ou en capitales ; un nom en
-    minuscules inconnu, des initiales (« J. D. »), un code postal seul ne sont pas signalés. En
+    minuscules inconnu, un code postal seul ne sont pas signalés. En
     capitales, tout mot hors vocabulaire est signalé (verbes, adjectifs) : volume d'alertes élevé
     sur un contrat tout en capitales, à mesurer sur le corpus.
 
