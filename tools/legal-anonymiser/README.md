@@ -346,16 +346,25 @@ publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publi�
 
 ## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
-contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF texte et numérisation,
-plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté
-(mesure du 2026-10-20) : 0 fuite des noms, initiales, adresses, numéros, e-mails, IBAN, SIREN et dates
-de naissance lisibles après arbitrage, 175 noms sur 176 détectés avant arbitrage, 30 constats techniques
-sur 30 présents dans le rapport, 1,0 alerte pour 100 mots, 0 fusion de deux parties sous un placeholder,
-0 partie éclatée sur plusieurs placeholders ; 20 placeholders de nom qui débordent sur du texte courant
-(« Logement sans l'accord » pris pour une société par le modèle, 17 fois ; un titre de contrat pris pour
-une personne, 2 fois ; « TVA intracommunautaire », 1 fois : masqués à tort, pas une fuite). Trace
-système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 449 tests, 0 échec,
+4 ignorés faute de liens symboliques ou de modes POSIX sous Windows, après les correctifs de l'audit) ;
+corpus synthétique de 26 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF
+texte et numérisation, plus un fichier piégé par constat technique) traité par la ligne de commande.
+**Mesure après arbitrage scripté sur 26 contrats fictifs ; ce n'est pas une garantie générale** :
+l'arbitrage scripté masque chaque alerte, garde le masquage sur chaque alerte `sur_masquage` et tranche
+les ambiguïtés d'après la vérité terrain ; aucune validation humaine n'est simulée, rien n'est publié.
+Mesure du 2026-10-20 après les correctifs : 0 fuite des noms, initiales, adresses, numéros, e-mails,
+IBAN, SIREN et dates de naissance lisibles après cet arbitrage, 175 noms sur 176 détectés avant
+arbitrage, 30 constats techniques sur 30 présents dans le rapport, 1,1 alerte pour 100 mots (dont 9
+`sur_masquage` sur le corpus), 0 fusion de deux parties sous un placeholder, 1 partie éclatée sur deux
+placeholders (le vendeur d'un DOCX : « Morvan Habitat » de l'en-tête lu comme une personne, masqué, pas
+une fuite). Sur-masquages : la v4.5.0 en comptait 23 entrées, dont 20 réelles (« Logement sans l'accord »
+pris pour une société, 17 fois ; un titre de contrat pris pour une personne, 2 fois ; « TVA
+intracommunautaire », 1 fois) ; après les correctifs, 5 entrées, dont 2 réelles (le titre de contrat,
+2 fois) et 3 vrais noms coupés par une ligne ; l'alerte `sur_masquage` signale ces 5 et 4 autres
+(« tacite » de « tacite reconduction » pris pour une personne, 3 fois ; « RCS de La Roche-sur-Yon »,
+1 fois), masqués à tort, pas une fuite, à `demasquer:` à la relecture. Trace système `strace` dans un
+conteneur Linux : aucune connexion, `unshare -rn` identique (mesure du 2026-10-19, non refaite).
 
 Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
 `relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
@@ -377,7 +386,11 @@ l'auto-protection (08:44 à 08:48 UTC, coffre temporaire sous le dossier personn
 `uninstall-hook` par `Bash` sont refusés par le verrou, sans chemin dans le texte vu par le modèle.
 Un `NotebookEdit` sur un original non lu est arrêté avant le hook par Claude Code (« File has not
 been read yet ») ; lien symbolique non créable sur ce poste (droit absent) ; délai dépassé non
-provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
+provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`. Après le correctif F1
+de l'audit (10:56 UTC, coffre temporaire hors `.legal-france`, session lancée depuis son dossier parent) :
+`PowerShell` `Get-Content coffre/registre.json`, chemin relatif littéral, refusé par le verrou (« coffre
+protégé »), sans chemin dans le texte vu par le modèle ; `cat coffre/registre.json` par `Bash` n'est
+vérifié que par les tests et le vrai processus du hook, pas en session.
 
 Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
 humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt

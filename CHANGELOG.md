@@ -8,6 +8,34 @@ to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+Quatre défauts de la v4.5.0 relevés par un audit indépendant le 2026-10-20.
+
+- Anonymiseur, verrou Claude Code (F1) : `Bash` et `PowerShell` résolvent
+  aussi chaque jeton de la commande depuis le dossier de la session ;
+  `cat coffre/registre.json` ou `Get-Content coffre/*/correspondance.json`
+  lancés depuis le parent du coffre, `cd coffre; type registre.json` et toute
+  commande lancée dans le coffre sont refusés (ils passaient). Un jeton
+  relatif qui désigne un fichier du paquet ou un `settings*.json` d'un
+  dossier `.claude` est refusé comme modification du verrou.
+- Anonymiseur, réidentification (F2) : la publication fige la table de
+  correspondance de la version publiée (`coffre/<id>/publications/<corps>.json`,
+  champ `corps=` ajouté au marqueur) ; `reidentifier` lit cette table,
+  jamais la table de travail, et refuse (code 7) un rapport dont la première
+  ligne n'est pas le marqueur du fichier publié. Retraiter l'original modifié
+  sans publier remplaçait les valeurs d'un rapport antérieur. Le moteur de
+  relecture fait commencer `rapport-relecture-<id>.md` par cette ligne.
+- Anonymiseur, validation (F3) : un `ajustements.txt` ou un `etat.json`
+  modifié pendant la fenêtre de confirmation bloque la publication (code 3,
+  « fichiers modifiés pendant la relecture », rien n'est publié).
+- Anonymiseur, détection (F4) : une entité de la reconnaissance des noms
+  s'arrête avant son premier mot en minuscules hors particule ; « Logement
+  sans l'accord » n'est plus masqué comme une société dans la clause de
+  sous-location. Nouvelle alerte `sur_masquage` : un nom masqué dont la
+  valeur déborde sur le texte du contrat est signalé avant publication
+  (`demasquer:` ou `garder`).
+
 ## [4.5.0] - 2026-10-20
 
 ### Added
