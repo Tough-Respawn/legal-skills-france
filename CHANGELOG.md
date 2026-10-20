@@ -8,6 +8,8 @@ to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-10-20
+
 ### Added
 
 - Outil local `tools/legal-anonymiser/` : pseudonymisation d'un contrat
