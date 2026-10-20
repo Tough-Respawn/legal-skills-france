@@ -178,11 +178,12 @@ class _Builder:
         return [i for i in own if m.source == "ner" or self.ents[i].kind == m.kind]
 
     def prefix(self, m: Mention, name: str) -> Optional[Tuple[Mention, List[int], str]]:
-        """Plus longue forme connue qui ouvre un nom en capitales sur-capturé (« N'DIAYE LE LOGEMENT ») :
-        mention rognée à cette forme, entités qui la portent, forme. Une forme d'un seul mot ne rogne que
-        si le mot suivant est un verbe courant, un mot-outil, un mot du vocabulaire ou sans majuscule ;
-        un autre mot capitalisé est un nom (« AWA DUPONT » n'est pas Awa N'Diaye : nouvelle entité), une
-        particule aussi après le seul prénom (« JEAN LE GALL »), mais pas après un nom (« N'DIAYE LA SOMME »)."""
+        """Plus longue forme connue qui ouvre un nom sur-capturé (« N'DIAYE LE LOGEMENT », « Paul Kerbrat Awa
+        N'Diaye ») : mention rognée à cette forme, entités qui la portent, forme. Une forme d'un seul mot ne
+        rogne que si le mot suivant est un verbe courant, un mot-outil, sans majuscule, sur une autre ligne, ou,
+        en capitales seulement, un mot du vocabulaire ou une particule ; un autre mot capitalisé est un nom
+        (« AWA DUPONT », « Paul Avril » n'est pas Paul Kerbrat : nouvelle entité), une particule aussi après le
+        seul prénom (« JEAN LE GALL »), mais pas après un nom en capitales (« N'DIAYE LA SOMME »)."""
         text, pos = folded(name)
         base = m.end - len(name)
         for f in sorted((f for f in self.owners if text.startswith(f + " ")), key=len, reverse=True):
@@ -196,9 +197,12 @@ class _Builder:
             if particle and " " not in f and any(given_name(self.sources.get(m, "")) == f for i in own
                                                   for m in self.ents[i].mentions):
                 return None   # « JEAN LE GALL » n'est pas Jean Kerbrat : après le prénom seul, le nom continue
-            if (" " in f or not word or particle or caps_verb(word) or function_word(word) or known(word, self.vocab)
-                    or word[0].islower()):   # après un nom entier ou un nom seul, la particule est un article
+            gap = name[end:nxt.start()] if nxt else ""
+            if (" " in f or not word or caps_verb(word) or function_word(word) or word[0].islower()
+                    or (name.isupper() and (particle or known(word, self.vocab)))   # « N'DIAYE LA SOMME »
+                    or "\n" in gap or "\t" in gap):   # reste sur une autre ligne ou colonne
                 return replace(m, end=base + end), own, f
+            # Casse mixte : un mot capitalisé après le prénom seul est un nom, même au vocabulaire (« Paul Avril »)
             return None
         return None
 

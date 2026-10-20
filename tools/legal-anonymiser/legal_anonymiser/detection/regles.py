@@ -68,7 +68,7 @@ def _r(kind: str, pattern: str, group: int = 0, typer: Optional[Callable[[str], 
 # Un seul séparateur : espace, insécable ou saut de ligne (le CRLF de l'OCR est normalisé à la source), jamais une
 # tabulation : un IBAN ou un SIREN coupé par une ligne reste reconnu, une colonne de montants « 850\t120\t970 » non.
 S = r"(?:" + SP + r"|\n)?"
-_MAX_BREAKS = 1   # au-delà, une suite de nombres typée (SIREN, SIRET, NIR, IBAN) est une colonne, pas un numéro
+_MAX_BREAKS = 1   # au-delà, une suite de nombres sans clé valide (NUMERO) est une colonne ; une clé valide l'emporte
 RULES: List[Rule] = [
     _r("TVA", r"\bFR" + S + r"\d{2}" + S + r"\d{3}" + S + r"\d{3}" + S + r"\d{3}\b"),
     _r("IBAN", r"(?i:\bFR\d{2}(?:" + S + r"[A-Z0-9]{4}){5}" + S + r"[A-Z0-9]{3}\b)", 0, _typed("IBAN", _iban_ok)),
@@ -120,12 +120,14 @@ def find(blocks: List[Block]) -> List[Mention]:
                 s, e = m.span(group)
                 if s < 0 or (s, e) in seen:
                     continue
-                if typer and (ARTICLE_BEFORE.search(text[:s]) or m.group(group).count("\n") > _MAX_BREAKS):
-                    continue   # référence d'article, ou colonne de montants « 850\n120\n970 »
+                found = typer(m.group(group)) if typer else kind
+                if typer and (ARTICLE_BEFORE.search(text[:s])
+                              or (found == "NUMERO" and m.group(group).count("\n") > _MAX_BREAKS)):
+                    continue   # référence d'article, ou colonne de montants « 850\n120\n970 » (clé invalide)
                 if kind == "COMMUNE" and any(a <= s and e <= b for a, b in addresses):
                     continue
                 seen.add((s, e))
                 if kind == "ADRESSE":
                     addresses.append((s, e))
-                out.append(Mention(i, s, e, typer(m.group(group)) if typer else kind, "regle"))
+                out.append(Mention(i, s, e, found, "regle"))
     return out
