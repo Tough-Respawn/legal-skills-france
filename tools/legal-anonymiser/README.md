@@ -130,11 +130,12 @@ demasquer: [SOCIETE_2]
   `date_naissance`, `initiales`, `valeur_connue`, `sur_masquage`). `masquer` masque ce texte partout ; `garder` exempte cette seule
   occurrence (clé `localisation | rang`), jamais une alerte `valeur_connue`, qui repasse à `?`.
 - `sur_masquage` : le texte de l'alerte est un placeholder (`[SOCIETE_3]`) dont la valeur déborde sur le
-  texte du contrat (« Logement sans l'accord » : saut de ligne, mot en minuscules hors particule après un
-  mot capitalisé, aucun mot capitalisé comme « tacite », ou seulement des mots du vocabulaire), signalé sur
-  sa première occurrence masquée ; une voie (« place des Tilleuls ») ne l'est pas. Vérifiez la valeur dans
-  `rapport.md` : `demasquer: [SOCIETE_3]` rend le texte au contrat, `garder` garde le masquage (un vrai nom
-  coupé par une ligne, « Élodie\nDuvalcourt »). `masquer` y est sans effet : l'alerte reste ouverte.
+  texte du contrat (« Logement sans l'accord » : saut de ligne, mot de clause en minuscules après un mot
+  capitalisé, aucune majuscule comme « tacite », ou seulement des mots du vocabulaire), signalé sur sa
+  première occurrence masquée ; une voie (« place des Tilleuls ») et une personne faite seulement de mots
+  de nom (« Élodie Duvalcourt » coupé par une ligne, « Maria do Carmo ») ne le sont pas. Vérifiez la valeur
+  dans `rapport.md` : `demasquer: [SOCIETE_3]` rend le texte au contrat, `garder` garde le masquage.
+  `masquer` y est sans effet : l'alerte reste ouverte.
 - `M<n>` : mention qui peut désigner plusieurs entités (homonymes, époux, « Orange » commune ou société).
   Répondre par un des placeholders proposés, ou `nouveau` pour une entité distincte. Un placeholder
   inexistant reste en attente.
@@ -561,10 +562,15 @@ v4.5.0, constat F2).
   (« AWA DUPONT SIGNE » donne « AWA DUPONT »), jamais avant son premier mot ni avant le second
   après une civilité (« SIGNE HANSEN », « MADAME CLAIRE DEMEURE EST TÉMOIN » donne « MADAME CLAIRE
   DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). En toute casse, une entité
-  s'arrête avant son premier mot en minuscules qui n'est ni une particule (de, du, la…) ni une liaison
-  de nom (et, sur, sous, en, au…), s'il suit un mot capitalisé : « Logement sans l'accord » devient
-  « Logement », puis est écarté comme mot du vocabulaire (audit v4.5.0, constat F4) ; « Jean de La
-  Fontaine », « Les Hauts de Valmorin », « Maison d'Arcy », « rue Victor Hugo » restent entiers. Une commune d'un seul
+  s'arrête avant son premier mot de clause : un mot en minuscules placé après un mot capitalisé, qui
+  n'est ni une particule (de, du, la, da, van, von, el, al, do, das, della, ibn, bin, ben, abu, ould,
+  mac, zu, y, e…), ni une liaison de nom (et, sur, sous, en, au…), ni un composé particule-Nom
+  (« el-Amrani », « al-Hassan », « d'Arcy »), et que ne suit pas un mot capitalisé hors vocabulaire
+  (« Nguyen thi Lan » reste entier). « Logement sans l'accord » devient « Logement », puis est écarté
+  comme mot du vocabulaire (audit v4.5.0, constat F4) ; « Jean de La Fontaine », « Mohamed el-Amrani »,
+  « Maria do Carmo », « Lucia della Rovere », « Ahmed ibn Saïd », « Les Hauts de Valmorin », « rue Victor
+  Hugo » restent entiers (la première version de la coupe laissait leur nom de famille visible, revue de
+  la branche, constat C2). Une commune d'un seul
   mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par
   propagation ; seule dans le texte libre, elle reste visible et la seconde passe la signale. Une
   entité qui court sur deux lignes, ou sur deux colonnes (deux espaces ou plus, tabulation : les noms
@@ -652,9 +658,11 @@ v4.5.0, constat F2).
     que là où rien d'autre n'alerte (tête de phrase après « Paraphes : », ligne en capitales).
   - `sur_masquage` : première occurrence masquée d'une entité de nom (personne, société, lieu, commune ;
     jamais un ajout `masquer:` de l'utilisateur ni un identifiant à forme fixe) dont la valeur canonique
-    contient un saut de ligne, un mot en minuscules hors particule et liaison de nom après son premier mot
-    capitalisé (même règle que la coupe de la reconnaissance des noms), aucun mot capitalisé, ou seulement
-    des mots du vocabulaire ; l'alerte porte le placeholder, à trancher par `demasquer:` ou `garder` avant
+    contient un saut de ligne, un mot en minuscules hors particule, liaison et composé de nom après son
+    premier mot capitalisé (plus strict que la coupe de la reconnaissance des noms, qui ne coupe pas devant
+    un mot capitalisé hors vocabulaire), aucune majuscule, ou seulement des mots du vocabulaire ; jamais
+    une personne dont chaque mot est une civilité ou un mot capitalisé hors vocabulaire (particules mises
+    à part) ; l'alerte porte le placeholder, à trancher par `demasquer:` ou `garder` avant
     publication.
   - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
     (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte

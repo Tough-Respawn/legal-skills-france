@@ -124,14 +124,40 @@ WORD_RX = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*|&")
 CIV_RX = re.compile(r"(?:" + CIVILITY + SP + r"+(?:et|ET)" + SP + r"+)?" + CIVILITY + SP + r"+")
 PARTICLE_RX = re.compile(r"(?i:" + PARTICLES + r")")
 _LINKS = NAME_JOINERS | {"au", "aux"}   # liaisons d'un nom de société (JOIN_C)
+# Particules de noms étrangers, pour la coupe au mot minuscule seulement : hors de PARTICLE_RX, qui borne aussi
+# les noms de la structure (JOIN_P), le saut des particules après une civilité et le recollage de la NER.
+_MORE_PARTICLES = frozenset("do das della delle dello degli ibn bint bin ben abu ould mac mc af av zu zum zur y e"
+                            .split())
+_COMPOUND_RX = re.compile(r"[^\W\d_]+['-][" + UP + r"]")   # particule-Nom : « el-Amrani », « al-Hassan », « d'Arcy »
+
+
+def name_particle(word: str) -> bool:
+    """Particule ou liaison de nom (« de », « el », « ibn », « della », « et »), ou composé particule-Nom
+    (« el-Amrani », « d'Arcy ») : partie d'un nom, jamais un mot de clause."""
+    w = word.replace("’", "'")
+    return bool(PARTICLE_RX.fullmatch(w) or w.lower() in _MORE_PARTICLES | _LINKS or _COMPOUND_RX.match(w))
 
 
 def lower_word(word: str) -> bool:
-    """Mot en minuscules, élision « l' », « d' » retirée, qui n'est ni une particule ni une liaison de nom :
-    « sans », « l'accord », « né » oui ; « de », « et », « sur », « d'Arcy » non."""
+    """Mot en minuscules, élision « l' », « d' » retirée, qui n'est pas une partie de nom (name_particle) :
+    « sans », « l'accord », « né » oui ; « de », « et », « sur », « d'Arcy », « el-Amrani », « ibn » non."""
     w = word.replace("’", "'")
-    return (re.sub(r"^[dl]'", "", w, flags=re.I)[:1].islower() and not PARTICLE_RX.fullmatch(w)
-            and w.lower() not in _LINKS)
+    return re.sub(r"^[dl]'", "", w, flags=re.I)[:1].islower() and not name_particle(w)
+
+
+def lower_cut(words: List[str], vocab: Set[str]) -> Optional[int]:
+    """Indice du premier mot qui coupe un nom en casse mixte : mot en minuscules (lower_word) placé après un
+    mot capitalisé et que ne suit pas un mot capitalisé hors vocabulaire. « Logement sans l'accord » coupe à
+    « sans » ; « Nguyen thi Lan », « Maria do Carmo », « rue Victor Hugo » : aucune coupe (None)."""
+    started = False
+    for i, w in enumerate(words):
+        if lower_word(w):
+            nxt = words[i + 1] if i + 1 < len(words) else ""
+            if started and not (nxt[:1].isupper() and not known(nxt, vocab)):
+                return i
+        elif w[:1].isupper():
+            started = True
+    return None
 
 Cand = Tuple[int, int, int, int, str]  # début, fin, étendue (début, fin) du motif, type (ALIAS = nom d'usage)
 Span = Tuple[int, int]

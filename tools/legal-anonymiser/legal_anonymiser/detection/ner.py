@@ -12,8 +12,9 @@ ligne porte deux mots capitalisés hors particules (deux noms) ; deux entités q
 particule (« Jean Dupont\\nDe », « La Fontaine ») sont recollées d'abord. En capitales, l'entité s'arrête avant
 son premier verbe courant (noms.verb_cut : « AWA SIGNE LE CONTRAT » donne « AWA », « SIGNE HANSEN »
 reste entier) ; un verbe en tête d'une société lui appartient (« VERSE SAS »). Toute entité s'arrête aussi
-avant son premier mot en minuscules hors particule et liaison de nom, s'il suit un mot capitalisé
-(« Logement sans l'accord » donne « Logement », écarté comme mot du vocabulaire). Les bords et l'intérieur
+avant son premier mot de clause (noms.lower_cut : minuscule après un mot capitalisé, hors particule, liaison
+ou composé particule-Nom, que ne suit pas un mot capitalisé hors vocabulaire) : « Logement sans l'accord »
+donne « Logement », écarté comme mot du vocabulaire ; « Mohamed el-Amrani », « Maria do Carmo » restent entiers. Les bords et l'intérieur
 se jugent sur une liste fixe de mots-outils (noms.FUNCTION_WORDS), jamais sur les mots vides de
 spaCy, qui contiennent de vrais noms (« LI HUI MIN »).
 
@@ -40,7 +41,7 @@ from .. import texte
 from ..extraction import MissingDependency
 from ..modele import Block, Mention
 from .noms import (FORMS, FUNCTION_WORDS, GENERIC, NAME_JOINERS, PARTICLE_RX, STOPWORDS, WORD_RX, function_word,
-                   known, lower_word, stem, tokens, verb_cut)
+                   known, lower_cut, stem, tokens, verb_cut)
 
 MODEL = "fr_core_news_lg"
 _EXCLUDE = ["tagger", "parser", "attribute_ruler", "lemmatizer", "morphologizer", "senter"]
@@ -151,19 +152,13 @@ def _lines(text: str, s: int, e: int) -> List[Tuple[int, int]]:
     return [_trim(text, a, b) for a, b, _ in out] if len(out) > 1 else [(s, e)]
 
 
-def _lower_cut(text: str, s: int, e: int) -> Tuple[int, int]:
-    """L'entité s'arrête avant son premier mot en minuscules qui n'est ni une particule ni une liaison de nom
-    (noms.lower_word), s'il suit un mot capitalisé : « Logement sans l'accord » donne « Logement » (écarté
-    ensuite par _kind, mot du vocabulaire), « Paul Kerbrat né le » « Paul Kerbrat » ; « Jean de La Fontaine »,
-    « Les Hauts de Valmorin », « rue Victor Hugo » restent entiers."""
-    started = False
-    for w in WORD_RX.finditer(text, s, e):
-        if lower_word(w.group()):
-            if started:
-                return _trim(text, s, w.start())
-        elif w.group()[0].isupper():
-            started = True
-    return s, e
+def _lower_cut(text: str, s: int, e: int, vocab: Set[str]) -> Tuple[int, int]:
+    """L'entité s'arrête avant son premier mot de clause (noms.lower_cut) : « Logement sans l'accord » donne
+    « Logement » (écarté ensuite par _kind, mot du vocabulaire), « Paul Kerbrat né le » « Paul Kerbrat » ;
+    « Jean de La Fontaine », « Mohamed el-Amrani », « Maria do Carmo », « rue Victor Hugo » restent entiers."""
+    words = list(WORD_RX.finditer(text, s, e))
+    i = lower_cut([w.group() for w in words], vocab)
+    return (s, e) if i is None else _trim(text, s, words[i].start())
 
 
 def _inner_stop(name: str) -> bool:
@@ -203,7 +198,7 @@ def find(blocks: List[Block], vocab: Set[str]) -> List[Mention]:
         for s0, e0, label in _joined(doc):
             s, e = _clean(text, base + s0, base + e0)
             s, e = verb_cut(text, s, e, lead=label != "ORG")   # « VERSE SAS » : un verbe ouvre une société
-            s, e = _lower_cut(text, s, e)
+            s, e = _lower_cut(text, s, e, vocab)
             for s, e in _lines(text, s, e):
                 kind = _kind(label, text[s:e], vocab, caps) if e > s else None
                 if kind:
