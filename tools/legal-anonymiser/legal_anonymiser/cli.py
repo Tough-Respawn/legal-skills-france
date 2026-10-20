@@ -78,18 +78,22 @@ def _after_run(vault: Vault, cid: str, result) -> int:
 
 def _ready(vault: Vault, cid: str, state: dict) -> Optional[str]:
     """Clé du message qui empêche la validation, ou None quand le dernier passage n'a rien laissé ouvert
-    et que `masque.md` et `ajustements.txt` sont ceux qu'il a écrits."""
-    from .pipeline import body_hash
+    et que `masque.md` (marqueur `corps=` et `passage=` compris), `ajustements.txt` et `correspondance.json`
+    sont ceux qu'il a écrits."""
+    from .rendu import MARKER_RE, body_hash
     folder = vault.root / cid
-    masque, adj = folder / "masque.md", folder / "ajustements.txt"
-    if not (masque.is_file() and adj.is_file()):
+    masque, adj, table = folder / "masque.md", folder / "ajustements.txt", folder / "correspondance.json"
+    if not (masque.is_file() and adj.is_file() and table.is_file()):
         return "non_pret"
     data = masque.read_bytes()
     if (state.get("pending") != 0 or state.get("ouverts") != 0 or b"[AMBIGU_" in data):
         return "non_pret"
-    if (body_hash(data) != state.get("sha_masque")
-            or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")):
-        return "modifie_depuis"
+    marker = MARKER_RE.match(data.split(b"\n", 1)[0].decode("utf-8", "replace"))
+    if (body_hash(data) != state.get("sha_masque") or not marker or marker.group("corps") != body_hash(data)[:16]
+            or not marker.group("passage")
+            or hashlib.sha256(adj.read_bytes()).hexdigest() != state.get("sha_ajustements")
+            or hashlib.sha256(table.read_bytes()).hexdigest() != state.get("sha_correspondance")):
+        return "modifie_depuis"   # un `masque.md` de la v4.5.0 (sans `corps=`) demande aussi un `relancer`
     return None
 
 
@@ -116,10 +120,16 @@ def _validate(vault: Vault, cid: str) -> int:
         if hashlib.sha256(data).hexdigest() != digest:
             say("modifie")
             return 4
+        if _ready(vault, cid, vault.read_state(cid)):   # ajustements ou état modifiés pendant la fenêtre
+            say("modifie_pendant_relecture", cid=cid)
+            return 3
         try:
             target = publication.publish(vault, cid, data.decode("utf-8"), Path(state["destination"]))
         except OSError:
             say("publication_impossible")
+            return 4
+        except ValueError:   # marqueur ou table figée incohérents : jamais le message, il peut citer un chemin
+            say("publication_refusee", cid=cid)
             return 4
         say("publie", name=target.name)
         say("rappel")
@@ -191,11 +201,11 @@ def _reidentifier(args: argparse.Namespace) -> int:
     vault = Vault()
     if not _contract(vault, args.id):
         return 7
-    if not (vault.root / args.id / "correspondance.json").is_file():
-        say("sans_correspondance", cid=args.id)
-        return 7
     try:
         target = reidentification.run(vault, args.id, Path(args.rapport))
+    except reidentification.SansPublication:
+        say("reidentification_sans_publication", cid=args.id)
+        return 7
     except (OSError, UnicodeDecodeError, ValueError):
         say("rapport_illisible")
         return 7

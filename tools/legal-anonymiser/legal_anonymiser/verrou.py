@@ -3,6 +3,8 @@
 Il refuse aussi toute modification de lui-même : son paquet, les dossiers de son interpréteur (venv,
 Python de base, site-packages de l'utilisateur), les réglages de Claude Code, et les commandes qui
 citent ces éléments ou lancent `uninstall-hook` (le retrait se fait par l'utilisateur, dans son terminal).
+Pour `Bash` et `PowerShell`, chaque jeton de la commande est aussi résolu depuis le `cwd` de l'événement
+(`cat coffre/registre.json` lancé depuis le parent du coffre) ; une commande lancée dans le coffre est refusée.
 
 Lancé par Claude Code (`python -P -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
 l'entrée standard. Refus = code 0 et décision JSON `deny` sur la sortie standard : Claude Code montre
@@ -21,7 +23,8 @@ import json
 import os
 import re
 import sys
-from typing import Iterable, List, Optional, Tuple
+from functools import lru_cache
+from typing import Iterable, List, Optional, Set, Tuple
 
 FILE_TOOLS = ("Read", "Edit", "Write", "NotebookEdit")
 SEARCH_TOOLS = ("Grep", "Glob")
@@ -56,11 +59,15 @@ def _long_name(path: str) -> str:
     return buf.value if 0 < n < 32768 else path
 
 
+def _lexical(path: str) -> str:
+    """Chemin absolu normalisé (casse, séparateurs, `..`), sans résolution."""
+    norm = os.path.normcase(os.path.abspath(path))
+    return norm.lower() if sys.platform == "darwin" else norm
+
+
 def _norm(path: str) -> str:
     """Chemin résolu (liens, jonctions, noms courts) et normalisé (casse, séparateurs)."""
-    real = _long_name(os.path.realpath(path))
-    norm = os.path.normcase(real)
-    return norm.lower() if sys.platform == "darwin" else norm
+    return _lexical(_long_name(os.path.realpath(path)))
 
 
 def _expand(path: str, cwd: str) -> str:
@@ -76,6 +83,7 @@ def _expand(path: str, cwd: str) -> str:
     return os.path.join(cwd, p)
 
 
+@lru_cache(maxsize=1)   # une résolution par processus, pas une par jeton
 def _package_dir() -> str:
     return _norm(os.path.dirname(os.path.abspath(__file__)))
 
@@ -88,9 +96,10 @@ def _python_dirs() -> List[str]:
     return [_norm(d) for d in dirs if d]
 
 
-def _protected(path: str) -> bool:
-    """Code du verrou, dossiers de l'interpréteur, réglages de Claude Code (chemin normalisé)."""
-    if any(_within(path, d) for d in [_package_dir()] + _python_dirs()):
+def _protected(path: str, interpreter: bool = True) -> bool:
+    """Code du verrou, dossiers de l'interpréteur (sauf `interpreter=False`), réglages de Claude Code
+    (chemin normalisé)."""
+    if any(_within(path, d) for d in [_package_dir()] + (_python_dirs() if interpreter else [])):
         return True
     parent, name = os.path.split(path)
     return os.path.basename(parent) == ".claude" and bool(_SETTINGS_RX.fullmatch(name))
@@ -121,27 +130,67 @@ def _gitbash(path: str) -> str:
     return "/" + flat[0] + flat[2:] if re.match(r"[a-z]:/", flat) else flat
 
 
-def _shell_forms(command: str, coffre: str, originals: Iterable[Tuple[str, str]]) -> Optional[str]:
+def _tokens(command: str, base: str) -> Set[str]:
+    """Chemins normalisés de chaque jeton de la commande, relatifs au dossier `base` (le `cwd` résolu) : mots
+    séparés par blancs, guillemets et `;|&<>()=,`, plus le contenu entier de chaque chaîne entre guillemets ;
+    un jeton à joker garde sa partie littérale jusqu'au dernier séparateur (même règle que `Glob`). Seul un
+    chemin dont le premier élément existe sous `base` peut traverser un lien : lui seul est résolu, les autres
+    sont normalisés sans appel système (une commande de 5 000 jetons tient dans le délai du hook)."""
+    words = re.split(r"[\s\"'`;|&<>()=,]+", command) + [a or b for a, b in re.findall(r"\"([^\"]*)\"|'([^']*)'", command)]
+    # Espace échappée, gardée dans le jeton : `mon\ coffre` (Bash), « mon` coffre » (PowerShell).
+    words += [re.sub(r"\\ |` ", " ", w) for w in re.findall(r"(?:\\ |` |[^\s\"'`;|&<>()=,])+", command)]
+    # Après un `:` : paramètre PowerShell `-Path:coffre`, chemin de fournisseur `FileSystem::coffre`.
+    words += [p for w in words if ":" in w for p in re.split(r":+", w)[1:]]
+    out, exists = set(), {}
+    for word in set(words):
+        m = _GLOB_RX.search(word)
+        if m:
+            word = word[:max(word.rfind("/", 0, m.start()), word.rfind("\\", 0, m.start())) + 1]
+        try:
+            p = _expand(word, "")
+            if not p:
+                continue
+            first = re.split(r"[\\/]", os.path.normpath(p), 1)[0]   # `nope\..\lien` : `lien`
+            # Forme UNC (`//hôte/x` d'une URL coupée au `:`), `https:` ou `-Path:x` : ni accès réseau ni `realpath`.
+            if re.match(r"[\\/]{2}", p) or (":" in first and not re.fullmatch(r"[A-Za-z]:", first)):
+                out.add(_lexical(os.path.join(base, p)))
+                continue
+            if not (os.path.isabs(p) or ":" in first or first in ("", ".", "..")):
+                if first not in exists:
+                    exists[first] = os.path.lexists(os.path.join(base, first))
+                if not exists[first]:
+                    out.add(_lexical(os.path.join(base, p)))
+                    continue
+            out.add(_norm(os.path.join(base, p)))
+        except (OSError, ValueError):
+            continue
+    return out
+
+
+def _shell_forms(command: str, coffre: str, originals: Iterable[Tuple[str, str]], cwd: str) -> Optional[str]:
     flat = _flat(command)
     for path in _WIN_PATH_RX.findall(command):   # jetons absolus résolus (noms 8.3, liens)
         try:
             flat += " " + _flat(_norm(path))
         except (OSError, ValueError):
             continue
+    cwd = _norm(cwd)
+    paths = _tokens(command, cwd)
     for path, name in originals:
-        if _flat(path) in flat or _gitbash(path) in flat or name in flat:
+        if _flat(path) in flat or _gitbash(path) in flat or name in flat or path in paths:
             return ORIGINAL
     forms = [_flat(coffre), _gitbash(coffre), ".legal-france"] + list(_ENV_COFFRE)
     home = _norm(os.path.expanduser("~"))
     if coffre != home and _within(coffre, home):   # coffre déplacé sous le dossier personnel : ~/…, $HOME/…
         rel = _flat(os.path.relpath(coffre, home))
         forms += [h + rel for h in _HOME_FORMS]
-    if any(f in flat for f in forms):
+    if any(f in flat for f in forms) or _within(cwd, coffre) or any(_within(p, coffre) for p in paths):
         return COFFRE
     pkg = _package_dir()
     if any(t in flat for t in _SHELL_SELF) or _flat(pkg) in flat or _gitbash(pkg) in flat:
         return SELF
-    return None
+    # Les dossiers de l'interpréteur restent permis : lancer le Python du venv par son chemin n'est pas refusé.
+    return SELF if any(_protected(p, interpreter=False) for p in paths) else None
 
 
 def decide(event: dict, coffre) -> Optional[str]:
@@ -153,7 +202,7 @@ def decide(event: dict, coffre) -> Optional[str]:
     originals = _originals(str(coffre))   # ouvert sous sa forme d'origine, comparé sous forme normalisée
     if tool in SHELL_TOOLS:
         command = inp.get("command")
-        return _shell_forms(command, root, originals) if command else None
+        return _shell_forms(command, root, originals, cwd) if command else None
     if tool in FILE_TOOLS:
         target = inp.get("file_path") or inp.get("notebook_path")
         if not target:

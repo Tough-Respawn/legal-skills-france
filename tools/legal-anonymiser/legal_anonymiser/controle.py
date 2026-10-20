@@ -10,6 +10,10 @@ Alertes A1, A2… dans l'ordre du document, positions sur le texte masqué (dét
 4. chiffres (6 ou plus, hors date, montant, référence), 5. arobase, url, 6. date_naissance.
 7. initiales : jeton isolé de 2 ou 3 capitales (« ED », « JK ») ou lettres pointées (« J.K. », « J. D. »),
    hors vocabulaire, rôle, mot-outil, forme sociale ou abréviation ; un mot déjà signalé majuscule garde ce motif.
+8. sur_masquage : première occurrence masquée d'un nom (personne, société, lieu, commune) dont la valeur
+   déborde sur le texte du contrat (saut de ligne, mot de clause après un mot capitalisé, aucune majuscule,
+   seulement des mots du vocabulaire ; jamais une personne faite de mots de nom) : `garder` garde le masquage,
+   `demasquer: [PLACEHOLDER]` rend le texte.
 Une décision garder (entites.Ranks.key sur le texte masqué) exempte une occurrence des motifs 2 à 7 ;
 une commune gardée aussi, sauf après une civilité. Une étendue, une alerte : valeur_connue d'abord.
 """
@@ -21,7 +25,8 @@ from functools import lru_cache
 from typing import Callable, FrozenSet, Iterable, Iterator, List, Optional, Set, Tuple
 
 from . import texte
-from .detection.noms import CIVILITY, FORMS, PARTICLE_RX, UP, caps_verb, function_word, known, role, stem
+from .detection.noms import (CIVILITY, FORMS, PARTICLE_RX, UP, caps_verb, function_word, known, lower_word,
+                             name_particle, role, stem, tokens)
 from .detection.regles import MONTHS, SP
 from .entites import Ranks
 from .modele import Alert, Block, Decisions, Entity
@@ -29,7 +34,9 @@ from .propagation import WORD_RX, forms, pattern, span
 
 Hit = Tuple[int, int, str]    # début, fin, motif (dans un bloc)
 Word = Tuple[int, int, str]   # début, fin, mot
-ORDER = {"valeur_connue": 0, "date_naissance": 1, "arobase": 2, "url": 2, "chiffres": 3, "majuscule": 4, "initiales": 5}
+ORDER = {"valeur_connue": 0, "date_naissance": 1, "arobase": 2, "url": 2, "chiffres": 3, "majuscule": 4, "initiales": 5,
+         "sur_masquage": 6}
+NAME_KINDS = ("PERSONNE", "SOCIETE", "LIEU", "COMMUNE")   # AUTRE (masquer: …) est un choix de l'utilisateur
 # Initiales seules : 2 à 3 capitales, ou lettres pointées (« J.K. », « J. D. », « J.-P. ») ; « J. Dupont » non.
 INITIALS_RX = re.compile(r"(?<![\w'’.-])(?:[%s]{2,3}|[%s]\.(?:[ -]?[%s]\.?)+)(?![\w'’-])" % (UP, UP, UP))
 FORM_RX = re.compile(FORMS)
@@ -280,6 +287,30 @@ def _find(text: str, folds: Tuple[str, List[int]], values: List[str]) -> Iterato
             yield span(text, pos, hit.start(), hit.end())
 
 
+def _name_like(e: Entity, vocab: Set[str]) -> bool:
+    """Personne dont chaque mot est un mot de nom : civilité, ou capitalisé hors vocabulaire, particules et
+    composés particule-Nom mis à part (« Élodie\\nDuvalcourt », « Mme\\nMorvan », « Maria do Carmo »)."""
+    words = [w for w in WORD_RX.findall(e.canonical) if not name_particle(w)]
+    return e.kind == "PERSONNE" and bool(words) and all(
+        CIV_WORD_RX.fullmatch(w) or (w[0].isupper() and not known(w, vocab)) for w in words)
+
+
+def _over_masked(e: Entity, vocab: Set[str]) -> bool:
+    """Nom dont la valeur déborde sur le texte du contrat : saut de ligne, mot de clause (noms.lower_word) après
+    le premier mot capitalisé (« Logement sans l'accord », « TVA intracommunautaire FR » ; « place des
+    Tilleuls », « Maria do Carmo » non), aucune majuscule (« tacite »), ou seulement des mots du vocabulaire
+    (« Logement »). Plus strict que la coupe de la NER (noms.lower_cut), qui préfère masquer trop que couper
+    un nom. Une personne faite seulement de mots de nom n'alerte jamais, même coupée par une ligne (_name_like)."""
+    if e.kind not in NAME_KINDS or _name_like(e, vocab):
+        return False
+    words = WORD_RX.findall(e.canonical)
+    first = next((i for i, w in enumerate(words) if w[0].isupper()), len(words))
+    real = tokens(e.canonical)
+    return ("\n" in e.canonical or not any(c.isupper() for c in e.canonical)
+            or any(lower_word(w) for w in words[first + 1:])
+            or (bool(real) and all(known(w, vocab) for w in real)))
+
+
 def _dedupe(hits: List[Hit]) -> List[Hit]:
     """Une alerte par étendue, la plus prioritaire d'abord (valeur_connue), dans l'ordre du bloc."""
     starts: List[int] = []
@@ -302,9 +333,12 @@ def check(masked: List[Block], entities: List[Entity], decisions: Decisions, voc
     communes = sorted((c for c, choice in decisions.communes.items() if choice == "garder" and c), key=len, reverse=True)
     kept = {(k[0], k[1]) for k in decisions.keep}   # clé calculée seulement pour une forme gardée
     ranks = Ranks(masked)
+    over = sorted({e.placeholder for e in entities if e.placeholder and _over_masked(e, vocab)})
     out: List[Tuple[int, int, int, str]] = []
     for bi, block in enumerate(masked):
         text, folds = block.text, ranks.fold(bi)
+        found = [(text.find(ph), ph) for ph in over if ph in text]   # première occurrence masquée seulement
+        over = [ph for ph in over if ph not in text]
         holder = _overlaps(m.span() for m in PLACEHOLDER_RX.finditer(text))
         words = _words(text, holder)
         at = {w[0]: i for i, w in enumerate(words)}
@@ -316,6 +350,7 @@ def check(masked: List[Block], entities: List[Entity], decisions: Decisions, voc
         hits += [h for h in _patterns(text) if not holder(h[0], h[1])]
         hits += _runs(text, marked, _overlaps((h[0], h[1]) for h in hits))
         hits += [h for h in _initials(text, vocab) if not holder(h[0], h[1])]   # après les runs : majuscule prime
+        hits += [(s, s + len(ph), "sur_masquage") for s, ph in found]
         hits = [h for h in hits if h[2] == "valeur_connue" or not (
             (block.location, texte.norm(text[h[0]:h[1]])) in kept and ranks.key(bi, h[0], h[1]) in decisions.keep)]
         out += [(bi,) + h for h in _dedupe(hits)]

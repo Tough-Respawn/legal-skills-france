@@ -1,11 +1,14 @@
 """Chaîne complète d'un contrat : extraction, inspection, détection, entités, masquage, seconde passe.
 
-Écrit dans `coffre/<id>/` : `masque.md` (version en préparation, marqueur `valide_humain` daté du jour),
-`rapport.md` (valeurs réelles, jamais publié), `ajustements.txt` (décisions relues à chaque passage),
-`correspondance.json` (placeholder vers valeur, pour la réidentification) et `etat.json`. `etat.json` est
+Écrit dans `coffre/<id>/` : `masque.md` (version en préparation, marqueur `valide_humain` daté du jour, avec
+l'empreinte `corps=` de son corps et l'identifiant aléatoire `passage=` de ce passage), `rapport.md` (valeurs
+réelles, jamais publié), `ajustements.txt` (décisions relues à chaque passage), `correspondance.json` (table de
+travail, placeholder vers valeur ; la publication en fige une copie par passage, seule lue par la
+réidentification) et `etat.json`. `etat.json` est
 écrit d'abord avec `pending` et `ouverts` à `null` (un passage interrompu ne laisse jamais un état validable),
 puis complété à la fin : `pending` (lignes `?` ou placeholder inconnu), `ouverts` (alertes et ambiguïtés
-encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur) et `sha_ajustements`. Tout le passage
+encore ouvertes), `sha_masque` (corps de `masque.md` après le marqueur), `sha_ajustements` et
+`sha_correspondance` (vérifiés par cli._ready avant et après la fenêtre de confirmation). Tout le passage
 tourne sous `sortie.quiet()` : rien n'est affiché ici.
 """
 from __future__ import annotations
@@ -13,6 +16,7 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import secrets
 import tempfile
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -37,9 +41,7 @@ class Result:
     pending: int
 
 
-def body_hash(data: bytes) -> str:
-    """Empreinte du corps de `masque.md`, marqueur (première ligne, redaté à la validation) exclu."""
-    return hashlib.sha256(data.split(b"\n", 1)[1] if b"\n" in data else b"").hexdigest()
+body_hash = rendu.body_hash   # empreinte du corps de `masque.md`, marqueur exclu
 
 
 def run(original: Path, vault: Vault, cid: str) -> Result:
@@ -96,7 +98,8 @@ def _run(original: Path, vault: Vault, cid: str) -> Result:
                                      for i, m in enumerate(sorted(resolved, key=lambda m: (m.block, m.start)), 1)]
 
     date = datetime.date.today().isoformat()
-    masque = rendu.masked_document(cid, masked, findings, residual, date).encode("utf-8")
+    passage = secrets.token_hex(8)   # un par passage : clé de la table figée si ce texte est publié
+    masque = rendu.masked_document(cid, masked, findings, residual, date, passage).encode("utf-8")
     atomic_write(folder / "masque.md", masque)
     atomic_write(folder / "rapport.md",
                  rendu.local_report(cid, extracted, entities, ambiguities, alerts, residual).encode("utf-8"))
@@ -106,11 +109,13 @@ def _run(original: Path, vault: Vault, cid: str) -> Result:
     table = {e.placeholder: e.canonical for e in entities}
     table.update((ambiguity_placeholder(a), blocks[a.mention.block].text[a.mention.start:a.mention.end])
                  for a in ambiguities)
-    atomic_write(folder / "correspondance.json", json.dumps(table, ensure_ascii=False, indent=2).encode("utf-8"))
+    table_bytes = json.dumps(table, ensure_ascii=False, indent=2).encode("utf-8")
+    atomic_write(folder / "correspondance.json", table_bytes)
     pending = ajustements.pending(adj, {e.placeholder for e in entities})
     state = vault.read_state(cid)
     state.update({"pending": pending, "ouverts": len(alerts) + len(ambiguities), "date": date,
                   "sha_masque": body_hash(masque),
-                  "sha_ajustements": hashlib.sha256(adj.read_bytes()).hexdigest()})
+                  "sha_ajustements": hashlib.sha256(adj.read_bytes()).hexdigest(),
+                  "sha_correspondance": hashlib.sha256(table_bytes).hexdigest()})
     vault.write_state(cid, state)
     return Result(extracted, entities, ambiguities, alerts, masked, pending)

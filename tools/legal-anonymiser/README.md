@@ -81,7 +81,11 @@ Parcours complet :
    registre. `legal-anonymiser verifier contrat-<id>.masque.md` répond `publie` tant qu'il n'a pas été
    modifié, `modifie` sinon, `inconnu` pour un fichier étranger.
 5. Après l'analyse par le modèle, `legal-anonymiser reidentifier <id> rapport.md` écrit le rapport avec
-   les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre.
+   les valeurs réelles dans `coffre/<id>/rapport-final.md` et l'ouvre : il ne quitte pas le coffre. La
+   **première ligne du rapport doit être la copie exacte de celle du fichier publié** (marqueur
+   `<!-- legal-france:masque v1 id=… statut=valide_humain date=… corps=… passage=… -->`) : elle désigne la
+   table de correspondance figée à cette publication. Sans elle, ou pour une version jamais publiée, rien
+   n'est réidentifié (code 7).
 
 | Commande | Effet | Codes |
 |---|---|---|
@@ -89,7 +93,7 @@ Parcours complet :
 | `relancer ID` | relit `ajustements.txt`, relance le masquage, puis comme `traiter` | idem (4 si l'identifiant est invalide ou inconnu) |
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
-| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
+| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, aucune publication ne correspond à la première ligne du rapport, rapport illisible ; sans trace écrite) |
 | `install-hook [--settings CHEMIN]` | ajoute le verrou Claude Code aux réglages (défaut `~/.claude/settings.json`), voir « Verrou Claude Code » | 0 (installé, ou déjà à jour), 6 (Claude Code absent ou antérieur à 2.1.295), 7 (réglages non JSON, rien écrit) |
 | `uninstall-hook [--settings CHEMIN]` | retire exactement cette entrée | 0 (retiré, ou rien à retirer), 7 |
 
@@ -110,6 +114,7 @@ décisions. Exemple après un premier passage :
 # legal-france ajustements v1, contrat c7f3a2
 # Alertes : remplacer ? par masquer ou garder.
 # Une alerte valeur_connue ne peut pas être gardée : utilisez masquer.
+# Une alerte sur_masquage : garder le masquage, ou demasquer: [PLACEHOLDER] pour rendre le texte.
 A1 ? « Résidence Les Hauts » | paragraphe 11 | 1 | majuscule
 A2 ? « kerbrat » | paragraphe 19 | 1 | valeur_connue
 # Mentions ambiguës : remplacer ? par un des placeholders proposés, ou nouveau.
@@ -122,8 +127,15 @@ demasquer: [SOCIETE_2]
 ```
 
 - `A<n>` : alerte de la seconde passe (motif en fin de ligne : `majuscule`, `chiffres`, `arobase`, `url`,
-  `date_naissance`, `initiales`, `valeur_connue`). `masquer` masque ce texte partout ; `garder` exempte cette seule
+  `date_naissance`, `initiales`, `valeur_connue`, `sur_masquage`). `masquer` masque ce texte partout ; `garder` exempte cette seule
   occurrence (clé `localisation | rang`), jamais une alerte `valeur_connue`, qui repasse à `?`.
+- `sur_masquage` : le texte de l'alerte est un placeholder (`[SOCIETE_3]`) dont la valeur déborde sur le
+  texte du contrat (« Logement sans l'accord » : saut de ligne, mot de clause en minuscules après un mot
+  capitalisé, aucune majuscule comme « tacite », ou seulement des mots du vocabulaire), signalé sur sa
+  première occurrence masquée ; une voie (« place des Tilleuls ») et une personne faite seulement de mots
+  de nom (« Élodie Duvalcourt » coupé par une ligne, « Maria do Carmo ») ne le sont pas. Vérifiez la valeur
+  dans `rapport.md` : `demasquer: [SOCIETE_3]` rend le texte au contrat, `garder` garde le masquage.
+  `masquer` y est sans effet : l'alerte reste ouverte.
 - `M<n>` : mention qui peut désigner plusieurs entités (homonymes, époux, « Orange » commune ou société).
   Répondre par un des placeholders proposés, ou `nouveau` pour une entité distincte. Un placeholder
   inexistant reste en attente.
@@ -136,7 +148,8 @@ demasquer: [SOCIETE_2]
   le numéro de ligne est affiché). Les décisions dont le texte a disparu sont listées sous « Décisions
   périmées ».
 - Modifier `ajustements.txt` ou `masque.md` après le dernier passage invalide la validation : `valider`
-  refuse (code 3) tant que `relancer` n'a pas été relancé.
+  refuse (code 3) tant que `relancer` n'a pas été relancé, y compris quand la modification a lieu
+  pendant la fenêtre de confirmation (rien n'est publié).
 
 ## Limites
 
@@ -209,7 +222,25 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
   personnel, ses formes `~/…`, `$HOME/…`, `%USERPROFILE%\…`, `$env:USERPROFILE\…` ; et toujours
   `$LEGAL_FRANCE_COFFRE`, `%LEGAL_FRANCE_COFFRE%`, `$env:LEGAL_FRANCE_COFFRE`), le chemin d'un
   original ou son nom de fichier ; les chemins absolus Windows présents dans la commande sont
-  résolus avant comparaison (jonction, nom court).
+  résolus avant comparaison (jonction, nom court). Chaque jeton de la commande (mots séparés par
+  blancs, guillemets et `;|&<>()=,`, plus le contenu entier de chaque chaîne entre guillemets, plus
+  chaque mot où une espace échappée ne sépare pas : `mon\ coffre` en Bash, « mon` coffre » en
+  PowerShell, plus chaque partie après un `:` : `-Path:coffre`, `-LiteralPath:coffre`,
+  `FileSystem::coffre`, `Microsoft.PowerShell.Core\FileSystem::coffre` ; un jeton à joker réduit à sa
+  partie littérale, comme pour `Glob`) est aussi résolu depuis le dossier de la session (`cwd` de
+  l'événement) : refusé s'il est sous le coffre (`cat coffre/registre.json` ou
+  `Get-Content coffre/*/correspondance.json` depuis le parent du coffre, `cd coffre; type
+  registre.json`, `nope\..\lien\registre.json` par une jonction) ou s'il est un original. Une commande
+  lancée depuis un dossier du coffre est refusée entière. Une forme UNC ou un premier élément qui porte
+  `:` sans être un lecteur (`https://…`) est comparé sans appel système (jamais d'accès réseau). Délai :
+  5 000 jetons de fichiers inexistants sont jugés en moins d'une seconde, 5 000 jetons mêlant chemins
+  inexistants et URL en 1,2 s (mesures du 2026-10-20 sous Windows) ; un jeton qui désigne un fichier
+  existant passe par la résolution complète : 3 000 fichiers existants cités en 5,3 s (7,7 s pendant
+  que la suite de tests tournait) ; au-delà de 4 000 environ, le délai de 10 s peut être dépassé et
+  l'appel est refusé (`onFailure: "block"`), jamais laissé passer.
+  Refus attendus, à connaître : depuis le parent du coffre, tout mot égal au nom du dossier du coffre
+  (`echo coffre`, `git commit -m "maj du coffre"`) ; `python -m legal_anonymiser …` lancé depuis
+  `tools/legal-anonymiser` (jeton = dossier du paquet, « verrou protégé »).
 
 Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
 (2.1.303) ouvrira lui-même après le hook : espaces et BOM retirés aux extrémités, `~` et `~/` seuls
@@ -231,8 +262,10 @@ Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modifi
   `Read` reste permis ;
 - `Bash` et `PowerShell` dont la commande contient `uninstall-hook`, `legal_anonymiser.verrou`,
   `legal_anonymiser/`, `.claude/settings`, `sitecustomize`, `usercustomize`, `site-packages` ou le
-  chemin absolu du paquet. `python -m legal_anonymiser traiter` et `legal-anonymiser verifier`
-  restent permis.
+  chemin absolu du paquet, ou dont un jeton, résolu depuis le dossier de la session, désigne un fichier
+  du paquet ou un `settings*.json` d'un dossier `.claude` (`echo {} > settings.json` lancé dans
+  `.claude`). `python -m legal_anonymiser traiter`, `legal-anonymiser verifier` et le Python du venv
+  lancé par son chemin restent permis.
 
 Conséquences : `uninstall-hook` se lance par l'utilisateur, dans son propre terminal, jamais par le
 modèle ; les réglages de Claude Code ne se modifient plus depuis une session (le faire à la main, ou
@@ -300,8 +333,10 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
 
 - un script lancé par `Bash` ou `PowerShell` (Python, `node`, PowerShell) qui lit l'original sans
   citer son chemin ni son nom, un motif générique (`cat *.docx`, `Get-ChildItem -Recurse`), un chemin
-  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`) ne sont pas
-  reconnus ;
+  reconstitué par des variables ou une concaténation (`d=.legal-fr; cat ~/${d}ance/...`, `cat
+  co''ffre/…`, `cat c\offre/…`, « Get-Content c`offre/… ») ne sont pas reconnus ; une lecture récursive
+  lancée depuis un ancêtre du coffre (`grep -r motif .`, `Get-ChildItem -Recurse -File | Get-Content`)
+  n'est pas refusée par `Bash` ni `PowerShell`, alors que l'outil `Grep` refuse le même cas ;
 - les outils MCP, les autres harnais et toute session sans le hook ne sont pas couverts ;
 - un fichier de réglages (`--settings` ou `settings.json`) qui n'est pas du JSON valide est ignoré
   par Claude Code sans avertissement : le verrou disparaît avec lui. Constaté avec `--settings` le
@@ -325,16 +360,29 @@ publié n'existe hors du coffre, l'utilisateur ne transmet que le fichier publi�
 
 ## État de la validation (2026-10-20)
 
-Vérifié par exécution : suite de tests locale complète (OCR et modèle réels) ; corpus synthétique de 26
-contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF texte et numérisation,
-plus un fichier piégé par constat technique) traité par la ligne de commande avec arbitrage scripté
-(mesure du 2026-10-20) : 0 fuite des noms, initiales, adresses, numéros, e-mails, IBAN, SIREN et dates
-de naissance lisibles après arbitrage, 175 noms sur 176 détectés avant arbitrage, 30 constats techniques
-sur 30 présents dans le rapport, 1,0 alerte pour 100 mots, 0 fusion de deux parties sous un placeholder,
-0 partie éclatée sur plusieurs placeholders ; 20 placeholders de nom qui débordent sur du texte courant
-(« Logement sans l'accord » pris pour une société par le modèle, 17 fois ; un titre de contrat pris pour
-une personne, 2 fois ; « TVA intracommunautaire », 1 fois : masqués à tort, pas une fuite). Trace
-système `strace` dans un conteneur Linux : aucune connexion, `unshare -rn` identique.
+Vérifié par exécution : suite de tests locale complète (OCR et modèle réels : 456 tests, 0 échec,
+4 ignorés faute de liens symboliques ou de modes POSIX sous Windows, après les correctifs de l'audit et
+de la revue de la branche) ;
+corpus synthétique de 26 contrats fictifs (bail, travail, consommation, entre professionnels, en DOCX, PDF
+texte et numérisation, plus un fichier piégé par constat technique) traité par la ligne de commande.
+**Mesure après arbitrage scripté sur 26 contrats fictifs ; ce n'est pas une garantie générale** :
+l'arbitrage scripté masque chaque alerte, garde le masquage sur chaque alerte `sur_masquage` et tranche
+les ambiguïtés d'après la vérité terrain ; aucune validation humaine n'est simulée, rien n'est publié.
+Mesure du 2026-10-20 après les correctifs : 0 fuite des noms, initiales, adresses, numéros, e-mails,
+IBAN, SIREN et dates de naissance lisibles après cet arbitrage, 175 noms sur 176 détectés avant
+arbitrage, 30 constats techniques sur 30 présents dans le rapport, 1,1 alerte pour 100 mots (157, dont 7
+`sur_masquage`), 0 fusion de deux parties sous un placeholder, 1 partie éclatée sur deux placeholders (le
+vendeur d'un DOCX : « Morvan Habitat » de l'en-tête lu comme une personne, masqué, pas une fuite).
+Sur-masquages : la v4.5.0 en comptait 23 entrées, dont 20 réelles (« Logement sans l'accord » pris pour
+une société, 17 fois ; un titre de contrat pris pour une personne, 2 fois ; « TVA intracommunautaire »,
+1 fois) ; après les correctifs, 6 entrées, dont 3 réelles (le titre de contrat, 2 fois ; « TVA
+intracommunautaire », 1 fois) et 3 vrais noms coupés par une ligne. Les 7 alertes `sur_masquage` portent
+exactement sur les 7 sur-masquages réels : ces 3 et 4 que le critère de la mesure ne compte pas
+(« tacite » de « tacite reconduction » pris pour une personne, 3 fois ; « RCS de La Roche-sur-Yon »,
+1 fois) ; aucune sur un vrai nom. Masqués à tort, pas une fuite, à `demasquer:` à la relecture. Le corpus
+ne contient aucun nom à particule étrangère (« el-Amrani », « do Carmo ») : ceux-là sont vérifiés par
+les tests seulement. Trace système `strace` dans un
+conteneur Linux : aucune connexion, `unshare -rn` identique (mesure du 2026-10-19, non refaite).
 
 Parcours réel sur un poste Windows, vérifié le 2026-10-19 à 23:28 : `traiter` (code 3), arbitrage,
 `relancer`, fenêtre de validation, clic humain « Publier » (code 0), `verifier` = `publie`, aucun nom de
@@ -356,7 +404,11 @@ l'auto-protection (08:44 à 08:48 UTC, coffre temporaire sous le dossier personn
 `uninstall-hook` par `Bash` sont refusés par le verrou, sans chemin dans le texte vu par le modèle.
 Un `NotebookEdit` sur un original non lu est arrêté avant le hook par Claude Code (« File has not
 been read yet ») ; lien symbolique non créable sur ce poste (droit absent) ; délai dépassé non
-provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
+provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`. Après le correctif F1
+de l'audit (10:56 UTC, coffre temporaire hors `.legal-france`, session lancée depuis son dossier parent) :
+`PowerShell` `Get-Content coffre/registre.json`, chemin relatif littéral, refusé par le verrou (« coffre
+protégé »), sans chemin dans le texte vu par le modèle ; `cat coffre/registre.json` par `Bash` n'est
+vérifié que par les tests et le vrai processus du hook, pas en session.
 
 Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
 humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
@@ -368,11 +420,15 @@ public.
 une IA), règles, structure (`[IMAGE]` des signatures relabellisé), NER si le modèle est installé (sinon
 le passage continue sans elle, constat `ner_absente`), entités avec les décisions relues, constats de
 métadonnées, masquage, risque résiduel, seconde passe. Écrit dans `coffre/<id>/` : `masque.md`
-(version en préparation, marqueur `valide_humain` daté du jour), `rapport.md` (valeurs réelles, jamais
-publié), `ajustements.txt`, `correspondance.json` (placeholder vers valeur, ambiguïtés `[AMBIGU_n]`
-comprises) et `etat.json` (`destination` : dossier courant du premier `traiter`, où sera publié le
+(version en préparation, marqueur `valide_humain` daté du jour, avec `corps=` : 16 premiers caractères
+de l'empreinte SHA-256 de tout ce qui suit le marqueur, et `passage=` : 16 caractères hexadécimaux tirés
+au hasard à chaque passage, clé de la table figée si ce texte est publié), `rapport.md` (valeurs réelles, jamais
+publié), `ajustements.txt`, `correspondance.json` (table de travail, placeholder vers valeur, ambiguïtés
+`[AMBIGU_n]` comprises, réécrite à chaque passage ; la publication en fige une copie) et `etat.json`
+(`destination` : dossier courant du premier `traiter`, où sera publié le
 fichier ; `pending` ; `ouverts` : alertes et ambiguïtés encore ouvertes ; `sha_masque` : empreinte du
-corps de `masque.md` après le marqueur ; `sha_ajustements` ; `date` ; `original_name_hidden`). `etat.json`
+corps de `masque.md` après le marqueur ; `sha_ajustements` ; `sha_correspondance` ; `date` ;
+`original_name_hidden`). `etat.json`
 est écrit en début de passage avec `pending` et `ouverts` à `null`, puis complété à la fin : un passage
 interrompu ne laisse jamais un état validable. Les décisions survivent à la réécriture du fichier
 d'ajustements : une alerte gardée reste écrite `A<n> garder`, une ambiguïté tranchée `M<n> [PLACEHOLDER]`
@@ -383,15 +439,23 @@ attente les lignes `?` et ces placeholders inconnus.
 
 **Validation** : refusée (code 3, « des points restent ouverts ») tant que `pending` ou `ouverts` n'est
 pas 0, si `etat.json` ne porte pas ces champs, ou si `masque.md` contient encore `[AMBIGU_` ; refusée
-aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de `masque.md`
-ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage : il faut `relancer`. Sinon
+aussi (code 3, « fichiers du coffre modifiés depuis le dernier passage ») quand le corps de
+`masque.md`, `ajustements.txt` ou `correspondance.json` ne correspond plus aux empreintes du dernier
+passage, ou que le marqueur de `masque.md` n'a pas le `corps=` de son corps ou pas de `passage=`
+(fichier écrit par la v4.5.0) : il faut `relancer`. Sinon
 `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
 ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
 masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
-(« fichier modifié pendant la relecture, relancez », code 4) ; sinon il est publié dans la destination
+(« fichier modifié pendant la relecture, relancez », code 4) ; les contrôles d'avant la fenêtre sont
+ensuite refaits (empreintes de `masque.md`, `ajustements.txt` et `correspondance.json`, `pending` et
+`ouverts` d'`etat.json`) : un ajustement, une table ou un état modifié pendant la fenêtre donne « Contrat <id> : fichiers modifiés pendant la
+relecture, rien n'a été publié ; relancez : legal-anonymiser relancer <id> » (code 3, audit v4.5.0,
+constat F3) ; sinon il est publié dans la destination
 enregistrée (« Publié : contrat-<id>.masque.md », suivi du rappel « La validation porte sur le texte
 relu ; le risque résiduel listé reste visible pour le modèle. »), un dossier inaccessible en écriture
-donne le code 4. `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la
+donne le code 4, un refus de la publication elle-même (marqueur ou table figée incohérents) « Publication
+refusée : le texte masqué ou sa table ne correspondent plus au dernier passage, rien n'a été publié ;
+relancez : legal-anonymiser relancer <id> » (code 4, sans trace ni message d'exception). `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la
 fenêtre : code 4. `impossible` (ni fenêtre ni terminal, cas d'un outil piloté par un modèle) :
 « validation impossible ici : lancez vous-même `legal-anonymiser valider <id>` dans un terminal », code 4.
 Sans chemin : `tkinter` absent ou sans affichage donne « Sélecteur de fichier indisponible : lancez
@@ -414,9 +478,17 @@ du script ; une erreur d'arguments (commande inconnue, argument en trop ou manqu
 (`pending` 0, `ouverts` > 0), le message dit « <n> alerte(s) ou ambiguïté(s) restent ouvertes : voir
 coffre/<id>/ajustements.txt » (code 3), jamais « 0 point(s) à arbitrer ».
 
-**Réidentification** (`reidentification.py`) : seules les clés de `correspondance.json` sont
-substituées (texte exact, la plus longue d'abord), tout le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel
-quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
+**Réidentification** (`reidentification.py`) : la première ligne du rapport doit être le marqueur du
+fichier publié (même `id`, champs `corps=` et `passage=`, couple inscrit au registre par une
+publication) ; elle désigne `coffre/<id>/publications/<passage>.json`, la table figée à cette
+publication. Seules les clés de cette table sont substituées (texte exact, la plus longue d'abord), tout
+le reste (`[INCONNU_1]`, `[IMAGE]`) reste tel quel ; le résultat, `coffre/<id>/rapport-final.md`, ne
+quitte pas le coffre. Ligne absente ou modifiée, autre contrat, version jamais publiée, marqueur sans
+`corps=` ou `passage=` : refus, « aucune publication ne correspond à ce rapport » (code 7), rien n'est
+écrit. La table de travail n'est jamais lue : retraiter l'original modifié, avec ou sans nouvelle
+publication, ne change pas les valeurs d'un rapport écrit sur une publication antérieure (audit v4.5.0,
+constat F2 ; revue de la branche, constat I1 : deux versions au corps masqué identique, publiées l'une
+après l'autre, gardent chacune leur table).
 
 ## Formats lus (état actuel)
 
@@ -500,7 +572,19 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
   « BOULOGNE SUR MER » gardé) ; une entité en capitales s'arrête avant son premier verbe courant
   (« AWA DUPONT SIGNE » donne « AWA DUPONT »), jamais avant son premier mot ni avant le second
   après une civilité (« SIGNE HANSEN », « MADAME CLAIRE DEMEURE EST TÉMOIN » donne « MADAME CLAIRE
-  DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). Une commune d'un seul
+  DEMEURE ») ; un verbe qui ouvre une société lui appartient (« VERSE SAS »). En toute casse, une entité
+  s'arrête avant son premier mot de clause : un mot en minuscules placé après un mot capitalisé, qui
+  n'est ni une particule (de, du, la, da, van, von, el, al, do, das, della, ibn, bin, binti, bte, ben,
+  abu, ould, mac, zu, thi, las, los, y, e…), ni une liaison de nom (et, sur, sous, en, au…), ni un
+  composé particule-Nom (« el-Amrani », « al-Hassan », « d'Arcy »). Dans un nom de personne (après une
+  civilité, ou entre deux mots capitalisés), seul un mot-outil (sans, pour, par, avec, dans, qui…) ou un
+  verbe courant coupe, quel que soit le mot capitalisé qui suit, même un mot du vocabulaire comme un mois
+  (« Nguyen thi Mai », « Tran thi Avril », « Jean Dupont dit Martin » restent entiers). « Logement sans
+  l'accord » devient « Logement », puis est écarté comme mot du vocabulaire (audit v4.5.0, constat F4) ;
+  « Jean de La Fontaine », « Mohamed el-Amrani », « Maria do Carmo », « Lucia della Rovere », « Ahmed ibn
+  Saïd », « María de las Mercedes », « Les Hauts de Valmorin », « rue Victor Hugo » restent entiers (les
+  versions précédentes de la coupe laissaient visible un nom de famille ou un prénom : revue de la
+  branche, constat C2, puis re-revue, constat N1). Une commune d'un seul
   mot en capitales n'y est trouvée qu'après un code postal, « NÉ(E) LE … À », « FAIT À », ou par
   propagation ; seule dans le texte libre, elle reste visible et la seconde passe la signale. Une
   entité qui court sur deux lignes, ou sur deux colonnes (deux espaces ou plus, tabulation : les noms
@@ -586,6 +670,14 @@ quel ; le résultat, `coffre/<id>/rapport-final.md`, ne quitte pas le coffre.
     abréviation (« Ets », « NO ») ; « J. Dupont » n'en est pas une. Un jeton déjà signalé `majuscule`
     (« JK » en milieu de phrase, « LI HUI MIN » en une alerte) garde ce motif : `initiales` ne s'ajoute
     que là où rien d'autre n'alerte (tête de phrase après « Paraphes : », ligne en capitales).
+  - `sur_masquage` : première occurrence masquée d'une entité de nom (personne, société, lieu, commune ;
+    jamais un ajout `masquer:` de l'utilisateur ni un identifiant à forme fixe) dont la valeur canonique
+    contient un saut de ligne, un mot en minuscules hors particule, liaison et composé de nom après son
+    premier mot capitalisé (plus strict que la coupe de la reconnaissance des noms, qui ne coupe pas devant
+    un mot capitalisé hors vocabulaire), aucune majuscule, ou seulement des mots du vocabulaire ; jamais
+    une personne dont chaque mot est une civilité ou un mot capitalisé hors vocabulaire (particules mises
+    à part) ; l'alerte porte le placeholder, à trancher par `demasquer:` ou `garder` avant
+    publication.
   - Une décision garder exempte une occurrence des motifs autres que `valeur_connue`. Sa clé
     (`entites.occurrence_key`, ou `entites.Ranks` pour plusieurs clés) est `(localisation, texte
     normalisé, rang)`, le rang étant compté sur **tous les blocs de même localisation** dans l'ordre
@@ -628,10 +720,14 @@ dont le texte a changé sont listées sous « Décisions périmées ».
   programme, n'est pas détecté.
 - **Publication** (`publication.py`) : refusée, avant toute écriture, si l'identifiant n'est pas un id
   neutre connu du coffre (6 caractères hexadécimaux) ou si la première ligne n'est pas le marqueur
-  `statut=valide_humain` de ce contrat. Écrit `contrat-<id>.masque.md` de façon atomique, en UTF-8,
-  octet pour octet sans conversion des fins de ligne (le rendu produit des `\n`), inscrit d'abord
-  l'empreinte SHA-256 des octets écrits au registre avec la date du marqueur, puis le chemin,
-  l'empreinte et la date dans l'état du contrat.
+  `statut=valide_humain` de ce contrat, si son champ `corps=` manque ou ne correspond pas au corps du
+  texte, s'il n'a pas de `passage=`, ou si la table figée de ce passage existe déjà avec un autre
+  contenu. Fige d'abord la table de travail en `coffre/<id>/publications/<passage>.json` (écrite une
+  seule fois : republier le même passage la laisse intacte), inscrit l'empreinte SHA-256 des octets
+  écrits au registre avec la date du marqueur, `corps` et `passage`, puis écrit
+  `contrat-<id>.masque.md` de façon atomique, en UTF-8, octet pour octet sans conversion des fins de
+  ligne (le rendu produit des `\n`), et enfin le chemin, l'empreinte et la date dans l'état du contrat.
+  Les entrées du registre écrites par la v4.5.0 (sans `corps` ni `passage`) restent lues par `verifier`.
 - **Vérification** : `publie` si l'empreinte du fichier est au registre ; `modifie` si sa première
   ligne est un marqueur dont l'identifiant est connu du coffre (BOM et fins de ligne `\r\n`
   tolérés) ; sinon, ou si le fichier est illisible, `inconnu`. Jamais de contenu affiché.
