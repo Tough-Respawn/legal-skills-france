@@ -140,7 +140,8 @@ demasquer: [SOCIETE_2]
   le numéro de ligne est affiché). Les décisions dont le texte a disparu sont listées sous « Décisions
   périmées ».
 - Modifier `ajustements.txt` ou `masque.md` après le dernier passage invalide la validation : `valider`
-  refuse (code 3) tant que `relancer` n'a pas été relancé.
+  refuse (code 3) tant que `relancer` n'a pas été relancé, y compris quand la modification a lieu
+  pendant la fenêtre de confirmation (rien n'est publié).
 
 ## Limites
 
@@ -404,7 +405,11 @@ ou `ajustements.txt` ne correspond plus aux empreintes du dernier passage, ou qu
 `masque.md` est redaté du jour, son empreinte SHA-256 calculée, puis `masque.md` et `rapport.md` sont
 ouverts et la question posée (« Contrat <id> : relisez les fichiers ouverts. Publier ce contrat
 masqué ? »). `publier` : le fichier est relu ; s'il a changé pendant la relecture, rien n'est publié
-(« fichier modifié pendant la relecture, relancez », code 4) ; sinon il est publié dans la destination
+(« fichier modifié pendant la relecture, relancez », code 4) ; les contrôles d'avant la fenêtre sont
+ensuite refaits (empreintes de `masque.md` et `ajustements.txt`, `pending` et `ouverts` d'`etat.json`) :
+un ajustement ou un état modifié pendant la fenêtre donne « Contrat <id> : fichiers modifiés pendant la
+relecture, rien n'a été publié ; relancez : legal-anonymiser relancer <id> » (code 3, audit v4.5.0,
+constat F3) ; sinon il est publié dans la destination
 enregistrée (« Publié : contrat-<id>.masque.md », suivi du rappel « La validation porte sur le texte
 relu ; le risque résiduel listé reste visible pour le modèle. »), un dossier inaccessible en écriture
 donne le code 4. `ajuster` : chemin neutre de `ajustements.txt`, code 3. `abandonner` ou fermeture de la

@@ -117,6 +117,9 @@ def _validate(vault: Vault, cid: str) -> int:
         if hashlib.sha256(data).hexdigest() != digest:
             say("modifie")
             return 4
+        if _ready(vault, cid, vault.read_state(cid)):   # ajustements ou état modifiés pendant la fenêtre
+            say("modifie_pendant_relecture", cid=cid)
+            return 3
         try:
             target = publication.publish(vault, cid, data.decode("utf-8"), Path(state["destination"]))
         except OSError:

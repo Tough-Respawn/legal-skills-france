@@ -35,6 +35,8 @@ MESSAGES = {
     "abandon": "Publication abandonnée : rien n'a été écrit hors du coffre.",
     "impossible": "validation impossible ici : lancez vous-même `legal-anonymiser valider {cid}` dans un terminal",
     "modifie": "fichier modifié pendant la relecture, relancez",
+    "modifie_pendant_relecture": "Contrat {cid} : fichiers modifiés pendant la relecture, rien n'a été publié ; "
+                                 "relancez : legal-anonymiser relancer {cid}",
     "publication_impossible": "Publication impossible : le dossier de destination n'est pas accessible en écriture.",
     "aucun_fichier": "Aucun fichier choisi : rien n'a été traité.",
     "selecteur_indisponible": "Sélecteur de fichier indisponible : lancez `legal-anonymiser traiter <chemin>` vous-même.",
