@@ -69,14 +69,19 @@ def _activate_comctl6() -> bool:
         ctx.dwFlags = 0x0008   # ACTCTX_FLAG_RESOURCE_NAME_VALID
         ctx.lpSource = os.path.join(os.environ.get("SystemRoot", r"C:\Windows"), "System32", "shell32.dll")
         ctx.lpResourceName = 124   # MAKEINTRESOURCE(124) : manifeste des contrôles communs v6
+        # HANDLE = c_void_p, ULONG_PTR = c_size_t : sans argtypes, un handle 64 bits lève ArgumentError.
+        kernel32.CreateActCtxW.argtypes = [ctypes.POINTER(_ACTCTXW)]
         kernel32.CreateActCtxW.restype = _HANDLE
+        kernel32.ActivateActCtx.argtypes = [_HANDLE, ctypes.POINTER(ctypes.c_size_t)]
+        kernel32.ActivateActCtx.restype = ctypes.c_int
         handle = kernel32.CreateActCtxW(ctypes.byref(ctx))
         if handle in (None, _HANDLE(-1).value):
             return False
         cookie = ctypes.c_size_t()
-        # ponytail: contexte laissé actif jusqu'à la fin du processus (une seule question par passage).
+        # ponytail: contexte laissé actif jusqu'à la fin du processus (une seule question par passage), donc ni
+        # DeactivateActCtx ni ReleaseActCtx ; les déclarer quand une désactivation deviendra utile.
         return bool(kernel32.ActivateActCtx(handle, ctypes.byref(cookie)))
-    except (AttributeError, OSError, ValueError):
+    except (AttributeError, OSError, ValueError, ctypes.ArgumentError):
         return False
 
 
@@ -129,8 +134,8 @@ def _mac_dialog(question: str, choices: Sequence[str]) -> Optional[str]:
                              text=True, encoding="utf-8")
     except (OSError, ValueError):
         return None
-    if out.returncode != 0:   # bouton d'annulation ou fenêtre fermée : -128 « User canceled »
-        return _ABANDON
+    if out.returncode != 0:   # -128 « User canceled » : bouton Abandonner ou Échap ; autre erreur : repli
+        return _ABANDON if "(-128)" in (out.stderr or "") else None
     m = re.search(r"button returned:(\S+)", out.stdout or "")
     return labels.get(m.group(1), _ABANDON) if m else _ABANDON
 

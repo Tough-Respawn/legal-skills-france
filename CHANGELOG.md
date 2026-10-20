@@ -29,19 +29,26 @@ to [Semantic Versioning](https://semver.org/).
   `Edit`, `Write`, `NotebookEdit` sur un original inscrit ou le coffre,
   `Grep` et `Glob` lancés depuis un dossier qui les contient (dossier
   personnel compris), `Bash` et `PowerShell` dont la commande cite le coffre,
-  un original ou son nom ; refus par décision JSON `deny` (le modèle ne voit
-  ni chemin ni ligne de commande), erreur interne comprise (raison
-  générique) ; code 2 seulement si la décision ne peut pas être écrite.
-  Commandes `install-hook` et `uninstall-hook` (`~/.claude/settings.json` par
-  défaut, `--settings` sinon) : refus sous Claude Code 2.1.295 (code 6) ou sur
-  des réglages non JSON (code 7), sauvegarde `settings.json.legal-france.bak`,
-  écriture atomique, une seule entrée, `"onFailure": "block"`, interpréteur
-  lancé avec `-P` en Python 3.11 ou plus. Limites documentées : script, motif
-  générique ou variables dans `Bash` ou `PowerShell`, outils MCP, réglages
-  non JSON ignorés sans avertissement par Claude Code.
+  un original ou son nom ; chemins pris sous la forme que Claude Code ouvrira
+  (`~`, `/c/...`, `\\?\`), motif `Glob` absolu coupé au dernier séparateur
+  avant un joker, entrée lue en UTF-8 (chemins accentués) ; refus par
+  décision JSON `deny` (le modèle ne voit ni chemin ni ligne de commande),
+  erreur interne comprise (raison générique) ; code 2 seulement si la
+  décision ne peut pas être écrite. Auto-protection : paquet, `.pth` et
+  `sitecustomize.py` des site-packages, réglages `.claude/settings*.json`,
+  commandes `uninstall-hook`. Commandes `install-hook` et `uninstall-hook`
+  (`~/.claude/settings.json` par défaut, `--settings` sinon) : refus avec une
+  version de Claude Code antérieure à 2.1.295 (code 6) ou sur des réglages
+  non JSON (code 7), sauvegarde `settings.json.legal-france.bak`, écriture
+  atomique (cible d'un lien symbolique), BOM accepté, une seule entrée, seul
+  notre hook retiré, `"onFailure": "block"`, interpréteur lancé avec `-P` en
+  Python 3.11 ou plus. Limites documentées : script, motif générique ou
+  variables dans `Bash` ou `PowerShell`, outils MCP, réglages non JSON
+  ignorés sans avertissement par Claude Code.
 - Anonymiseur, dialogue de validation natif : `TaskDialogIndirect` sous
   Windows, `osascript` sous macOS, puis `tkinter`, puis terminal ;
-  « Abandonner » par défaut, fermeture = abandon.
+  « Abandonner » par défaut, fermeture = abandon ; une erreur d'`osascript`
+  autre que l'annulation passe au repli suivant.
 
 ### Fixed
 

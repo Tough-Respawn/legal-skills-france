@@ -55,13 +55,17 @@ def check_version(version: Optional[str]) -> None:
         raise VersionTooOld()
 
 
+def _is_ours(hook: object) -> bool:
+    return isinstance(hook, dict) and MARK in (hook.get("args") or [])
+
+
 def _ours(entry: dict) -> bool:
-    return any(MARK in (h.get("args") or []) for h in entry.get("hooks", []) if isinstance(h, dict))
+    return any(_is_ours(h) for h in entry.get("hooks", []))
 
 
 def _load(settings: Path) -> dict:
     try:
-        data = json.loads(settings.read_text("utf-8"))
+        data = json.loads(settings.read_text("utf-8-sig"))   # BOM toléré (Bloc-notes)
     except FileNotFoundError:
         return {}
     except (ValueError, UnicodeDecodeError):
@@ -88,10 +92,18 @@ def _entry(coffre: Path) -> dict:
 
 
 def _without_ours(data: dict) -> dict:
+    """Retire notre objet hook de chaque entrée ; une entrée n'est retirée que si elle devient vide."""
     data = copy.deepcopy(data)
     hooks = data.get("hooks")
-    kept = [e for e in (hooks or {}).get("PreToolUse", []) if not (isinstance(e, dict) and _ours(e))]
-    if kept != (hooks or {}).get("PreToolUse", kept):   # nettoyage seulement si une entrée à nous est retirée
+    entries = (hooks or {}).get("PreToolUse", [])
+    kept = []
+    for e in entries:
+        inner = e.get("hooks") if isinstance(e, dict) else None
+        if not (isinstance(inner, list) and any(_is_ours(h) for h in inner)):
+            kept.append(e)
+        elif any(not _is_ours(h) for h in inner):
+            kept.append(dict(e, hooks=[h for h in inner if not _is_ours(h)]))
+    if kept != entries:   # nettoyage seulement si un hook à nous est retiré
         hooks["PreToolUse"] = kept
         if not kept:
             del hooks["PreToolUse"]
@@ -103,6 +115,7 @@ def _without_ours(data: dict) -> dict:
 def install(settings: Path, coffre: Path, version: Optional[str]) -> str:
     """`installé` ou `inchangé` (entrée déjà présente, identique et en dernière position)."""
     check_version(version)
+    settings = Path(settings).resolve()   # lien symbolique (dotfiles) : on écrit la cible, le lien reste
     before = _load(settings)
     data = _without_ours(before)
     data.setdefault("hooks", {}).setdefault("PreToolUse", []).append(_entry(coffre))
@@ -114,6 +127,7 @@ def install(settings: Path, coffre: Path, version: Optional[str]) -> str:
 
 def uninstall(settings: Path) -> str:
     """`retiré` ou `absent` (aucune entrée à nous, fichier absent compris : rien n'est écrit)."""
+    settings = Path(settings).resolve()
     before = _load(settings)
     data = _without_ours(before)
     if data == before:

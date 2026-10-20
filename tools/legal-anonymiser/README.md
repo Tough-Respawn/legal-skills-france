@@ -197,16 +197,42 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
 
 - `Read`, `Edit`, `Write`, `NotebookEdit` sur un original ou sur tout chemin sous le coffre
   (`file_path` ou `notebook_path`, relatif au `cwd` de la session s'il n'est pas absolu) ;
-- `Grep` et `Glob` dont la racine (`path`, sinon le dossier courant ; un motif absolu aussi) est le
+- `Grep` et `Glob` dont la racine (`path`, sinon le dossier courant ; pour `Glob`, aussi la partie
+  littérale du motif jusqu'au dernier séparateur avant le premier `*`, `?`, `[` ou `{`) est le
   coffre ou est dedans (« coffre protégé »), ou est un parent du coffre ou d'un original : une
-  recherche lancée depuis le dossier personnel ou la racine du disque est refusée avec la raison
-  (« un original protégé ou le coffre se trouve dans ce dossier ou en dessous : lancez la recherche
-  dans un sous-dossier qui ne les contient pas ») ;
+  recherche lancée depuis le dossier personnel ou la racine du disque, ou un motif comme
+  `~/Doc*/**/*.docx`, est refusée avec la raison (« un original protégé ou le coffre se trouve dans
+  ce dossier ou en dessous : lancez la recherche dans un sous-dossier qui ne les contient pas ») ;
 - `Bash` et `PowerShell` dont la commande contient, casse et séparateurs `\` ou `/` indifférents,
   le chemin du coffre (absolu, `/c/Users/…` de Git Bash, `~/.legal-france`, `%USERPROFILE%`,
-  `$HOME`, `$env:USERPROFILE`, ou simplement `.legal-france`), le chemin d'un original ou son nom
-  de fichier ; les chemins absolus Windows présents dans la commande sont résolus avant comparaison
-  (jonction, nom court).
+  `$HOME`, `$env:USERPROFILE`, ou simplement `.legal-france` ; pour un coffre déplacé sous le dossier
+  personnel, ses formes `~/…`, `$HOME/…`, `%USERPROFILE%\…`, `$env:USERPROFILE\…` ; et toujours
+  `$LEGAL_FRANCE_COFFRE`, `%LEGAL_FRANCE_COFFRE%`, `$env:LEGAL_FRANCE_COFFRE`), le chemin d'un
+  original ou son nom de fichier ; les chemins absolus Windows présents dans la commande sont
+  résolus avant comparaison (jonction, nom court).
+
+Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
+ouvrira lui-même après le hook : `~` développé, et sous Windows `/c/…` et `/cygdrive/c/…` (Git Bash)
+convertis en `C:\…`, préfixes `\\?\` et `\\.\` retirés (`\\?\UNC\serveur` devient `\\serveur`).
+L'entrée standard est lue en octets et décodée en UTF-8, quelle que soit la page de code du poste
+(Claude Code ne fixe pas `PYTHONIOENCODING` pour les hooks) : un chemin accentué est comparé tel quel.
+
+Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modification refusée » :
+
+- `Edit`, `Write`, `NotebookEdit` sur un fichier du paquet `legal_anonymiser` installé (pour une
+  installation éditable, le dossier du dépôt), sur un `.pth`, `sitecustomize.py` ou
+  `usercustomize.py` des site-packages de l'interpréteur (ceux du venv et ceux de l'utilisateur), et
+  sur tout `settings*.json` d'un dossier `.claude` (`~/.claude/settings.json`,
+  `~/.claude/settings.local.json`, `.claude/settings.json` d'un projet) ; `Read` reste permis ;
+- `Bash` et `PowerShell` dont la commande contient `uninstall-hook`, `legal_anonymiser.verrou`,
+  `legal_anonymiser/`, `.claude/settings`, `sitecustomize`, `usercustomize`, `site-packages` ou le
+  chemin absolu du paquet. `python -m legal_anonymiser traiter` et `legal-anonymiser verifier`
+  restent permis.
+
+Conséquences : `uninstall-hook` se lance par l'utilisateur, dans son propre terminal, jamais par le
+modèle ; les réglages de Claude Code ne se modifient plus depuis une session (le faire à la main, ou
+retirer le verrou le temps du changement) ; développer l'outil lui-même avec Claude Code demande de
+retirer le verrou d'abord.
 
 Les messages ne contiennent jamais un chemin ni un nom de fichier. Sur un refus, le modèle voit
 seulement `PreToolUse:Read hook error: legal-france : original protégé, accès refusé...`
@@ -255,7 +281,11 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
 - Avant chaque écriture, l'ancien fichier est copié en `settings.json.legal-france.bak` à côté ;
   l'écriture est atomique (fichier temporaire puis remplacement). Le fichier est rechargé et réécrit
   en JSON indenté de 2 : les autres clés et les autres hooks sont conservés, la mise en forme
-  d'origine ne l'est pas. Relancer sans rien à changer n'écrit rien.
+  d'origine ne l'est pas. Relancer sans rien à changer n'écrit rien. Un BOM UTF-8 en tête est
+  accepté. Si `settings.json` est un lien symbolique, c'est sa cible qui est réécrite (et sauvegardée
+  à côté d'elle), le lien reste en place.
+- `uninstall-hook` retire seulement l'objet hook du verrou ; un hook à vous placé dans la même entrée
+  est conservé, l'entrée n'est supprimée que si elle devient vide.
 - Redémarrer les sessions Claude Code ouvertes après l'installation.
 
 **Limites** (conception, section 8) :
@@ -272,6 +302,10 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
   restent du JSON valide ;
 - `Read` refuse déjà de lui-même un `.docx` (fichier binaire) et suggère au modèle un script : c'est
   précisément le contournement que le verrou ne voit pas ;
+- l'auto-protection repose sur des chemins et des mots dans les commandes : un script qui écrit dans
+  les réglages ou dans le paquet sans les nommer n'est pas vu (même limite que ci-dessus) ;
+- le dépassement du délai de 10 s n'a pas été provoqué en session réelle : le blocage dans ce cas
+  vient de la documentation de Claude Code, pas d'une observation ;
 - un contrat jamais passé dans l'outil n'est pas inscrit au registre, donc pas protégé : la garde
   d'entrée du skill (`verifier`) s'en charge.
 
@@ -303,7 +337,15 @@ générique) et interpréteur introuvable (`onFailure: "block"`). Après passage
 `-P` (08:14 UTC), puis du dernier recours à la décision JSON (08:19 UTC), tous les cas rejoués
 sauf l'interpréteur introuvable : `Read` de l'original, `Grep` depuis le dossier personnel, `cat` et
 `Get-Content` du registre, `Read` par un sous-agent et registre corrompu sont refusés, et le texte vu
-par le modèle ne contient ni chemin ni ligne de commande. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
+par le modèle ne contient ni chemin ni ligne de commande. Après la normalisation des chemins et
+l'auto-protection (08:44 à 08:48 UTC, coffre temporaire sous le dossier personnel) : `Grep` sur
+`~/.legal-france-test/coffre`, `Read` d'un original accentué, deux `Glob` absolus à joker (`pro*`,
+`{projet,x}`), `Edit` et `Write` de l'original, `Write` dans le coffre par `~`, `Write` de
+`.claude/settings.local.json`, `Edit` de `verrou.py`, `NotebookEdit` d'un notebook du paquet et
+`uninstall-hook` par `Bash` sont refusés par le verrou, sans chemin dans le texte vu par le modèle.
+Un `NotebookEdit` sur un original non lu est arrêté avant le hook par Claude Code (« File has not
+been read yet ») ; lien symbolique non créable sur ce poste (droit absent) ; délai dépassé non
+provoqué. `install-hook` n'a pas été lancé sur un vrai `~/.claude/settings.json`.
 
 Non vérifié à ce jour : le parcours complet depuis une session Claude Code avec le skill, le clic
 humain sur le dialogue natif, la règle de pare-feu Windows, macOS. Les résultats détaillés restent locaux (`evals/`), hors du dépôt
@@ -588,16 +630,21 @@ dont le texte a changé sont listées sous « Décisions périmées ».
 Ordre d'essai : dialogue natif du système ci-dessous ; s'il est indisponible, fenêtre `tkinter` ;
 sans affichage, clavier si l'entrée et la sortie standard sont des terminaux ; sinon `impossible`
 (rien n'est publié). Mêmes garanties à chaque étape : aucune option de pré-acceptation, « Publier »
-jamais bouton par défaut, fermer la fenêtre vaut abandon.
+jamais bouton par défaut, fermer la fenêtre vaut abandon (nuance clavier sous Windows ci-dessous).
 
 - **Windows** : `TaskDialogIndirect` des contrôles communs v6 (`comctl32`, via `ctypes`, sans
   dépendance) : titre `legal-france`, question en texte principal, trois boutons « Publier »,
-  « Ajuster », « Abandonner ». « Abandonner » est le bouton par défaut (Entrée ou Échap abandonnent),
-  la croix de fermeture vaut abandon. Si les contrôles communs v6 ne sont pas chargés, l'outil active
-  le manifeste de `shell32` (contexte d'activation) ; si `TaskDialogIndirect` reste introuvable ou
-  renvoie une erreur, repli sur `tkinter` sans plantage.
+  « Ajuster », « Abandonner ». « Abandonner » est le bouton par défaut (à l'ouverture, Entrée ou
+  Échap abandonnent), la croix de fermeture vaut abandon. Contrairement à la fenêtre `tkinter`, les
+  trois boutons sont dans l'ordre de tabulation : Tab jusqu'à « Publier » puis Entrée ou Espace
+  publie. C'est voulu : un choix délibéré au clavier, par une personne devant l'écran, vaut un clic
+  (aucun appui unique ne publie). Si les contrôles communs v6 ne sont pas chargés, l'outil active le
+  manifeste de `shell32` (contexte d'activation, appel réel vérifié en test sans fenêtre) ; si
+  `TaskDialogIndirect` reste introuvable ou renvoie une erreur, repli sur `tkinter` sans plantage.
 - **macOS** : `osascript -e 'display dialog …'`, la question passée en argument (aucun shell), bouton
-  par défaut et bouton d'annulation « Abandonner » ; `osascript` absent : repli sur `tkinter`.
+  par défaut et bouton d'annulation « Abandonner ». Seul ce bouton (ou Échap, erreur -128) donne
+  « abandonner » ; `osascript` absent ou toute autre erreur (session sans interface) : repli sur
+  `tkinter`, puis terminal, puis `impossible`.
 - **Linux et autres** : `tkinter` directement.
 - La signature de `validation.confirm` et ses garanties sont inchangées ; les tests ne passent que par
   des appels système remplacés, jamais par une vraie fenêtre. Le clic humain sur la fenêtre native n'a

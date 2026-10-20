@@ -1,5 +1,9 @@
 """Verrou Claude Code : hook `PreToolUse` qui refuse l'accès aux originaux inscrits et au coffre.
 
+Il refuse aussi toute modification de lui-même : son paquet, les `.pth` / `sitecustomize.py` /
+`usercustomize.py` des site-packages, les réglages de Claude Code, et les commandes qui les citent
+ou lancent `uninstall-hook` (le retrait se fait par l'utilisateur, dans son terminal).
+
 Lancé par Claude Code (`python -P -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
 l'entrée standard. Refus = code 0 et décision JSON `deny` sur la sortie standard : Claude Code montre
 alors la raison seule (avec le code 2, il la préfixe de la ligne de commande du hook, chemins absolus
@@ -27,9 +31,19 @@ ORIGINAL = ("legal-france : original protégé, accès refusé. Travaillez uniqu
 COFFRE = "legal-france : coffre protégé, accès refusé. Le coffre n'est jamais lu par le modèle."
 SEARCH = ("legal-france : recherche refusée, un original protégé ou le coffre se trouve dans ce dossier ou en "
           "dessous : lancez la recherche dans un sous-dossier qui ne les contient pas.")
+SELF = ("legal-france : verrou protégé, modification refusée. Pour le retirer, lancez vous-même "
+        "`legal-anonymiser uninstall-hook` dans votre terminal.")
 GENERIC = "legal-france : verrou en erreur, accès refusé par précaution."
 _WIN_PATH_RX = re.compile(r"[A-Za-z]:[\\/][^\s\"'<>|;&`]*")
-_WILDCARD_RX = re.compile(r"[*?\[]")
+_GLOB_RX = re.compile(r"[*?\[{]")   # métacaractères de Glob, accolades comprises
+_DEVICE_RX = re.compile(r"^[\\/]{2}[?.][\\/](UNC[\\/])?", re.I)   # \\?\C:\..., \\.\C:\..., \\?\UNC\serveur
+_GITBASH_RX = re.compile(r"^/(?:cygdrive/)?([A-Za-z])(?:/|$)")   # /c/Users/... ou /cygdrive/c/...
+_SETTINGS_RX = re.compile(r"settings.*\.json")
+# Commandes qui touchent au verrou lui-même : son module, son installation, les réglages de Claude Code.
+_SHELL_SELF = ("uninstall-hook", "legal_anonymiser.verrou", "legal_anonymiser/", ".claude/settings",
+               "sitecustomize", "usercustomize", "site-packages")
+_ENV_COFFRE = ("$legal_france_coffre", "${legal_france_coffre}", "%legal_france_coffre%", "$env:legal_france_coffre")
+_HOME_FORMS = ("~/", "$home/", "${home}/", "%userprofile%/", "$env:userprofile/")
 
 
 def _long_name(path: str) -> str:
@@ -46,6 +60,39 @@ def _norm(path: str) -> str:
     real = _long_name(os.path.realpath(path))
     norm = os.path.normcase(real)
     return norm.lower() if sys.platform == "darwin" else norm
+
+
+def _expand(path: str, cwd: str) -> str:
+    """Chemin tel que Claude Code l'ouvrira : `~` développé ; sous Windows, formes Git Bash (`/c/...`,
+    `/cygdrive/c/...`) et préfixes de périphérique (`\\\\?\\`, `\\\\.\\`) convertis ; relatif au dossier de la session."""
+    p = os.path.expanduser(str(path))
+    if sys.platform == "win32":
+        p = _DEVICE_RX.sub(lambda m: "\\\\" if m.group(1) else "", p)
+        p = _GITBASH_RX.sub(lambda m: m.group(1).upper() + ":\\", p)
+    return os.path.join(cwd, p)
+
+
+def _package_dir() -> str:
+    return _norm(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _site_dirs() -> List[str]:
+    import site
+    dirs = list(getattr(site, "getsitepackages", lambda: [])())
+    user = getattr(site, "getusersitepackages", lambda: None)()
+    return [_norm(d) for d in dirs + ([user] if user else [])]
+
+
+def _protected(path: str) -> bool:
+    """Code du verrou, fichiers exécutés au démarrage de Python, réglages de Claude Code (chemin normalisé)."""
+    if _within(path, _package_dir()):
+        return True
+    parent, name = os.path.split(path)
+    if os.path.basename(parent) == ".claude" and _SETTINGS_RX.fullmatch(name):
+        return True
+    if name.endswith(".pth") or name in ("sitecustomize.py", "usercustomize.py"):
+        return any(_within(path, d) for d in _site_dirs())
+    return False
 
 
 def _within(path: str, root: str) -> bool:
@@ -83,8 +130,16 @@ def _shell_forms(command: str, coffre: str, originals: Iterable[Tuple[str, str]]
     for path, name in originals:
         if _flat(path) in flat or _gitbash(path) in flat or name in flat:
             return ORIGINAL
-    if _flat(coffre) in flat or _gitbash(coffre) in flat or ".legal-france" in flat:
+    forms = [_flat(coffre), _gitbash(coffre), ".legal-france"] + list(_ENV_COFFRE)
+    home = _norm(os.path.expanduser("~"))
+    if coffre != home and _within(coffre, home):   # coffre déplacé sous le dossier personnel : ~/…, $HOME/…
+        rel = _flat(os.path.relpath(coffre, home))
+        forms += [h + rel for h in _HOME_FORMS]
+    if any(f in flat for f in forms):
         return COFFRE
+    pkg = _package_dir()
+    if any(t in flat for t in _SHELL_SELF) or _flat(pkg) in flat or _gitbash(pkg) in flat:
+        return SELF
     return None
 
 
@@ -94,23 +149,30 @@ def decide(event: dict, coffre) -> Optional[str]:
     inp = event.get("tool_input") or {}
     cwd = event.get("cwd") or os.getcwd()
     root = _norm(str(coffre))
+    originals = _originals(str(coffre))   # ouvert sous sa forme d'origine, comparé sous forme normalisée
     if tool in SHELL_TOOLS:
         command = inp.get("command")
-        return _shell_forms(command, root, _originals(root)) if command else None
-    originals = _originals(root)
+        return _shell_forms(command, root, originals) if command else None
     if tool in FILE_TOOLS:
         target = inp.get("file_path") or inp.get("notebook_path")
         if not target:
             return None
-        path = _norm(os.path.join(cwd, target))
+        path = _norm(_expand(target, cwd))
         if _within(path, root):
             return COFFRE
-        return ORIGINAL if any(path == o for o, _ in originals) else None
+        if any(path == o for o, _ in originals):
+            return ORIGINAL
+        return SELF if tool != "Read" and _protected(path) else None
     if tool in SEARCH_TOOLS:
-        roots = [_norm(os.path.join(cwd, inp.get("path") or "."))]
-        prefix = _WILDCARD_RX.split(inp.get("pattern") or "")[0]
-        if os.path.isabs(prefix):
-            roots.append(_norm(prefix))
+        base = _expand(inp.get("path") or ".", cwd)
+        roots = [_norm(base)]
+        if tool == "Glob":   # le motif porte sa propre racine : partie littérale jusqu'au dernier séparateur
+            pattern = inp.get("pattern") or ""
+            m = _GLOB_RX.search(pattern)
+            prefix = pattern[:m.start()] if m else pattern
+            if m:
+                prefix = prefix[:max(prefix.rfind("/"), prefix.rfind("\\")) + 1]
+            roots.append(_norm(_expand(prefix, base)))
         for base in roots:
             if _within(base, root):
                 return COFFRE
@@ -139,7 +201,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         parser = _Parser(prog="legal_anonymiser.verrou", add_help=False)
         parser.add_argument("--coffre", required=True)
         args = parser.parse_args(argv)
-        message = decide(json.load(sys.stdin), args.coffre)
+        raw = getattr(sys.stdin, "buffer", None)   # octets lus en UTF-8, jamais selon la page de code
+        text = raw.read().decode("utf-8") if raw is not None else sys.stdin.read()
+        message = decide(json.loads(text), args.coffre)
     except BaseException:   # SystemExit d'argparse compris : jamais de laisser-passer
         message = GENERIC
     if message is None:
