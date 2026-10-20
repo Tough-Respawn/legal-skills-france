@@ -64,6 +64,8 @@ def _contract(vault: Vault, cid: str) -> bool:
 def _after_run(vault: Vault, cid: str, result) -> int:
     say("resume", cid=cid, entities=len(result.entities), alerts=len(result.alerts),
         ambiguities=len(result.ambiguities))
+    if result.extracted and any(f.code == "ner_absente" for f in result.extracted.findings):
+        say("ner_absente")   # le passage continue sans NER : à dire ici, pas seulement dans masque.md
     path = sortie.neutral(vault.root / cid / "ajustements.txt", Path.cwd(), vault)
     if result.pending:
         say("pending", pending=result.pending, path=path, cid=cid)

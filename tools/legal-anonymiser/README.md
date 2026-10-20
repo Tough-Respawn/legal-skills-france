@@ -46,7 +46,8 @@ legal-anonymiser --help
 
 Le modèle de reconnaissance des noms (`fr_core_news_lg`, environ 550 Mo) est chargé localement à chaque
 passage et n'est jamais téléchargé à l'exécution. Sans lui, le passage continue sans reconnaissance des
-noms et le rapport porte le constat `ner_absente` : à éviter sur un vrai contrat.
+noms, la console affiche « Modèle de reconnaissance des noms absent : détection réduite, relisez avec
+attention. » et le rapport porte le constat `ner_absente` : à éviter sur un vrai contrat.
 
 Les numérisations (PDF image, JPG, PNG) demandent **Tesseract** avec la langue française :
 
