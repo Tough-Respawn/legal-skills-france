@@ -34,9 +34,9 @@ to [Semantic Versioning](https://semver.org/).
   avant un joker, entrée lue en UTF-8 (chemins accentués) ; refus par
   décision JSON `deny` (le modèle ne voit ni chemin ni ligne de commande),
   erreur interne comprise (raison générique) ; code 2 seulement si la
-  décision ne peut pas être écrite. Auto-protection : paquet, `.pth` et
-  `sitecustomize.py` des site-packages, réglages `.claude/settings*.json`,
-  commandes `uninstall-hook`. Commandes `install-hook` et `uninstall-hook`
+  décision ne peut pas être écrite. Auto-protection : paquet, dossiers de
+  l'interpréteur (venv, Python de base, site-packages de l'utilisateur),
+  réglages `.claude/settings*.json`, commandes `uninstall-hook`. Commandes `install-hook` et `uninstall-hook`
   (`~/.claude/settings.json` par défaut, `--settings` sinon) : refus avec une
   version de Claude Code antérieure à 2.1.295 (code 6) ou sur des réglages
   non JSON (code 7), sauvegarde `settings.json.legal-france.bak`, écriture

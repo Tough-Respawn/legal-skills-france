@@ -1,8 +1,8 @@
 """Verrou Claude Code : hook `PreToolUse` qui refuse l'accès aux originaux inscrits et au coffre.
 
-Il refuse aussi toute modification de lui-même : son paquet, les `.pth` / `sitecustomize.py` /
-`usercustomize.py` des site-packages, les réglages de Claude Code, et les commandes qui les citent
-ou lancent `uninstall-hook` (le retrait se fait par l'utilisateur, dans son terminal).
+Il refuse aussi toute modification de lui-même : son paquet, les dossiers de son interpréteur (venv,
+Python de base, site-packages de l'utilisateur), les réglages de Claude Code, et les commandes qui
+citent ces éléments ou lancent `uninstall-hook` (le retrait se fait par l'utilisateur, dans son terminal).
 
 Lancé par Claude Code (`python -P -m legal_anonymiser.verrou --coffre <racine>`), événement JSON sur
 l'entrée standard. Refus = code 0 et décision JSON `deny` sur la sortie standard : Claude Code montre
@@ -37,7 +37,8 @@ GENERIC = "legal-france : verrou en erreur, accès refusé par précaution."
 _WIN_PATH_RX = re.compile(r"[A-Za-z]:[\\/][^\s\"'<>|;&`]*")
 _GLOB_RX = re.compile(r"[*?\[{]")   # métacaractères de Glob, accolades comprises
 _DEVICE_RX = re.compile(r"^[\\/]{2}[?.][\\/](UNC[\\/])?", re.I)   # \\?\C:\..., \\.\C:\..., \\?\UNC\serveur
-_GITBASH_RX = re.compile(r"^/(?:cygdrive/)?([A-Za-z])(?:/|$)")   # /c/Users/... ou /cygdrive/c/...
+_GITBASH_RX = re.compile(r"^/([A-Za-z])/")   # /c/Users/... (Claude Code : /^\/[a-z]\//i)
+_TRIM_RX = re.compile(r"^[\s﻿]+|[\s﻿]+$")   # comme String.prototype.trim
 _SETTINGS_RX = re.compile(r"settings.*\.json")
 # Commandes qui touchent au verrou lui-même : son module, son installation, les réglages de Claude Code.
 _SHELL_SELF = ("uninstall-hook", "legal_anonymiser.verrou", "legal_anonymiser/", ".claude/settings",
@@ -63,9 +64,12 @@ def _norm(path: str) -> str:
 
 
 def _expand(path: str, cwd: str) -> str:
-    """Chemin tel que Claude Code l'ouvrira : `~` développé ; sous Windows, formes Git Bash (`/c/...`,
-    `/cygdrive/c/...`) et préfixes de périphérique (`\\\\?\\`, `\\\\.\\`) convertis ; relatif au dossier de la session."""
-    p = os.path.expanduser(str(path))
+    """Chemin tel que Claude Code l'ouvrira (2.1.303) : espaces et BOM retirés aux extrémités, `~` et `~/`
+    seuls développés (pas `~\\` ni `~nom`), `/c/...` en `C:\\...` sous Windows, sinon relatif au dossier de
+    la session. Les préfixes `\\\\?\\` et `\\\\.\\` sont retirés : ils désignent le même fichier."""
+    p = _TRIM_RX.sub("", str(path))
+    if p == "~" or p.startswith("~/"):
+        p = os.path.expanduser("~") + p[1:]
     if sys.platform == "win32":
         p = _DEVICE_RX.sub(lambda m: "\\\\" if m.group(1) else "", p)
         p = _GITBASH_RX.sub(lambda m: m.group(1).upper() + ":\\", p)
@@ -76,23 +80,20 @@ def _package_dir() -> str:
     return _norm(os.path.dirname(os.path.abspath(__file__)))
 
 
-def _site_dirs() -> List[str]:
+def _python_dirs() -> List[str]:
+    """Tout ce que l'interpréteur du verrou peut charger au démarrage : venv, Python de base, site utilisateur."""
     import site
-    dirs = list(getattr(site, "getsitepackages", lambda: [])())
-    user = getattr(site, "getusersitepackages", lambda: None)()
-    return [_norm(d) for d in dirs + ([user] if user else [])]
+    dirs = [sys.prefix, sys.base_prefix, sys.exec_prefix, getattr(sys, "base_exec_prefix", None),
+            getattr(site, "getusersitepackages", lambda: None)()]
+    return [_norm(d) for d in dirs if d]
 
 
 def _protected(path: str) -> bool:
-    """Code du verrou, fichiers exécutés au démarrage de Python, réglages de Claude Code (chemin normalisé)."""
-    if _within(path, _package_dir()):
+    """Code du verrou, dossiers de l'interpréteur, réglages de Claude Code (chemin normalisé)."""
+    if any(_within(path, d) for d in [_package_dir()] + _python_dirs()):
         return True
     parent, name = os.path.split(path)
-    if os.path.basename(parent) == ".claude" and _SETTINGS_RX.fullmatch(name):
-        return True
-    if name.endswith(".pth") or name in ("sitecustomize.py", "usercustomize.py"):
-        return any(_within(path, d) for d in _site_dirs())
-    return False
+    return os.path.basename(parent) == ".claude" and bool(_SETTINGS_RX.fullmatch(name))
 
 
 def _within(path: str, root: str) -> bool:

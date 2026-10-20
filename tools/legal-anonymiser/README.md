@@ -212,18 +212,23 @@ Ce qu'il refuse, pour le coffre et pour chaque original inscrit au registre :
   résolus avant comparaison (jonction, nom court).
 
 Avant toute comparaison, chaque chemin donné à un outil est mis sous la forme que Claude Code
-ouvrira lui-même après le hook : `~` développé, et sous Windows `/c/…` et `/cygdrive/c/…` (Git Bash)
-convertis en `C:\…`, préfixes `\\?\` et `\\.\` retirés (`\\?\UNC\serveur` devient `\\serveur`).
+(2.1.303) ouvrira lui-même après le hook : espaces et BOM retirés aux extrémités, `~` et `~/` seuls
+développés (`~\…` ou `~nom/…` restent relatifs au dossier de la session, comme dans Claude Code), sous
+Windows `/c/…` (Git Bash) converti en `C:\…`, sinon chemin relatif au dossier de la session. Les
+préfixes `\\?\` et `\\.\` sont retirés (`\\?\UNC\serveur` devient `\\serveur`) : ils désignent le
+même fichier.
 L'entrée standard est lue en octets et décodée en UTF-8, quelle que soit la page de code du poste
 (Claude Code ne fixe pas `PYTHONIOENCODING` pour les hooks) : un chemin accentué est comparé tel quel.
 
 Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modification refusée » :
 
 - `Edit`, `Write`, `NotebookEdit` sur un fichier du paquet `legal_anonymiser` installé (pour une
-  installation éditable, le dossier du dépôt), sur un `.pth`, `sitecustomize.py` ou
-  `usercustomize.py` des site-packages de l'interpréteur (ceux du venv et ceux de l'utilisateur), et
-  sur tout `settings*.json` d'un dossier `.claude` (`~/.claude/settings.json`,
-  `~/.claude/settings.local.json`, `.claude/settings.json` d'un projet) ; `Read` reste permis ;
+  installation éditable, le dossier du dépôt), sur tout fichier des dossiers de l'interpréteur qui
+  lance le verrou (`sys.prefix`, `sys.base_prefix`, `sys.exec_prefix`, site-packages de
+  l'utilisateur : venv, bibliothèque standard, `.pth`, chercheur de l'installation éditable, tout ce
+  que Python charge au démarrage), et sur tout `settings*.json` d'un dossier `.claude`
+  (`~/.claude/settings.json`, `~/.claude/settings.local.json`, `.claude/settings.json` d'un projet) ;
+  `Read` reste permis ;
 - `Bash` et `PowerShell` dont la commande contient `uninstall-hook`, `legal_anonymiser.verrou`,
   `legal_anonymiser/`, `.claude/settings`, `sitecustomize`, `usercustomize`, `site-packages` ou le
   chemin absolu du paquet. `python -m legal_anonymiser traiter` et `legal-anonymiser verifier`
@@ -232,7 +237,10 @@ Le verrou se protège aussi lui-même. Refusés avec « verrou protégé, modifi
 Conséquences : `uninstall-hook` se lance par l'utilisateur, dans son propre terminal, jamais par le
 modèle ; les réglages de Claude Code ne se modifient plus depuis une session (le faire à la main, ou
 retirer le verrou le temps du changement) ; développer l'outil lui-même avec Claude Code demande de
-retirer le verrou d'abord.
+retirer le verrou d'abord. Sur un poste de développement, préférer une installation limitée au
+dossier des contrats (`legal-anonymiser install-hook --settings <dossier des contrats>/.claude/settings.json`),
+ou retirer le verrou pendant le travail sur l'outil : les sessions ouvertes hors de ce dossier ne sont
+alors pas protégées.
 
 Les messages ne contiennent jamais un chemin ni un nom de fichier. Sur un refus, le modèle voit
 seulement `PreToolUse:Read hook error: legal-france : original protégé, accès refusé...`
@@ -303,7 +311,10 @@ legal-anonymiser uninstall-hook               # retire exactement cette entrée
 - `Read` refuse déjà de lui-même un `.docx` (fichier binaire) et suggère au modèle un script : c'est
   précisément le contournement que le verrou ne voit pas ;
 - l'auto-protection repose sur des chemins et des mots dans les commandes : un script qui écrit dans
-  les réglages ou dans le paquet sans les nommer n'est pas vu (même limite que ci-dessus) ;
+  les réglages ou dans le paquet sans les nommer n'est pas vu (même limite que ci-dessus) ; pour
+  `Bash` et `PowerShell`, les dossiers de l'interpréteur ne sont reconnus que par `site-packages`,
+  `sitecustomize` ou `usercustomize`, pas par leur chemin absolu (sinon lancer le Python du venv par
+  son chemin serait refusé) ;
 - le dépassement du délai de 10 s n'a pas été provoqué en session réelle : le blocage dans ce cas
   vient de la documentation de Claude Code, pas d'une observation ;
 - un contrat jamais passé dans l'outil n'est pas inscrit au registre, donc pas protégé : la garde
