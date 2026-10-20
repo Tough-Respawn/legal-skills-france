@@ -89,7 +89,7 @@ Parcours complet :
 | `relancer ID` | relit `ajustements.txt`, relance le masquage, puis comme `traiter` | idem (4 si l'identifiant est invalide ou inconnu) |
 | `valider ID` | relecture et publication seules, si le dernier passage n'a rien laissé en attente | 0, 3, 4 |
 | `verifier FICHIER` | affiche `publie`, `modifie` ou `inconnu` | 0 si `publie`, 1 sinon |
-| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 |
+| `reidentifier ID RAPPORT` | rapport final avec les valeurs réelles, écrit dans le coffre et ouvert localement | 0, 7 (réidentification impossible : identifiant inconnu, table de correspondance absente, rapport illisible ; sans trace écrite) |
 
 Code 1 : `verifier` négatif. Code 2 : arguments invalides. Code 7 : erreur interne, ou fichier du coffre corrompu (`registre.json`, `etat.json`,
 `ajustements.txt` mal formé : la console ne donne que le numéro de ligne et le chemin neutre, jamais un
@@ -238,7 +238,8 @@ dossier courant, `coffre/<id>/…` sous le coffre, sinon `[chemin masqué]`). Ja
 le nom du fichier original, un chemin absolu, un fragment d'une ligne d'`ajustements.txt` ni le message
 d'une exception imprévue ; seuls les messages fixes de nos propres modules (dépendance manquante,
 fichier du coffre corrompu) sont relayés tels quels. Tout le passage tourne sous `sortie.quiet` :
-sorties, avertissements et journaux de pypdf et spaCy sont absorbés. Le chemin choisi n'est jamais
+sorties, avertissements et journaux Python de pypdf et spaCy sont absorbés (une écriture en code natif
+sur les descripteurs 1 et 2, thinc ou libtiff via Pillow, passerait ; aucune constatée). Le chemin choisi n'est jamais
 affiché ; si l'original est dans le dossier
 courant, un avertissement sans chemin le signale. `--help` affiche `legal-anonymiser`, jamais le chemin
 du script ; une erreur d'arguments (commande inconnue, argument en trop ou manquant) n'affiche que

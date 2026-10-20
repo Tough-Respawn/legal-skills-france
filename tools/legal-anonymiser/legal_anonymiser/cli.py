@@ -142,7 +142,6 @@ def _run(vault: Vault, original: Path, cid: str) -> int:
 def _traiter(args: argparse.Namespace) -> int:
     from .extraction import supported
     vault = Vault()
-    vault.ensure()
     chosen = args.chemin
     if not chosen:
         try:
@@ -160,6 +159,7 @@ def _traiter(args: argparse.Namespace) -> int:
     if not supported(original):   # contrôlé avant tout enregistrement au coffre
         say("illisible")
         return 5
+    vault.ensure()   # après le sélecteur et les contrôles : un choix annulé ne crée pas le coffre
     return _run(vault, original, vault.id_for_original(original))
 
 
